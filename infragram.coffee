@@ -20,6 +20,15 @@ class Image
                                 j++
                 return [mins, maxs]
         
+histogram = (array, [min,max], nbins) ->
+        bins = (0 for i in [0...nbins])
+        d = (max - min) / nbins
+        for a in array
+                i = Math.floor((a - min) / d)
+                if 0 <= i < nbins
+                        bins[i]++
+        return bins
+
 get_channels = (img) ->
         n = img.width * img.height;
         r = new Float32Array(n);
