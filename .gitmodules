@@ -1,0 +1,6 @@
+[submodule "jpgjs"]
+	path = jpgjs
+	url = https://github.com/notmasteryet/jpgjs.git
+[submodule "png.js"]
+	path = png.js
+	url = https://github.com/devongovett/png.js.git
