@@ -57,6 +57,8 @@ colorify = (img, colormap) ->
 
 render = (img) ->
         e = document.getElementById("image");
+        e.width = img.width
+        e.height = img.height
         ctx = e.getContext("2d");
         d = ctx.getImageData(0, 0, img.width, img.height);
         img.copyToImageData(d);
