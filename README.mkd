@@ -1,0 +1,8 @@
+# Infrapix-js
+
+To get started,
+
+    $ git clone --recursive git@github.com:bgamari/infragram-js.git
+    $ cd infragram-js
+    $ make
+    $ firefox infragram.html
