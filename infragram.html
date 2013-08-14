@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Infrapix</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="png.js/zlib.js"></script>
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
@@ -9,8 +10,23 @@
   <body>
     <h1>Infrapix</h1>
     <form name="file-form">
-      <input type="file" name="file-sel" onchange="on_file_sel();"></input>
+      <fieldset>
+        <legend>Select file</legend>
+        <input type="file" name="file-sel" onchange="on_file_sel();"></input>
+      </fieldset>
+      <fieldset>
+        <legend>Output type</legend>
+        <input type="radio" name="output-type" id="type-raw" value="raw" checked="true" />
+        <label for="type-raw">Raw</label>
+        <input type="radio" name="output-type" id="type-nvdi" value="nvdi" />
+        <label for="type-nvdi">NVDI</label>
+        <input type="radio" name="output-type" id="type-nir" value="nir" />
+        <label for="type-nir">NIR</label>
+      </fieldset>
     </form>
     <canvas id="image" style="width: 800; height: 800;"></canvas>
+    <script>
+      $('input[name="output-type"]').on('change', function() { update(image); });
+    </script>
   </body>
 </html>

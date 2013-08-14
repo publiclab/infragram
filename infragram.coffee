@@ -1,3 +1,5 @@
+image = null
+
 class Image
         constructor: (@data, @width, @height, @channels) ->
 
@@ -61,16 +63,19 @@ render = (img) ->
         ctx.putImageData(d, 0, 0);
 
 update = (img) ->
-        mode = "vdi"
+        mode = $('input[name="output-type"]:checked').val()
         if mode == "nvdi"
-                [r,g,b] = get_channels(img)
-                nvdi_img = nvdi(r,b)
-                [[min],[max]] = nvdi_img.extrema()
-                d = max - min
-                colormap = (x) -> [255/d * (x - min), 0, 0]
-                result = colorify(nvdi_img, colormap)
-        else
+            [r,g,b] = get_channels(img)
+            nvdi_img = nvdi(r,b)
+            [[min],[max]] = nvdi_img.extrema()
+            d = max - min
+            colormap = (x) -> [255/d * (x - min), 0, 0]
+            result = colorify(nvdi_img, colormap)
+        else if mode == "raw"
             result = img
+        else if mode == "nir"
+            [r,g,b] = get_channels(img)
+            result = colorify(r, (x) -> [x, 0, 0])
         render(result)
         
 file_reader = new FileReader();
@@ -91,7 +96,8 @@ file_reader.onload = (oFREvent) ->
             document.getElementById("error").html = "Unrecognized file format (supports PNG and JPEG)";
             return
 
-        update(img);
+        image = img
+        update(img)
 
 on_file_sel = () ->
         file = document.forms["file-form"]["file-sel"].files[0];
