@@ -1,17 +1,16 @@
 <html>
   <head>
-    <title>Infragram</title>
+    <title>Infrapix</title>
     <script src="png.js/zlib.js"></script>
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
     <script src="infragram.js"></script>
   </head>
   <body>
-    <h1></h1>
-    <canvas id="image" style="width: 800; height: 800;"></canvas>
+    <h1>Infrapix</h1>
     <form name="file-form">
-      <input type="file" name="file-sel"></input>
-      <input type="button" onclick="on_file_sel();" label="go"></input>
+      <input type="file" name="file-sel" onchange="on_file_sel();"></input>
     </form>
+    <canvas id="image" style="width: 800; height: 800;"></canvas>
   </body>
 </html>
