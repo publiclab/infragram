@@ -71,13 +71,15 @@ update = (img) ->
             nvdi_img = nvdi(r,b)
             [[min],[max]] = nvdi_img.extrema()
             d = max - min
-            colormap = (x) -> [255/d * (x - min), 0, 0]
+            colormap = (x) ->
+                y = 255/d * (x - min)
+                return [y, y, y]
             result = colorify(nvdi_img, colormap)
         else if mode == "raw"
             result = img
         else if mode == "nir"
             [r,g,b] = get_channels(img)
-            result = colorify(r, (x) -> [x, 0, 0])
+            result = colorify(r, (x) -> [x, x, x])
         render(result)
         
 file_reader = new FileReader();
