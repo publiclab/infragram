@@ -93,6 +93,9 @@ render = (img) ->
         img.copyToImageData(d);
         ctx.putImageData(d, 0, 0);
 
+segments = [ [0, [0,0,0], [0,255,0]],
+             [1, [255,0,0], [0,0,255]] ]
+        
 update = (img) ->
         mode = $('input[name="output-type"]:checked').val()
         if mode == "nvdi"
@@ -100,9 +103,7 @@ update = (img) ->
             nvdi_img = nvdi(r,b)
             [[min],[max]] = nvdi_img.extrema()
             d = max - min
-            colormap = (x) ->
-                y = 255/d * (x - min)
-                return [y, y, y]
+            colormap = segmented_colormap(segments)
             result = colorify(nvdi_img, colormap)
         else if mode == "raw"
             result = img
