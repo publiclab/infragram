@@ -61,7 +61,7 @@ get_channels = (img) ->
         mkImage = (d) -> new Image(d, img.width, img.height, 1);
         return [mkImage(r), mkImage(g), mkImage(b)];
 
-nvdi = (nir, vis) ->
+ndvi = (nir, vis) ->
         n = nir.width * nir.height;
         d = new Float64Array(n);
         for i in [0...n]
@@ -93,23 +93,23 @@ render = (img) ->
         img.copyToImageData(d);
         ctx.putImageData(d, 0, 0);
 
-segments = [ [0, [0,0,0], [0,255,0]],
-             [1, [255,0,0], [0,0,255]] ]
+segments = [ [0, [0,0,0], [255,255,255]],
+             [1, [255,255,255], [255,255,255]] ]
         
-update = (img) ->
-        mode = $('input[name="output-type"]:checked').val()
-        if mode == "nvdi"
+update = (img,mode) ->
+        if mode == "ndvi"
             [r,g,b] = get_channels(img)
-            nvdi_img = nvdi(r,b)
-            [[min],[max]] = nvdi_img.extrema()
+            ndvi_img = ndvi(r,b)
+            [[min],[max]] = ndvi_img.extrema()
             d = max - min
             colormap = segmented_colormap(segments)
-            result = colorify(nvdi_img, colormap)
+            result = colorify(ndvi_img, colormap)
         else if mode == "raw"
             result = img
         else if mode == "nir"
             [r,g,b] = get_channels(img)
             result = colorify(r, (x) -> [x, x, x])
+        $('#download').show()
         render(result)
         
 file_reader = new FileReader();
@@ -131,9 +131,14 @@ file_reader.onload = (oFREvent) ->
             return
 
         image = img
-        update(img)
+        update(img,'raw')
 
 on_file_sel = () ->
         file = document.forms["file-form"]["file-sel"].files[0];
         if file
                 file_reader.readAsArrayBuffer(file);
+
+download = () ->
+        e = document.getElementById("image");
+        ctx = e.getContext("2d");
+        window.open(ctx.canvas.toDataURL(),'_newtab').focus()
