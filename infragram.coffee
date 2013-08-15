@@ -45,7 +45,7 @@ segmented_colormap = (segments) -> (x) ->
                         break
 
         result = []
-        for i in [0...y0.length]:
+        for i in [0...y0.length]
                 result[i] = (x-x0) / (x1 - x0) * (y1[i] - y0[i]) + y0[i]
         return result
                         
