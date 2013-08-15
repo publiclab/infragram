@@ -41,7 +41,7 @@ get_channels = (img) ->
         mkImage = (d) -> new Image(d, img.width, img.height, 1);
         return [mkImage(r), mkImage(g), mkImage(b)];
 
-nvdi = (nir, vis) ->
+ndvi = (nir, vis) ->
         n = nir.width * nir.height;
         d = new Float64Array(n);
         for i in [0...n]
@@ -73,17 +73,16 @@ render = (img) ->
         img.copyToImageData(d);
         ctx.putImageData(d, 0, 0);
 
-update = (img) ->
-        mode = $('input[name="output-type"]:checked').val()
-        if mode == "nvdi"
+update = (img,mode) ->
+        if mode == "ndvi"
             [r,g,b] = get_channels(img)
-            nvdi_img = nvdi(r,b)
-            [[min],[max]] = nvdi_img.extrema()
+            ndvi_img = ndvi(r,b)
+            [[min],[max]] = ndvi_img.extrema()
             d = max - min
             colormap = (x) ->
                 y = 255/d * (x - min)
                 return [y, y, y]
-            result = colorify(nvdi_img, colormap)
+            result = colorify(ndvi_img, colormap)
         else if mode == "raw"
             result = img
         else if mode == "nir"
@@ -110,7 +109,7 @@ file_reader.onload = (oFREvent) ->
             return
 
         image = img
-        update(img)
+        update(img,'raw')
 
 on_file_sel = () ->
         file = document.forms["file-form"]["file-sel"].files[0];

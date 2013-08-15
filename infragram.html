@@ -1,35 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>Infrapix</title>
+    
+    <title>Infragram | by Public Lab - Home</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
+
+    <link href="/static/infragram-js/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <style> body { padding-top: 60px; } </style>
+    <link href="/static/infragram-js/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/application.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="png.js/zlib.js"></script>
-    <script src="png.js/png.js"></script>
-    <script src="jpgjs/jpg.js"></script>
-    <script src="infragram.js"></script>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css"></link>
+    <script src="/static/infragram-js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/infragram-js/png.js/zlib.js"></script>
+    <script src="/static/infragram-js/png.js/png.js"></script>
+    <script src="/static/infragram-js/jpgjs/jpg.js"></script>
+    <script src="/static/infragram-js/infragram.js"></script>
+    
   </head>
+
   <body>
-    <h1>Infrapix</h1>
-    <form name="file-form">
-      <fieldset>
-        <legend>Select file</legend>
-        <input type="file" name="file-sel" onchange="on_file_sel();"></input>
-      </fieldset>
-      <fieldset>
-        <legend>Output type</legend>
-        <input type="radio" name="output-type" id="type-raw" value="raw" checked="true" />
-        <label for="type-raw">Raw</label>
-        <input type="radio" name="output-type" id="type-nvdi" value="nvdi" />
-        <label for="type-nvdi">NVDI</label>
-        <input type="radio" name="output-type" id="type-nir" value="nir" />
-        <label for="type-nir">NIR</label>
-      </fieldset>
-    </form>
-    <canvas id="image" style="width: 800; height: 800;"></canvas>
-    <script>
-      $('input[name="output-type"]').on('change', function() { update(image); });
-    </script>
+  
+    <div class="container page" style="padding-top:10px;">
+      <img src="/static/img/infragram-logo.png" style="float:left;margin-right:14px;"/>
+
+      <br />
+      <h1><a style="color:#444;" href="/">Infragram</a> <br class="visible-phone"/><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
+
+      <p>Welcome to Public Lab's online service for generating plant health analyses from near-infrared imagery!</p>
+
+      <hr>
+
+      <p>For more information about the Infragram platform, <a href="http://publiclab.org/wiki/near-infrared-camera">read about the open source cameras we are developing</a>, or see our <a href="http://www.kickstarter.com/projects/publiclab/infragram-the-infrared-photography-project">Kickstarter</a> video. To purchase a filter kit to make your own camera, visit <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">the Public Lab Store</a></p>
+
+      <div class="content">
+
+        <hr />
+
+        <h3>JavaScript Infragram Sandbox</h3>
+
+        <p>This page is a demo of an under-development, browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a>. This will eventually enable live processing and tweaking of infrared composites in your browser window.</p>
+
+        <form name="file-form" class="well">
+            <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
+            <input type="file" name="file-sel" onchange="on_file_sel();"></input>
+            <b>Output type:</b>
+            <span class="btn-toolbar">
+              <div class="btn-group" data-toggle="buttons-radio">
+                <button id="raw" type="button" class="btn active">Raw</button>
+                <button id="ndvi" type="button" class="btn">NDVI</button>
+                <button id="nir" type="button" class="btn">NIR</button>
+              </div>
+           </span>
+        </form>
+        <canvas id="image" style="width: 800; height: 800;"></canvas>
+        <script>
+          (function(){
+            $('button#raw').on('click', function() { update(image,"raw"); });
+            $('button#ndvi').on('click', function() { update(image,"ndvi"); });
+            $('button#nir').on('click', function() { update(image,"nir"); });
+          })()
+        </script>
+
+      </div>
+    </div>
   </body>
 </html>
