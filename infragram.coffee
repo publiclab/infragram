@@ -29,6 +29,26 @@ histogram = (array, [min,max], nbins) ->
                         bins[i]++
         return bins
 
+segmented_colormap = (segments) -> (x) ->
+        [y0, y1] = [0, 0]
+        [x0, x1] = [segments[0][0], 1]
+        if x < x0
+                return y0
+        
+        for [xstart, y0, y1],i in segments
+                x0 = xstart
+                if i == segments.length - 1
+                        x1 = 1
+                        break
+                x1 = segments[i+1][0]
+                if xstart <= x < x1
+                        break
+
+        result = []
+        for i in [0...y0.length]:
+                result[i] = (x-x0) / (x1 - x0) * (y1[i] - y0[i]) + y0[i]
+        return result
+                        
 get_channels = (img) ->
         n = img.width * img.height;
         r = new Float32Array(n);
