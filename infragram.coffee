@@ -88,6 +88,7 @@ update = (img,mode) ->
         else if mode == "nir"
             [r,g,b] = get_channels(img)
             result = colorify(r, (x) -> [x, x, x])
+        $('#download').show()
         render(result)
         
 file_reader = new FileReader();
@@ -115,3 +116,8 @@ on_file_sel = () ->
         file = document.forms["file-form"]["file-sel"].files[0];
         if file
                 file_reader.readAsArrayBuffer(file);
+
+download = () ->
+        e = document.getElementById("image");
+        ctx = e.getContext("2d");
+        window.open(ctx.canvas.toDataURL(),'_newtab').focus()
