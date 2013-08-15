@@ -171,11 +171,6 @@ update = function(img) {
     nvdi_img = nvdi(r, b);
     _ref1 = nvdi_img.extrema(), (_ref2 = _ref1[0], min = _ref2[0]), (_ref3 = _ref1[1], max = _ref3[0]);
     d = max - min;
-    colormap = function(x) {
-      var y;
-      y = 255 / d * (x - min);
-      return [y, y, y];
-    };
     colormap = segmented_colormap(segments);
     result = colorify(nvdi_img, colormap);
   } else if (mode === "raw") {
