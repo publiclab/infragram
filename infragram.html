@@ -10,9 +10,11 @@
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
     <style> body { padding-top: 60px; } </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="bootstrap/css/slider.css" rel="stylesheet">
     <link href="/static/css/application.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/bootstrap-slider.js"></script>
     <script src="png.js/zlib.js"></script>
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
@@ -40,27 +42,43 @@
 
         <h3>JavaScript Infragram Sandbox</h3>
 
-        <p>This page is a demo of an under-development, browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a>. This will eventually enable live processing and tweaking of infrared composites in your browser window.</p>
+        <p>This page is a demo of an under-development, browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair and Jeff Warren.</p>
 
         <div class="well">
+
+          <div style="float:right;margin-right:20px;">
+            <span style="margin-right:20px;">Learn how to use this <a href="http://publiclab.org/wiki/infragram-js">at PublicLab.org/wiki/infragram-js</a></span> 
+            <b>Slider: &nbsp; </b>
+            <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100" />
+          </div>
+
           <form name="file-form">
               <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
               <input type="file" name="file-sel" onchange="on_file_sel();"></input>
-              <b>Output type:</b>
-              <span class="btn-toolbar">
-                <div class="btn-group" data-toggle="buttons-radio">
-                  <button id="raw" type="button" class="btn active">Raw</button>
-                  <button id="ndvi" type="button" class="btn">NDVI</button>
-                  <button id="nir" type="button" class="btn">NIR</button>
-                </div>
-                <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
-             </span>
           </form>
- 
-          <form id="infragrammar" class="form-inline">
-            <input type="text" id="expression" class="input-large" />
+
+          <form id="infragrammar" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
+            <b>Channel mixer:</b>
+            <input placeholder="R" type="text" id="r_exp" class="input-small" />
+            <input placeholder="G" type="text" id="g_exp" class="input-small" />
+            <input placeholder="B" type="text" id="b_exp" class="input-small" />
             <button type="submit" id="run" class="btn btn-primary">Run</button>
           </form>
+
+          <form id="infragrammar_mono" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
+            <input placeholder="monochrome" type="text" id="m_exp" class="input-small" />
+            <button type="submit" id="run" class="btn btn-primary">Run</button>
+          </form>
+
+          <b>Presets:</b>
+          <span class="btn-toolbar">
+            <div class="btn-group" data-toggle="buttons-radio">
+              <button id="raw" type="button" class="btn active">Raw</button>
+              <button id="ndvi" type="button" class="btn">NDVI</button>
+              <button id="nir" type="button" class="btn">NIR</button>
+            </div>
+            <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+          </span>
         </div>
 
         <canvas id="image" style="width: 800; height: 800;"></canvas>
@@ -70,7 +88,13 @@
             $('button#ndvi').on('click', function() { update(image,"ndvi"); });
             $('button#nir').on('click', function() { update(image,"nir"); });
             $('#download').on('click', function() { download(); });
-            $('#infragrammar').on('submit', function() { infragrammar() });
+            $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar"); });
+            $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());update(image,"infragrammar"); });
+
+            // http://www.eyecon.ro/bootstrap-slider/
+            $('#slider').slider().on('slide', function(ev){
+              save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar");
+            });
           })()
         </script>
 
