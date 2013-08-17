@@ -1,4 +1,8 @@
 image = null
+r_exp = ""
+g_exp = ""
+b_exp = ""
+m_exp = "" #monochrome
 
 class Image
         constructor: (@data, @width, @height, @channels) ->
@@ -84,6 +88,23 @@ colorify = (img, colormap) ->
         cimg.data = data;
         return new Image(data, img.width, img.height, 4);
 
+infragrammar = (img) ->
+        n = img.width * img.height;
+        r = new Float32Array(n);
+        g = new Float32Array(n);
+        b = new Float32Array(n);
+        #o = new Uint8ClampedArray(4*n);
+        o = new Float64Array(4*n);
+        for i in [0...n]
+                r[i] = img.data[4*i + 0]/255;
+                g[i] = img.data[4*i + 1]/255;
+                b[i] = img.data[4*i + 2]/255;
+                o[4*i + 0] = 255*r_exp(r[i],g[i],b[i]);
+                o[4*i + 1] = 255*g_exp(r[i],g[i],b[i]);
+                o[4*i + 2] = 255*b_exp(r[i],g[i],b[i]);
+                o[4*i + 3] = 255
+        return new Image(o, img.width, img.height, 4);
+
 render = (img) ->
         e = document.getElementById("image");
         e.width = img.width
@@ -109,6 +130,8 @@ update = (img,mode) ->
         else if mode == "nir"
             [r,g,b] = get_channels(img)
             result = colorify(r, (x) -> [x, x, x])
+        else if mode == "infragrammar"
+            result = infragrammar(img)
         $('#download').show()
         render(result)
         
@@ -142,3 +165,12 @@ download = () ->
         e = document.getElementById("image");
         ctx = e.getContext("2d");
         window.open(ctx.canvas.toDataURL(),'_newtab').focus()
+
+save_expressions = (r,g,b) ->
+        r = r.replace(/S/g,$('#slider').val()/100)
+        g = g.replace(/S/g,$('#slider').val()/100)
+        b = b.replace(/S/g,$('#slider').val()/100)
+        eval("r_exp = function(R,G,B){return "+r+";}")
+        eval("g_exp = function(R,G,B){return "+g+";}")
+        eval("b_exp = function(R,G,B){return "+b+";}")
+
