@@ -42,19 +42,27 @@
 
         <p>This page is a demo of an under-development, browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a>. This will eventually enable live processing and tweaking of infrared composites in your browser window.</p>
 
-        <form name="file-form" class="well">
-            <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
-            <input type="file" name="file-sel" onchange="on_file_sel();"></input>
-            <b>Output type:</b>
-            <span class="btn-toolbar">
-              <div class="btn-group" data-toggle="buttons-radio">
-                <button id="raw" type="button" class="btn active">Raw</button>
-                <button id="ndvi" type="button" class="btn">NDVI</button>
-                <button id="nir" type="button" class="btn">NIR</button>
-              </div>
-              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
-           </span>
-        </form>
+        <div class="well">
+          <form name="file-form">
+              <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
+              <input type="file" name="file-sel" onchange="on_file_sel();"></input>
+              <b>Output type:</b>
+              <span class="btn-toolbar">
+                <div class="btn-group" data-toggle="buttons-radio">
+                  <button id="raw" type="button" class="btn active">Raw</button>
+                  <button id="ndvi" type="button" class="btn">NDVI</button>
+                  <button id="nir" type="button" class="btn">NIR</button>
+                </div>
+                <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+             </span>
+          </form>
+ 
+          <form id="infragrammar" class="form-inline">
+            <input type="text" id="expression" class="input-large" />
+            <button type="submit" id="run" class="btn btn-primary">Run</button>
+          </form>
+        </div>
+
         <canvas id="image" style="width: 800; height: 800;"></canvas>
         <script>
           (function(){
@@ -62,6 +70,7 @@
             $('button#ndvi').on('click', function() { update(image,"ndvi"); });
             $('button#nir').on('click', function() { update(image,"nir"); });
             $('#download').on('click', function() { download(); });
+            $('#infragrammar').on('submit', function() { infragrammar() });
           })()
         </script>
 
