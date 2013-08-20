@@ -84,9 +84,9 @@
         <canvas id="image" style="width: 800; height: 800;"></canvas>
         <script>
           (function(){
-            $('button#raw').on('click', function() { update(image,"raw"); });
-            $('button#ndvi').on('click', function() { update(image,"ndvi"); });
-            $('button#nir').on('click', function() { update(image,"nir"); });
+            $('button#raw').on('click', function() { mode="raw"; update(image); });
+            $('button#ndvi').on('click', function() { mode="ndvi"; update(image); });
+            $('button#nir').on('click', function() { mode="nir"; update(image); });
             $('#download').on('click', function() { download(); });
             $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar"); });
             $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());update(image,"infragrammar"); });

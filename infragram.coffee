@@ -1,4 +1,5 @@
 image = null
+mode = "raw"
 r_exp = ""
 g_exp = ""
 b_exp = ""
@@ -117,7 +118,7 @@ render = (img) ->
 segments = [ [0, [0,0,0], [255,255,255]],
              [1, [255,255,255], [255,255,255]] ]
         
-update = (img,mode) ->
+update = (img) ->
         if mode == "ndvi"
             [r,g,b] = get_channels(img)
             ndvi_img = ndvi(r,b)
