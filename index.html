@@ -8,7 +8,10 @@
     <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <style> body { padding-top: 60px; } </style>
+    <style>
+      body { padding-top: 60px; }
+      span.group { display: inline-block; }
+    </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="bootstrap/css/slider.css" rel="stylesheet">
     <link href="/static/css/application.css" rel="stylesheet">
@@ -70,23 +73,27 @@
             <button type="submit" id="run" class="btn btn-primary">Run</button>
           </form>
 
-          <b>Presets:</b>
-          <span class="btn-toolbar">
-            <div class="btn-group" data-toggle="buttons-radio">
-              <button id="raw" type="button" class="btn active">Raw</button>
-              <button id="ndvi" type="button" class="btn">NDVI</button>
-              <button id="nir" type="button" class="btn">NIR</button>
-            </div>
-            <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+          <span class="group">
+            <b>Presets:</b>
+            <span class="btn-toolbar">
+              <div class="btn-group" data-toggle="buttons-radio">
+                <button id="raw" type="button" class="btn active">Raw</button>
+                <button id="ndvi" type="button" class="btn">NDVI</button>
+                <button id="nir" type="button" class="btn">NIR</button>
+              </div>
+              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+            </span>
           </span>
 
-          <b>Color maps:</b>
-          <span class="btn-toolbar">
-            <div class="btn-group" data-toggle="buttons-radio">
-              <button id="grey" type="button" class="btn active">Greyscale</button>
-              <button id="color" type="button" class="btn">Color</button>
-            </div>
-            <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+          <span class="group">
+            <b>Color maps:</b>
+            <span class="btn-toolbar">
+              <div class="btn-group" data-toggle="buttons-radio">
+                <button id="grey" type="button" class="btn active">Greyscale</button>
+                <button id="color" type="button" class="btn">Color</button>
+              </div>
+              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+            </span>
           </span>
         </div>
 
