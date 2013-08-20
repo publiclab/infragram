@@ -115,17 +115,24 @@ render = (img) ->
         img.copyToImageData(d);
         ctx.putImageData(d, 0, 0);
 
-segments = [ [0, [0,0,0], [255,255,255]],
-             [1, [255,255,255], [255,255,255]] ]
+greyscale_colormap = segmented_colormap(
+        [ [0, [0,0,0], [255,255,255]],
+          [1, [255,255,255], [255,255,255]] ])
+
+colormap1 = segmented_colormap(
+        [ [   0, [25,0,175],   [38,195,195]],
+          [ 0.5, [50,155,60],  [195,190,90]],
+          [0.75, [195,190,90], [185,50,50]] ])
+
+colormap = greyscale_colormap
         
 update = (img) ->
         if mode == "ndvi"
             [r,g,b] = get_channels(img)
             ndvi_img = ndvi(r,b)
             [[min],[max]] = ndvi_img.extrema()
-            d = max - min
-            colormap = segmented_colormap(segments)
-            result = colorify(ndvi_img, colormap)
+            normalize = (x) -> (x - min) / (max - min)
+            result = colorify(ndvi_img, (x) -> colormap(normalize(x)))
         else if mode == "raw"
             result = img
         else if mode == "nir"
@@ -174,4 +181,3 @@ save_expressions = (r,g,b) ->
         eval("r_exp = function(R,G,B){return "+r+";}")
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
-
