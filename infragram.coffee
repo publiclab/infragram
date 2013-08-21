@@ -200,3 +200,8 @@ save_expressions = (r,g,b) ->
         eval("r_exp = function(R,G,B){return "+r+";}")
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
+
+set_mode = (new_mode) ->
+        mode = new_mode
+        update(image)
+        
