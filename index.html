@@ -111,8 +111,8 @@
             $('button#ndvi').on('click', function() { set_mode("ndvi"); });
             $('button#nir').on('click', function() { set_mode("nir"); });
             $('#download').on('click', function() { download(); });
-            $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar"); });
-            $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());update(image,"infragrammar"); });
+            $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val()); set_mode("infragrammar"); });
+            $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val()); set_mode("infragrammar"); });
 
             $('button#grey').on('click', function() { colormap = greyscale_colormap; update(image); });
             $('button#color').on('click', function() { colormap = colormap1; update(image); });
