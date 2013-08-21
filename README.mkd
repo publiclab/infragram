@@ -2,7 +2,7 @@
 
 To get started,
 
-    $ git clone --recursive git@github.com:bgamari/infragram-js.git
+    $ git clone --recursive https://github.com/Pioneer-Valley-Open-Science/infragram-js.git
     $ cd infragram-js
     $ make
     $ firefox infragram.html
