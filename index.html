@@ -97,11 +97,14 @@
           </span>
         </div>
 
-        <canvas id="image" style="width: 800px; height: 800px;"></canvas>
-        <div id="colorbar-container">
-          <span id="colorbar-min"></span>
-          <canvas id="colorbar" style="width: 800px; height: 10px;"></canvas>
-          <span id="colorbar-max"></span>
+        <div style="text-align: center;">
+          <canvas id="image" style="width: 800px; height: 800px; margin: 0px auto;"></canvas>
+
+          <div id="colorbar-container" style="display: inline-block; width: 70%;">
+            <span id="colorbar-min"></span>
+            <canvas id="colorbar" style="width: 80%; height: 2em; vertical-align: middle;"></canvas>
+            <span id="colorbar-max"></span>
+          </div>
         </div>
 
         <script>
