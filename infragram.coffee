@@ -204,4 +204,9 @@ save_expressions = (r,g,b) ->
 set_mode = (new_mode) ->
         mode = new_mode
         update(image)
+
+        if mode == "ndvi"
+                $("#colormaps-group")[0].style.display = "inline-block"
+        else
+                $("#colormaps-group")[0].style.display = "none"
         

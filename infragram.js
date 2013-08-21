@@ -295,5 +295,10 @@ save_expressions = function(r, g, b) {
 
 set_mode = function(new_mode) {
   mode = new_mode;
-  return update(image);
+  update(image);
+  if (mode === "ndvi") {
+    return $("#colormaps-group")[0].style.display = "inline-block";
+  } else {
+    return $("#colormaps-group")[0].style.display = "none";
+  }
 };
