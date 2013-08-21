@@ -73,6 +73,7 @@ ndvi = (nir, vis) ->
                 d[i] = (nir.data[i] - vis.data[i]) / (nir.data[i] + vis.data[i]);
         return new Image(d, nir.width, nir.height, 1);
 
+# Apply the given colormap to a single-channel image
 colorify = (img, colormap) -> 
         n = img.width * img.height;
         data = new Uint8ClampedArray(4*n);
@@ -125,14 +126,32 @@ colormap1 = segmented_colormap(
           [0.75, [195,190,90], [185,50,50]] ])
 
 colormap = greyscale_colormap
-        
+
+update_colorbar = (min,max) =>        
+        e = $('#colorbar')[0]
+        ctx = e.getContext("2d");
+        d = ctx.getImageData(0, 0, e.width, e.height);
+        for i in [0...e.width]
+                for j in [0...e.height]
+                        [r,g,b] = colormap(i / e.width)
+                        k = 4 * (i + j*e.width)
+                        d.data[k+0] = r
+                        d.data[k+1] = g
+                        d.data[k+2] = b
+                        d.data[k+3] = 255
+        ctx.putImageData(d, 0, 0)
+        $("#colorbar-min")[0].textContent = min.toFixed(2)
+        $("#colorbar-max")[0].textContent = max.toFixed(2)
+
 update = (img) ->
+        $('#colorbar-container')[0].display = 'none'
         if mode == "ndvi"
             [r,g,b] = get_channels(img)
             ndvi_img = ndvi(r,b)
             [[min],[max]] = ndvi_img.extrema()
             normalize = (x) -> (x - min) / (max - min)
             result = colorify(ndvi_img, (x) -> colormap(normalize(x)))
+            update_colorbar(min, max)
         else if mode == "raw"
             result = img
         else if mode == "nir"

@@ -97,7 +97,13 @@
           </span>
         </div>
 
-        <canvas id="image" style="width: 800; height: 800;"></canvas>
+        <canvas id="image" style="width: 800px; height: 800px;"></canvas>
+        <div id="colorbar-container">
+          <span id="colorbar-min"></span>
+          <canvas id="colorbar" style="width: 800px; height: 10px;"></canvas>
+          <span id="colorbar-max"></span>
+        </div>
+
         <script>
           (function(){
             $('button#raw').on('click', function() { mode="raw"; update(image); });
