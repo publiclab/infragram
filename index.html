@@ -83,7 +83,7 @@
             </span>
           </span>
 
-          <span class="group">
+          <span id="colormaps-group" class="group" style="display: none;">
             <b>Color maps:</b>
             <span class="btn-toolbar">
               <div class="btn-group" data-toggle="buttons-radio">
@@ -107,9 +107,9 @@
 
         <script>
           (function(){
-            $('button#raw').on('click', function() { mode="raw"; update(image); });
-            $('button#ndvi').on('click', function() { mode="ndvi"; update(image); });
-            $('button#nir').on('click', function() { mode="nir"; update(image); });
+            $('button#raw').on('click', function() { set_mode("raw"); });
+            $('button#ndvi').on('click', function() { set_mode("ndvi"); });
+            $('button#nir').on('click', function() { set_mode("nir"); });
             $('#download').on('click', function() { download(); });
             $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar"); });
             $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());update(image,"infragrammar"); });

@@ -128,6 +128,7 @@ colormap1 = segmented_colormap(
 colormap = greyscale_colormap
 
 update_colorbar = (min,max) =>        
+        $('#colorbar-container')[0].style.display = 'inline-block'
         e = $('#colorbar')[0]
         ctx = e.getContext("2d");
         d = ctx.getImageData(0, 0, e.width, e.height);
@@ -144,7 +145,7 @@ update_colorbar = (min,max) =>
         $("#colorbar-max")[0].textContent = max.toFixed(2)
 
 update = (img) ->
-        $('#colorbar-container')[0].display = 'none'
+        $('#colorbar-container')[0].style.display = 'none'
         if mode == "ndvi"
             [r,g,b] = get_channels(img)
             ndvi_img = ndvi(r,b)
@@ -200,3 +201,13 @@ save_expressions = (r,g,b) ->
         eval("r_exp = function(R,G,B){return "+r+";}")
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
+
+set_mode = (new_mode) ->
+        mode = new_mode
+        update(image)
+
+        if mode == "ndvi"
+                $("#colormaps-group")[0].style.display = "inline-block"
+        else
+                $("#colormaps-group")[0].style.display = "none"
+        
