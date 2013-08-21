@@ -1,0 +1,28 @@
+body { padding-top: 60px; }
+span.group { display: inline-block; }
+
+footer.footer {
+    clear: both;
+    padding-top: 10px;
+}
+
+div#image-container {
+    text-align: center;
+}
+
+div#image-container canvas#image {
+    width: 800px;
+    height: 800px;
+    margin: 0px auto;
+}
+
+div#colorbar-container {
+    display: inline-block;
+    width: 70%;
+}
+
+div#colorbar-container canvas#colorbar {
+    width: 80%;
+    height: 2em;
+    vertical-align: middle;
+}

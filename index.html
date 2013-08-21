@@ -8,13 +8,11 @@
     <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <style>
-      body { padding-top: 60px; }
-      span.group { display: inline-block; }
-    </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="bootstrap/css/slider.css" rel="stylesheet">
     <link href="/static/css/application.css" rel="stylesheet">
+    <link href="infragram.css" rel="stylesheet">
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="bootstrap/js/bootstrap-slider.js"></script>
@@ -97,12 +95,12 @@
           </span>
         </div>
 
-        <div style="text-align: center;">
-          <canvas id="image" style="width: 800px; height: 800px; margin: 0px auto;"></canvas>
+        <div id="image-container">
+          <canvas id="image"></canvas>
 
-          <div id="colorbar-container" style="display: inline-block; width: 70%;">
+          <div id="colorbar-container">
             <span id="colorbar-min"></span>
-            <canvas id="colorbar" style="width: 80%; height: 2em; vertical-align: middle;"></canvas>
+            <canvas id="colorbar"></canvas>
             <span id="colorbar-max"></span>
           </div>
         </div>
@@ -128,7 +126,7 @@
 
       </div>
 
-      <footer class="footer" style="clear:both;padding-top:10px;">
+      <footer class="footer">
           <hr>
           <h4 style="margin-bottom:40px;"><a style="color:#444;" href="/">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/bgamari/infragram-js/">open source software</a></small></h4>
       </footer>
