@@ -8,10 +8,11 @@
     <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <style> body { padding-top: 60px; } </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="bootstrap/css/slider.css" rel="stylesheet">
     <link href="/static/css/application.css" rel="stylesheet">
+    <link href="infragram.css" rel="stylesheet">
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="bootstrap/js/bootstrap-slider.js"></script>
@@ -70,18 +71,40 @@
             <button type="submit" id="run" class="btn btn-primary">Run</button>
           </form>
 
-          <b>Presets:</b>
-          <span class="btn-toolbar">
-            <div class="btn-group" data-toggle="buttons-radio">
-              <button id="raw" type="button" class="btn active">Raw</button>
-              <button id="ndvi" type="button" class="btn">NDVI</button>
-              <button id="nir" type="button" class="btn">NIR</button>
-            </div>
-            <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+          <span class="group">
+            <b>Presets:</b>
+            <span class="btn-toolbar">
+              <div class="btn-group" data-toggle="buttons-radio">
+                <button id="raw" type="button" class="btn active">Raw</button>
+                <button id="ndvi" type="button" class="btn">NDVI</button>
+                <button id="nir" type="button" class="btn">NIR</button>
+              </div>
+              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+            </span>
+          </span>
+
+          <span class="group">
+            <b>Color maps:</b>
+            <span class="btn-toolbar">
+              <div class="btn-group" data-toggle="buttons-radio">
+                <button id="grey" type="button" class="btn active">Greyscale</button>
+                <button id="color" type="button" class="btn">Color</button>
+              </div>
+              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+            </span>
           </span>
         </div>
 
-        <canvas id="image" style="width: 800; height: 800;"></canvas>
+        <div id="image-container">
+          <canvas id="image"></canvas>
+
+          <div id="colorbar-container">
+            <span id="colorbar-min"></span>
+            <canvas id="colorbar"></canvas>
+            <span id="colorbar-max"></span>
+          </div>
+        </div>
+
         <script>
           (function(){
             $('button#raw').on('click', function() { mode="raw"; update(image); });
@@ -90,6 +113,9 @@
             $('#download').on('click', function() { download(); });
             $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar"); });
             $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());update(image,"infragrammar"); });
+
+            $('button#grey').on('click', function() { colormap = greyscale_colormap; update(image); });
+            $('button#color').on('click', function() { colormap = colormap1; update(image); });
 
             // http://www.eyecon.ro/bootstrap-slider/
             $('#slider').slider().on('slide', function(ev){
@@ -100,7 +126,7 @@
 
       </div>
 
-      <footer class="footer" style="clear:both;padding-top:10px;">
+      <footer class="footer">
           <hr>
           <h4 style="margin-bottom:40px;"><a style="color:#444;" href="/">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/bgamari/infragram-js/">open source software</a></small></h4>
       </footer>
