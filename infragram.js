@@ -199,6 +199,7 @@ colormap = greyscale_colormap;
 
 update_colorbar = function(min, max) {
   var b, ctx, d, e, g, i, j, k, r, _i, _j, _ref, _ref1, _ref2;
+  $('#colorbar-container')[0].style.display = 'inline-block';
   e = $('#colorbar')[0];
   ctx = e.getContext("2d");
   d = ctx.getImageData(0, 0, e.width, e.height);
@@ -219,7 +220,7 @@ update_colorbar = function(min, max) {
 
 update = function(img) {
   var b, g, max, min, ndvi_img, normalize, r, result, _ref, _ref1, _ref2, _ref3, _ref4;
-  $('#colorbar-container')[0].display = 'none';
+  $('#colorbar-container')[0].style.display = 'none';
   if (mode === "ndvi") {
     _ref = get_channels(img), r = _ref[0], g = _ref[1], b = _ref[2];
     ndvi_img = ndvi(r, b);
