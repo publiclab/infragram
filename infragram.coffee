@@ -174,3 +174,31 @@ save_expressions = (r,g,b) ->
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
 
+save_expressions_hsv = (h,s,v) ->
+        h = h.replace(/S/g,$('#slider').val()/100)
+        s = s.replace(/S/g,$('#slider').val()/100)
+        v = v.replace(/S/g,$('#slider').val()/100)
+        eval("r_exp = function(R,G,B){return hsv2rgb("+h+","+s+","+v+")[0];}")
+        eval("g_exp = function(R,G,B){return hsv2rgb("+h+","+s+","+v+")[1];}")
+        eval("b_exp = function(R,G,B){return hsv2rgb("+h+","+s+","+v+")[2];}")
+
+# modified from:
+# http://schinckel.net/2012/01/10/hsv-to-rgb-in-javascript/
+
+hsv2rgb = (h,s,v) ->
+        data = [];
+        if s is 0 
+                rgb = [v,v,v];
+        else
+                h = h / 60;
+                i = Math.floor(h);
+                data = [v*(1-s), v*(1-s*(h-i)), v*(1-s*(1-(h-i)))];
+                switch i
+                  when 0 then rgb = [v, data[2], data[0]];
+                  when 1 then rgb = [data[1], v, data[0]];
+                  when 2 then rgb = [data[0], v, data[2]];
+                  when 3 then rgb = [data[0], data[1], v];
+                  when 4 then rgb = [data[2], data[0], v];
+                  else rgb = [v, data[0], data[1]];
+        return rgb
+
