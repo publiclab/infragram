@@ -1,5 +1,9 @@
-all : infragram.js
+SRCS = infragram.js
+
+all : $(SRCS)
 
 %.js : %.coffee
 	coffee --compile --bare $<
-	git commit $@ -m "Update $@"
+
+commit : $(SRCS)
+	git commit $(SRCS:.coffee=.js) -m "Update javascript"
