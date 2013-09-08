@@ -121,9 +121,9 @@ greyscale_colormap = segmented_colormap(
           [1, [255,255,255], [255,255,255]] ])
 
 colormap1 = segmented_colormap(
-        [ [   0, [25,0,175],   [38,195,195]],
-          [ 0.5, [50,155,60],  [195,190,90]],
-          [0.75, [195,190,90], [185,50,50]] ])
+        [ [   0, [0,0,255],   [38,195,195]],
+          [ 0.5, [0,150,0],  [255,255,0]],
+          [0.75, [255,255,0], [255,50,50]] ])
 
 colormap = greyscale_colormap
 
@@ -149,7 +149,10 @@ update = (img) ->
         if mode == "ndvi"
             [r,g,b] = get_channels(img)
             ndvi_img = ndvi(r,b)
-            [[min],[max]] = ndvi_img.extrema()
+            # this isn't correct for NDVI; we want values from -1 to 1:
+            # [[min],[max]] = ndvi_img.extrema()
+            min = -1
+            max = 1
             normalize = (x) -> (x - min) / (max - min)
             result = colorify(ndvi_img, (x) -> colormap(normalize(x)))
             update_colorbar(min, max)

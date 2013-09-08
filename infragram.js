@@ -192,7 +192,7 @@ render = function(img) {
 
 greyscale_colormap = segmented_colormap([[0, [0, 0, 0], [255, 255, 255]], [1, [255, 255, 255], [255, 255, 255]]]);
 
-colormap1 = segmented_colormap([[0, [25, 0, 175], [38, 195, 195]], [0.5, [50, 155, 60], [195, 190, 90]], [0.75, [195, 190, 90], [185, 50, 50]]]);
+colormap1 = segmented_colormap([[0, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.75, [255, 255, 0], [255, 50, 50]]]);
 
 colormap = greyscale_colormap;
 
@@ -218,12 +218,13 @@ update_colorbar = function(min, max) {
 };
 
 update = function(img) {
-  var b, g, max, min, ndvi_img, normalize, r, result, _ref, _ref1, _ref2, _ref3, _ref4;
+  var b, g, max, min, ndvi_img, normalize, r, result, _ref, _ref1;
   $('#colorbar-container')[0].style.display = 'none';
   if (mode === "ndvi") {
     _ref = get_channels(img), r = _ref[0], g = _ref[1], b = _ref[2];
     ndvi_img = ndvi(r, b);
-    _ref1 = ndvi_img.extrema(), (_ref2 = _ref1[0], min = _ref2[0]), (_ref3 = _ref1[1], max = _ref3[0]);
+    min = -1;
+    max = 1;
     normalize = function(x) {
       return (x - min) / (max - min);
     };
@@ -234,7 +235,7 @@ update = function(img) {
   } else if (mode === "raw") {
     result = img;
   } else if (mode === "nir") {
-    _ref4 = get_channels(img), r = _ref4[0], g = _ref4[1], b = _ref4[2];
+    _ref1 = get_channels(img), r = _ref1[0], g = _ref1[1], b = _ref1[2];
     result = colorify(r, function(x) {
       return [x, x, x];
     });
