@@ -63,19 +63,19 @@
             <input placeholder="R" type="text" id="r_exp" class="input-small" />
             <input placeholder="G" type="text" id="g_exp" class="input-small" />
             <input placeholder="B" type="text" id="b_exp" class="input-small" />
-            <button type="submit" id="run" class="btn btn-primary">Run</button>
+            <button type="submit" id="rgb_run" class="btn btn-primary">Run</button>
           </form>
 
           <form id="infragrammar_mono" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
             <input placeholder="monochrome" type="text" id="m_exp" class="input-small" />
-            <button type="submit" id="run" class="btn btn-primary">Run</button>
+            <button type="submit" id="mono_run" class="btn btn-primary">Run</button>
           </form>
 
           <form id="infragrammar_hsv" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
             <input placeholder="hue" type="text" id="h_exp" class="input-small" />
-            <input placeholder="saturation" type="text" id="s_exp" class="input-small" />
-            <input placeholder="value" type="text" id="v_exp" class="input-small" />
-            <button type="submit" id="run" class="btn btn-primary">Run</button>
+            <input placeholder="saturation" type="text" id="s_exp" class="input-small" value="1" />
+            <input placeholder="value" type="text" id="v_exp" class="input-small" value="1" />
+            <button type="submit" id="hsv_run" class="btn btn-primary">Run</button>
           </form>
 
           <br />
@@ -132,6 +132,37 @@
             $('#slider').slider().on('slide', function(ev){
               save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar");
             });
+
+            // check for parameters and insert and run them:
+            if (window.location.href.split('?').length > 1) {
+              params = {}
+              $.each(window.location.href.split('?')[1].split('&'),function(i,param){
+                if (param.split('=').length > 1) {
+                  key = param.split('=')[0]
+                  value = param.split('=')[1]
+                  params[key] = value
+                }
+              })
+            }
+            if (params['m']) $('#m_exp').val(params['m'])
+
+            if (params['r']) $('#r_exp').val(params['r'])
+            if (params['g']) $('#g_exp').val(params['g'])
+            if (params['b']) $('#b_exp').val(params['b'])
+
+            if (params['h']) $('#h_exp').val(params['h'])
+            if (params['s']) $('#s_exp').val(params['s'])
+            if (params['v']) $('#v_exp').val(params['v'])
+
+            /*
+            if (params['r'] || params['g'] || params['b']) { 
+              $('#infragrammar_rgb').submit()
+            } else if (params['m']) {
+              $('#infragrammar_mono').submit()
+            } else if (params['h']) {
+              $('#infragrammar_hsv').submit()
+            }
+            */
           })()
         </script>
 
