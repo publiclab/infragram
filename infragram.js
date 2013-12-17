@@ -398,7 +398,7 @@ jsHandleOnClickDownload = function() {
   e = document.getElementById("image");
   ctx = e.getContext("2d");
   lnk = document.createElement("a");
-  lnk.download = (new Date()).toISOString().replace(":", "_") + ".png";
+  lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png";
   lnk.href = ctx.canvas.toDataURL("image/png");
   if (document.createEvent) {
     event = document.createEvent("MouseEvents");
@@ -625,7 +625,7 @@ glHandleOnClickNir = function() {
 glHandleOnClickDownload = function() {
   var event, lnk;
   lnk = document.createElement("a");
-  lnk.download = (new Date()).toISOString().replace(":", "_") + ".png";
+  lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png";
   lnk.href = drawScene(imgContext, true);
   if (document.createEvent) {
     event = document.createEvent("MouseEvents");
