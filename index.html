@@ -10,10 +10,11 @@
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="bootstrap/css/slider.css" rel="stylesheet">
-    <link href="/static/css/application.css" rel="stylesheet">
+    <link href="assets/css/application.css" rel="stylesheet">
     <link href="infragram.css" rel="stylesheet">
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+    <script src="jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="addyosmani-getUserMedia.js/lib/getUserMedia.js"></script>
     <script src="bootstrap/js/bootstrap-slider.js"></script>
@@ -105,10 +106,11 @@
             </span>
           </span>
 
-          <button id="snapshot" type="button" class="btn btn-primary" onClick="$I.initialize();"><i class="icon-white icon-camera"></i> Take webcam snapshot</button>
+          <button id="webcam-activate" type="button" class="btn btn-primary" onClick="$I.initialize();"><i class="icon-white icon-camera"></i> Activate webcam</button>
+          <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
         </div>
 
-        <div id="webcam"></div>
+        <div style="display:none;" id="webcam"></div>
 
         <div id="image-container">
           <canvas id="image"></canvas>

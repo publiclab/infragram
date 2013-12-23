@@ -58,7 +58,10 @@ $I = {
     this.image = this.ctx.getImageData(0, 0, this.options.width, this.options.height);
 
     // Trigger a snapshot w/ button
+    $('#webcam-activate').hide();
+    $('#snapshot').show();
     $('#snapshot').click(this.getSnapshot);
+    $('#webcam').show();
 
   },
   // options contains the configuration information for the shim
@@ -159,6 +162,7 @@ $I = {
 
   deviceError: function (error) {
     alert('No camera available.');
+    console.log(error);
     console.error('An error occurred: [CODE ' + error.code + ']');
   },
 
@@ -169,10 +173,13 @@ $I = {
     // detection), we handle getting video/images for our canvas 
     // from our HTML5 <video> element.
     if ($I.options.context === 'webrtc') {
-        var video = document.getElementsByTagName('video')[0]; 
-        //$I.canvas.width = video.videoWidth;
-        //$I.canvas.height = video.videoHeight;
-        //$I.canvas.getContext('2d').drawImage(video, 0, 0);
+      var video = document.getElementsByTagName('video')[0]; 
+      $I.canvas.width = video.videoWidth;
+      $I.canvas.height = video.videoHeight;
+      $I.canvas.getContext('2d').drawImage(video, 0, 0);
+      //image = new Image(data, video.videoWidth, video.videoHeight);
+      image = $I.canvas.getContext('2d').getImageData(0, 0, $I.canvas.width, $I.canvas.height);
+      $('#webcam').hide();
 
     // Otherwise, if the context is Flash, we ask the shim to
     // directly call window.webcam, where our shim is located
