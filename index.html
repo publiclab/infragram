@@ -4,6 +4,7 @@
     
     <title>Infragram | by Public Lab - Home</title>
 
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
@@ -21,17 +22,21 @@
     <script src="png.js/zlib.js"></script>
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
-    <script src="infragram.js"></script>
-    
+    <script src="webgl-utils.js"></script>
+    <script src="infragram.js?hash=cf6c531c5aa39ce446c3c0a3edfafd37b396f27a"></script>
+
+    <script type="x-shader/x-vertex" id="shader-vs"></script>
+    <script type="x-shader/x-fragment" id="shader-fs-template"></script>
+    <script type="x-shader/x-fragment" id="shader-fs"></script>
   </head>
 
   <body>
   
     <div class="container page" style="padding-top:10px;">
-      <img src="/static/img/infragram-logo.png" style="float:left;margin-right:14px;"/>
+      <img src="/static/img/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;">
 
-      <br />
-      <h1><a style="color:#444;" href="/">Infragram</a> <br class="visible-phone"/><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
+      <br>
+      <h1><a style="color:#444;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
 
       <p>Welcome to Public Lab's online service for generating plant health analyses from near-infrared imagery!</p>
 
@@ -41,61 +46,57 @@
 
       <div class="content">
 
-        <hr />
+        <hr>
 
         <h3>JavaScript Infragram Sandbox</h3>
 
-        <p>This page is a prototype (with <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues?labels=bug&page=1&state=open">known bugs</a>), browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair and Jeff Warren.</p>
+        <p>This page is a prototype (with <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues?labels=bug&amp;page=1&amp;state=open">known bugs</a>), browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair, Jeff Warren and Piotr Foltyn.</p>
 
         <div class="well">
 
           <div style="float:right;margin-right:20px;">
             <span style="margin-right:20px;">Learn how to use this <a href="http://publiclab.org/wiki/infragram-sandbox">at PublicLab.org/wiki/infragram-sandbox</a></span> 
-            <b>Slider: &nbsp; </b>
-            <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100" />
+            <b>Slider (X): &nbsp; </b>
+            <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">
           </div>
 
-          <form name="file-form">
               <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
-              <input type="file" name="file-sel" onchange="on_file_sel();"></input>
-          </form>
+          <div>
+              <input type="file" id="file-sel">
+          </div>
 
-          <form id="infragrammar" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
             <b>Channel mixer:</b>
-            <input placeholder="R" type="text" id="r_exp" class="input-small" />
-            <input placeholder="G" type="text" id="g_exp" class="input-small" />
-            <input placeholder="B" type="text" id="b_exp" class="input-small" />
-            <button type="submit" id="rgb_run" class="btn btn-primary">Run</button>
+          <form id="infragrammar" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
+            <input placeholder="R" type="text" id="r_exp" class="input-small">
+            <input placeholder="G" type="text" id="g_exp" class="input-small">
+            <input placeholder="B" type="text" id="b_exp" class="input-small">
+            <button type="submit" class="btn btn-primary">Run</button>
           </form>
 
-          <form id="infragrammar_mono" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
-            <input placeholder="monochrome" type="text" id="m_exp" class="input-small" />
-            <button type="submit" id="mono_run" class="btn btn-primary">Run</button>
+          <form id="infragrammar_mono" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
+            <input placeholder="monochrome" type="text" id="m_exp" class="input-small">
+            <button type="submit" class="btn btn-primary">Run</button>
           </form>
 
-          <form id="infragrammar_hsv" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void();">
-            <input placeholder="hue" type="text" id="h_exp" class="input-small" />
-            <input placeholder="saturation" type="text" id="s_exp" class="input-small" value="1" />
-            <input placeholder="value" type="text" id="v_exp" class="input-small" value="1" />
-            <button type="submit" id="hsv_run" class="btn btn-primary">Run</button>
+          <form id="infragrammar_hsv" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
+            <input placeholder="H" type="text" id="h_exp" class="input-small">
+            <input placeholder="S" type="text" id="s_exp" class="input-small">
+            <input placeholder="V" type="text" id="v_exp" class="input-small">
+            <button type="submit" class="btn btn-primary">Run</button>
           </form>
 
-          <br />
-          <br />
+          <br>
+          <br>
 
-          <span class="group">
-            <b>Presets:</b>
-            <span class="btn-toolbar">
-              <div class="btn-group" data-toggle="buttons-radio">
-                <button id="raw" type="button" class="btn active">Raw</button>
-                <button id="ndvi" type="button" class="btn">NDVI</button>
-                <button id="nir" type="button" class="btn">NIR</button>
-              </div>
-              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
-            </span>
-          </span>
+          <b>Presets:</b>
+          <div class="btn-group" data-toggle="buttons-radio">
+            <button id="raw" type="button" class="btn active">Raw</button>
+            <button id="ndvi" type="button" class="btn">NDVI</button>
+            <button id="nir" type="button" class="btn">NIR</button>
+          </div>
+          <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
 
-          <span id="colormaps-group" class="group" style="display: none;">
+          <div id="colormaps-group" style="display: none;">
             <b>Color maps:</b>
             <span class="btn-toolbar">
               <div class="btn-group" data-toggle="buttons-radio">
@@ -104,7 +105,7 @@
               </div>
               <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
             </span>
-          </span>
+          </div>
 
           <button id="webcam-activate" type="button" class="btn btn-primary" onClick="$I.initialize();"><i class="icon-white icon-camera"></i> Activate webcam</button>
           <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
@@ -113,12 +114,12 @@
         <div style="display:none;" id="webcam"></div>
 
         <div id="image-container">
-          <canvas id="image"></canvas>
+          <canvas id="image" width="800" height="600"></canvas>
 
-          <div id="colorbar-container">
-            <span id="colorbar-min"></span>
+          <div id="colorbar-container" style="display:none;">
+            <span id="colorbar-min">-1.00</span>
             <canvas id="colorbar"></canvas>
-            <span id="colorbar-max"></span>
+            <span id="colorbar-max">1.00</span>
           </div>
         </div>
 

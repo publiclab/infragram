@@ -11,8 +11,6 @@ div#image-container {
 }
 
 div#image-container canvas#image {
-    width: 800px;
-    height: 800px;
     margin: 0px auto;
 }
 

@@ -1,4 +1,4 @@
-# Infrapix-js
+# infragram-js
 
 To get started,
 

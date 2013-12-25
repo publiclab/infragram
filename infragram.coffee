@@ -1,3 +1,18 @@
+# This file is part of infragram-js.
+#
+# infragram-js is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# infragram-js is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
+
 image = null
 mode = "raw"
 r_exp = ""
@@ -5,7 +20,7 @@ g_exp = ""
 b_exp = ""
 m_exp = "" #monochrome
 
-class Image
+class JsImage
         constructor: (@data, @width, @height, @channels) ->
 
         copyToImageData: (imgData) ->
@@ -63,7 +78,7 @@ get_channels = (img) ->
                 r[i] = img.data[4*i + 0];
                 g[i] = img.data[4*i + 1];
                 b[i] = img.data[4*i + 2];
-        mkImage = (d) -> new Image(d, img.width, img.height, 1);
+        mkImage = (d) -> new JsImage(d, img.width, img.height, 1);
         return [mkImage(r), mkImage(g), mkImage(b)];
 
 ndvi = (nir, vis) ->
@@ -71,7 +86,7 @@ ndvi = (nir, vis) ->
         d = new Float64Array(n);
         for i in [0...n]
                 d[i] = (nir.data[i] - vis.data[i]) / (nir.data[i] + vis.data[i]);
-        return new Image(d, nir.width, nir.height, 1);
+        return new JsImage(d, nir.width, nir.height, 1);
 
 # Apply the given colormap to a single-channel image
 colorify = (img, colormap) -> 
@@ -84,11 +99,11 @@ colorify = (img, colormap) ->
                 data[j++] = g;
                 data[j++] = b;
                 data[j++] = 255;
-        cimg = new Image();
+        cimg = new JsImage();
         cimg.width = img.width;
         cimg.height = img.height;
         cimg.data = data;
-        return new Image(data, img.width, img.height, 4);
+        return new JsImage(data, img.width, img.height, 4);
 
 infragrammar = (img) ->
         n = img.width * img.height;
@@ -105,7 +120,7 @@ infragrammar = (img) ->
                 o[4*i + 1] = 255*g_exp(r[i],g[i],b[i]);
                 o[4*i + 2] = 255*b_exp(r[i],g[i],b[i]);
                 o[4*i + 3] = 255
-        return new Image(o, img.width, img.height, 4);
+        return new JsImage(o, img.width, img.height, 4);
 
 render = (img) ->
         e = document.getElementById("image");
@@ -161,77 +176,74 @@ update = (img) ->
         else if mode == "nir"
             [r,g,b] = get_channels(img)
             result = colorify(r, (x) -> [x, x, x])
-        else if mode == "infragrammar"
+        else
             result = infragrammar(img)
         $('#download').show()
         render(result)
-        
-file_reader = new FileReader();
-file_reader.onload = (oFREvent) ->
-        file = document.forms["file-form"]["file-sel"].files[0];
-        data = new Uint8Array(file_reader.result);
-        if file.type == "image/png"
-            png = new PNG(data);
-            data = png.decode()
-            img = new Image(data, png.width, png.height);
-        else if file.type == "image/jpeg"
-            jpeg = new JpegImage();
-            jpeg.parse(data);
-            d = new Uint8ClampedArray(4 * jpeg.width * jpeg.height);
-            img = new Image(d, jpeg.width, jpeg.height, 4);
-            jpeg.copyToImageData(img);
-        else
-            document.getElementById("error").html = "Unrecognized file format (supports PNG and JPEG)";
-            return
-
-        image = img
-        update(img,'raw')
-
-on_file_sel = () ->
-        file = document.forms["file-form"]["file-sel"].files[0];
-        if file
-                file_reader.readAsArrayBuffer(file);
-
-download = () ->
-        e = document.getElementById("image");
-        ctx = e.getContext("2d");
-        window.open(ctx.canvas.toDataURL(),'_newtab').focus()
 
 save_expressions = (r,g,b) ->
-        r = r.replace(/S/g,$('#slider').val()/100)
-        g = g.replace(/S/g,$('#slider').val()/100)
-        b = b.replace(/S/g,$('#slider').val()/100)
+        r = r.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        g = g.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        b = b.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        r = "R" if r == ""
+        g = "G" if g == ""
+        b = "B" if b == ""
         eval("r_exp = function(R,G,B){return "+r+";}")
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
 
 save_expressions_hsv = (h,s,v) ->
-        h = h.replace(/S/g,$('#slider').val()/100)
-        s = s.replace(/S/g,$('#slider').val()/100)
-        v = v.replace(/S/g,$('#slider').val()/100)
-        eval("r_exp = function(R,G,B){return hsv2rgb("+h+","+s+","+v+")[0];}")
-        eval("g_exp = function(R,G,B){return hsv2rgb("+h+","+s+","+v+")[1];}")
-        eval("b_exp = function(R,G,B){return hsv2rgb("+h+","+s+","+v+")[2];}")
+        h = h.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        s = s.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        v = v.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        h = "H" if h == ""
+        s = "S" if s == ""
+        v = "V" if v == ""
+        eval("r_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[0];}")
+        eval("g_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[1];}")
+        eval("b_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[2];}")
 
 # modified from:
-# http://schinckel.net/2012/01/10/hsv-to-rgb-in-javascript/
+# http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
 
 hsv2rgb = (h,s,v) ->
         data = [];
         if s is 0 
                 rgb = [v,v,v];
         else
-                h = h / 60;
-                i = Math.floor(h);
+                i = Math.floor(h * 6);
+                f = h * 6 - i;
+                p = v * (1 - s);
+                q = v * (1 - f * s);
+                t = v * (1 - (1 - f) * s);
                 data = [v*(1-s), v*(1-s*(h-i)), v*(1-s*(1-(h-i)))];
                 switch i
-                  when 0 then rgb = [v, data[2], data[0]];
-                  when 1 then rgb = [data[1], v, data[0]];
-                  when 2 then rgb = [data[0], v, data[2]];
-                  when 3 then rgb = [data[0], data[1], v];
-                  when 4 then rgb = [data[2], data[0], v];
-                  else rgb = [v, data[0], data[1]];
+                  when 0 then rgb = [v, t, p];
+                  when 1 then rgb = [q, v, p];
+                  when 2 then rgb = [p, v, t];
+                  when 3 then rgb = [p, q, v];
+                  when 4 then rgb = [t, p, v];
+                  else rgb = [v, p, q];
         return rgb
+
+rgb2hsv = (r, g, b) ->
+    max = Math.max(r, g, b)
+    min = Math.min(r, g, b)
+    h = s = v = max
+
+    d = max - min
+    s = if max == 0 then 0 else d / max
+
+    if max == min
+        h = 0 # achromatic
+    else
+        switch max
+            when r then h = (g - b) / d + (if g < b then 6 else 0)
+            when g then h = (b - r) / d + 2
+            when b then h = (r - g) / d + 4
+        h /= 6
+
+    return [h, s, v]
 
 set_mode = (new_mode) ->
         mode = new_mode
@@ -241,4 +253,83 @@ set_mode = (new_mode) ->
                 $("#colormaps-group")[0].style.display = "inline-block"
         else
                 $("#colormaps-group")[0].style.display = "none"
-        
+
+jsHandleOnChangeFile = (files) ->
+    if files && files[0]
+        file = files[0]
+        file_reader = new FileReader();
+        file_reader.onload = (oFREvent) ->
+            data = new Uint8Array(file_reader.result);
+            if file.type == "image/png"
+                png = new PNG(data);
+                data = png.decode()
+                img = new JsImage(data, png.width, png.height);
+            else if file.type == "image/jpeg"
+                jpeg = new JpegImage();
+                jpeg.parse(data);
+                d = new Uint8ClampedArray(4 * jpeg.width * jpeg.height);
+                img = new JsImage(d, jpeg.width, jpeg.height, 4);
+                jpeg.copyToImageData(img);
+            else
+                document.getElementById("error").html = "Unrecognized file format (supports PNG and JPEG)";
+                return
+            image = img
+            update(img)
+        file_reader.readAsArrayBuffer(file);
+
+jsHandleOnClickRaw = () ->
+    set_mode("raw")
+
+jsHandleOnClickNdvi = () ->
+    set_mode("ndvi")
+
+jsHandleOnClickNir = () ->
+    set_mode("nir")
+
+jsHandleOnClickDownload = () ->
+    e = document.getElementById("image");
+    ctx = e.getContext("2d");
+
+    # create an "off-screen" anchor tag
+    lnk = document.createElement("a")
+    # the key here is to set the download attribute of the a tag
+    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
+    lnk.href = ctx.canvas.toDataURL("image/png")
+
+    # create a "fake" click-event to trigger the download
+    if document.createEvent
+        event = document.createEvent("MouseEvents")
+        event.initMouseEvent(
+            "click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+        lnk.dispatchEvent(event)
+    else if lnk.fireEvent
+        lnk.fireEvent("onclick")
+
+jsHandleOnSubmitInfraHsv = () ->
+    save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
+    set_mode("infragrammar_hsv")
+
+jsHandleOnSubmitInfra = () ->
+    save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val())
+    set_mode("infragrammar")
+
+jsHandleOnSubmitInfraMono = () ->
+    save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val())
+    set_mode("infragrammar_mono")
+
+jsHandleOnClickGrey = () ->
+    colormap = greyscale_colormap
+    update(image)
+
+jsHandleOnClickColor = () ->
+    colormap = colormap1
+    update(image)
+
+jsHandleOnSlide = (event) ->
+    if mode == "infragrammar"
+        save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val())
+    else if mode == "infragrammar_hsv"
+        save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
+    else
+        save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val())
+    update(image)
