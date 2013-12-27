@@ -60,6 +60,7 @@ $I = {
     // Trigger a snapshot w/ button
     $('#webcam-activate').hide();
     $('#snapshot').show();
+    $('#liveVideo').show();
     $('#snapshot').click(this.getSnapshot);
     $('#webcam').show();
 
@@ -138,7 +139,9 @@ $I = {
     if ($I.options.context === 'webrtc') {
 
       var video = $I.options.videoEl;
-      
+
+          // attempt to do live video
+          //$I.getSnapshot()
 
           if ((typeof MediaStream !== "undefined" && MediaStream !== null) && stream instanceof MediaStream) {
             

@@ -109,6 +109,7 @@
 
           <button id="webcam-activate" type="button" class="btn btn-primary" onClick="$I.initialize();"><i class="icon-white icon-camera"></i> Activate webcam</button>
           <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
+          <button style="display:none;" id="liveVideo" type="button" class="btn btn-primary" onClick="setInterval($I.getSnapshot,100)"><i class="icon-white icon-camera"></i> Live video</button>
         </div>
 
         <div style="display:none;" id="webcam"></div>
