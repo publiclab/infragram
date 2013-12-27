@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
 
-TARGET=infragram.js
-HASH=$(git hash-object $TARGET)
-REGEXP='s:(src="'$TARGET')(.*)":\1?hash='$HASH'":'
-sed -r $REGEXP -i index.html
+HASH=$(git hash-object $1)
+REGEXP='s:(src="'$1')(.*)":\1?hash='$HASH'":'
+sed -r $REGEXP -i $2
