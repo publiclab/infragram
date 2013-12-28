@@ -3,7 +3,6 @@
 $('button#raw').on('click', function() { set_mode("raw"); });
 $('button#ndvi').on('click', function() { set_mode("ndvi"); });
 $('button#nir').on('click', function() { set_mode("nir"); });
-$('#download').on('click', function() { download(); });
 $('#infragrammar_hsv').on('submit', function() { save_expressions_hsv($('#h_exp').val(),$('#s_exp').val(),$('#v_exp').val());set_mode("infragrammar"); });
 $('#infragrammar').on('submit', function() { save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val()); set_mode("infragrammar"); });
 $('#infragrammar_mono').on('submit', function() { save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val()); set_mode("infragrammar"); });
