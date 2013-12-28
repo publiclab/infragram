@@ -1,3 +1,5 @@
+// Button event listeners:
+
 $('button#raw').on('click', function() { set_mode("raw"); });
 $('button#ndvi').on('click', function() { set_mode("ndvi"); });
 $('button#nir').on('click', function() { set_mode("nir"); });
@@ -13,6 +15,8 @@ $('button#color').on('click', function() { colormap = colormap1; update(image); 
 $('#slider').slider().on('slide', function(ev){
   save_expressions($('#r_exp').val(),$('#g_exp').val(),$('#b_exp').val());update(image,"infragrammar");
 });
+
+// Prepopulated Infragrammar expressions via URL:
 
 params = {}
 // check for parameters and insert and run them:
@@ -45,7 +49,11 @@ if (params['r'] || params['g'] || params['b']) {
 }
 */
 
+// Webcam integration:
+
 $I = {
+  log: ['raw'], // command log; always starts with raw
+  last_command: function() { return $I.log[$I.log.length-1] },
   initialize: function() {
     // Initialize getUserMedia with options
     getUserMedia(this.options, this.success, this.deviceError);
@@ -138,23 +146,17 @@ $I = {
 
     if ($I.options.context === 'webrtc') {
 
-      var video = $I.options.videoEl;
+      var video = $I.options.videoEl, vendorURL = window.URL || window.webkitURL;
+      if (navigator.mozGetUserMedia) {
+        video.mozSrcObject = stream;
+        console.log('mozilla???')
+      } else if ((typeof MediaStream !== "undefined" && MediaStream !== null) && stream instanceof MediaStream) {
+        video.src = stream;
+        return video.play();
+      } else video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
 
-          // attempt to do live video
-          //$I.getSnapshot()
-
-          if ((typeof MediaStream !== "undefined" && MediaStream !== null) && stream instanceof MediaStream) {
-            
-            video.src = stream;
-            return video.play();
-          } else {
-            var vendorURL = window.URL || window.webkitURL;
-            video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
-          }
-
-      video.onerror = function () {
+      video.onerror = function (e) {
         stream.stop();
-        streamError();
       };
 
     } else{
@@ -180,8 +182,11 @@ $I = {
       $I.canvas.width = video.videoWidth;
       $I.canvas.height = video.videoHeight;
       $I.canvas.getContext('2d').drawImage(video, 0, 0);
-      //image = new Image(data, video.videoWidth, video.videoHeight);
+
       image = $I.canvas.getContext('2d').getImageData(0, 0, $I.canvas.width, $I.canvas.height);
+      e = document.getElementById("image");
+      e = new Image(image, video.videoWidth, video.videoHeight);
+      set_mode($I.last_command())
       $('#webcam').hide();
 
     // Otherwise, if the context is Flash, we ask the shim to
