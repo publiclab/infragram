@@ -17,9 +17,17 @@
 webGlSupported = false
 
 
+getURLParameter = (name) ->
+    return decodeURI(
+        (RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
+    )
+
+
 $(document).ready(() ->
     $("#image-container").ready(() ->
-        webGlSupported = glInitInfragram()
+        disableWebGl = if getURLParameter("enablewebgl") == "true" then false else true
+        #disableWebGl = if getURLParameter("disablewebgl") == "true" then true else false
+        webGlSupported = !disableWebGl && glInitInfragram()
     )
 
     $("#file-sel").change(() ->

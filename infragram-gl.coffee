@@ -14,6 +14,16 @@
 # along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
 
 
+modeToEquationMap = {
+    "hsv":  ["#h_exp", "#s_exp", "#v_exp"],
+    "rgb":  ["#r_exp", "#g_exp", "#b_exp"],
+    "mono": ["#m_exp", "#m_exp", "#m_exp"],
+    "raw":  ["r", "g", "b"],
+    "ndvi": ["(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2"],
+    "nir":  ["r", "r", "r"],
+}
+
+
 imgContext = null
 mapContext = null
 
@@ -52,6 +62,8 @@ createContext = (mode, greyscale, colormap, slider, canvasName) ->
     ctx.colormap = colormap
     ctx.slider = slider
     ctx.canvas = document.getElementById(canvasName)
+    ctx.canvas.addEventListener("webglcontextlost", ((event) -> event.preventDefault()), false)
+    ctx.canvas.addEventListener("webglcontextrestored", glRestoreContext, false)
     ctx.gl = getWebGLContext(ctx.canvas)
     if ctx.gl
         initBuffers(ctx)
@@ -81,7 +93,7 @@ drawScene = (ctx, returnImage) ->
     pSliderUniform = gl.getUniformLocation(ctx.shaderProgram, "uSlider")
     gl.uniform1f(pSliderUniform, ctx.slider)
     pNdviUniform = gl.getUniformLocation(ctx.shaderProgram, "uNdvi")
-    gl.uniform1f(pNdviUniform, (if ctx.mode == "ndvi" then 1.0 else 0.0))
+    gl.uniform1f(pNdviUniform, (if ctx.mode == "ndvi" || ctx.colormap then 1.0 else 0.0))
     pGreyscaleUniform = gl.getUniformLocation(ctx.shaderProgram, "uGreyscale")
     gl.uniform1f(pGreyscaleUniform, (if ctx.greyscale then 1.0 else 0.0))
     pHsvUniform = gl.getUniformLocation(ctx.shaderProgram, "uHsv")
@@ -95,7 +107,12 @@ drawScene = (ctx, returnImage) ->
         return ctx.canvas.toDataURL("image/png")
 
 
-generateShader = (ctx, r, g, b) ->
+generateShader = (ctx) ->
+    [r, g, b] = modeToEquationMap[ctx.mode]
+    r = if r.charAt(0) == "#" then $(r).val() else r
+    g = if g.charAt(0) == "#" then $(g).val() else g
+    b = if b.charAt(0) == "#" then $(b).val() else b
+
     # Map HSV to shader variable names
     r = r.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b")
     g = g.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b")
@@ -154,40 +171,53 @@ glHandleOnLoadTexture = (ctx, imageData) ->
 
 glInitInfragram = () ->
     imgContext = createContext("raw", true, false, 1.0, "image")
-    if imgContext
-        $("#shader-vs").load("shader.vert")
-        $("#shader-fs-template").load("shader.frag")
-        mapContext = createContext("ndvi", true, true, 1.0, "colorbar")
+    mapContext = createContext("raw", true, true, 1.0, "colorbar")
+    $("#shader-vs").load("shader.vert")
+    $("#shader-fs-template").load("shader.frag")
     return if imgContext && mapContext then true else false
+
+
+glRestoreContext = () ->
+    imageData = imgContext.imageData
+    imgContext = createContext(
+        imgContext.mode, imgContext.greyscale, imgContext.colormap, imgContext.slider, "image")
+    mapContext = createContext(
+        mapContext.mode, mapContext.greyscale, mapContext.colormap, mapContext.slider, "colorbar")
+    if imgContext && mapContext
+        generateShader(imgContext)
+        glHandleOnLoadTexture(imgContext, imageData)
+        generateShader(mapContext)
+        drawScene(mapContext)
 
 
 glHandleOnChangeFile = (files) ->
     if files && files[0]
         reader = new FileReader()
         reader.onload = (eventObject) ->
+            imgContext.imageData = eventObject.target.result
             glSetMode(imgContext, "raw");
-            generateShader(imgContext, "r", "g", "b")
+            generateShader(imgContext)
             glHandleOnLoadTexture(imgContext, eventObject.target.result)
-            generateShader(mapContext, "r", "g", "b")
+            generateShader(mapContext)
         reader.readAsDataURL(files[0])
 
 
 glHandleOnClickRaw = () ->
     glSetMode(imgContext, "raw")
-    generateShader(imgContext, "r", "g", "b")
+    generateShader(imgContext)
     drawScene(imgContext)
 
 
 glHandleOnClickNdvi = () ->
     glSetMode(imgContext, "ndvi")
-    generateShader(imgContext, "(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2")
+    generateShader(imgContext)
     drawScene(imgContext)
     drawScene(mapContext)
 
 
 glHandleOnClickNir = () ->
     glSetMode(imgContext, "nir")
-    generateShader(imgContext, "r", "r", "r")
+    generateShader(imgContext)
     drawScene(imgContext)
 
 
@@ -195,7 +225,7 @@ glHandleOnClickDownload = () ->
     # create an "off-screen" anchor tag
     lnk = document.createElement("a")
     # the key here is to set the download attribute of the a tag
-    lnk.download = (new Date()).toISOString().replace(":", "_") + ".png"
+    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
     lnk.href = drawScene(imgContext, true)
 
     # create a "fake" click-event to trigger the download
@@ -210,19 +240,19 @@ glHandleOnClickDownload = () ->
 
 glHandleOnSubmitInfraHsv = () ->
     glSetMode(imgContext, "hsv")
-    generateShader(imgContext, $("#h_exp").val(), $("#s_exp").val(), $("#v_exp").val())
+    generateShader(imgContext)
     drawScene(imgContext)
 
 
 glHandleOnSubmitInfra = () ->
     glSetMode(imgContext, "rgb")
-    generateShader(imgContext, $("#r_exp").val(), $("#g_exp").val(), $("#b_exp").val())
+    generateShader(imgContext)
     drawScene(imgContext)
 
 
 glHandleOnSubmitInfraMono = () ->
     glSetMode(imgContext, "mono")
-    generateShader(imgContext, $("#m_exp").val(), $("#m_exp").val(), $("#m_exp").val())
+    generateShader(imgContext)
     drawScene(imgContext)
 
 
