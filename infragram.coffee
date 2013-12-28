@@ -172,7 +172,8 @@ update = (img) ->
             result = colorify(ndvi_img, (x) -> colormap(normalize(x)))
             update_colorbar(min, max)
         else if mode == "raw"
-            result = img
+            #result = img
+            result = new JsImage(img.data, img.width, img.height, 4);
         else if mode == "nir"
             [r,g,b] = get_channels(img)
             result = colorify(r, (x) -> [x, x, x])
@@ -247,6 +248,7 @@ rgb2hsv = (r, g, b) ->
 
 set_mode = (new_mode) ->
         mode = new_mode
+        $I.log.push(mode)
         update(image)
 
         if mode == "ndvi"
