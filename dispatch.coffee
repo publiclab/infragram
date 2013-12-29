@@ -30,11 +30,13 @@ setParametersFromURL = (idNameMap) ->
         if val
             $(id).val(val)
 
-updateImage = (imgdata) ->
+
+updateImage = (video) ->
     if webGlSupported
-        glUpdateImage(imgdata)
+        glUpdateImage(video)
     else
-        jsUpdateImage(imgdata)
+        jsUpdateImage(video)
+
 
 $(document).ready(() ->
     $("#image-container").ready(() ->
@@ -150,7 +152,10 @@ $(document).ready(() ->
     )
 
     $("#live-video").click(() ->
-        setInterval(camera.getSnapshot, 250)
+        if webGlSupported
+            setInterval(camera.getSnapshot, 33)
+        else
+            setInterval(camera.getSnapshot, 250)
     )
 
     $("#modeSwitcher").click(() ->

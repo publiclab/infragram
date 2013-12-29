@@ -1,13 +1,13 @@
-precision mediump float;
+precision highp float;
 
 varying vec2 vTextureCoord;
 
 uniform sampler2D uSampler;
 uniform float uSlider;
-uniform float uNdvi;
-uniform float uGreyscale;
-uniform float uHsv;
-uniform float uColormap;
+uniform int uNdvi;
+uniform int uGreyscale;
+uniform int uHsv;
+uniform int uColormap;
 
 vec4 greyscale_colormap(float n)
 {
@@ -69,11 +69,11 @@ vec4 hsv2rgb(vec4 c)
 void main(void)
 {
     vec4 color = texture2D(uSampler, vTextureCoord);
-    if (uColormap >= 1.0)
+    if (uColormap == 1)
     {
         color = vec4(vTextureCoord, 0.0, 0.0);
     }
-    else if (uHsv >= 1.0)
+    else if (uHsv == 1)
     {
         color = rgb2hsv(color);
     }
@@ -84,13 +84,13 @@ void main(void)
     float rr = @1@;
     float gg = @2@;
     float bb = @3@;
-    if (uNdvi < 1.0)
+    if (uNdvi == 0)
     {
         color = vec4(rr, gg, bb, 1.0);
-        gl_FragColor = (uHsv < 1.0) ? color : hsv2rgb(color);
+        gl_FragColor = (uHsv == 0) ? color : hsv2rgb(color);
     }
     else
     {
-        gl_FragColor = (uGreyscale < 1.0) ? color_colormap(rr) : greyscale_colormap(rr);
+        gl_FragColor = (uGreyscale == 0) ? color_colormap(rr) : greyscale_colormap(rr);
     }
 }

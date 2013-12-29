@@ -7,3 +7,6 @@
 [submodule "bootstrap"]
 	path = bootstrap
 	url = https://github.com/twbs/bootstrap.git
+[submodule "getUserMedia.js"]
+	path = getUserMedia.js
+	url = https://github.com/addyosmani/getUserMedia.js.git

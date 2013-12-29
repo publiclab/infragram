@@ -16,13 +16,13 @@
 
     <script src="jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="addyosmani-getUserMedia.js/lib/getUserMedia.js"></script>
+    <script src="getUserMedia.js/lib/getUserMedia.js"></script>
     <script src="bootstrap/js/bootstrap-slider.js"></script>
     <script src="png.js/zlib.js"></script>
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
     <script src="webgl-utils.js"></script>
-    <script src="infragram.js?hash=23d073e4325bcc921a593b39ece870e0b0be16fe"></script>
+    <script src="infragram.js?hash=765cd083d8a4936676aad3205ed645282b9ab378"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -95,7 +95,6 @@
                 <button id="grey" type="button" class="btn active">Greyscale</button>
                 <button id="color" type="button" class="btn">Color</button>
               </div>
-              <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
             </span>
           </div>
 
@@ -108,9 +107,8 @@
           </div>
         </div>
 
-        <div style="display:none;" id="webcam"></div>
-
         <div id="image-container">
+          <div style="display:none;" id="webcam"></div>
           <canvas style="width:800px; height:600px;" id="image" width="800" height="600"></canvas>
 
           <div id="colorbar-container" style="display:none;">

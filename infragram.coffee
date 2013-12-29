@@ -247,17 +247,20 @@ rgb2hsv = (r, g, b) ->
     return [h, s, v]
 
 set_mode = (new_mode) ->
-        mode = new_mode
-        camera.log.push(mode)
-        update(image)
+    mode = new_mode
+    update(image)
 
-        if mode == "ndvi"
-                $("#colormaps-group")[0].style.display = "inline-block"
-        else
-                $("#colormaps-group")[0].style.display = "none"
+    if mode == "ndvi"
+        $("#colormaps-group")[0].style.display = "inline-block"
+    else
+        $("#colormaps-group")[0].style.display = "none"
 
-jsUpdateImage = (imgdata) ->
-        image = imgdata
+jsUpdateImage = (video) ->
+    e = document.getElementById("image")
+    ctx = e.getContext("2d")
+    ctx.drawImage(video, 0, 0)
+    image = ctx.getImageData(0, 0, video.videoWidth, video.videoHeight)
+    set_mode(mode)
 
 jsHandleOnChangeFile = (files) ->
     if files && files[0]
