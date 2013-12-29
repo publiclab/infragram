@@ -354,7 +354,9 @@ set_mode = function(new_mode) {
 
 jsUpdateImage = function(video) {
   var ctx, e;
-  e = document.getElementById("image");
+  e = document.createElement("canvas");
+  e.width = video.videoWidth;
+  e.height = video.videoHeight;
   ctx = e.getContext("2d");
   ctx.drawImage(video, 0, 0);
   image = ctx.getImageData(0, 0, video.videoWidth, video.videoHeight);
@@ -362,31 +364,25 @@ jsUpdateImage = function(video) {
 };
 
 jsHandleOnChangeFile = function(files) {
-  var file, file_reader;
+  var file_reader;
   if (files && files[0]) {
-    file = files[0];
     file_reader = new FileReader();
-    file_reader.onload = function(oFREvent) {
-      var d, data, img, jpeg, png;
-      data = new Uint8Array(file_reader.result);
-      if (file.type === "image/png") {
-        png = new PNG(data);
-        data = png.decode();
-        img = new JsImage(data, png.width, png.height);
-      } else if (file.type === "image/jpeg") {
-        jpeg = new JpegImage();
-        jpeg.parse(data);
-        d = new Uint8ClampedArray(4 * jpeg.width * jpeg.height);
-        img = new JsImage(d, jpeg.width, jpeg.height, 4);
-        jpeg.copyToImageData(img);
-      } else {
-        document.getElementById("error").html = "Unrecognized file format (supports PNG and JPEG)";
-        return;
-      }
-      image = img;
-      return update(img);
+    file_reader.onload = function(eventObject) {
+      var img;
+      img = new Image();
+      img.onload = function(event) {
+        var ctx, e;
+        e = document.createElement("canvas");
+        e.width = img.width;
+        e.height = img.height;
+        ctx = e.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        image = ctx.getImageData(0, 0, img.width, img.height);
+        return update(image);
+      };
+      return img.src = eventObject.target.result;
     };
-    return file_reader.readAsArrayBuffer(file);
+    return file_reader.readAsDataURL(files[0]);
   }
 };
 
