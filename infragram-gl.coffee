@@ -238,12 +238,6 @@ glHandleOnClickNdvi = () ->
     drawScene(mapContext)
 
 
-glHandleOnClickNir = () ->
-    glSetMode(imgContext, "nir")
-    generateShader(imgContext)
-    drawScene(imgContext)
-
-
 glHandleOnClickDownload = () ->
     # create an "off-screen" anchor tag
     lnk = document.createElement("a")

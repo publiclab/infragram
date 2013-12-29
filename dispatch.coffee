@@ -79,10 +79,12 @@ $(document).ready(() ->
     )
 
     $("button#nir").click(() ->
+        $('#m_exp').val('R')
+        $('#modeSwitcher').val('infragrammar_mono').click()
         if webGlSupported
-            glHandleOnClickNir()
+            glHandleOnSubmitInfraMono()
         else
-            jsHandleOnClickNir()
+            jsHandleOnSubmitInfraMono()
     )
 
     $("#download").click(() ->

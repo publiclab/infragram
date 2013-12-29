@@ -172,7 +172,6 @@ update = (img) ->
             result = colorify(ndvi_img, (x) -> colormap(normalize(x)))
             update_colorbar(min, max)
         else if mode == "raw"
-            #result = img
             result = new JsImage(img.data, img.width, img.height, 4);
         else if mode == "nir"
             [r,g,b] = get_channels(img)
@@ -290,9 +289,6 @@ jsHandleOnClickRaw = () ->
 
 jsHandleOnClickNdvi = () ->
     set_mode("ndvi")
-
-jsHandleOnClickNir = () ->
-    set_mode("nir")
 
 jsHandleOnClickDownload = () ->
     e = document.getElementById("image");
