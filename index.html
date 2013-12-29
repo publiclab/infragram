@@ -22,7 +22,7 @@
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
     <script src="webgl-utils.js"></script>
-    <script src="infragram.js?hash=6263a45d1c9e6834988ed5877ea0591ca31cfd38"></script>
+    <script src="infragram.js?hash=23d073e4325bcc921a593b39ece870e0b0be16fe"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -32,41 +32,40 @@
   <body>
   
     <div class="container page" style="padding-top:10px;">
-      <img src="/static/img/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;">
+      <button id="webgl-activate" type="button" class="btn btn-secondary pull-right">Try WebGL version &raquo;</button>
+      <h1><img src="/static/img/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"/> <a style="color:#444;padding-top:8px;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
 
-      <br>
-      <h1><a style="color:#444;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
-
-      <p>Welcome to Public Lab's online service for generating plant health analyses from near-infrared imagery!</p>
-
+      <p>Infragram is an online tool for analyzing plant health with near-infrared imagery! To learn more, <a href="http://publiclab.org/wiki/near-infrared-camera">read about our open source cameras</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a> from the Public Lab non-profit.</p>
       <hr>
-
-      <p>For more information about the Infragram platform, <a href="http://publiclab.org/wiki/near-infrared-camera">read about the open source cameras we are developing</a>, or see our <a href="http://www.kickstarter.com/projects/publiclab/infragram-the-infrared-photography-project">Kickstarter</a> video. To purchase a filter kit to make your own camera, visit <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">the Public Lab Store</a></p>
 
       <div class="content">
 
-        <hr>
-
-        <h3>JavaScript Infragram Sandbox</h3>
-
-        <p>This page is a prototype (with <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues?labels=bug&amp;page=1&amp;state=open">known bugs</a>), browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair, Jeff Warren and Piotr Foltyn.</p>
-
-        <p><button id="webgl-activate" type="button" class="btn btn-secondary">Try WebGL version &raquo;</button></p>
-
         <div class="well">
 
-          <div style="float:right;margin-right:20px;">
-            <span style="margin-right:20px;">Learn how to use this <a href="http://publiclab.org/wiki/infragram-sandbox">at PublicLab.org/wiki/infragram-sandbox</a></span> 
-            <b>Slider (X): &nbsp; </b>
-            <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">
+          <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
+          <input type="file" id="file-sel">
+
+          <b>Or use a USB webcam: </b>
+          <button id="webcam-activate" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Activate webcam</button>
+          <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
+          <button style="display:none;" id="live-video" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Live video</button>
+
+          <hr>
+
+          <b>Presets:</b>
+          <div class="btn-group" data-toggle="buttons-radio">
+            <button id="raw" type="button" class="btn active">Raw</button>
+            <button id="ndvi" type="button" class="btn">NDVI</button>
+            <button id="nir" type="button" class="btn">NIR</button>
           </div>
 
-              <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
-          <div>
-              <input type="file" id="file-sel">
-          </div>
+          <b style="margin-left:20px;">Infragrammar:</b>
+          <select style="margin-top:10px;width:120px;" id="modeSwitcher">
+            <option value='infragrammar'>RGB</option>
+            <option value='infragrammar_hsv'>HSV</option>
+            <option value='infragrammar_mono'>Monochrome</option>
+          </select>
 
-            <b>Channel mixer:</b>
           <form id="infragrammar" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
             <input placeholder="R" type="text" id="r_exp" class="input-small">
             <input placeholder="G" type="text" id="g_exp" class="input-small">
@@ -74,12 +73,12 @@
             <button type="submit" class="btn btn-primary">Run</button>
           </form>
 
-          <form id="infragrammar_mono" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
+          <form id="infragrammar_mono" class="form-inline" style="display:none;margin-right:20px;" action="javascript:void(0);">
             <input placeholder="monochrome" type="text" id="m_exp" class="input-small">
             <button type="submit" class="btn btn-primary">Run</button>
           </form>
 
-          <form id="infragrammar_hsv" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
+          <form id="infragrammar_hsv" class="form-inline" style="display:none;margin-right:20px;" action="javascript:void(0);">
             <input placeholder="H" type="text" id="h_exp" class="input-small">
             <input placeholder="S" type="text" id="s_exp" class="input-small">
             <input placeholder="V" type="text" id="v_exp" class="input-small">
@@ -88,14 +87,6 @@
 
           <br>
           <br>
-
-          <b>Presets:</b>
-          <div class="btn-group" data-toggle="buttons-radio">
-            <button id="raw" type="button" class="btn active">Raw</button>
-            <button id="ndvi" type="button" class="btn">NDVI</button>
-            <button id="nir" type="button" class="btn">NIR</button>
-          </div>
-          <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
 
           <div id="colormaps-group" style="display: none;">
             <b>Color maps:</b>
@@ -108,9 +99,13 @@
             </span>
           </div>
 
-          <button id="webcam-activate" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Activate webcam</button>
-          <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
-          <button style="display:none;" id="live-video" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Live video</button>
+          <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+
+          <b style="margin-left:20px;">Slider (X): &nbsp; </b>
+          <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">
+          <div style="float:right;margin-right:20px;">
+            <a style="margin-right:20px;" class="btn" href="http://publiclab.org/wiki/infragram-sandbox"><i class="icon icon-question-sign"></i> Help</a></span> 
+          </div>
         </div>
 
         <div style="display:none;" id="webcam"></div>
@@ -129,6 +124,7 @@
 
       <footer class="footer">
           <hr>
+          <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues">Please report bugs</a>, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair, Jeff Warren and Piotr Foltyn.</p>
           <h4 style="margin-bottom:40px;"><a style="color:#444;" href="/">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/bgamari/infragram-js/">open source software</a></small></h4>
       </footer>
  

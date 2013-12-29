@@ -201,6 +201,12 @@ glHandleOnChangeFile = (files) ->
             generateShader(mapContext)
         reader.readAsDataURL(files[0])
 
+glUpdateImage = (imgdata) ->
+    imgContext.imageData = imgdata
+    glSetMode(imgContext, "raw");
+    generateShader(imgContext)
+    glHandleOnLoadTexture(imgContext, eventObject.target.result)
+    generateShader(mapContext)
 
 glHandleOnClickRaw = () ->
     glSetMode(imgContext, "raw")

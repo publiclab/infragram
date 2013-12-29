@@ -256,6 +256,9 @@ set_mode = (new_mode) ->
         else
                 $("#colormaps-group")[0].style.display = "none"
 
+jsUpdateImage = (imgdata) ->
+        image = imgdata
+
 jsHandleOnChangeFile = (files) ->
     if files && files[0]
         file = files[0]

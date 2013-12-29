@@ -129,9 +129,9 @@ camera =
             video = document.getElementsByTagName("video")[0] 
             camera.canvas.width = video.videoWidth
             camera.canvas.height = video.videoHeight
-            camera.canvas.getContext("2d").drawImage(video, 0, 0)
+            camera.ctx.drawImage(video, 0, 0)
 
-            image = camera.canvas.getContext("2d").getImageData(0, 0, camera.canvas.width, camera.canvas.height)
+            updateImage(camera.ctx.getImageData(0, 0, camera.canvas.width, camera.canvas.height))
             e = document.getElementById("image")
             e = new Image(image, video.videoWidth, video.videoHeight)
             set_mode(camera.last_command())
