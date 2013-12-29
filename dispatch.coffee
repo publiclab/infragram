@@ -30,11 +30,13 @@ setParametersFromURL = (idNameMap) ->
         if val
             $(id).val(val)
 
+
 updateImage = (video) ->
     if webGlSupported
         glUpdateImage(video)
     else
         jsUpdateImage(video)
+
 
 $(document).ready(() ->
     $("#image-container").ready(() ->

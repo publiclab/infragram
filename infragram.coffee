@@ -251,9 +251,9 @@ set_mode = (new_mode) ->
     update(image)
 
     if mode == "ndvi"
-            $("#colormaps-group")[0].style.display = "inline-block"
+        $("#colormaps-group")[0].style.display = "inline-block"
     else
-            $("#colormaps-group")[0].style.display = "none"
+        $("#colormaps-group")[0].style.display = "none"
 
 jsUpdateImage = (video) ->
     e = document.getElementById("image")
