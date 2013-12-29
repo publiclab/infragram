@@ -660,6 +660,9 @@ glUpdateImage = function(video) {
   if (!imgContext.shaderProgram) {
     generateShader(imgContext);
   }
+  if (!mapContext.shaderProgram) {
+    generateShader(mapContext);
+  }
   return drawScene(imgContext);
 };
 
