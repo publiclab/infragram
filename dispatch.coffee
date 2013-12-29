@@ -18,16 +18,36 @@ webGlSupported = false
 
 
 getURLParameter = (name) ->
-    return decodeURI(
+    result = decodeURI(
         (RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
     )
+    return if result == "null" then null else result
+
+
+setParametersFromURL = (idNameMap) ->
+    for id, name of idNameMap
+        val = getURLParameter(name)
+        if val
+            $(id).val(val)
 
 
 $(document).ready(() ->
     $("#image-container").ready(() ->
-        disableWebGl = if getURLParameter("enablewebgl") == "true" then false else true
-        #disableWebGl = if getURLParameter("disablewebgl") == "true" then true else false
-        webGlSupported = !disableWebGl && glInitInfragram()
+        idNameMap =
+            "#m_exp": "m"
+            "#r_exp": "r"
+            "#g_exp": "g"
+            "#b_exp": "b"
+            "#h_exp": "h"
+            "#s_exp": "s"
+            "#v_exp": "v"
+        setParametersFromURL(idNameMap)
+
+        enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
+        webGlSupported = enablewebgl && glInitInfragram()
+
+        if webGlSupported
+            $("#webgl-activate").html("&laquo; Go back to JS version")
     )
 
     $("#file-sel").change(() ->
@@ -100,11 +120,31 @@ $(document).ready(() ->
             jsHandleOnClickColor()
     )
 
-    # http://www.eyecon.ro/bootstrap-slider/
     $("#slider").slider().on("slide", (event) ->
         if webGlSupported
             glHandleOnSlide(event)
         else
             jsHandleOnSlide(event)
+    )
+
+    $("#webgl-activate").click(() ->
+        href = window.location.href
+        if webGlSupported
+            href = href.replace(/enablewebgl=true&?/gi, "")
+        else
+            href += if href.indexOf("?") >= 0 then "enablewebgl=true" else "?enablewebgl=true"
+        window.location.href = href
+    )
+
+    $("#webcam-activate").click(() ->
+        camera.initialize()
+    )
+
+    $("#snapshot").click(() ->
+        camera.getSnapshot()
+    )
+
+    $("#live-video").click(() ->
+        setInterval(camera.getSnapshot, 250)
     )
 )

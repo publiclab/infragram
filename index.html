@@ -14,7 +14,6 @@
     <link href="assets/css/application.css" rel="stylesheet">
     <link href="infragram.css" rel="stylesheet">
 
-    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
     <script src="jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="addyosmani-getUserMedia.js/lib/getUserMedia.js"></script>
@@ -23,7 +22,7 @@
     <script src="png.js/png.js"></script>
     <script src="jpgjs/jpg.js"></script>
     <script src="webgl-utils.js"></script>
-    <script src="infragram.js?hash=635a21d486863bc429b27d033637058098f56dcc"></script>
+    <script src="infragram.js?hash=1d9a963ff9d98ebeef64d3d84df9f215eb260582"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -52,7 +51,7 @@
 
         <p>This page is a prototype (with <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues?labels=bug&amp;page=1&amp;state=open">known bugs</a>), browser-based infrared compositing environment, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair, Jeff Warren and Piotr Foltyn.</p>
 
-        <p><a class="btn" href="?enablewebgl=true">Try WebGL accelerated version &raquo;</a></p>
+        <p><button id="webgl-activate" type="button" class="btn btn-secondary">Try WebGL version &raquo;</button></p>
 
         <div class="well">
 
@@ -109,9 +108,9 @@
             </span>
           </div>
 
-          <button id="webcam-activate" type="button" class="btn btn-primary" onClick="$I.initialize();"><i class="icon-white icon-camera"></i> Activate webcam</button>
+          <button id="webcam-activate" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Activate webcam</button>
           <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
-          <button style="display:none;" id="liveVideo" type="button" class="btn btn-primary" onClick="setInterval($I.getSnapshot,250)"><i class="icon-white icon-camera"></i> Live video</button>
+          <button style="display:none;" id="live-video" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Live video</button>
         </div>
 
         <div style="display:none;" id="webcam"></div>
@@ -134,9 +133,6 @@
       </footer>
  
     </div>
-
-<script src="infragram-2.js"></script>
-
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
