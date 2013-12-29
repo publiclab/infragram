@@ -248,7 +248,7 @@ rgb2hsv = (r, g, b) ->
 
 set_mode = (new_mode) ->
         mode = new_mode
-        $I.log.push(mode)
+        camera.log.push(mode)
         update(image)
 
         if mode == "ndvi"

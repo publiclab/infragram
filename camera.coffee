@@ -27,12 +27,12 @@ camera =
 
         this.canvas = document.getElementById("image")
         this.ctx = this.canvas.getContext("2d")
-        this.image = this.ctx.getImageData(0, 0, this.options.width, this.options.height)
+        #this.image = this.ctx.getImageData(0, 0, this.options.width, this.options.height)
 
         # Trigger a snapshot w/ button
         $("#webcam-activate").hide()
         $("#snapshot").show()
-        $("#liveVideo").show()
+        $("#live-video").show()
         $("#webcam").show()
 
     # options contains the configuration information for the shim
