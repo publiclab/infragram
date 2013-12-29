@@ -14,10 +14,6 @@
 # along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
 
 camera =
-    log: ["raw"] # command log always starts with raw
-
-    last_command: () -> return camera.log[camera.log.length-1]
-
     initialize: () ->
         # Initialize getUserMedia with options
         getUserMedia(this.options, this.success, this.deviceError)
@@ -126,15 +122,8 @@ camera =
         # detection), we handle getting video/images for our canvas 
         # from our HTML5 <video> element.
         if camera.options.context == "webrtc"
-            video = document.getElementsByTagName("video")[0] 
-            camera.canvas.width = video.videoWidth
-            camera.canvas.height = video.videoHeight
-            camera.ctx.drawImage(video, 0, 0)
-
-            updateImage(camera.ctx.getImageData(0, 0, camera.canvas.width, camera.canvas.height))
-            e = document.getElementById("image")
-            e = new Image(image, video.videoWidth, video.videoHeight)
-            set_mode(camera.last_command())
+            video = document.getElementsByTagName("video")[0]
+            updateImage(video)
             $("#webcam").hide()
 
         # Otherwise, if the context is Flash, we ask the shim to
