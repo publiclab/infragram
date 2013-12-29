@@ -15,7 +15,6 @@ b_exp = "";
 m_exp = "";
 
 JsImage = (function() {
-
   function JsImage(data, width, height, channels) {
     this.data = data;
     this.width = width;
