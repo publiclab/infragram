@@ -88,7 +88,7 @@ $(document).ready(() ->
 
     $("button#nir").click(() ->
         $('#m_exp').val('R')
-        $('#modeSwitcher').val('infragrammar_mono').click()
+        $('#modeSwitcher').val('infragrammar_mono').change()
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else

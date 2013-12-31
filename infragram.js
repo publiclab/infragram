@@ -872,7 +872,7 @@ $(document).ready(function() {
   });
   $("button#nir").click(function() {
     $('#m_exp').val('R');
-    $('#modeSwitcher').val('infragrammar_mono').click();
+    $('#modeSwitcher').val('infragrammar_mono').change();
     if (webGlSupported) {
       glHandleOnSubmitInfraMono();
     } else {
