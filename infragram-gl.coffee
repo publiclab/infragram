@@ -23,17 +23,10 @@ modeToEquationMap = {
     "nir":  ["r", "r", "r"],
 }
 
-vertices = [
-   -1.0, -1.0,
-    1.0, -1.0,
-   -1.0,  1.0,
-   -1.0,  1.0,
-    1.0, -1.0,
-    1.0,  1.0,
-]
+vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]
 vertices.itemSize = 2
 
-
+waitForShadersToLoad = 0
 imgContext = null
 mapContext = null
 
@@ -67,6 +60,7 @@ createContext = (mode, greyscale, colormap, slider, canvasName) ->
     ctx.greyscale = greyscale
     ctx.colormap = colormap
     ctx.slider = slider
+    ctx.updateShader = true
     ctx.canvas = document.getElementById(canvasName)
     ctx.canvas.addEventListener("webglcontextlost", ((event) -> event.preventDefault()), false)
     ctx.canvas.addEventListener("webglcontextrestored", glRestoreContext, false)
@@ -82,6 +76,13 @@ createContext = (mode, greyscale, colormap, slider, canvasName) ->
 
 
 drawScene = (ctx, returnImage) ->
+    if !returnImage
+        requestAnimFrame(() -> drawScene(ctx, false))
+
+    if ctx.updateShader
+        ctx.updateShader = false
+        generateShader(ctx)
+
     gl = ctx.gl
     gl.viewport(0, 0, ctx.canvas.width, ctx.canvas.height)
     gl.useProgram(ctx.shaderProgram)
@@ -104,7 +105,7 @@ drawScene = (ctx, returnImage) ->
     pColormap = gl.getUniformLocation(ctx.shaderProgram, "uColormap")
     gl.uniform1i(pColormap, (if ctx.colormap then 1 else 0))
 
-    gl.drawArrays(gl.TRIANGLES, 0, vertices.length / vertices.itemSize)
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / vertices.itemSize)
 
     if returnImage
         return ctx.canvas.toDataURL("image/png")
@@ -146,6 +147,7 @@ generateShader = (ctx) ->
 
 glSetMode = (ctx, newMode) ->
     ctx.mode = newMode
+    ctx.updateShader = true
     $("#download").show()
     if ctx.mode == "ndvi"
         $("#colorbar-container")[0].style.display = "inline-block"
@@ -161,15 +163,22 @@ glHandleOnLoadTexture = (ctx, imageData) ->
     texImage.onload = (event) ->
         gl.activeTexture(gl.TEXTURE0)
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, event.target)
-        drawScene(ctx)
     texImage.src = imageData
 
 
+glShaderLoaded = () ->
+    waitForShadersToLoad -= 1
+    if !waitForShadersToLoad
+        drawScene(imgContext)
+        drawScene(mapContext)
+
+
 glInitInfragram = () ->
-    $("#shader-vs").load("shader.vert")
-    $("#shader-fs-template").load("shader.frag")
     imgContext = createContext("raw", true, false, 1.0, "image")
     mapContext = createContext("raw", true, true, 1.0, "colorbar")
+    waitForShadersToLoad = 2
+    $("#shader-vs").load("shader.vert", glShaderLoaded)
+    $("#shader-fs-template").load("shader.frag", glShaderLoaded)
     return if imgContext && mapContext then true else false
 
 
@@ -180,10 +189,7 @@ glRestoreContext = () ->
     mapContext = createContext(
         mapContext.mode, mapContext.greyscale, mapContext.colormap, mapContext.slider, "colorbar")
     if imgContext && mapContext
-        generateShader(imgContext)
         glHandleOnLoadTexture(imgContext, imageData)
-        generateShader(mapContext)
-        drawScene(mapContext)
 
 
 glHandleOnChangeFile = (files) ->
@@ -191,10 +197,7 @@ glHandleOnChangeFile = (files) ->
         reader = new FileReader()
         reader.onload = (eventObject) ->
             imgContext.imageData = eventObject.target.result
-            glSetMode(imgContext, "raw")
-            generateShader(imgContext)
             glHandleOnLoadTexture(imgContext, eventObject.target.result)
-            generateShader(mapContext)
         reader.readAsDataURL(files[0])
 
 
@@ -202,24 +205,6 @@ glUpdateImage = (video) ->
     gl = imgContext.gl
     gl.activeTexture(gl.TEXTURE0)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video)
-    if !imgContext.shaderProgram
-        generateShader(imgContext)
-    if !mapContext.shaderProgram
-        generateShader(mapContext)
-    drawScene(imgContext)
-
-
-glHandleOnClickRaw = () ->
-    glSetMode(imgContext, "raw")
-    generateShader(imgContext)
-    drawScene(imgContext)
-
-
-glHandleOnClickNdvi = () ->
-    glSetMode(imgContext, "ndvi")
-    generateShader(imgContext)
-    drawScene(imgContext)
-    drawScene(mapContext)
 
 
 glHandleOnClickDownload = () ->
@@ -239,38 +224,11 @@ glHandleOnClickDownload = () ->
         lnk.fireEvent("onclick")
 
 
-glHandleOnSubmitInfraHsv = () ->
-    glSetMode(imgContext, "hsv")
-    generateShader(imgContext)
-    drawScene(imgContext)
-
-
-glHandleOnSubmitInfra = () ->
-    glSetMode(imgContext, "rgb")
-    generateShader(imgContext)
-    drawScene(imgContext)
-
-
-glHandleOnSubmitInfraMono = () ->
-    glSetMode(imgContext, "mono")
-    generateShader(imgContext)
-    drawScene(imgContext)
-
-
-glHandleOnClickGrey = () ->
-    imgContext.greyscale = true
-    drawScene(imgContext)
-    mapContext.greyscale = true
-    drawScene(mapContext)
-
-
-glHandleOnClickColor = () ->
-    imgContext.greyscale = false
-    drawScene(imgContext)
-    mapContext.greyscale = false
-    drawScene(mapContext)
-
-
-glHandleOnSlide = (event) ->
-    imgContext.slider = event.value / 100.0
-    drawScene(imgContext)
+glHandleOnClickRaw        = ()      -> glSetMode(imgContext, "raw")
+glHandleOnClickNdvi       = ()      -> glSetMode(imgContext, "ndvi")
+glHandleOnSubmitInfraHsv  = ()      -> glSetMode(imgContext, "hsv")
+glHandleOnSubmitInfra     = ()      -> glSetMode(imgContext, "rgb")
+glHandleOnSubmitInfraMono = ()      -> glSetMode(imgContext, "mono")
+glHandleOnClickGrey       = ()      -> imgContext.greyscale = mapContext.greyscale = true
+glHandleOnClickColor      = ()      -> imgContext.greyscale = mapContext.greyscale = false
+glHandleOnSlide           = (event) -> imgContext.slider = event.value / 100.0
