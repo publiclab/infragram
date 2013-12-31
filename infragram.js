@@ -842,94 +842,107 @@ $(document).ready(function() {
     enablewebgl = getURLParameter("enablewebgl") === "true" ? true : false;
     webGlSupported = enablewebgl && glInitInfragram();
     if (webGlSupported) {
-      return $("#webgl-activate").html("&laquo; Go back to JS version");
+      $("#webgl-activate").html("&laquo; Go back to JS version");
     }
+    return true;
   });
   $("#file-sel").change(function() {
     if (webGlSupported) {
-      return glHandleOnChangeFile(this.files);
+      glHandleOnChangeFile(this.files);
     } else {
-      return jsHandleOnChangeFile(this.files);
+      jsHandleOnChangeFile(this.files);
     }
+    return true;
   });
   $("button#raw").click(function() {
     if (webGlSupported) {
-      return glHandleOnClickRaw();
+      glHandleOnClickRaw();
     } else {
-      return jsHandleOnClickRaw();
+      jsHandleOnClickRaw();
     }
+    return true;
   });
   $("button#ndvi").click(function() {
     if (webGlSupported) {
-      return glHandleOnClickNdvi();
+      glHandleOnClickNdvi();
     } else {
-      return jsHandleOnClickNdvi();
+      jsHandleOnClickNdvi();
     }
+    return true;
   });
   $("button#nir").click(function() {
     $('#m_exp').val('R');
     $('#modeSwitcher').val('infragrammar_mono').click();
     if (webGlSupported) {
-      return glHandleOnSubmitInfraMono();
+      glHandleOnSubmitInfraMono();
     } else {
-      return jsHandleOnSubmitInfraMono();
+      jsHandleOnSubmitInfraMono();
     }
+    return true;
   });
   $("#download").click(function() {
     if (webGlSupported) {
-      return glHandleOnClickDownload();
+      glHandleOnClickDownload();
     } else {
-      return jsHandleOnClickDownload();
+      jsHandleOnClickDownload();
     }
+    return true;
   });
   $("#infragrammar_hsv").submit(function() {
     if (webGlSupported) {
-      return glHandleOnSubmitInfraHsv();
+      glHandleOnSubmitInfraHsv();
     } else {
-      return jsHandleOnSubmitInfraHsv();
+      jsHandleOnSubmitInfraHsv();
     }
+    return true;
   });
   $("#infragrammar").submit(function() {
     if (webGlSupported) {
-      return glHandleOnSubmitInfra();
+      glHandleOnSubmitInfra();
     } else {
-      return jsHandleOnSubmitInfra();
+      jsHandleOnSubmitInfra();
     }
+    return true;
   });
   $("#infragrammar_mono").submit(function() {
     if (webGlSupported) {
-      return glHandleOnSubmitInfraMono();
+      glHandleOnSubmitInfraMono();
     } else {
-      return jsHandleOnSubmitInfraMono();
+      jsHandleOnSubmitInfraMono();
     }
+    return true;
   });
   $("button#grey").click(function() {
     if (webGlSupported) {
-      return glHandleOnClickGrey();
+      glHandleOnClickGrey();
     } else {
-      return jsHandleOnClickGrey();
+      jsHandleOnClickGrey();
     }
+    return true;
   });
   $("button#colorify").click(function() {
     if (webGlSupported) {
-      return glHandleOnClickColorify();
+      glHandleOnClickColorify();
     } else {
-      return jsHandleOnClickColorify();
+      jsHandleOnClickColorify();
     }
+    return true;
   });
   $("button#color").click(function() {
     if (webGlSupported) {
-      return glHandleOnClickColor();
+      glHandleOnClickColor();
     } else {
-      return jsHandleOnClickColor();
+      jsHandleOnClickColor();
     }
+    return true;
   });
   $("#slider").slider().on("slide", function(event) {
     if (webGlSupported) {
-      return glHandleOnSlide(event);
+      glHandleOnSlide(event);
     } else {
-      return jsHandleOnSlide(event);
+      jsHandleOnSlide(event);
     }
+    return true;
   });
   $("#webgl-activate").click(function() {
     var href;
@@ -939,13 +952,16 @@ $(document).ready(function() {
     } else {
       href += href.indexOf("?") >= 0 ? "enablewebgl=true" : "?enablewebgl=true";
     }
-    return window.location.href = href;
+    window.location.href = href;
+    return true;
   });
   $("#webcam-activate").click(function() {
-    return camera.initialize();
+    camera.initialize();
+    return true;
   });
   $("#snapshot").click(function() {
-    return camera.getSnapshot();
+    camera.getSnapshot();
+    return true;
   });
   $("#exit-fullscreen").click(function() {
     $("#image").css('display', 'inline');
@@ -954,7 +970,8 @@ $(document).ready(function() {
     $('#image').css('left', 0);
     $("#backdrop").hide();
     $("#exit-fullscreen").hide();
-    return $("#fullscreen").show();
+    $("#fullscreen").show();
+    return true;
   });
   $("#fullscreen").click(function() {
     $("#image").css('display', 'block');
@@ -966,17 +983,21 @@ $(document).ready(function() {
     $("#image").css('z-index', '2');
     $("#backdrop").show();
     $("#exit-fullscreen").show();
-    return $("#fullscreen").hide();
+    $("#fullscreen").hide();
+    return true;
   });
   $("#live-video").click(function() {
     if (webGlSupported) {
-      return setInterval(camera.getSnapshot, 33);
+      setInterval(camera.getSnapshot, 33);
     } else {
-      return setInterval(camera.getSnapshot, 250);
+      setInterval(camera.getSnapshot, 250);
     }
+    return true;
   });
-  return $("#modeSwitcher").click(function() {
+  $("#modeSwitcher").click(function() {
     $('#infragrammar, #infragrammar_mono, #infragrammar_hsv').hide();
-    return $('#' + $("#modeSwitcher").val()).css('display', 'inline');
+    $('#' + $("#modeSwitcher").val()).css('display', 'inline');
+    return true;
   });
+  return true;
 });
