@@ -194,7 +194,7 @@ $(document).ready(() ->
             setInterval(camera.getSnapshot, 250)
     )
 
-    $("#modeSwitcher").click(() ->
+    $("#modeSwitcher").change(() ->
         $('#infragrammar, #infragrammar_mono, #infragrammar_hsv').hide()
         $('#'+$("#modeSwitcher").val()).css('display','inline')
     )
