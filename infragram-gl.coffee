@@ -33,16 +33,6 @@ vertices = [
 ]
 vertices.itemSize = 2
 
-textureCoords = [
-    0.0,  0.0,
-    1.0,  0.0,
-    0.0,  1.0,
-    0.0,  1.0,
-    1.0,  0.0,
-    1.0,  1.0,
-]
-textureCoords.itemSize = 2
-
 
 imgContext = null
 mapContext = null
@@ -84,7 +74,6 @@ createContext = (mode, greyscale, colormap, slider, canvasName) ->
     if ctx.gl
         ctx.gl.getExtension("OES_texture_float")
         ctx.vertexBuffer = createBuffer(ctx, vertices)
-        ctx.textureBuffer = createBuffer(ctx, textureCoords)
         ctx.framebuffer = ctx.gl.createFramebuffer()
         ctx.imageTexture = createTexture(ctx, ctx.gl.TEXTURE0)
         return ctx
@@ -101,11 +90,6 @@ drawScene = (ctx, returnImage) ->
     pVertexPosition = gl.getAttribLocation(ctx.shaderProgram, "aVertexPosition")
     gl.enableVertexAttribArray(pVertexPosition)
     gl.vertexAttribPointer(pVertexPosition, ctx.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0)
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, ctx.textureBuffer)
-    pTextureCoord = gl.getAttribLocation(ctx.shaderProgram, "aTextureCoord")
-    gl.enableVertexAttribArray(pTextureCoord)
-    gl.vertexAttribPointer(pTextureCoord, ctx.textureBuffer.itemSize, gl.FLOAT, false, 0, 0)
 
     pSampler = gl.getUniformLocation(ctx.shaderProgram, "uSampler")
     gl.uniform1i(pSampler, 0)
