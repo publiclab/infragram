@@ -72,6 +72,10 @@ $(document).ready(() ->
     )
 
     $("button#ndvi").click(() ->
+        #$('#h_exp').val() # <-- some viable NDVI expression...
+        #$('#s_exp').val(1)
+        #$('#v_exp').val(1)
+        #$('#modeSwitcher').val('infragrammar_mono').click()
         if webGlSupported
             glHandleOnClickNdvi()
         else
@@ -79,10 +83,12 @@ $(document).ready(() ->
     )
 
     $("button#nir").click(() ->
+        $('#m_exp').val('R')
+        $('#modeSwitcher').val('infragrammar_mono').click()
         if webGlSupported
-            glHandleOnClickNir()
+            glHandleOnSubmitInfraMono()
         else
-            jsHandleOnClickNir()
+            jsHandleOnSubmitInfraMono()
     )
 
     $("#download").click(() ->
@@ -120,6 +126,13 @@ $(document).ready(() ->
             jsHandleOnClickGrey()
     )
 
+    $("button#colorify").click(() ->
+        if webGlSupported
+            glHandleOnClickColorify()
+        else
+            jsHandleOnClickColorify()
+    )
+
     $("button#color").click(() ->
         if webGlSupported
             glHandleOnClickColor()
@@ -149,6 +162,29 @@ $(document).ready(() ->
 
     $("#snapshot").click(() ->
         camera.getSnapshot()
+    )
+
+    $("#exit-fullscreen").click(() ->
+        $("#image").css('display','inline')
+        $("#image").css('position','relative')
+        $("#image").css('height','auto')
+        $('#image').css('left',0)
+        $("#backdrop").hide()
+        $("#exit-fullscreen").hide()
+        $("#fullscreen").show()
+    )
+
+    $("#fullscreen").click(() ->
+        $("#image").css('display','block')
+        $("#image").css('height','100%')
+        $("#image").css('width','auto')
+        $("#image").css('position','absolute')
+        $("#image").css('top','0px')
+        $("#image").css('left',parseInt((window.innerWidth-$('#image').width())/2)+'px')
+        $("#image").css('z-index','2')
+        $("#backdrop").show()
+        $("#exit-fullscreen").show()
+        $("#fullscreen").hide()
     )
 
     $("#live-video").click(() ->
