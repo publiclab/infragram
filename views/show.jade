@@ -1,0 +1,10 @@
+extends layout
+block content
+
+  h1= title
+  div.image
+    img(src=image.src)
+    div.body= image.desc
+    div.meta
+        span.author= "by "+(image.author || "anon")
+        span.updated_at= " on "+image.updated_at

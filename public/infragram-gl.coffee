@@ -163,6 +163,7 @@ generateShader = (ctx) ->
 glSetMode = (ctx, newMode) ->
     ctx.mode = newMode
     $("#download").show()
+    $("#save").show()
     if ctx.mode == "ndvi"
         $("#colorbar-container")[0].style.display = "inline-block"
         $("#colormaps-group")[0].style.display = "inline-block"
@@ -182,8 +183,8 @@ glHandleOnLoadTexture = (ctx, imageData) ->
 
 
 glInitInfragram = () ->
-    $("#shader-vs").load("shader.vert")
-    $("#shader-fs-template").load("shader.frag")
+    $("#shader-vs").load("/shader.vert")
+    $("#shader-fs-template").load("/shader.frag")
     imgContext = createContext("raw", true, false, 1.0, "image")
     mapContext = createContext("raw", true, true, 1.0, "colorbar")
     return if imgContext && mapContext then true else false
@@ -236,6 +237,15 @@ glHandleOnClickNdvi = () ->
     generateShader(imgContext)
     drawScene(imgContext)
     drawScene(mapContext)
+
+
+glHandleOnClickSave = () ->
+    e = document.getElementById("image");
+    ctx = e.getContext("2d");
+    data = drawScene(imgContext, true)
+    $('<form method="post" id="saveForm" action="/create"></form>').appendTo('body')
+    $('<input name="src" type="hidden" value="'+data+'">').appendTo('#saveForm')
+    $('#saveForm').submit();
 
 
 glHandleOnClickDownload = () ->

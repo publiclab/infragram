@@ -1,8 +1,21 @@
 # infragram-js
 
+The code behind (and in front of) Infragram.org -- providing multispectral image compositing in the browser, as well as image saving online.
+
+###Developers
+
 To get started,
 
     $ git clone --recursive https://github.com/Pioneer-Valley-Open-Science/infragram-js.git
-    $ cd infragram-js
+    $ cd infragram-js/public
     $ make
-    $ firefox infragram.html
+    $ ./run-linux-mac.sh
+    $ firefox http://localhost:8000
+
+To run the whole node server:
+
+* you'll need nodejs, npm, and mongodb -- ubuntu/debian: `sudo apt-get install nodejs npm mongodb`
+* install node modules with `npm install`
+* run `node app.js` or `nodejs app.js` from the root directory.
+* navigate to http://localhost:8001/sandbox/
+

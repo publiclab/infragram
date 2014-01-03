@@ -8,21 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="bootstrap/css/slider.css" rel="stylesheet">
-    <link href="assets/css/application.css" rel="stylesheet">
-    <link href="infragram.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/bootstrap/css/slider.css" rel="stylesheet">
+    <link href="/assets/css/application.css" rel="stylesheet">
+    <link href="/infragram.css" rel="stylesheet">
 
-    <script src="jquery.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="getUserMedia.js/lib/getUserMedia.js"></script>
-    <script src="bootstrap/js/bootstrap-slider.js"></script>
-    <script src="png.js/zlib.js"></script>
-    <script src="png.js/png.js"></script>
-    <script src="jpgjs/jpg.js"></script>
-    <script src="webgl-utils.js"></script>
-    <script src="infragram.js?hash=d4c42a4ea93874f7ffa3b9565f395b651f1fa52e"></script>
+    <script src="/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/getUserMedia.js/lib/getUserMedia.js"></script>
+    <script src="/bootstrap/js/bootstrap-slider.js"></script>
+    <script src="/png.js/zlib.js"></script>
+    <script src="/png.js/png.js"></script>
+    <script src="/jpgjs/jpg.js"></script>
+    <script src="/webgl-utils.js"></script>
+    <script src="/infragram.js?hash=d4c42a4ea93874f7ffa3b9565f395b651f1fa52e"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -99,6 +99,7 @@
           </div>
 
           <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
+          <button style="display:none;margin-left:30px;" id="save" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
 
           <b style="margin-left:20px;">Slider (X): &nbsp; </b>
           <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">

@@ -5,8 +5,8 @@
 	path = png.js
 	url = https://github.com/devongovett/png.js.git
 [submodule "bootstrap"]
-	path = bootstrap
+	path = public/bootstrap
 	url = https://github.com/twbs/bootstrap.git
 [submodule "getUserMedia.js"]
-	path = getUserMedia.js
+	path = public/getUserMedia.js
 	url = https://github.com/addyosmani/getUserMedia.js.git

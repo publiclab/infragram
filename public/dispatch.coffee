@@ -98,6 +98,13 @@ $(document).ready(() ->
             jsHandleOnClickDownload()
     )
 
+    $("#save").click(() ->
+        if webGlSupported
+            glHandleOnClickSave()
+        else
+            jsHandleOnClickSave()
+    )
+
     $("#infragrammar_hsv").submit(() ->
         if webGlSupported
             glHandleOnSubmitInfraHsv()

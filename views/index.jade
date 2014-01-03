@@ -1,0 +1,14 @@
+extends layout
+block content
+
+  h1= title
+  #images
+      - each image in images.reverse()
+        div.image
+          div.thumbnail 
+              a(href="/i/"+image._id): img(width="300px" src=image.src)
+          div.body= image.desc
+          div.meta
+              span.author= "by "+(image.author || "anon")
+              span.updated_at= " on "+image.updated_at
+          hr

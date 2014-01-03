@@ -179,6 +179,7 @@ update = (img) ->
         else
             result = infragrammar(img)
         $('#download').show()
+        $('#save').show()
         render(result)
 
 save_expressions = (r,g,b) ->
@@ -289,6 +290,14 @@ jsHandleOnClickRaw = () ->
 
 jsHandleOnClickNdvi = () ->
     set_mode("ndvi")
+
+jsHandleOnClickSave = () ->
+    e = document.getElementById("image");
+    ctx = e.getContext("2d");
+    data = ctx.canvas.toDataURL("image/png")
+    $('<form method="post" id="saveForm" action="/create"></form>').appendTo('body')
+    $('<input name="src" type="hidden" value="'+data+'">').appendTo('#saveForm')
+    $('#saveForm').submit();
 
 jsHandleOnClickDownload = () ->
     e = document.getElementById("image");

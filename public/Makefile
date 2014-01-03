@@ -24,7 +24,7 @@ all : $(TARGET)
 
 $(TARGET) : $(SRCS)
 	coffee --compile --bare --join $@ $^
-	bash update_hash.sh $@ index.html
+	bash update_hash.sh $@ sandbox/index.html
 
 commit : $(TARGET)
 	git commit $^ -m "Update javascript"
