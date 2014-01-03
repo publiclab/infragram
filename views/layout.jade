@@ -2,6 +2,41 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(name="description", content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.")
+
+    link(rel='stylesheet' href='/stylesheets/style.css')
+    link(rel='stylesheet' href="/bootstrap/css/bootstrap.css")
+    link(rel='stylesheet' href="/bootstrap/css/bootstrap-responsive.css")
+    link(rel='stylesheet' href="/bootstrap/css/slider.css")
+    link(rel='stylesheet' href="/assets/css/application.css")
+    link(rel='stylesheet' href="/infragram.css")
+
+    script(src='stylesheet' href="/infragram.css")
+
+    script(src="/jquery.min.js")
+    script(src="/bootstrap/js/bootstrap.min.js")
+    script(src="/getUserMedia.js/lib/getUserMedia.js")
+    script(src="/bootstrap/js/bootstrap-slider.js")
+    script(src="/png.js/zlib.js")
+    script(src="/png.js/png.js")
+    script(src="/jpgjs/jpg.js")
+    script(src="/webgl-utils.js")
+    script(src="/infragram.js?hash=d4c42a4ea93874f7ffa3b9565f395b651f1fa52e")
+
+    script#shader-vs(type="x-shader/x-vertex")
+    script#shader-fs-template(type="x-shader/x-fragment")
+    script#shader-fs(type="x-shader/x-fragment")
+
   body
-    block content
+    div.container.page
+
+      h1.span12
+        img(src="/static/img/infragram-logo.png" style="float:left;margin-right:14px;width:100px;")
+        a(style="color:#444;padding-top:8px;" href="/") Infragram 
+        small
+          span(style="font-size:70%;") by
+          a(href="http://publiclab.org")  Public Lab
+
+      p Infragram is an online tool for analyzing plant health with near-infrared imagery! To learn more, <a href="http://publiclab.org/wiki/near-infrared-camera">read about our open source cameras</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a> from the Public Lab non-profit.</p>
+
+      block content

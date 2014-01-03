@@ -6,6 +6,7 @@ var Image = new Schema({
     author      : String,
     desc        : String,
     src         : String,
+    parent_id   : String, // this image based on the parent_id; default null?
     log         : [String],
     updated_at  : Date
 });

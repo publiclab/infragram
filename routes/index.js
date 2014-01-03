@@ -18,7 +18,6 @@ exports.show = function(req, res){
   Image.findOne({ _id: req.params.id }, 'src desc author', function (err, image) {
     if (err) return handleError(err);
     res.render( 'show', {
-      title : 'Recent images',
       image : image
     });
   })

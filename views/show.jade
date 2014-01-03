@@ -1,8 +1,15 @@
 extends layout
 block content
 
-  h1= title
-  div.image
+  div.navbar.clearfix
+    div.navbar-inner
+      ul.nav
+        li
+          a(href="/sandbox/?src="+image.src)
+            i.icon.icon-pencil
+            |  Open in Infragram Sandbox &raquo;
+
+  div
     img(src=image.src)
     div.body= image.desc
     div.meta

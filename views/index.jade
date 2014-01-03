@@ -1,14 +1,17 @@
 extends layout
 block content
 
-  h1= title
-  #images
-      - each image in images.reverse()
-        div.image
-          div.thumbnail 
-              a(href="/i/"+image._id): img(width="300px" src=image.src)
-          div.body= image.desc
-          div.meta
-              span.author= "by "+(image.author || "anon")
-              span.updated_at= " on "+image.updated_at
-          hr
+  div.well
+    h3(style="display:inline;") Analyze your Infragram photos 
+    a.btn-large.btn-primary(href="/sandbox/") Begin now &raquo;
+
+  h3= title
+  - each image in images.reverse()
+    div.image-div.span3
+      div.thumbnail
+          a(href="/i/"+image._id): img.image(src=image.src)
+      div.body= image.desc
+      div.meta
+          span.author= "by "+(image.author || "anon")
+          span.updated_at= " on "+image.updated_at
+      hr
