@@ -256,7 +256,9 @@ set_mode = (new_mode) ->
         $("#colormaps-group")[0].style.display = "none"
 
 jsUpdateImage = (video) ->
-    e = document.getElementById("image")
+    e = document.createElement("canvas")
+    e.width = video.videoWidth
+    e.height = video.videoHeight
     ctx = e.getContext("2d")
     ctx.drawImage(video, 0, 0)
     image = ctx.getImageData(0, 0, video.videoWidth, video.videoHeight)
@@ -264,26 +266,19 @@ jsUpdateImage = (video) ->
 
 jsHandleOnChangeFile = (files) ->
     if files && files[0]
-        file = files[0]
         file_reader = new FileReader();
-        file_reader.onload = (oFREvent) ->
-            data = new Uint8Array(file_reader.result);
-            if file.type == "image/png"
-                png = new PNG(data);
-                data = png.decode()
-                img = new JsImage(data, png.width, png.height);
-            else if file.type == "image/jpeg"
-                jpeg = new JpegImage();
-                jpeg.parse(data);
-                d = new Uint8ClampedArray(4 * jpeg.width * jpeg.height);
-                img = new JsImage(d, jpeg.width, jpeg.height, 4);
-                jpeg.copyToImageData(img);
-            else
-                document.getElementById("error").html = "Unrecognized file format (supports PNG and JPEG)";
-                return
-            image = img
-            update(img)
-        file_reader.readAsArrayBuffer(file);
+        file_reader.onload = (eventObject) ->
+            img = new Image()
+            img.onload = (event) ->
+                e = document.createElement("canvas")
+                e.width = img.width
+                e.height = img.height
+                ctx = e.getContext("2d")
+                ctx.drawImage(img, 0, 0)
+                image = ctx.getImageData(0, 0, img.width, img.height)
+                update(image)
+            img.src = eventObject.target.result
+        file_reader.readAsDataURL(files[0]);
 
 jsHandleOnClickRaw = () ->
     set_mode("raw")

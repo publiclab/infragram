@@ -55,6 +55,7 @@ $(document).ready(() ->
 
         if webGlSupported
             $("#webgl-activate").html("&laquo; Go back to JS version")
+        return true
     )
 
     $("#file-sel").change(() ->
@@ -62,6 +63,7 @@ $(document).ready(() ->
             glHandleOnChangeFile(this.files)
         else
             jsHandleOnChangeFile(this.files)
+        return true
     )
 
     $("button#raw").click(() ->
@@ -69,6 +71,7 @@ $(document).ready(() ->
             glHandleOnClickRaw()
         else
             jsHandleOnClickRaw()
+        return true
     )
 
     $("button#ndvi").click(() ->
@@ -80,15 +83,17 @@ $(document).ready(() ->
             glHandleOnClickNdvi()
         else
             jsHandleOnClickNdvi()
+        return true
     )
 
     $("button#nir").click(() ->
         $('#m_exp').val('R')
-        $('#modeSwitcher').val('infragrammar_mono').click()
+        $('#modeSwitcher').val('infragrammar_mono').change()
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
             jsHandleOnSubmitInfraMono()
+        return true
     )
 
     $("#download").click(() ->
@@ -96,6 +101,7 @@ $(document).ready(() ->
             glHandleOnClickDownload()
         else
             jsHandleOnClickDownload()
+        return true
     )
 
     $("#save").click(() ->
@@ -110,6 +116,7 @@ $(document).ready(() ->
             glHandleOnSubmitInfraHsv()
         else
             jsHandleOnSubmitInfraHsv()
+        return true
     )
 
     $("#infragrammar").submit(() ->
@@ -117,6 +124,7 @@ $(document).ready(() ->
             glHandleOnSubmitInfra()
         else
             jsHandleOnSubmitInfra()
+        return true
     )
 
     $("#infragrammar_mono").submit(() ->
@@ -124,6 +132,7 @@ $(document).ready(() ->
             glHandleOnSubmitInfraMono()
         else
             jsHandleOnSubmitInfraMono()
+        return true
     )
 
     $("button#grey").click(() ->
@@ -131,6 +140,7 @@ $(document).ready(() ->
             glHandleOnClickGrey()
         else
             jsHandleOnClickGrey()
+        return true
     )
 
     $("button#colorify").click(() ->
@@ -138,6 +148,7 @@ $(document).ready(() ->
             glHandleOnClickColorify()
         else
             jsHandleOnClickColorify()
+        return true
     )
 
     $("button#color").click(() ->
@@ -145,6 +156,7 @@ $(document).ready(() ->
             glHandleOnClickColor()
         else
             jsHandleOnClickColor()
+        return true
     )
 
     $("#slider").slider().on("slide", (event) ->
@@ -152,6 +164,7 @@ $(document).ready(() ->
             glHandleOnSlide(event)
         else
             jsHandleOnSlide(event)
+        return true
     )
 
     $("#webgl-activate").click(() ->
@@ -161,14 +174,17 @@ $(document).ready(() ->
         else
             href += if href.indexOf("?") >= 0 then "enablewebgl=true" else "?enablewebgl=true"
         window.location.href = href
+        return true
     )
 
     $("#webcam-activate").click(() ->
         camera.initialize()
+        return true
     )
 
     $("#snapshot").click(() ->
         camera.getSnapshot()
+        return true
     )
 
     $("#exit-fullscreen").click(() ->
@@ -179,6 +195,7 @@ $(document).ready(() ->
         $("#backdrop").hide()
         $("#exit-fullscreen").hide()
         $("#fullscreen").show()
+        return true
     )
 
     $("#fullscreen").click(() ->
@@ -192,6 +209,7 @@ $(document).ready(() ->
         $("#backdrop").show()
         $("#exit-fullscreen").show()
         $("#fullscreen").hide()
+        return true
     )
 
     $("#live-video").click(() ->
@@ -199,10 +217,14 @@ $(document).ready(() ->
             setInterval(camera.getSnapshot, 33)
         else
             setInterval(camera.getSnapshot, 250)
+        return true
     )
 
-    $("#modeSwitcher").click(() ->
+    $("#modeSwitcher").change(() ->
         $('#infragrammar, #infragrammar_mono, #infragrammar_hsv').hide()
         $('#'+$("#modeSwitcher").val()).css('display','inline')
+        return true 
     )
+
+    return true
 )
