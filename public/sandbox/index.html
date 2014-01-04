@@ -18,11 +18,8 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/getUserMedia.js/lib/getUserMedia.js"></script>
     <script src="/bootstrap/js/bootstrap-slider.js"></script>
-    <script src="/png.js/zlib.js"></script>
-    <script src="/png.js/png.js"></script>
-    <script src="/jpgjs/jpg.js"></script>
     <script src="/webgl-utils.js"></script>
-    <script src="/infragram.js?hash=d4c42a4ea93874f7ffa3b9565f395b651f1fa52e"></script>
+    <script src="/infragram.js?hash=9d6596291c758b881354e0c522dbfd9e9f306c2a"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -88,14 +85,12 @@
           <br>
           <br>
 
-          <div id="colormaps-group" style="display: none;">
+          <div id="colormaps-group" style="display:none;">
             <b>Color maps:</b>
-            <span class="btn-toolbar">
-              <div class="btn-group" data-toggle="buttons-radio">
-                <button id="grey" type="button" class="btn active">Greyscale</button>
-                <button id="color" type="button" class="btn">Color</button>
-              </div>
-            </span>
+            <div class="btn-group" data-toggle="buttons-radio">
+              <button id="grey" type="button" class="btn active">Greyscale</button>
+              <button id="color" type="button" class="btn">Color</button>
+            </div>
           </div>
 
           <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
@@ -104,7 +99,7 @@
           <b style="margin-left:20px;">Slider (X): &nbsp; </b>
           <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">
           <div style="float:right;margin-right:20px;">
-            <a style="margin-right:20px;" class="btn" href="http://publiclab.org/wiki/infragram-sandbox"><i class="icon icon-question-sign"></i> Help</a></span> 
+            <a style="margin-right:20px;" class="btn" href="http://publiclab.org/wiki/infragram-sandbox"><i class="icon icon-question-sign"></i> Help</a>
           </div>
         </div>
 
@@ -127,7 +122,7 @@
 
       <footer class="footer">
           <hr>
-          <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues">Please report bugs</a>, <a href="https://github.com/bgamari/infragram-js">created by Ben Gamari</a> with additions by Don Blair, Jeff Warren and Piotr Foltyn.</p>
+          <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues">Please report bugs</a>. Created by <a href="https://github.com/bgamari/infragram-js">Ben Gamari</a> with additions by Don Blair, Jeff Warren and Piotr Foltyn.
           <h4 style="margin-bottom:40px;"><a style="color:#444;" href="/">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/bgamari/infragram-js/">open source software</a></small></h4>
       </footer>
  
