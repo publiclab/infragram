@@ -8,7 +8,7 @@ var Image     = mongoose.model( 'Image' );
 exports.index = function(req, res){
   Image.find( function ( err, images, count ){
     res.render( 'index', {
-      title : 'Recent images',
+      title : 'Infragram: online infrared image analysis',
       images : images
     });
   });
@@ -20,6 +20,13 @@ exports.show = function(req, res){
     res.render( 'show', {
       image : image
     });
+  })
+};
+
+exports.delete = function(req, res){
+  Image.remove({ _id: req.params.id }, function (err, image) {
+    if (err) return handleError(err);
+    res.redirect('/');
   })
 };
 

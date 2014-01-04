@@ -1,11 +1,20 @@
 extends layout
 block content
 
-  div.well
-    h3(style="display:inline;") Analyze your Infragram photos 
-    a.btn-large.btn-primary(href="/sandbox/") Begin now &raquo;
+  div
+    div.span4(style="margin-bottom:6px;")
+      img(src="/images/infragram-animated.gif")
 
-  h3= title
+    div.span7.well(style="padding-top:6px;")
+      h3 Analyze your Infragram photos 
+      p Infragram is an online tool for analyzing plant health with near-infrared imagery. To learn more, <a href="http://publiclab.org/wiki/near-infrared-camera">read about our open source cameras</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a> from the Public Lab non-profit.</p>
+      p You can upload images from an <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">Infragram-modified camera</a>, or connect a <a href="http://store.publiclab.org/products/infragram-webcam">USB Infragram webcam</a>
+      br
+      p: a.btn-large.btn-primary(href="/sandbox/") Begin now &raquo;
+
+    br(style="clear:both;")
+
+  h3.span12(style="clear:both;")= title
   - each image in images.reverse()
     div.image-div.span3
       div.thumbnail
@@ -13,5 +22,6 @@ block content
       div.body= image.desc
       div.meta
           span.author= "by "+(image.author || "anon")
-          span.updated_at= " on "+image.updated_at
+          span.updated_at= " on "+image.updated_at 
+          a(href="/delete/"+image._id) Delete
       hr

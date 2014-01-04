@@ -33,6 +33,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/i/:id', routes.show);
 app.post('/create', routes.create);
+app.get('/delete/:id', routes.delete);
 app.get('/static/sandbox/', function(req,res) { res.redirect('/sandbox/') });
 
 http.createServer(app).listen(app.get('port'), function(){
