@@ -14,7 +14,7 @@ block content
 
     br(style="clear:both;")
 
-  h3.span12(style="clear:both;")= title
+  h3.span12(style="clear:both;") Recent images
   - each image in images.reverse()
     div.image-div.span3
       div.thumbnail
@@ -22,6 +22,6 @@ block content
       div.body= image.desc
       div.meta
           span.author= "by "+(image.author || "anon")
-          span.updated_at= " on "+image.updated_at 
+          span.updated_at= " on "+image.updated_at+" "
           a(href="/delete/"+image._id) Delete
       hr

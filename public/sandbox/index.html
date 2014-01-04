@@ -29,6 +29,21 @@
   <body>
   
     <div class="container page" style="padding-top:10px;">
+
+      <div class="modal hide fade" id="save-modal">
+        <div class="modal-body">
+          <h3>Save your image</h3>
+          <form id="save-form" class="form" action="/create" method="post">
+            <input type="text" name="title" placeholder="Title" /><br />
+            <input type="text" name="author" placeholder="Your name" /><br />
+            <textarea name="desc" placeholder="A description of your work"></textarea>
+          </form>
+        </div>
+        <div class="modal-footer">
+            <button id="save" class="btn btn-primary">Save</button> or if you do not wish to share your work, <a class="btn" id="download">Download</a>
+        </div>
+      </div>
+
       <button id="webgl-activate" type="button" class="btn btn-secondary pull-right">Try WebGL version &raquo;</button>
       <h1><img src="/static/img/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"/> <a style="color:#444;padding-top:8px;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
 
@@ -94,7 +109,7 @@
           </div>
 
           <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
-          <button style="display:none;margin-left:30px;" id="save" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
+          <button style="display:none;margin-left:30px;" href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
 
           <b style="margin-left:20px;">Slider (X): &nbsp; </b>
           <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">

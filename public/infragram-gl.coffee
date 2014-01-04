@@ -149,7 +149,7 @@ glSetMode = (ctx, newMode) ->
     ctx.mode = newMode
     ctx.updateShader = true
     $("#download").show()
-    $("#save").show()
+    $("#save-modal-btn").show()
     if ctx.mode == "ndvi"
         $("#colorbar-container")[0].style.display = "inline-block"
         $("#colormaps-group")[0].style.display = "inline-block"
@@ -212,9 +212,8 @@ glHandleOnClickSave = () ->
     e = document.getElementById("image");
     ctx = e.getContext("2d");
     data = drawScene(imgContext, true)
-    $('<form method="post" id="saveForm" action="/create"></form>').appendTo('body')
-    $('<input name="src" type="hidden" value="'+data+'">').appendTo('#saveForm')
-    $('#saveForm').submit();
+    $('<input name="src" type="hidden" value="'+data+'">').appendTo('#save-form')
+    $('#save-form').submit();
 
 
 glHandleOnClickDownload = () ->
