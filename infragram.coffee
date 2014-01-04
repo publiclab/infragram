@@ -255,12 +255,10 @@ set_mode = (new_mode) ->
         $("#colormaps-group")[0].style.display = "none"
 
 jsUpdateImage = (video) ->
-    e = document.createElement("canvas")
-    e.width = video.videoWidth
-    e.height = video.videoHeight
-    ctx = e.getContext("2d")
-    ctx.drawImage(video, 0, 0)
-    image = ctx.getImageData(0, 0, video.videoWidth, video.videoHeight)
+    imgCanvas = document.getElementById("image")
+    ctx = imgCanvas.getContext("2d")
+    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, imgCanvas.width, imgCanvas.height)
+    image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height)
     set_mode(mode)
 
 jsHandleOnChangeFile = (files) ->
@@ -269,12 +267,10 @@ jsHandleOnChangeFile = (files) ->
         file_reader.onload = (eventObject) ->
             img = new Image()
             img.onload = (event) ->
-                e = document.createElement("canvas")
-                e.width = img.width
-                e.height = img.height
-                ctx = e.getContext("2d")
-                ctx.drawImage(img, 0, 0)
-                image = ctx.getImageData(0, 0, img.width, img.height)
+                imgCanvas = document.getElementById("image")
+                ctx = imgCanvas.getContext("2d")
+                ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, imgCanvas.width, imgCanvas.height)
+                image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height)
                 update(image)
             img.src = eventObject.target.result
         file_reader.readAsDataURL(files[0]);

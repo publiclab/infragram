@@ -353,13 +353,11 @@ set_mode = function(new_mode) {
 };
 
 jsUpdateImage = function(video) {
-  var ctx, e;
-  e = document.createElement("canvas");
-  e.width = video.videoWidth;
-  e.height = video.videoHeight;
-  ctx = e.getContext("2d");
-  ctx.drawImage(video, 0, 0);
-  image = ctx.getImageData(0, 0, video.videoWidth, video.videoHeight);
+  var ctx, imgCanvas;
+  imgCanvas = document.getElementById("image");
+  ctx = imgCanvas.getContext("2d");
+  ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, imgCanvas.width, imgCanvas.height);
+  image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
   return set_mode(mode);
 };
 
@@ -371,13 +369,11 @@ jsHandleOnChangeFile = function(files) {
       var img;
       img = new Image();
       img.onload = function(event) {
-        var ctx, e;
-        e = document.createElement("canvas");
-        e.width = img.width;
-        e.height = img.height;
-        ctx = e.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        image = ctx.getImageData(0, 0, img.width, img.height);
+        var ctx, imgCanvas;
+        imgCanvas = document.getElementById("image");
+        ctx = imgCanvas.getContext("2d");
+        ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, imgCanvas.width, imgCanvas.height);
+        image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
         return update(image);
       };
       return img.src = eventObject.target.result;
