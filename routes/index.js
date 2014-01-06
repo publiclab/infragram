@@ -32,11 +32,13 @@ exports.delete = function(req, res){
 
 exports.create = function ( req, res ){
   new Image({
-    description: req.body.desc,
+    title: req.body.title,
     author: req.body.author,
+    desc: req.body.desc,
+    orig_src: req.body.orig_src,
     src: req.body.src,
-//    image_data: 'http://localhost:3000/images/logo.png',
-    updated_at : Date.now()
+    log: req.body.log,
+    updated_at : Date.now(),
   }).save( function( err, todo, count ){
     res.redirect( '/' );
   });

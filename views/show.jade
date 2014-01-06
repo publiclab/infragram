@@ -8,10 +8,20 @@ block content
           a(href="/sandbox/?src="+image.src)
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
+        li: a(onClick="$('#final').toggle();$('#original').toggle();") See original
+        if image.log
+          li
+            input(value=image.log.last())
 
   div
-    img(src=image.src)
+    img#final(src=image.src)
+    img#original(src=image.orig_src style="display:none;")
     div.body= image.desc
+    br
     div.meta
         span.author= "by "+(image.author || "anon")
         span.updated_at= " on "+image.updated_at
+
+  h4 Command log
+
+  textarea#log.span6= image.log

@@ -148,6 +148,16 @@ generateShader = (ctx) ->
 glSetMode = (ctx, newMode) ->
     ctx.mode = newMode
     ctx.updateShader = true
+    if newMode == "infragrammar_hsv"
+      save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
+    else if newMode == "infragrammar_rgb"
+      save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val())
+    else if newMode == "infragrammar_mono"
+      save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_rxp').val())
+    else if newMode == "ndvi"
+      log.push("ndvi")
+    else if newMode == "raw"
+      log.push("raw")
     $("#download").show()
     $("#save-modal-btn").show()
     if ctx.mode == "ndvi"
@@ -213,6 +223,7 @@ glHandleOnClickSave = () ->
     ctx = e.getContext("2d");
     data = drawScene(imgContext, true)
     $('<input name="src" type="hidden" value="'+data+'">').appendTo('#save-form')
+    $('<input name="log" type="hidden"/>').appendTo('#save-form').val(JSON.stringify(log))
     $('#save-form').submit();
 
 

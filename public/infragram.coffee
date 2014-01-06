@@ -123,7 +123,7 @@ infragrammar = (img) ->
         return new JsImage(o, img.width, img.height, 4);
 
 render = (img) ->
-        e = document.getElementById("image");
+        e = $("#image")[0];
         e.width = img.width
         e.height = img.height
         ctx = e.getContext("2d");
@@ -189,6 +189,7 @@ save_expressions = (r,g,b) ->
         r = "R" if r == ""
         g = "G" if g == ""
         b = "B" if b == ""
+        log.push("rgb("+r+","+g+","+b+")")
         eval("r_exp = function(R,G,B){return "+r+";}")
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
@@ -200,6 +201,7 @@ save_expressions_hsv = (h,s,v) ->
         h = "H" if h == ""
         s = "S" if s == ""
         v = "V" if v == ""
+        log.push("hsv("+h+","+s+","+v+")")
         eval("r_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[0];}")
         eval("g_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[1];}")
         eval("b_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[2];}")
@@ -282,19 +284,25 @@ jsHandleOnChangeFile = (files) ->
 
 jsHandleOnClickRaw = () ->
     set_mode("raw")
+    log.push("raw")
 
 jsHandleOnClickNdvi = () ->
     set_mode("ndvi")
+    log.push("ndvi")
 
 jsHandleOnClickSave = () ->
-    e = document.getElementById("image");
+    e = $("#image")[0];
     ctx = e.getContext("2d");
     data = ctx.canvas.toDataURL("image/png")
+    ctx.putImageData(image, 0, 0)
+    orig_data = ctx.canvas.toDataURL("image/png")
     $('<input name="src" type="hidden" value="'+data+'">').appendTo('#save-form')
+    $('<input name="orig_src" type="hidden" value="'+orig_data+'">').appendTo('#save-form')
+    $('<input name="log" type="hidden"/>').appendTo('#save-form').val(JSON.stringify(log))
     $('#save-form').submit();
 
 jsHandleOnClickDownload = () ->
-    e = document.getElementById("image");
+    e = $("#image")[0];
     ctx = e.getContext("2d");
 
     # create an "off-screen" anchor tag

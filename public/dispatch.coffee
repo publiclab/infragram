@@ -15,7 +15,12 @@
 
 
 webGlSupported = false
+log = [] # a record of previous commands run
 
+
+last_command = () ->
+    log[log.length-1]
+        
 
 getURLParameter = (name) ->
     result = decodeURI(
