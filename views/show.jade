@@ -9,9 +9,6 @@ block content
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
         li: a(onClick="$('#final').toggle();$('#original').toggle();") See original
-        if image.log
-          li
-            input(value=image.log.last())
 
   div
     img#final(src=image.src)
@@ -22,6 +19,13 @@ block content
         span.author= "by "+(image.author || "anon")
         span.updated_at= " on "+image.updated_at
 
+  hr 
   h4 Command log
 
-  textarea#log.span6= image.log
+  form.form
+    label Current command
+    input(type="text" value=image.log.split(';')[image.log.split(';').length-1])
+    label Full command log
+    textarea#log.span6(rows=10)= image.log
+
+
