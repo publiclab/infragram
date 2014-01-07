@@ -24,8 +24,10 @@ block content
 
   form.form
     label Current command
-    input(type="text" value=image.log.split(';')[image.log.split(';').length-1])
+    - var log = []
+    - if (image.log) log = JSON.parse(image.log) 
+    input(type="text" value=log[log.length-1])
     label Full command log
-    textarea#log.span6(rows=10)= image.log
+    textarea#log.span6(rows=10)= log.join('\r')
 
 

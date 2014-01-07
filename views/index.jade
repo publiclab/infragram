@@ -1,27 +1,46 @@
 extends layout
 block content
 
-  div
-    div.span4(style="margin-bottom:6px;")
-      img(src="/images/infragram-animated.gif")
+  div.row-fluid
 
-    div.span7.well(style="padding-top:6px;")
+    div.span8.well(style="padding-top:6px;")
       h3 Analyze your Infragram photos 
       p Infragram is an online tool for analyzing plant health with near-infrared imagery. To learn more, <a href="http://publiclab.org/wiki/near-infrared-camera">read about our open source cameras</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a> from the Public Lab non-profit.</p>
       p You can upload images from an <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">Infragram-modified camera</a>, or connect a <a href="http://store.publiclab.org/products/infragram-webcam">USB Infragram webcam</a>
       br
       p: a.btn-large.btn-primary(href="/sandbox/") Begin now &raquo;
 
-    br(style="clear:both;")
+    div.span4(style="margin-bottom:6px;")
+      img(width="100%" src="/images/infragram-animated.gif")
 
-  h3.span12(style="clear:both;") Recent images
-  - each image in images.reverse()
-    div.image-div.span3
-      div.thumbnail
+  hr 
+
+  div.row-fluid
+    div.span4
+      p: img(src="/images/infragram-aerial.jpg")
+      p Combine an infragram camera with Public Lab's <a href="http://publiclab.org/wiki/balloon mapping">open source</a> <a href="http://store.publiclab.org/products/balloon-mapping-kit">Balloon Mapping Kit</a> for aerial infrared plant analysis!
+    div.span4
+      h2 What is Infragram?
+      p An "infrablue" image is one in which the "red" channel of the image shows "near-infrared" light instead of the usual red. Such images can be generated using many inexpensive digital cameras and webcams by removing the infrared block filter and then adding a filter that selectively blocks red light (this is something the Public Lab Infragram kits nicely accomplish). 
+      p <a href="http://publiclab.org/wiki/near-infrared-camera">Learn how this technique works</a>, and help improve it, by joining <a href="http://publiclab.org">Public Lab</a>, an open community working towards affordable, open source environmental science tools for real-world problems.
+    div.span4
+      img(style="width:100%" src="/images/camera-plant.png")
+      h3 Build or buy one
+      p Public Lab tools are <a href="http://publiclab.org/wiki/licenses">open source</a>, and you can <a href="http://publiclab.org/wiki/infragram">build one yourself</a>. The Public Lab non-profit also <a href="http://store.publiclab.org/collections/diy-infrared-photography">distributes kits to help you get started</a>.
+
+  hr 
+  h2 Recent images <small>uploaded by contributors like you</small>
+
+  div.row-fluid
+    - each image, index in images.reverse()
+      div.image-div.span3
+        div.thumbnail
           a(href="/i/"+image._id): img.image(src=image.src)
-      div.body= image.desc
-      div.meta
+        div.body= image.desc
+        div.meta
           span.author= "by "+(image.author || "anon")
           span.updated_at= " on "+image.updated_at+" "
           a(href="/delete/"+image._id) Delete
-      hr
+      if (index+1) % 4 == 0
+        | </div><hr style="clear:both;"/><div class="row-fluid">
+
