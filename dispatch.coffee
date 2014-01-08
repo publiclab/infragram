@@ -31,11 +31,11 @@ setParametersFromURL = (idNameMap) ->
             $(id).val(val)
 
 
-updateImage = (video) ->
+updateImage = (img) ->
     if webGlSupported
-        glUpdateImage(video)
+        glUpdateImage(img)
     else
-        jsUpdateImage(video)
+        jsUpdateImage(img)
 
 
 $(document).ready(() ->
@@ -59,10 +59,13 @@ $(document).ready(() ->
     )
 
     $("#file-sel").change(() ->
-        if webGlSupported
-            glHandleOnChangeFile(this.files)
-        else
-            jsHandleOnChangeFile(this.files)
+        if this.files && this.files[0]
+            reader = new FileReader()
+            reader.onload = (event) ->
+                img = new Image()
+                img.onload = () -> updateImage(this)
+                img.src = event.target.result
+            reader.readAsDataURL(this.files[0])
         return true
     )
 

@@ -254,26 +254,14 @@ set_mode = (new_mode) ->
     else
         $("#colormaps-group")[0].style.display = "none"
 
-jsUpdateImage = (video) ->
+jsUpdateImage = (img) ->
     imgCanvas = document.getElementById("image")
     ctx = imgCanvas.getContext("2d")
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, imgCanvas.width, imgCanvas.height)
+    width = img.videoWidth or img.width
+    height = img.videoHeight or img.height
+    ctx.drawImage(img, 0, 0, width, height, 0, 0, imgCanvas.width, imgCanvas.height)
     image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height)
     set_mode(mode)
-
-jsHandleOnChangeFile = (files) ->
-    if files && files[0]
-        file_reader = new FileReader();
-        file_reader.onload = (eventObject) ->
-            img = new Image()
-            img.onload = (event) ->
-                imgCanvas = document.getElementById("image")
-                ctx = imgCanvas.getContext("2d")
-                ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, imgCanvas.width, imgCanvas.height)
-                image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height)
-                update(image)
-            img.src = eventObject.target.result
-        file_reader.readAsDataURL(files[0]);
 
 jsHandleOnClickRaw = () ->
     set_mode("raw")

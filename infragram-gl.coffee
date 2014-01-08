@@ -157,15 +157,6 @@ glSetMode = (ctx, newMode) ->
         $("#colormaps-group")[0].style.display = "none"
 
 
-glHandleOnLoadTexture = (ctx, imageData) ->
-    gl = ctx.gl
-    texImage = new Image()
-    texImage.onload = (event) ->
-        gl.activeTexture(gl.TEXTURE0)
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, event.target)
-    texImage.src = imageData
-
-
 glShaderLoaded = () ->
     waitForShadersToLoad -= 1
     if !waitForShadersToLoad
@@ -189,22 +180,14 @@ glRestoreContext = () ->
     mapContext = createContext(
         mapContext.mode, mapContext.greyscale, mapContext.colormap, mapContext.slider, "colorbar")
     if imgContext && mapContext
-        glHandleOnLoadTexture(imgContext, imageData)
+        glUpdateImage(imageData)
 
 
-glHandleOnChangeFile = (files) ->
-    if files && files[0]
-        reader = new FileReader()
-        reader.onload = (eventObject) ->
-            imgContext.imageData = eventObject.target.result
-            glHandleOnLoadTexture(imgContext, eventObject.target.result)
-        reader.readAsDataURL(files[0])
-
-
-glUpdateImage = (video) ->
+glUpdateImage = (img) ->
     gl = imgContext.gl
+    imgContext.imageData = img
     gl.activeTexture(gl.TEXTURE0)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
 
 
 glHandleOnClickDownload = () ->
