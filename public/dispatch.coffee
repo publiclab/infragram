@@ -16,7 +16,7 @@
 
 webGlSupported = false
 log = [] # a record of previous commands run
-
+params = {}
 
 last_command = () ->
     log[log.length-1]
@@ -24,7 +24,8 @@ last_command = () ->
 
 getURLParameter = (name) ->
     result = decodeURI(
-        (RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
+        #(RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
+        (RegExp(name + "=" + "(.+?)(&|$|/.)").exec(location.search) || [null, null])[1]
     )
     return if result == "null" then null else result
 
@@ -42,8 +43,27 @@ updateImage = (video) ->
     else
         jsUpdateImage(video)
 
-
 $(document).ready(() ->
+
+    if location.toString().split('?')[1]
+        $.each(location.toString().split('?')[1].split('&'), (i,o) -> 
+            k = o.split('=')[0]
+            v = o.split('=')[1]
+            params[k] = v
+        )
+    
+    
+    if params["src"]
+        src_img = new Image()
+        src_img.onload = () ->
+            e = $("#image")[0];
+            e.width = this.width
+            e.height = this.height
+            ctx = e.getContext("2d");
+            ctx.drawImage(this,0,0)
+        src_img.src = params["src"]
+ 
+
     $("#image-container").ready(() ->
         idNameMap =
             "#m_exp": "m"
