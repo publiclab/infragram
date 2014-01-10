@@ -294,10 +294,21 @@ jsHandleOnClickSave = () ->
     e = $("#image")[0];
     ctx = e.getContext("2d");
     data = ctx.canvas.toDataURL("image/png")
+
+    # This is totally not working; too tired to fix 
+    # Create a new "thumbnail" canvas for the smaller version
+    $("<canvas id='thumb'></canvas>").appendTo('body')
+    ctx = $('#thumb')[0].getContext('2d');
+    ctx.drawImage(img,0,0)
+    ctx.canvas.height = parseInt((240*image.height)/image.width) # is this right?
+    ctx.canvas.width = 240
+    thumb_data = ctx.canvas.toDataURL("image/png")
+
     ctx.putImageData(image, 0, 0)
     orig_data = ctx.canvas.toDataURL("image/png")
     $('<input name="src" type="hidden" value="'+data+'">').appendTo('#save-form')
     $('<input name="orig_src" type="hidden" value="'+orig_data+'">').appendTo('#save-form')
+    $('<input name="thumb_src" type="hidden" value="'+orig_data+'">').appendTo('#save-form')
     $('<input name="log" type="hidden"/>').appendTo('#save-form').val(JSON.stringify(log))
     $('#save-form').submit();
 

@@ -15,7 +15,9 @@ block content
     img#original(src=image.orig_src style="display:none;")
     div.body= image.desc
     br
+    h3.title= image.title
     div.meta
+        span.title= image.title
         span.author= "by "+(image.author || "anon")
         span.updated_at= " on "+image.updated_at
 

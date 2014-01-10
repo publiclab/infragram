@@ -6,7 +6,7 @@ var Image     = mongoose.model( 'Image' );
  */
 
 exports.index = function(req, res){
-  Image.find( function ( err, images, count ){
+  Image.find( 'title author created_at src', function ( err, images, count ){
     res.render( 'index', {
       title : 'Infragram: online infrared image analysis',
       images : images
@@ -15,7 +15,7 @@ exports.index = function(req, res){
 };
 
 exports.show = function(req, res){
-  Image.findOne({ _id: req.params.id }, 'src desc author orig_src created_at log', function (err, image) {
+  Image.findOne({ _id: req.params.id }, 'src title desc author orig_src updated_at log', function (err, image) {
     if (err) return handleError(err);
     res.render( 'show', {
       image : image
@@ -37,6 +37,7 @@ exports.create = function ( req, res ){
     desc: req.body.desc,
     log: req.body.log,
     orig_src: req.body.orig_src,
+    thumb_src: req.body.thumb_src,
     src: req.body.src,
     updated_at : Date.now(),
   }).save( function( err, todo, count ){
