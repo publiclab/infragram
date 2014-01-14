@@ -1,3 +1,2 @@
 [submodule "public/getUserMedia.js"]
 	path = public/getUserMedia.js
-	url = https://github.com/addyosmani/getUserMedia.js.git

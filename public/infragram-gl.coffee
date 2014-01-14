@@ -203,17 +203,9 @@ glRestoreContext = () ->
         glHandleOnLoadTexture(imgContext, imageData)
 
 
-glHandleOnChangeFile = (files) ->
-    if files && files[0]
-        reader = new FileReader()
-        reader.onload = (eventObject) ->
-            imgContext.imageData = eventObject.target.result
-            glHandleOnLoadTexture(imgContext, eventObject.target.result)
-        reader.readAsDataURL(files[0])
-
-
-glUpdateImage = (video) ->
+glUpdateImage = (img) ->
     gl = imgContext.gl
+    imgContext.imageData = img
     gl.activeTexture(gl.TEXTURE0)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video)
 

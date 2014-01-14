@@ -24,10 +24,12 @@ exports.show = function(req, res){
 };
 
 exports.delete = function(req, res){
-  Image.remove({ _id: req.params.id }, function (err, image) {
-    if (err) return handleError(err);
-    res.redirect('/');
-  })
+  if (req.params.pwd == "easytohack") { // very temporary solution
+    Image.remove({ _id: req.params.id }, function (err, image) {
+      if (err) return handleError(err);
+      res.redirect('/');
+    })
+  }
 };
 
 exports.create = function ( req, res ){
