@@ -18,6 +18,7 @@ TARGET = infragram.js
 SRCS = infragram.coffee \
        infragram-gl.coffee \
        camera.coffee \
+       file-upload.coffee \
        dispatch.coffee
 
 all : $(TARGET)

@@ -35,7 +35,7 @@ block content
     - each image, index in images.reverse()
       div.image-div.span3
         div.thumbnail
-          a(href="/i/"+image._id): img.image(src=image.src)
+          a(href="/i/"+image._id): img.image(src="./upload/"+image.filename+"_thumb.jpg")
         h4.title= image.title
         div.meta
           span.author= "by "+(image.author || "anon")

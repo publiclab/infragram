@@ -5,14 +5,14 @@ block content
     div.navbar-inner
       ul.nav
         li
-          a(href="/sandbox/?src="+image.src)
+          a(href="/sandbox/?src="+image.filename)
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
-        li: a(onClick="$('#final').toggle();$('#original').toggle();") See original
+        li: a(onClick="$('#image').toggle();$('#original').toggle();") See original
 
-  div
-    img#final(src=image.src)
-    img#original(src=image.orig_src style="display:none;")
+  div#image-container
+    img#image(src="../upload/"+image.filename style="width:800px; height:600px;")
+
     div.body= image.desc
     br
     h3.title= image.title
@@ -27,9 +27,7 @@ block content
   form.form
     label Current command
     - var log = []
-    - if (image.log) log = JSON.parse(image.log) 
+    - if (image.log) log = JSON.parse(image.log)
     input(type="text" value=log[log.length-1])
     label Full command log
     textarea#log.span6(rows=10)= log.join('\r')
-
-

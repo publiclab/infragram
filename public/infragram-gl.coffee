@@ -148,33 +148,12 @@ generateShader = (ctx) ->
 glSetMode = (ctx, newMode) ->
     ctx.mode = newMode
     ctx.updateShader = true
-    if newMode == "infragrammar_hsv"
-      save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
-    else if newMode == "infragrammar_rgb"
-      save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val())
-    else if newMode == "infragrammar_mono"
-      save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_rxp').val())
-    else if newMode == "ndvi"
-      log.push("ndvi")
-    else if newMode == "raw"
-      log.push("raw")
-    $("#download").show()
-    $("#save-modal-btn").show()
     if ctx.mode == "ndvi"
         $("#colorbar-container")[0].style.display = "inline-block"
         $("#colormaps-group")[0].style.display = "inline-block"
     else
         $("#colorbar-container")[0].style.display = "none"
         $("#colormaps-group")[0].style.display = "none"
-
-
-glHandleOnLoadTexture = (ctx, imageData) ->
-    gl = ctx.gl
-    texImage = new Image()
-    texImage.onload = (event) ->
-        gl.activeTexture(gl.TEXTURE0)
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, event.target)
-    texImage.src = imageData
 
 
 glShaderLoaded = () ->
@@ -200,40 +179,18 @@ glRestoreContext = () ->
     mapContext = createContext(
         mapContext.mode, mapContext.greyscale, mapContext.colormap, mapContext.slider, "colorbar")
     if imgContext && mapContext
-        glHandleOnLoadTexture(imgContext, imageData)
+        glUpdateImage(imageData)
 
 
 glUpdateImage = (img) ->
     gl = imgContext.gl
     imgContext.imageData = img
     gl.activeTexture(gl.TEXTURE0)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
 
 
-glHandleOnClickSave = () ->
-    e = document.getElementById("image");
-    ctx = e.getContext("2d");
-    data = drawScene(imgContext, true)
-    $('<input name="src" type="hidden" value="'+data+'">').appendTo('#save-form')
-    $('<input name="log" type="hidden"/>').appendTo('#save-form').val(JSON.stringify(log))
-    $('#save-form').submit();
-
-
-glHandleOnClickDownload = () ->
-    # create an "off-screen" anchor tag
-    lnk = document.createElement("a")
-    # the key here is to set the download attribute of the a tag
-    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
-    lnk.href = drawScene(imgContext, true)
-
-    # create a "fake" click-event to trigger the download
-    if document.createEvent
-        event = document.createEvent("MouseEvents")
-        event.initMouseEvent(
-            "click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-        lnk.dispatchEvent(event)
-    else if lnk.fireEvent
-        lnk.fireEvent("onclick")
+glGetCurrentImage = () ->
+    return drawScene(imgContext, true)
 
 
 glHandleOnClickRaw        = ()      -> glSetMode(imgContext, "raw")
