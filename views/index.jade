@@ -37,7 +37,6 @@ block content
         div.thumbnail
           a(href="/i/"+image._id): img.image(src=image.src)
         h4.title= image.title
-        div.title: p: b= image.title
         div.meta
           span.author= "by "+(image.author || "anon")
           span.updated_at= " on "+image.updated_at+" "

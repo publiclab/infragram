@@ -4,6 +4,7 @@ var Schema   = mongoose.Schema;
 var Image = new Schema({
     filename    : String,
     author      : String,
+    title       : String,
     desc        : String,
     src         : String,
     thumb_src   : String, // thumbnail image
