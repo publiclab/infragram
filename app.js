@@ -32,6 +32,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/i/:id', routes.show);
+app.get('/raw/:id', routes.raw);
 app.post('/create', routes.create);
 app.get('/delete/:id', routes.delete);
 app.get('/static/sandbox/', function(req,res) { res.redirect('/sandbox/') });

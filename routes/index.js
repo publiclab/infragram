@@ -23,6 +23,16 @@ exports.show = function(req, res){
   })
 };
 
+// serve up the image itself, converting it from base64 to binary
+exports.raw = function(req, res){
+  Image.findOne({ _id: req.params.id }, 'src title desc author orig_src updated_at log', function (err, image) {
+    if (err) return handleError(err);
+    res.writeHead(200, { "Content-type": "image/png" });
+    var atob = require('atob')
+    res.end(atob(image.src.split(',')[1]), "binary");
+  })
+};
+
 exports.delete = function(req, res){
   if (req.params.pwd == "easytohack") { // very temporary solution
     Image.remove({ _id: req.params.id }, function (err, image) {
@@ -46,3 +56,5 @@ exports.create = function ( req, res ){
     res.redirect( '/' );
   });
 };
+
+

@@ -1,11 +1,14 @@
 extends layout
 block content
 
+  - var log = []
+  - if (image.log) log = JSON.parse(image.log) 
+
   div.navbar.clearfix
     div.navbar-inner
       ul.nav
         li
-          a(href="/sandbox/?src="+image.src)
+          a(href="/sandbox/?src=/raw/"+image._id+"&infragrammar="+log[log.length-1])
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
         li: a(onClick="$('#final').toggle();$('#original').toggle();") See original
@@ -26,8 +29,6 @@ block content
 
   form.form
     label Current command
-    - var log = []
-    - if (image.log) log = JSON.parse(image.log) 
     input(type="text" value=log[log.length-1])
     label Full command log
     textarea#log.span6(rows=10)= log.join('\r')
