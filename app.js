@@ -60,37 +60,51 @@ server.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
+getFilename = function (data) {
+    var name = '';
+    if ('name' in data) {
+        name = String(data['name']).substring(0, 128).toLowerCase().replace(/[^a-z0-9]/g, '_');
+        n = name.lastIndexOf('_');
+        if (n > -1) {
+            name = name.substring(0, n) + '.' + name.substring(n + 1);
+        }
+    }
+    return name;
+}
+
 io.sockets.on('connection', function (socket) {
-	socket.on('upload', function (data) {
-        var thumbnail = false;
-        if ('thumbnail' in data) {
-            thumbnail = data['thumbnail'];
-        }
-        var name = '';
-        if ('name' in data) {
-            name = String(data['name']).toLowerCase().replace(/[^a-z0-9]/g, '_');
-            n = name.lastIndexOf('_');
-            if (n > -1) {
-                name = name.substring(0, n) + '.' + name.substring(n + 1);
-            }
-            if (thumbnail) {
-                name += '_thumb.jpg';
-            }
-        }
-        var buffer = '';
+	socket.on('image', function (data) {
+        var name = getFilename(data);
         if ('data' in data) {
-            if (data['data'].substring(0, 5) == 'data:') {
-                encoding = 'base64';
-                buffer = data['data'].split(',')[1];
-            }
-            else {
-                encoding = 'binary';
-                buffer = data['data'];
-            }
+            var buffer = String(data['data']);
+            fs.writeFile('./public/upload/' + name, buffer, 'binary',  function (err) {
+                if (err) console.log(err);
+                socket.emit('done', {'name': name});
+            });
         }
-        fs.writeFile('./public/upload/' + name, buffer, encoding,  function (err) {
-            if (err) console.log(err);
-            socket.emit("done", {"name": name});
-        });
+    });
+
+    socket.on('thumbnail', function (data) {
+        var name = getFilename(data) + '_thumb.jpg';
+        if ('data' in data) {
+            var buffer = String(data['data']).split(',');
+            buffer = buffer[buffer.length - 1];
+            fs.writeFile('./public/upload/' + name, buffer, 'base64',  function () {});
+        }
+    });
+
+	socket.on('url', function (data) {
+        var name = getFilename(data);
+        if (('data' in data) && ('on_load' in data)) {
+            var buffer = String(data['data']).substring(0, 256).split(':');
+            buffer = 'http:' + buffer[buffer.length - 1];
+            var file = fs.createWriteStream('./public/upload/' + name);
+            file.on('finish', function () {
+                socket.emit('done_url', {'name': name, 'on_load': data['on_load']});
+            });
+            var request = http.get(buffer, function(response) {
+                response.pipe(file);
+            });
+        }
     });
 });

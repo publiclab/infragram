@@ -18,20 +18,6 @@ socket = io.connect("http://localhost:8001")
 filename = ""
 
 
-isUrl = (s) ->
-    regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(s)
-
-
-sendImage = (file) ->
-    $("#file-sel").prop('disabled', true);
-    upload = new FileReader()
-    upload.onload = (event) ->
-        socket.emit("upload", {"name": file.name, "data": event.target.result, "thumbnail": false})
-        $("#file-sel").prop('disabled', false);
-    upload.readAsBinaryString(file)
-
-
 sendThumbnail = (img) ->
     e = new Image()
     e.onload = () ->
@@ -41,27 +27,23 @@ sendThumbnail = (img) ->
         canvas.height = 195
         ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height)
         dataUrl = canvas.toDataURL("image/jpeg")
-        socket.emit("upload", {"name": filename, "data": dataUrl, "thumbnail": true})
+        socket.emit("thumbnail", {"name": filename, "data": dataUrl})
     e.src = img
 
 
 loadFileFromUrl = (url, onLoadImage) ->
-    img = new Image()
-    img.crossOrigin = "anonymous"
-    img.onload = () ->
-        onLoadImage(this)
-        canvas = document.createElement("canvas")
-        ctx = canvas.getContext("2d")
-        canvas.width = this.width
-        canvas.height = this.height
-        ctx.drawImage(this, 0, 0, this.width, this.height)
-        dataUrl = canvas.toDataURL("image/jpeg")
-        name = url.substring(url.lastIndexOf("/") + 1)
-        socket.emit("upload", {"name": name, "data": dataUrl, "thumbnail": false})
-    if isUrl(url)
-        img.src = url
-    else
-        img.src = "../upload/" + url
+    name = url.substring(url.lastIndexOf("/") + 1)
+    funTxt = onLoadImage.toString()
+    socket.emit("url", {"name": name, "data": url, "on_load": funTxt})
+
+
+sendImage = (file) ->
+    $("#file-sel").prop("disabled", true)
+    upload = new FileReader()
+    upload.onload = (event) ->
+        socket.emit("image", {"name": file.name, "data": event.target.result})
+        $("#file-sel").prop("disabled", false)
+    upload.readAsBinaryString(file)
 
 
 handleOnChangeFile = (files, onLoadImage) ->
@@ -79,6 +61,16 @@ handleOnChangeFile = (files, onLoadImage) ->
 
 socket.on("done", (data) ->
     filename = data["name"]
+)
+
+
+socket.on("done_url", (data) ->
+    filename = data["name"]
+    img = new Image()
+    img.onload = () ->
+        eval("fn=" + data["on_load"])
+        fn(this)
+    img.src = "../upload/" + filename
 )
 
 
