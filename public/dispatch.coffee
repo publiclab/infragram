@@ -20,7 +20,7 @@ log = [] # a record of previous commands run
 
 getURLParameter = (name) ->
     result = decodeURI(
-        (RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
+        (RegExp(name + "=" + "(.+?)(&|$)").exec(location.search) || [null, null])[1]
     )
     return if result == "null" then null else result
 
@@ -59,10 +59,9 @@ $(document).ready(() ->
 
         src = getURLParameter("src")
         if src
-            setFilename(src)
-            src_img = new Image()
-            src_img.onload = () -> updateImage(this)
-            src_img.src = "../upload/" + src
+            $("#download").show()
+            $("#save-modal-btn").show()
+            loadFileFromUrl(src, updateImage)
 
         return true
     )

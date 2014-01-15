@@ -64,9 +64,9 @@ io.sockets.on('connection', function (socket) {
 	socket.on('upload', function (data) {
         var thumbnail = false;
         if ('thumbnail' in data) {
-            thumbnail = data['thumbnail']
+            thumbnail = data['thumbnail'];
         }
-        var name = ''
+        var name = '';
         if ('name' in data) {
             name = String(data['name']).toLowerCase().replace(/[^a-z0-9]/g, '_');
             n = name.lastIndexOf('_');
@@ -77,11 +77,17 @@ io.sockets.on('connection', function (socket) {
                 name += '_thumb.jpg';
             }
         }
-        var buffer = ''
+        var buffer = '';
         if ('data' in data) {
-            buffer = data['data'];
+            if (data['data'].substring(0, 5) == 'data:') {
+                encoding = 'base64';
+                buffer = data['data'].split(',')[1];
+            }
+            else {
+                encoding = 'binary';
+                buffer = data['data'];
+            }
         }
-        encoding = (thumbnail) ? 'base64' : 'binary';
         fs.writeFile('./public/upload/' + name, buffer, encoding,  function (err) {
             if (err) console.log(err);
             socket.emit("done", {"name": name});
