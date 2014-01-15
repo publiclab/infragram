@@ -53,6 +53,10 @@ exports.create = function ( req, res ){
     src: req.body.src,
     updated_at : Date.now(),
   }).save( function( err, todo, count ){
+    // if err, redirect to a filled-out form of the data, with validation errors 
+    // ...i don't yet know how to do this, but here are some relevant things:
+    //if (err) return handleError(err);
+    //err.errors.desc.type // <= 'Description must be less than 1000 words'
     res.redirect( '/' );
   });
 };
