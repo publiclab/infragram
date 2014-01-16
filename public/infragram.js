@@ -725,7 +725,7 @@ camera = {
   }
 };
 
-socket = io.connect(window.location.protocol + "\\" + window.location.host);
+socket = io.connect(window.location.protocol + "//" + window.location.host);
 
 filename = "";
 
