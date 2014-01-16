@@ -725,7 +725,7 @@ camera = {
   }
 };
 
-socket = io.connect("http://localhost:8001");
+socket = io.connect(window.location.protocol + "\\" + window.location.host);
 
 filename = "";
 

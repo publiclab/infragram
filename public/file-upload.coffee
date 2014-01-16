@@ -14,7 +14,7 @@
 # along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
 
 
-socket = io.connect("http://localhost:8001")
+socket = io.connect(window.location.protocol + "\\" + window.location.host)
 filename = ""
 
 
