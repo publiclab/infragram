@@ -18,6 +18,7 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/getUserMedia.js/lib/getUserMedia.js"></script>
     <script src="/bootstrap/js/bootstrap-slider.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/webgl-utils.js"></script>
     <script src="/infragram.js?hash=9d6596291c758b881354e0c522dbfd9e9f306c2a"></script>
 
@@ -37,6 +38,8 @@
             <input type="text" name="title" placeholder="Title" /><br />
             <input type="text" name="author" placeholder="Your name" /><br />
             <textarea name="desc" placeholder="A description of your work"></textarea>
+            <input id="form-filename" type="hidden" name="filename" />
+            <input id="form-log" type="hidden" name="log" />
           </form>
         </div>
         <div class="modal-footer">

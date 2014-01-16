@@ -1,20 +1,21 @@
 doctype html
 html
   head
-    title= title
+    title=title
     meta(name="description", content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.")
 
-    link(rel='stylesheet' href='/stylesheets/style.css')
-    link(rel='stylesheet' href="/bootstrap/css/bootstrap.css")
-    link(rel='stylesheet' href="/bootstrap/css/bootstrap-responsive.css")
-    link(rel='stylesheet' href="/bootstrap/css/slider.css")
-    link(rel='stylesheet' href="/assets/css/application.css")
-    link(rel='stylesheet' href="/infragram.css")
+    link(rel="stylesheet" href="/stylesheets/style.css")
+    link(rel="stylesheet" href="/bootstrap/css/bootstrap.css")
+    link(rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css")
+    link(rel="stylesheet" href="/bootstrap/css/slider.css")
+    link(rel="stylesheet" href="/assets/css/application.css")
+    link(rel="stylesheet" href="/infragram.css")
 
     script(src="/jquery.min.js")
     script(src="/bootstrap/js/bootstrap.min.js")
     script(src="/getUserMedia.js/lib/getUserMedia.js")
     script(src="/bootstrap/js/bootstrap-slider.js")
+    script(src="/socket.io/socket.io.js")
     script(src="/webgl-utils.js")
     script(src="/infragram.js?hash=d4c42a4ea93874f7ffa3b9565f395b651f1fa52e")
 
@@ -43,11 +44,11 @@ html
           p: small Infragram was created by <a href="https://github.com/bgamari">Ben Gamari</a>, <a href="http://github.com/donblair">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn">Piotr Foltyn</a>.
 
     script
-      | (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      | (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
       | (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       | m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      | })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      | })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
   
-      | ga('create', 'UA-43030180-1', 'infragram.org');
-      | ga('send', 'pageview');
+      | ga("create", "UA-43030180-1", "infragram.org");
+      | ga("send", "pageview");
 

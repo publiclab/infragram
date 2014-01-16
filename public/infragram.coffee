@@ -110,8 +110,7 @@ infragrammar = (img) ->
         r = new Float32Array(n);
         g = new Float32Array(n);
         b = new Float32Array(n);
-        #o = new Uint8ClampedArray(4*n);
-        o = new Float64Array(4*n);
+        o = new Float32Array(4*n);
         for i in [0...n]
                 r[i] = img.data[4*i + 0]/255;
                 g[i] = img.data[4*i + 1]/255;
@@ -178,8 +177,6 @@ update = (img) ->
             result = colorify(r, (x) -> [x, x, x])
         else
             result = infragrammar(img)
-        $('#download').show()
-        $('#save-modal-btn').show()
         render(result)
 
 save_expressions = (r,g,b) ->
@@ -189,7 +186,6 @@ save_expressions = (r,g,b) ->
         r = "R" if r == ""
         g = "G" if g == ""
         b = "B" if b == ""
-        log.push("rgb("+r+","+g+","+b+")")
         eval("r_exp = function(R,G,B){return "+r+";}")
         eval("g_exp = function(R,G,B){return "+g+";}")
         eval("b_exp = function(R,G,B){return "+b+";}")
@@ -201,7 +197,6 @@ save_expressions_hsv = (h,s,v) ->
         h = "H" if h == ""
         s = "S" if s == ""
         v = "V" if v == ""
-        log.push("hsv("+h+","+s+","+v+")")
         eval("r_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[0];}")
         eval("g_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[1];}")
         eval("b_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[2];}")
@@ -268,52 +263,14 @@ jsUpdateImage = (img) ->
 
 jsHandleOnClickRaw = () ->
     set_mode("raw")
-    log.push("raw")
 
 jsHandleOnClickNdvi = () ->
     set_mode("ndvi")
-    log.push("ndvi")
 
-jsHandleOnClickSave = () ->
+jsGetCurrentImage = () ->
     e = $("#image")[0];
     ctx = e.getContext("2d");
-    data = ctx.canvas.toDataURL("image/png")
-
-    # This is totally not working; too tired to fix 
-    # Create a new "thumbnail" canvas for the smaller version
-    $("<canvas id='thumb'></canvas>").appendTo('body')
-    ctx = $('#thumb')[0].getContext('2d');
-    ctx.drawImage(img,0,0)
-    ctx.canvas.height = parseInt((240*image.height)/image.width) # is this right?
-    ctx.canvas.width = 240
-    thumb_data = ctx.canvas.toDataURL("image/png")
-
-    ctx.putImageData(image, 0, 0)
-    orig_data = ctx.canvas.toDataURL("image/png")
-    $('<input name="src" type="hidden" value="'+data+'">').appendTo('#save-form')
-    $('<input name="orig_src" type="hidden" value="'+orig_data+'">').appendTo('#save-form')
-    $('<input name="thumb_src" type="hidden" value="'+orig_data+'">').appendTo('#save-form')
-    $('<input name="log" type="hidden"/>').appendTo('#save-form').val(JSON.stringify(log))
-    $('#save-form').submit();
-
-jsHandleOnClickDownload = () ->
-    e = $("#image")[0];
-    ctx = e.getContext("2d");
-
-    # create an "off-screen" anchor tag
-    lnk = document.createElement("a")
-    # the key here is to set the download attribute of the a tag
-    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
-    lnk.href = ctx.canvas.toDataURL("image/png")
-
-    # create a "fake" click-event to trigger the download
-    if document.createEvent
-        event = document.createEvent("MouseEvents")
-        event.initMouseEvent(
-            "click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-        lnk.dispatchEvent(event)
-    else if lnk.fireEvent
-        lnk.fireEvent("onclick")
+    return ctx.canvas.toDataURL("image/png")
 
 jsHandleOnSubmitInfraHsv = () ->
     save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
