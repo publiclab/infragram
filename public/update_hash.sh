@@ -14,5 +14,5 @@
 # along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
 
 HASH=$(git hash-object $1)
-REGEXP='s:(src="'$1')(.*)":\1?hash='$HASH'":'
+REGEXP='s:(src="/'$1')(.*)":\1?hash='$HASH'":'
 sed -r $REGEXP -i $2

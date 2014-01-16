@@ -15,6 +15,8 @@
 
 
 socket = io.connect(window.location.protocol + "//" + window.location.host)
+activeFile = null
+upload = null
 filename = ""
 
 
@@ -31,44 +33,61 @@ sendThumbnail = (img) ->
     e.src = img
 
 
-loadFileFromUrl = (url, onLoadImage) ->
-    name = url.substring(url.lastIndexOf("/") + 1)
-    funTxt = onLoadImage.toString()
-    socket.emit("url", {"name": name, "data": url, "on_load": funTxt})
-
-
-sendImage = (file) ->
-    $("#file-sel").prop("disabled", true)
-    upload = new FileReader()
-    upload.onload = (event) ->
-        socket.emit("image", {"name": file.name, "data": event.target.result})
-        $("#file-sel").prop("disabled", false)
-    upload.readAsBinaryString(file)
-
-
 handleOnChangeFile = (files, onLoadImage) ->
     if files && files[0]
-        file = files[0]
+        $("#file-sel").prop("disabled", true)
+        $("#save-modal-btn").prop("disabled", true)
+
+        activeFile = files[0]
+
+        upload = new FileReader()
+        upload.onload = (event) ->
+            socket.emit("image_send", {"id": socket.socket.sessionid, "data": event.target.result})
+        socket.emit("image_start", {"id": socket.socket.sessionid, "name": activeFile.name, "size": activeFile.size})
+
         reader = new FileReader()
         reader.onload = (event) ->
             img = new Image()
             img.onload = () ->
                 onLoadImage(this)
-                sendImage(file)
             img.src = event.target.result
-        reader.readAsDataURL(file)
+        reader.readAsDataURL(activeFile)
 
 
-socket.on("done", (data) ->
-    filename = data["name"]
+socket.on("image_request", (data) ->
+    txt = $("#save-modal-btn").html().split(/\s-\s/g)[0]
+    txt += " - " + data["percent"] + "%"
+    $("#save-modal-btn").html(txt)
+    uploaded = data["uploaded"]
+    chunk = data["chunk"]
+    newFile = activeFile.slice(uploaded, uploaded + Math.min(chunk, (activeFile.size - uploaded)))
+    upload.readAsBinaryString(newFile)
 )
+
+
+socket.on("image_done", (data) ->
+    if "error" in data
+        alert(data["error"])
+    else
+        filename = data["name"]
+    txt = $("#save-modal-btn").html().split(/\s-\s/g)[0]
+    $("#save-modal-btn").html(txt)
+    $("#file-sel").prop("disabled", false)
+    $("#save-modal-btn").prop("disabled", false)
+)
+
+
+loadFileFromUrl = (url, onLoadImage) ->
+    name = url.substring(url.lastIndexOf("/") + 1)
+    funTxt = onLoadImage.toString()
+    socket.emit("url", {"name": name, "url": url, "on_load": funTxt})
 
 
 socket.on("done_url", (data) ->
     filename = data["name"]
     img = new Image()
     img.onload = () ->
-        eval("fn=" + data["on_load"])
+        eval("var fn=" + data["on_load"])
         fn(this)
     img.src = "../upload/" + filename
 )
