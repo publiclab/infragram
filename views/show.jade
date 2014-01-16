@@ -11,7 +11,8 @@ block content
         li: a(onClick="$('#image').toggle();$('#original').toggle();") See original
 
   div#image-container
-    img#image(src="../upload/"+image.filename style="width:800px; height:600px;")
+    canvas#image(width="800" height="600" style="width:800px; height:600px;")
+    img#original(src="../upload/"+image.filename style="display:none; width:800px; height:600px;")
 
     div.body= image.desc
     br
