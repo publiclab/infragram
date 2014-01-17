@@ -39,6 +39,15 @@ updateImage = (img) ->
         jsUpdateImage(img)
 
 
+getCurrentImage = () ->
+    img = null
+    if webGlSupported
+        img = glGetCurrentImage()
+    else
+        img = jsGetCurrentImage()
+    return img
+
+
 $(document).ready(() ->
     $("#image-container").ready(() ->
         enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
@@ -61,7 +70,7 @@ $(document).ready(() ->
         if src
             $("#download").show()
             $("#save-modal-btn").show()
-            loadFileFromUrl(src, updateImage)
+            FileUpload.fromUrl(src, updateImage)
 
         return true
     )
@@ -69,7 +78,7 @@ $(document).ready(() ->
     $("#file-sel").change(() ->
         $("#download").show()
         $("#save-modal-btn").show()
-        handleOnChangeFile(this.files, updateImage)
+        FileUpload.fromFile(this.files, updateImage)
         return true
     )
 
@@ -107,10 +116,7 @@ $(document).ready(() ->
         lnk = document.createElement("a")
         # the key here is to set the download attribute of the a tag
         lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
-        if webGlSupported
-            lnk.href = glGetCurrentImage()
-        else
-            lnk.href = jsGetCurrentImage()
+        lnk.href = getCurrentImage()
 
         # create a "fake" click-event to trigger the download
         if document.createEvent
@@ -125,15 +131,22 @@ $(document).ready(() ->
     )
 
     $("#save").click(() ->
-        if webGlSupported
-            img = glGetCurrentImage()
-        else
-            img = jsGetCurrentImage()
-        sendThumbnail(img)
+        sendThumbnail = () ->
+            img = getCurrentImage()
+            FileUpload.uploadThumbnail(img)
+            $("#form-filename").val(FileUpload.filename)
+            $("#form-log").val(JSON.stringify(log))
+            $("#save-form").submit()
 
-        $("#form-filename").val(getFilename())
-        $("#form-log").val(JSON.stringify(log))
-        $("#save-form").submit()
+        if FileUpload.filename == ""
+            img = getCurrentImage()
+            FileUpload.fromBase64("camera", img, sendThumbnail)
+        else if FileUpload.activeFile == null
+            url = window.location.protocol + "//" + window.location.host + "/upload/" + FileUpload.filename
+            FileUpload.fromUrl(url, sendThumbnail)
+        else
+            sendThumbnail()
+        return true
     )
 
     $("#infragrammar_hsv").submit(() ->

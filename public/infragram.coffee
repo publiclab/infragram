@@ -270,7 +270,7 @@ jsHandleOnClickNdvi = () ->
 jsGetCurrentImage = () ->
     e = $("#image")[0];
     ctx = e.getContext("2d");
-    return ctx.canvas.toDataURL("image/png")
+    return ctx.canvas.toDataURL("image/jpeg")
 
 jsHandleOnSubmitInfraHsv = () ->
     save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())

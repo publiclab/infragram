@@ -53,7 +53,7 @@ getFilename = function (data, noDate) {
 };
 
 exports.onConnection = function (socket) {
-	socket.on('image_start', function (data) {
+    socket.on('image_start', function (data) {
         var id = getValue(data, 'id', ID_LENGTH_LIMIT);
         var name = getFilename(data);
         var size = parseInt(getValue(data, 'size', SIZE_LENGTH_LIMIT));
@@ -66,7 +66,7 @@ exports.onConnection = function (socket) {
         }
     });
 
-	socket.on('image_send', function (data) {
+    socket.on('image_send', function (data) {
         var id = getValue(data, 'id', ID_LENGTH_LIMIT);
         if (id in activeFiles) {
             var file = activeFiles[id];
@@ -92,22 +92,33 @@ exports.onConnection = function (socket) {
         fs.writeFile('./public/upload/' + name, buffer[buffer.length - 1], 'base64', function () {});
     });
 
-	socket.on('url', function (data) {
-        var url = getValue(data, 'url', URL_LENGTH_LIMIT).split(':');
+    socket.on('base64_start', function (data) {
+        var name = getFilename(data);
         var on_load = getValue(data, 'on_load', 0);
-        if (url[0] == 'http' || url[0] == 'https') {
+        var buffer = getValue(data, 'data', FILE_SIZE_LIMIT).split(',');
+        fs.writeFile('./public/upload/' + name, buffer[buffer.length - 1], 'base64', function () {
+            socket.emit('base64_done', {'name': name, 'on_load': on_load});
+        });
+    });
+
+    socket.on('url_start', function (data) {
+        var url = getValue(data, 'url', URL_LENGTH_LIMIT);
+        var protocol = url.split(':')[0]
+        var on_load = getValue(data, 'on_load', 0);
+        if (protocol == 'http' || protocol == 'https') {
             var name = getFilename(data);
             var file = fs.createWriteStream('./public/upload/' + name);
             file.on('finish', function () {
-                socket.emit('done_url', {'name': name, 'on_load': on_load});
+                socket.emit('url_done', {'name': name, 'on_load': on_load});
             });
-            http.get('http:' + url[url.length - 1], function (response) {
+            url = url.replace(/https:\/\//g, 'http://');
+            http.get(url, function (response) {
                 response.pipe(file);
             }).on('error', function () {}).end();
         }
         else {
             var name = getFilename(data, 'no_date');
-            socket.emit('done_url', {'name': name, 'on_load': on_load});
+            socket.emit('url_done', {'name': name, 'on_load': on_load});
         }
     });
 };

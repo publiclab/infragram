@@ -14,13 +14,20 @@ block content
     canvas#image(width="800" height="600" style="width:800px; height:600px;")
     img#original(src="../upload/"+image.filename style="display:none; width:800px; height:600px;")
 
+    div#colorbar-container(style="display:none;")
+      span#colorbar-min -1.00
+      canvas#colorbar
+      span#colorbar-max 1.00
+
+    div#colormaps-group(style="display:none;")
+
     div.body= image.desc
     br
     h3.title= image.title
     div.meta
-        span.title= image.title
-        span.author= "by "+(image.author || "anon")
-        span.updated_at= " on "+image.updated_at
+      span.title= image.title
+      span.author= "by "+(image.author || "anon")
+      span.updated_at= " on "+image.updated_at
 
   hr 
   h4 Command log
