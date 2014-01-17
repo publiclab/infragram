@@ -26,6 +26,14 @@ html
   body
     div.container.page
 
+      div#delete-modal(class="modal hide fade")
+        div(class="modal-body")
+          h3 Delete image
+          form#delete-form(class="form" action="/" method="get")
+            input#pwd(type="password" name="pwd" placeholder="Password")
+            br
+            input(type="submit" value="Delete" class="btn btn-primary")
+
       h1.span12
         img(src="/images/infragram-mini-leaf.png" style="float:left;margin-right:14px;width:50px;padding-bottom:10px;")
         div(style="margin-top:10px;")

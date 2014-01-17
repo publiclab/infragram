@@ -40,6 +40,7 @@ block content
         div.meta
           span.author= "by "+(image.author || "anon")
           span.updated_at= " on "+image.updated_at+" "
+          a(href="#delete-modal" data-toggle="modal" onclick="$('#delete-form').attr('action', '/delete/" + image._id + "');") Delete
       if (index+1) % 4 == 0
         | </div><hr style="clear:both;"/><div class="row-fluid">
 
