@@ -1,11 +1,14 @@
 extends layout
 block content
 
+  - var log = []
+  - if (image.log) log = JSON.parse(image.log)
+
   div.navbar.clearfix
     div.navbar-inner
       ul.nav
         li
-          a(href="/sandbox/?src="+image.filename)
+          a(href="/sandbox/?src="+image.filename+"&"+log[log.length-1])
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
         li: a(onClick="$('#image').toggle();$('#original').toggle();") See original
@@ -14,12 +17,44 @@ block content
     canvas#image(width="800" height="600" style="width:800px; height:600px;")
     img#original(src="../upload/"+image.filename style="display:none; width:800px; height:600px;")
 
-    div#colorbar-container(style="display:none;")
+  div(style="display:none;")
+    div#colorbar-container
       span#colorbar-min -1.00
       canvas#colorbar
       span#colorbar-max 1.00
 
-    div#colormaps-group(style="display:none;")
+    div(class="btn-group" data-toggle="buttons-radio")
+      button#raw(type="button" class="btn active") Raw
+      button#ndvi(type="button" class="btn") NDVI
+      button#nir(type="button" class="btn") NIR
+
+    select#modeSwitcher
+      option(value='infragrammar') RGB
+      option(value='infragrammar_hsv') HSV
+      option(value='infragrammar_mono') Monochrome
+
+    form#infragrammar(class="form-inline" action="javascript:void(0);")
+      input#r_exp(placeholder="R" type="text" class="input-small")
+      input#g_exp(placeholder="G" type="text" class="input-small")
+      input#b_exp(placeholder="B" type="text" class="input-small")
+      button(type="submit" class="btn btn-primary") Run
+
+    form#infragrammar_mono(class="form-inline" action="javascript:void(0);")
+      input#m_exp(placeholder="monochrome" type="text" class="input-small")
+      button(type="submit" class="btn btn-primary") Run
+
+    form#infragrammar_hsv(class="form-inline" action="javascript:void(0);")
+      input#h_exp(placeholder="H" type="text" class="input-small")
+      input#s_exp(placeholder="S" type="text" class="input-small")
+      input#v_exp(placeholder="V" type="text" class="input-small")
+      button(type="submit" class="btn btn-primary") Run
+
+    div#colormaps-group
+      div(class="btn-group" data-toggle="buttons-radio")
+        button#grey(type="button" class="btn active") Greyscale
+        button#color(type="button" class="btn") Color
+
+    input#slider(type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100")
 
     div.body= image.desc
     br
@@ -34,8 +69,6 @@ block content
 
   form.form
     label Current command
-    - var log = []
-    - if (image.log) log = JSON.parse(image.log)
     input(type="text" value=log[log.length-1])
     label Full command log
     textarea#log.span6(rows=10)= log.join('\r')

@@ -22,6 +22,8 @@ var FILE_NAME_LIMIT = 128;
 var ID_LENGTH_LIMIT = 64;
 var SIZE_LENGTH_LIMIT = 8;
 var URL_LENGTH_LIMIT = 256;
+var UPLOAD_PREFIX = './public/upload/';
+var THUMBNAIL_SUFIX = '_thumb.jpg';
 
 var FILE_SIZE_LIMIT = 5242880; // 5MB
 var FILE_CHUNK_SIZE = 131072; // 128kB
@@ -72,7 +74,7 @@ exports.onConnection = function (socket) {
             var file = activeFiles[id];
             var buffer = getValue(data, 'data', FILE_CHUNK_SIZE);
             var options = {encoding: 'binary', mode: 438, flag: 'a'};
-            fs.appendFile('./public/upload/' + file['name'], buffer, options, function () {
+            fs.appendFile(UPLOAD_PREFIX + file['name'], buffer, options, function () {
                 file['uploaded'] += buffer.length;
                 var percent = Math.round((file['uploaded'] / activeFiles[id]['size']) * 100);
                 socket.emit(
@@ -87,16 +89,16 @@ exports.onConnection = function (socket) {
     });
 
     socket.on('thumbnail', function (data) {
-        var name = getFilename(data, 'no_date') + '_thumb.jpg';
+        var name = getFilename(data, 'no_date') + THUMBNAIL_SUFIX;
         var buffer = getValue(data, 'data', FILE_SIZE_LIMIT).split(',');
-        fs.writeFile('./public/upload/' + name, buffer[buffer.length - 1], 'base64', function () {});
+        fs.writeFile(UPLOAD_PREFIX + name, buffer[buffer.length - 1], 'base64', function () {});
     });
 
     socket.on('base64_start', function (data) {
         var name = getFilename(data);
         var on_load = getValue(data, 'on_load', 0);
         var buffer = getValue(data, 'data', FILE_SIZE_LIMIT).split(',');
-        fs.writeFile('./public/upload/' + name, buffer[buffer.length - 1], 'base64', function () {
+        fs.writeFile(UPLOAD_PREFIX + name, buffer[buffer.length - 1], 'base64', function () {
             socket.emit('base64_done', {'name': name, 'on_load': on_load});
         });
     });
@@ -107,7 +109,7 @@ exports.onConnection = function (socket) {
         var on_load = getValue(data, 'on_load', 0);
         if (protocol == 'http' || protocol == 'https') {
             var name = getFilename(data);
-            var file = fs.createWriteStream('./public/upload/' + name);
+            var file = fs.createWriteStream(UPLOAD_PREFIX + name);
             file.on('finish', function () {
                 socket.emit('url_done', {'name': name, 'on_load': on_load});
             });
@@ -122,3 +124,7 @@ exports.onConnection = function (socket) {
         }
     });
 };
+
+exports.UPLOAD_PREFIX = UPLOAD_PREFIX;
+
+exports.THUMBNAIL_SUFIX = THUMBNAIL_SUFIX;

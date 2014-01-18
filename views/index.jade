@@ -33,9 +33,11 @@ block content
 
   div.row-fluid
     - each image, index in images.reverse()
+      - var log = []
+      - if (image.log) log = JSON.parse(image.log)
       div.image-div.span3
         div.thumbnail
-          a(href="/i/"+image._id+"?src="+image.filename): img.image(src="./upload/"+image.filename+"_thumb.jpg")
+          a(href="/i/"+image._id+"?src="+image.filename+"&"+log[log.length-1]): img.image(src="./upload/"+image.filename+"_thumb.jpg")
         h4.title= image.title
         div.meta
           span.author= "by "+(image.author || "anon")

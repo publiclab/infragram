@@ -772,7 +772,7 @@ FileUpload = {
         var img;
         img = new Image();
         img.onload = function() {
-          return onLoadImage(img);
+          return onLoadImage(this);
         };
         return img.src = event.target.result;
       };
@@ -828,7 +828,7 @@ FileUpload = {
       img = new Image();
       img.onload = function() {
         eval("var fn=" + data["on_load"]);
-        return fn(img);
+        return fn(this);
       };
       return img.src = "../upload/" + FileUpload.filename;
     });
@@ -912,7 +912,25 @@ $(document).ready(function() {
     if (src) {
       $("#download").show();
       $("#save-modal-btn").show();
-      FileUpload.fromUrl(src, updateImage);
+      FileUpload.fromUrl(src, function(img) {
+        var color, infraMode;
+        updateImage(img);
+        infraMode = getURLParameter("mode");
+        if (infraMode) {
+          if (infraMode.substring(0, 5) === "infra") {
+            $("#modeSwitcher").val(infraMode).change();
+            $("#" + infraMode).submit();
+          } else {
+            $("button#" + infraMode).button("toggle");
+            $("button#" + infraMode).click();
+          }
+        }
+        color = getURLParameter("color");
+        if (color) {
+          $("button#color").button("toggle");
+          return $("button#color").click();
+        }
+      });
     }
     return true;
   });
@@ -923,7 +941,7 @@ $(document).ready(function() {
     return true;
   });
   $("button#raw").click(function() {
-    log.push("raw");
+    log.push("mode=raw");
     if (webGlSupported) {
       glHandleOnClickRaw();
     } else {
@@ -932,7 +950,7 @@ $(document).ready(function() {
     return true;
   });
   $("button#ndvi").click(function() {
-    log.push("ndvi");
+    log.push("mode=ndvi");
     if (webGlSupported) {
       glHandleOnClickNdvi();
     } else {
@@ -941,7 +959,7 @@ $(document).ready(function() {
     return true;
   });
   $("button#nir").click(function() {
-    log.push("nir");
+    log.push("mode=nir");
     $("#m_exp").val("R");
     $("#modeSwitcher").val("infragrammar_mono").change();
     if (webGlSupported) {
@@ -987,10 +1005,12 @@ $(document).ready(function() {
     return true;
   });
   $("#infragrammar_hsv").submit(function() {
-    log.push($("#h_exp").val());
-    log.push($("#s_exp").val());
-    log.push($("#v_exp").val());
-    log.push("infragrammar_hsv");
+    var logEntry;
+    logEntry = "mode=infragrammar_hsv";
+    logEntry += $("#h_exp").val() ? "&h=" + $("#h_exp").val() : "";
+    logEntry += $("#s_exp").val() ? "&s=" + $("#s_exp").val() : "";
+    logEntry += $("#v_exp").val() ? "&v=" + $("#v_exp").val() : "";
+    log.push(logEntry);
     if (webGlSupported) {
       glHandleOnSubmitInfraHsv();
     } else {
@@ -999,10 +1019,12 @@ $(document).ready(function() {
     return true;
   });
   $("#infragrammar").submit(function() {
-    log.push($("#r_exp").val());
-    log.push($("#g_exp").val());
-    log.push($("#b_exp").val());
-    log.push("infragrammar");
+    var logEntry;
+    logEntry = "mode=infragrammar";
+    logEntry += $("#r_exp").val() ? "&r=" + $("#r_exp").val() : "";
+    logEntry += $("#g_exp").val() ? "&g=" + $("#g_exp").val() : "";
+    logEntry += $("#b_exp").val() ? "&b=" + $("#b_exp").val() : "";
+    log.push(logEntry);
     if (webGlSupported) {
       glHandleOnSubmitInfra();
     } else {
@@ -1011,8 +1033,10 @@ $(document).ready(function() {
     return true;
   });
   $("#infragrammar_mono").submit(function() {
-    log.push($("#m_exp").val());
-    log.push("infragrammar_mono");
+    var logEntry;
+    logEntry = "mode=infragrammar_mono";
+    logEntry += $("#m_exp").val() ? "&m=" + $("#m_exp").val() : "";
+    log.push(logEntry);
     if (webGlSupported) {
       glHandleOnSubmitInfraMono();
     } else {
@@ -1021,6 +1045,7 @@ $(document).ready(function() {
     return true;
   });
   $("button#grey").click(function() {
+    log.push("mode=ndvi");
     if (webGlSupported) {
       glHandleOnClickGrey();
     } else {
@@ -1037,6 +1062,7 @@ $(document).ready(function() {
     return true;
   });
   $("button#color").click(function() {
+    log.push("mode=ndvi&color=true");
     if (webGlSupported) {
       glHandleOnClickColor();
     } else {

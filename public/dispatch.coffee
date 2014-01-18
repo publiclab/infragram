@@ -70,7 +70,22 @@ $(document).ready(() ->
         if src
             $("#download").show()
             $("#save-modal-btn").show()
-            FileUpload.fromUrl(src, updateImage)
+            FileUpload.fromUrl(src, (img) ->
+                updateImage(img)
+                infraMode = getURLParameter("mode")
+                if infraMode
+                    if infraMode.substring(0, 5) == "infra"
+                        $("#modeSwitcher").val(infraMode).change()
+                        $("#" + infraMode).submit()
+                    else
+                        $("button#" + infraMode).button("toggle");
+                        $("button#" + infraMode).click()
+
+                color = getURLParameter("color")
+                if color
+                    $("button#color").button("toggle");
+                    $("button#color").click()
+            )
 
         return true
     )
@@ -83,7 +98,7 @@ $(document).ready(() ->
     )
 
     $("button#raw").click(() ->
-        log.push("raw")
+        log.push("mode=raw")
         if webGlSupported
             glHandleOnClickRaw()
         else
@@ -92,7 +107,7 @@ $(document).ready(() ->
     )
 
     $("button#ndvi").click(() ->
-        log.push("ndvi")
+        log.push("mode=ndvi")
         if webGlSupported
             glHandleOnClickNdvi()
         else
@@ -101,7 +116,7 @@ $(document).ready(() ->
     )
 
     $("button#nir").click(() ->
-        log.push("nir")
+        log.push("mode=nir")
         $("#m_exp").val("R")
         $("#modeSwitcher").val("infragrammar_mono").change()
         if webGlSupported
@@ -150,10 +165,11 @@ $(document).ready(() ->
     )
 
     $("#infragrammar_hsv").submit(() ->
-        log.push($("#h_exp").val())
-        log.push($("#s_exp").val())
-        log.push($("#v_exp").val())
-        log.push("infragrammar_hsv")
+        logEntry = "mode=infragrammar_hsv"
+        logEntry += if $("#h_exp").val() then "&h=" + $("#h_exp").val() else ""
+        logEntry += if $("#s_exp").val() then "&s=" + $("#s_exp").val() else ""
+        logEntry += if $("#v_exp").val() then "&v=" + $("#v_exp").val() else ""
+        log.push(logEntry)
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
@@ -162,10 +178,11 @@ $(document).ready(() ->
     )
 
     $("#infragrammar").submit(() ->
-        log.push($("#r_exp").val())
-        log.push($("#g_exp").val())
-        log.push($("#b_exp").val())
-        log.push("infragrammar")
+        logEntry = "mode=infragrammar"
+        logEntry += if $("#r_exp").val() then "&r=" + $("#r_exp").val() else ""
+        logEntry += if $("#g_exp").val() then "&g=" + $("#g_exp").val() else ""
+        logEntry += if $("#b_exp").val() then "&b=" + $("#b_exp").val() else ""
+        log.push(logEntry)
         if webGlSupported
             glHandleOnSubmitInfra()
         else
@@ -174,8 +191,9 @@ $(document).ready(() ->
     )
 
     $("#infragrammar_mono").submit(() ->
-        log.push($("#m_exp").val())
-        log.push("infragrammar_mono")
+        logEntry = "mode=infragrammar_mono"
+        logEntry += if $("#m_exp").val() then "&m=" + $("#m_exp").val() else ""
+        log.push(logEntry)
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
@@ -184,6 +202,7 @@ $(document).ready(() ->
     )
 
     $("button#grey").click(() ->
+        log.push("mode=ndvi")
         if webGlSupported
             glHandleOnClickGrey()
         else
@@ -200,6 +219,7 @@ $(document).ready(() ->
     )
 
     $("button#color").click(() ->
+        log.push("mode=ndvi&color=true")
         if webGlSupported
             glHandleOnClickColor()
         else

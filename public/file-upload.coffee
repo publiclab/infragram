@@ -50,7 +50,7 @@ FileUpload =
             reader.onload = (event) ->
                 img = new Image()
                 img.onload = () ->
-                    onLoadImage(img)
+                    onLoadImage(this)
                 img.src = event.target.result
             reader.readAsDataURL(files[0])
 
@@ -95,7 +95,7 @@ FileUpload =
             img = new Image()
             img.onload = () ->
                 eval("var fn=" + data["on_load"])
-                fn(img)
+                fn(this)
             img.src = "../upload/" + FileUpload.filename
         )
 

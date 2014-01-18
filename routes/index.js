@@ -40,13 +40,16 @@ exports.delete = function (req, res) {
   if (req.query.pwd == "easytohack") { // very temporary solution
     Image.findOne({_id: req.params.id}, 'filename', function (err, image) {
       if (err) return handleError(err);
+      var upload = require('../upload');
+      var fs = require('fs');
       var obj = image.toObject();
-      require('fs').unlink('./public/upload/' + obj.filename, function () {});
-      require('fs').unlink('./public/upload/' + obj.filename + '_thumb.jpg', function () {});
-    });
-    Image.remove({ _id: req.params.id }, function (err, image) {
-      if (err) return handleError(err);
-      res.redirect('/');
+      fs.unlink(upload.UPLOAD_PREFIX + obj.filename, function () {});
+      fs.unlink(upload.UPLOAD_PREFIX + obj.filename + upload.THUMBNAIL_SUFIX, function () {});
+
+      Image.remove({ _id: req.params.id }, function (err, image) {
+        if (err) return handleError(err);
+        res.redirect('/');
+      });
     });
   }
   else {
