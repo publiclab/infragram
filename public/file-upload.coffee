@@ -36,9 +36,9 @@ FileUpload =
             canvas.width = 260
             canvas.height = 195
             ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height)
-            funTxt = onLoadImage.toString()
+            onLoad = onLoadImage.toString()
             dataUrl = canvas.toDataURL("image/jpeg")
-            FileUpload.socket.emit("thumbnail_start", {"name": FileUpload.serverFilename, "data": dataUrl, "on_load": funTxt})
+            FileUpload.socket.emit("thumbnail_start", {"name": FileUpload.serverFilename, "data": dataUrl, "on_load": onLoad})
         img.src = src
 
 
@@ -68,8 +68,8 @@ FileUpload =
 
     fromUrl: (url, onLoadImage) ->
         name = url.substring(url.lastIndexOf("/") + 1)
-        funTxt = onLoadImage.toString()
-        FileUpload.socket.emit("url_start", {"name": name, "url": url, "on_load": funTxt})
+        onLoad = onLoadImage.toString()
+        FileUpload.socket.emit("url_start", {"name": name, "url": url, "on_load": onLoad})
 
 
     fromBase64: (name, data, onLoadImage) ->
@@ -78,17 +78,20 @@ FileUpload =
 
 
     initialize: () ->
-        FileUpload.socket = io.connect(window.location.protocol + "//" + window.location.host)
+        options =
+            rememberTransport: false
+            transports: ['WebSocket', 'AJAX long-polling']
+        FileUpload.socket = io.connect(window.location.protocol + "//" + window.location.host, options)
 
         FileUpload.socket.on("image_request", (data) ->
             file = FileUpload.file
             txt = $("#save-modal-btn").html().split(/\s-\s/g)[0]
-            txt += " - " + Math.round(file.uploaded / file.size) * 100 + "%"
+            txt += " - " + Math.round((file.uploaded / file.size) * 100) + "%"
             $("#save-modal-btn").html(txt)
             newFile = file.slice(file.uploaded, file.uploaded + Math.min(data["chunk"], (file.size - file.uploaded)))
-            file.uploaded += data["chunk"]
+            FileUpload.file.uploaded += data["chunk"]
             FileUpload.serverFilename = data["name"]
-            file.reader.readAsBinaryString(newFile)
+            file.reader.readAsDataURL(newFile)
         )
 
         FileUpload.socket.on("image_done", (data) ->

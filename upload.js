@@ -27,6 +27,7 @@ var THUMBNAIL_SUFIX = '_thumb.jpg';
 
 var FILE_SIZE_LIMIT = 5242880; // 5MB
 var FILE_CHUNK_SIZE = 131072; // 128kB
+var FILE_CHUNK_BASE64_SIZE = FILE_CHUNK_SIZE * 2;
 
 getValue = function (data, key, maxLen) {
     var value = '';
@@ -61,8 +62,9 @@ exports.onConnection = function (socket) {
             socket.emit('image_done', {'error': 'File is too big. Size limit is 5MB.'});
         }
         else {
-            var buffer = getValue(data, 'data', FILE_CHUNK_SIZE);
-            var name = getFilename(data, !(buffer == ''));
+            var strData = getValue(data, 'data', FILE_CHUNK_BASE64_SIZE).split(',');
+            strData = strData[strData.length - 1];
+            var name = getFilename(data, !(strData == ''));
             var options = {encoding: 'binary', mode: 438, flag: 'a+'};
             fs.stat(UPLOAD_PREFIX + name, function (err, stats) {
                 if (err) {
@@ -71,6 +73,7 @@ exports.onConnection = function (socket) {
                     });
                 }
                 else if (stats.size < size) {
+                    var buffer = new Buffer(strData, 'base64');
                     fs.appendFile(UPLOAD_PREFIX + name, buffer, options, function () {
                         if (stats.size + buffer.length >= size) {
                             socket.emit('image_done', {'name': name});

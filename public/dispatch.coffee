@@ -70,7 +70,6 @@ $(document).ready(() ->
 
         src = getURLParameter("src")
         if src
-            $("#download").show()
             $("#save-modal-btn").show()
             FileUpload.fromUrl(src, (img) ->
                 updateImage(img)
@@ -93,7 +92,6 @@ $(document).ready(() ->
     )
 
     $("#file-sel").change(() ->
-        $("#download").show()
         $("#save-modal-btn").show()
         FileUpload.fromFile(this.files, updateImage)
         return true
@@ -249,7 +247,6 @@ $(document).ready(() ->
     )
 
     $("#webcam-activate").click(() ->
-        $("#download").show()
         $("#save-modal-btn").show()
         camera.initialize()
         return true

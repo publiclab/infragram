@@ -743,18 +743,18 @@ FileUpload = {
     var img;
     img = new Image();
     img.onload = function() {
-      var canvas, ctx, dataUrl, funTxt;
+      var canvas, ctx, dataUrl, onLoad;
       canvas = document.createElement("canvas");
       ctx = canvas.getContext("2d");
       canvas.width = 260;
       canvas.height = 195;
       ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
-      funTxt = onLoadImage.toString();
+      onLoad = onLoadImage.toString();
       dataUrl = canvas.toDataURL("image/jpeg");
       return FileUpload.socket.emit("thumbnail_start", {
         "name": FileUpload.serverFilename,
         "data": dataUrl,
-        "on_load": funTxt
+        "on_load": onLoad
       });
     };
     return img.src = src;
@@ -791,13 +791,13 @@ FileUpload = {
     }
   },
   fromUrl: function(url, onLoadImage) {
-    var funTxt, name;
+    var name, onLoad;
     name = url.substring(url.lastIndexOf("/") + 1);
-    funTxt = onLoadImage.toString();
+    onLoad = onLoadImage.toString();
     return FileUpload.socket.emit("url_start", {
       "name": name,
       "url": url,
-      "on_load": funTxt
+      "on_load": onLoad
     });
   },
   fromBase64: function(name, data, onLoadImage) {
@@ -810,17 +810,22 @@ FileUpload = {
     });
   },
   initialize: function() {
-    FileUpload.socket = io.connect(window.location.protocol + "//" + window.location.host);
+    var options;
+    options = {
+      rememberTransport: false,
+      transports: ['WebSocket', 'AJAX long-polling']
+    };
+    FileUpload.socket = io.connect(window.location.protocol + "//" + window.location.host, options);
     FileUpload.socket.on("image_request", function(data) {
       var file, newFile, txt;
       file = FileUpload.file;
       txt = $("#save-modal-btn").html().split(/\s-\s/g)[0];
-      txt += " - " + Math.round(file.uploaded / file.size) * 100 + "%";
+      txt += " - " + Math.round((file.uploaded / file.size) * 100) + "%";
       $("#save-modal-btn").html(txt);
       newFile = file.slice(file.uploaded, file.uploaded + Math.min(data["chunk"], file.size - file.uploaded));
-      file.uploaded += data["chunk"];
+      FileUpload.file.uploaded += data["chunk"];
       FileUpload.serverFilename = data["name"];
-      return file.reader.readAsBinaryString(newFile);
+      return file.reader.readAsDataURL(newFile);
     });
     FileUpload.socket.on("image_done", function(data) {
       var txt;
@@ -925,7 +930,6 @@ $(document).ready(function() {
     setParametersFromURL(idNameMap);
     src = getURLParameter("src");
     if (src) {
-      $("#download").show();
       $("#save-modal-btn").show();
       FileUpload.fromUrl(src, function(img) {
         var color, infraMode;
@@ -950,7 +954,6 @@ $(document).ready(function() {
     return true;
   });
   $("#file-sel").change(function() {
-    $("#download").show();
     $("#save-modal-btn").show();
     FileUpload.fromFile(this.files, updateImage);
     return true;
@@ -1106,7 +1109,6 @@ $(document).ready(function() {
     return true;
   });
   $("#webcam-activate").click(function() {
-    $("#download").show();
     $("#save-modal-btn").show();
     camera.initialize();
     return true;
