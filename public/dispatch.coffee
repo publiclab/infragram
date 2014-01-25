@@ -49,6 +49,8 @@ getCurrentImage = () ->
 
 
 $(document).ready(() ->
+    FileUpload.initialize()
+
     $("#image-container").ready(() ->
         enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
         webGlSupported = enablewebgl && glInitInfragram()
@@ -148,16 +150,17 @@ $(document).ready(() ->
     $("#save").click(() ->
         sendThumbnail = () ->
             img = getCurrentImage()
-            FileUpload.uploadThumbnail(img)
-            $("#form-filename").val(FileUpload.filename)
-            $("#form-log").val(JSON.stringify(log))
-            $("#save-form").submit()
+            FileUpload.uploadThumbnail(img, ()->
+                $("#form-filename").val(FileUpload.getFilename())
+                $("#form-log").val(JSON.stringify(log))
+                $("#save-form").submit()
+            )
 
-        if FileUpload.filename == ""
+        if FileUpload.getFilename() == ""
             img = getCurrentImage()
             FileUpload.fromBase64("camera", img, sendThumbnail)
-        else if FileUpload.activeFile == null
-            url = window.location.protocol + "//" + window.location.host + "/upload/" + FileUpload.filename
+        else if FileUpload.isLoadedFromFile() == false
+            url = window.location.protocol + "//" + window.location.host + "/upload/" + FileUpload.getFilename()
             FileUpload.fromUrl(url, sendThumbnail)
         else
             sendThumbnail()
@@ -238,9 +241,9 @@ $(document).ready(() ->
     $("#webgl-activate").click(() ->
         href = window.location.href
         if webGlSupported
-            href = href.replace(/enablewebgl=true&?/gi, "")
+            href = href.replace(/(?:\?|&)enablewebgl=true/gi, "")
         else
-            href += if href.indexOf("?") >= 0 then "enablewebgl=true" else "?enablewebgl=true"
+            href += if href.indexOf("?") >= 0 then "&enablewebgl=true" else "?enablewebgl=true"
         window.location.href = href
         return true
     )
