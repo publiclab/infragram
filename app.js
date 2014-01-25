@@ -35,7 +35,7 @@ var ioOptions = {
     rememberTransport: false,
     transports: ['WebSocket', 'AJAX long-polling']
 };
-var io = require('socket.io', ioOptions).listen(server);
+var io = require('socket.io', ioOptions).listen(server, {log: false});
 
 // all environments
 app.set('port', process.env.PORT || 8001);
