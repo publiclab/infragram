@@ -153,7 +153,8 @@ $(document).ready(() ->
                 $("#form-log").val(JSON.stringify(log))
                 $("#save-form").submit()
             )
-
+        $("#save").prop("disabled", false)
+        $("#save").html("Saving...")
         if FileUpload.getFilename() == ""
             img = getCurrentImage()
             FileUpload.fromBase64("camera", img, sendThumbnail)
