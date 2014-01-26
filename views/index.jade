@@ -32,7 +32,7 @@ block content
   h2#new Recent images <small>uploaded by contributors like you</small>
 
   div.row-fluid
-    - each image, index in images.reverse()
+    - each image, index in images
       - var log = []
       - if (image.log) log = JSON.parse(image.log)
       div.image-div.span3

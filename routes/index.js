@@ -19,12 +19,16 @@ var mongoose = require('mongoose');
 var Image = mongoose.model('Image');
 
 exports.index = function (req, res) {
-  Image.find('title author created_at filename', function (err, images, count) {
-    res.render('index', {
-      title: 'Infragram: online infrared image analysis',
-      images: images
+  Image
+    .find({})
+    .sort('-updated_at')
+    .limit(8)
+    .exec(function (err, images, count) {
+      res.render('index', {
+        title: 'Infragram: online infrared image analysis',
+        images: images
+      });
     });
-  });
 };
 
 exports.show = function(req, res){
