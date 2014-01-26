@@ -49,6 +49,8 @@ getCurrentImage = () ->
 
 
 $(document).ready(() ->
+    FileUpload.initialize()
+
     $("#image-container").ready(() ->
         enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
         webGlSupported = enablewebgl && glInitInfragram()
@@ -68,7 +70,6 @@ $(document).ready(() ->
 
         src = getURLParameter("src")
         if src
-            $("#download").show()
             $("#save-modal-btn").show()
             FileUpload.fromUrl(src, (img) ->
                 updateImage(img)
@@ -91,7 +92,6 @@ $(document).ready(() ->
     )
 
     $("#file-sel").change(() ->
-        $("#download").show()
         $("#save-modal-btn").show()
         FileUpload.fromFile(this.files, updateImage)
         return true
@@ -148,16 +148,18 @@ $(document).ready(() ->
     $("#save").click(() ->
         sendThumbnail = () ->
             img = getCurrentImage()
-            FileUpload.uploadThumbnail(img)
-            $("#form-filename").val(FileUpload.filename)
-            $("#form-log").val(JSON.stringify(log))
-            $("#save-form").submit()
-
-        if FileUpload.filename == ""
+            FileUpload.uploadThumbnail(img, ()->
+                $("#form-filename").val(FileUpload.getFilename())
+                $("#form-log").val(JSON.stringify(log))
+                $("#save-form").submit()
+            )
+        $("#save").prop("disabled", false)
+        $("#save").html("Saving...")
+        if FileUpload.getFilename() == ""
             img = getCurrentImage()
             FileUpload.fromBase64("camera", img, sendThumbnail)
-        else if FileUpload.activeFile == null
-            url = window.location.protocol + "//" + window.location.host + "/upload/" + FileUpload.filename
+        else if FileUpload.isLoadedFromFile() == false
+            url = window.location.protocol + "//" + window.location.host + "/upload/" + FileUpload.getFilename()
             FileUpload.fromUrl(url, sendThumbnail)
         else
             sendThumbnail()
@@ -238,15 +240,14 @@ $(document).ready(() ->
     $("#webgl-activate").click(() ->
         href = window.location.href
         if webGlSupported
-            href = href.replace(/enablewebgl=true&?/gi, "")
+            href = href.replace(/(?:\?|&)enablewebgl=true/gi, "")
         else
-            href += if href.indexOf("?") >= 0 then "enablewebgl=true" else "?enablewebgl=true"
+            href += if href.indexOf("?") >= 0 then "&enablewebgl=true" else "?enablewebgl=true"
         window.location.href = href
         return true
     )
 
     $("#webcam-activate").click(() ->
-        $("#download").show()
         $("#save-modal-btn").show()
         camera.initialize()
         return true

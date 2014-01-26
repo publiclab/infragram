@@ -20,20 +20,19 @@ var http = require('http');
 
 var FILE_NAME_LIMIT = 128;
 var ID_LENGTH_LIMIT = 64;
-var SIZE_LENGTH_LIMIT = 8;
+var NUMBER_LENGTH_LIMIT = 8;
 var URL_LENGTH_LIMIT = 256;
 var UPLOAD_PREFIX = './public/upload/';
 var THUMBNAIL_SUFIX = '_thumb.jpg';
 
 var FILE_SIZE_LIMIT = 5242880; // 5MB
 var FILE_CHUNK_SIZE = 131072; // 128kB
-
-var activeFiles = {};
+var FILE_CHUNK_BASE64_SIZE = FILE_CHUNK_SIZE * 2;
 
 getValue = function (data, key, maxLen) {
     var value = '';
     if (key in data) {
-        value = String(data[key])
+        value = String(data[key]);
         if (maxLen > 0) {
             value = value.substring(0, maxLen);
         }
@@ -55,43 +54,49 @@ getFilename = function (data, noDate) {
 };
 
 exports.onConnection = function (socket) {
-    socket.on('image_start', function (data) {
-        var id = getValue(data, 'id', ID_LENGTH_LIMIT);
-        var name = getFilename(data);
-        var size = parseInt(getValue(data, 'size', SIZE_LENGTH_LIMIT));
-        if (size < FILE_SIZE_LIMIT) {
-            activeFiles[id] = {'name': name, 'size': size, 'uploaded': 0};
-            socket.emit('image_request', {'uploaded': 0, 'chunk': FILE_CHUNK_SIZE, 'percent': 0});
-        }
-        else {
-            socket.emit('image_done', {'error': 'File is too big. Size limit is 5MB.'});
-        }
-    });
 
     socket.on('image_send', function (data) {
-        var id = getValue(data, 'id', ID_LENGTH_LIMIT);
-        if (id in activeFiles) {
-            var file = activeFiles[id];
-            var buffer = getValue(data, 'data', FILE_CHUNK_SIZE);
-            var options = {encoding: 'binary', mode: 438, flag: 'a'};
-            fs.appendFile(UPLOAD_PREFIX + file['name'], buffer, options, function () {
-                file['uploaded'] += buffer.length;
-                var percent = Math.round((file['uploaded'] / activeFiles[id]['size']) * 100);
-                socket.emit(
-                    (file['uploaded'] < file['size']) ? 'image_request' : 'image_done',
-                    {'name': file['name'], 'uploaded': file['uploaded'], 'chunk': FILE_CHUNK_SIZE, 'percent': percent}
-                );
-            });
+        var strSize = getValue(data, 'size', NUMBER_LENGTH_LIMIT);
+        var size = parseInt(strSize);
+        if ((strSize == '') || (size > FILE_SIZE_LIMIT)) {
+            socket.emit('image_done', {'error': 'File is too big. Size limit is 5MB.'});
         }
         else {
-            socket.emit('image_done', {'error': 'Unknown session id.'});
+            var strData = getValue(data, 'data', FILE_CHUNK_BASE64_SIZE).split(',');
+            strData = strData[strData.length - 1];
+            var name = getFilename(data, !(strData == ''));
+            var options = {encoding: 'binary', mode: 438, flag: 'a+'};
+            fs.stat(UPLOAD_PREFIX + name, function (err, stats) {
+                if (err) {
+                    fs.appendFile(UPLOAD_PREFIX + name, '', options, function () {
+                        socket.emit('image_request', {'name': name, 'chunk': FILE_CHUNK_SIZE});
+                    });
+                }
+                else if (stats.size < size) {
+                    var buffer = new Buffer(strData, 'base64');
+                    fs.appendFile(UPLOAD_PREFIX + name, buffer, options, function () {
+                        if (stats.size + buffer.length >= size) {
+                            socket.emit('image_done', {'name': name});
+                        }
+                        else {
+                            socket.emit('image_request', {'name': name, 'chunk': FILE_CHUNK_SIZE});
+                        }
+                    });
+                }
+                else {
+                    socket.emit('image_done', {'error': 'File size mismatch.'});
+                }
+            });
         }
     });
 
-    socket.on('thumbnail', function (data) {
+    socket.on('thumbnail_start', function (data) {
         var name = getFilename(data, 'no_date') + THUMBNAIL_SUFIX;
+        var on_load = getValue(data, 'on_load', 0);
         var buffer = getValue(data, 'data', FILE_SIZE_LIMIT).split(',');
-        fs.writeFile(UPLOAD_PREFIX + name, buffer[buffer.length - 1], 'base64', function () {});
+        fs.writeFile(UPLOAD_PREFIX + name, buffer[buffer.length - 1], 'base64', function () {
+            socket.emit('thumbnail_done', {'on_load': on_load});
+        });
     });
 
     socket.on('base64_start', function (data) {

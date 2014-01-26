@@ -20,7 +20,7 @@
     <script src="/bootstrap/js/bootstrap-slider.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/webgl-utils.js"></script>
-    <script src="/infragram.js?hash=76709f9a064498dfc4591a359a90e1e7b46d0683"></script>
+    <script src="/infragram.js?hash=0fc4be18daf2426a251fb114c4afed6728cc58a9"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -103,6 +103,8 @@
           <br>
           <br>
 
+          <button style="display:none;margin-left:30px;" href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
+
           <div id="colormaps-group" style="display:none;">
             <b>Color maps:</b>
             <div class="btn-group" data-toggle="buttons-radio">
@@ -110,9 +112,6 @@
               <button id="color" type="button" class="btn">Color</button>
             </div>
           </div>
-
-          <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
-          <button style="display:none;margin-left:30px;" href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
 
           <b style="margin-left:20px;">Slider (X): &nbsp; </b>
           <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">

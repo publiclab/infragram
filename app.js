@@ -30,7 +30,12 @@ var path = require('path');
 
 var app = express();
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+
+var ioOptions = {
+    rememberTransport: false,
+    transports: ['WebSocket', 'AJAX long-polling']
+};
+var io = require('socket.io', ioOptions).listen(server, {log: false});
 
 // all environments
 app.set('port', process.env.PORT || 80);
