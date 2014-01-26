@@ -159,8 +159,7 @@ $(document).ready(() ->
             img = getCurrentImage()
             FileUpload.fromBase64("camera", img, sendThumbnail)
         else if FileUpload.isLoadedFromFile() == false
-            url = window.location.protocol + "//" + window.location.host + "/upload/" + FileUpload.getFilename()
-            FileUpload.fromUrl(url, sendThumbnail)
+            FileUpload.duplicate(sendThumbnail)
         else
             sendThumbnail()
         return true

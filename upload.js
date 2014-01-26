@@ -92,31 +92,49 @@ exports.onConnection = function (socket) {
 
     socket.on('thumbnail_start', function (data) {
         var name = getFilename(data, 'no_date') + THUMBNAIL_SUFIX;
-        var on_load = getValue(data, 'on_load', 0);
+        var callback = getValue(data, 'callback', 0);
         var buffer = getValue(data, 'data', FILE_SIZE_LIMIT).split(',');
         fs.writeFile(UPLOAD_PREFIX + name, buffer[buffer.length - 1], 'base64', function () {
-            socket.emit('thumbnail_done', {'on_load': on_load});
+            socket.emit('thumbnail_done', {'callback': callback});
         });
     });
 
     socket.on('base64_start', function (data) {
         var name = getFilename(data);
-        var on_load = getValue(data, 'on_load', 0);
+        var callback = getValue(data, 'callback', 0);
         var buffer = getValue(data, 'data', FILE_SIZE_LIMIT).split(',');
         fs.writeFile(UPLOAD_PREFIX + name, buffer[buffer.length - 1], 'base64', function () {
-            socket.emit('base64_done', {'name': name, 'on_load': on_load});
+            socket.emit('base64_done', {'name': name, 'callback': callback});
+        });
+    });
+
+    socket.on('duplicate_start', function (data) {
+        var callback = getValue(data, 'callback', 0);
+        var newName = getFilename(data);
+        var existingName = getFilename(data, 'no_date');
+        fs.open(UPLOAD_PREFIX + existingName, 'r', function (err, fd) {
+            if (err) {
+                socket.emit('duplicate_done', {'error': 'File not found.'});
+            }
+            else {
+                var file = fs.createWriteStream(UPLOAD_PREFIX + newName);
+                file.on('finish', function () {
+                    socket.emit('duplicate_done', {'name': newName, 'callback': callback});
+                });
+                fs.createReadStream(UPLOAD_PREFIX + existingName, {'fd': fd}).pipe(file);
+            }
         });
     });
 
     socket.on('url_start', function (data) {
         var url = getValue(data, 'url', URL_LENGTH_LIMIT);
-        var protocol = url.split(':')[0]
-        var on_load = getValue(data, 'on_load', 0);
+        var protocol = url.split(':')[0];
+        var callback = getValue(data, 'callback', 0);
         if (protocol == 'http' || protocol == 'https') {
             var name = getFilename(data);
             var file = fs.createWriteStream(UPLOAD_PREFIX + name);
             file.on('finish', function () {
-                socket.emit('url_done', {'name': name, 'on_load': on_load});
+                socket.emit('url_done', {'name': name, 'callback': callback});
             });
             url = url.replace(/https:\/\//g, 'http://');
             http.get(url, function (response) {
@@ -125,7 +143,7 @@ exports.onConnection = function (socket) {
         }
         else {
             var name = getFilename(data, 'no_date');
-            socket.emit('url_done', {'name': name, 'on_load': on_load});
+            socket.emit('url_done', {'name': name, 'callback': callback});
         }
     });
 };

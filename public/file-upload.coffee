@@ -28,7 +28,7 @@ FileUpload =
         return FileUpload.serverFilename
 
 
-    uploadThumbnail: (src, onLoadImage) ->
+    uploadThumbnail: (src, callback) ->
         img = new Image()
         img.onload = () ->
             canvas = document.createElement("canvas")
@@ -36,13 +36,13 @@ FileUpload =
             canvas.width = 260
             canvas.height = 195
             ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height)
-            onLoad = onLoadImage.toString()
+            callback = callback.toString()
             dataUrl = canvas.toDataURL("image/jpeg")
-            FileUpload.socket.emit("thumbnail_start", {"name": FileUpload.serverFilename, "data": dataUrl, "on_load": onLoad})
+            FileUpload.socket.emit("thumbnail_start", {"name": FileUpload.serverFilename, "data": dataUrl, "callback": callback})
         img.src = src
 
 
-    fromFile: (files, onLoadImage) ->
+    fromFile: (files, callback) ->
         if files && files[0]
             $("#file-sel").prop("disabled", true)
             $("#save-modal-btn").prop("disabled", true)
@@ -61,20 +61,25 @@ FileUpload =
             reader.onload = (event) ->
                 img = new Image()
                 img.onload = () ->
-                    onLoadImage(this)
+                    callback(this)
                 img.src = event.target.result
             reader.readAsDataURL(files[0])
 
 
-    fromUrl: (url, onLoadImage) ->
+    fromUrl: (url, callback) ->
         name = url.substring(url.lastIndexOf("/") + 1)
-        onLoad = onLoadImage.toString()
-        FileUpload.socket.emit("url_start", {"name": name, "url": url, "on_load": onLoad})
+        callback = callback.toString()
+        FileUpload.socket.emit("url_start", {"name": name, "url": url, "callback": callback})
 
 
-    fromBase64: (name, data, onLoadImage) ->
-        onLoad = onLoadImage.toString()
-        FileUpload.socket.emit("base64_start", {"name": name, "data": data, "on_load": onLoad})
+    duplicate: (callback) ->
+        callback = callback.toString()
+        FileUpload.socket.emit("duplicate_start", {"name": FileUpload.serverFilename, "callback": callback})
+
+
+    fromBase64: (name, data, callback) ->
+        callback = callback.toString()
+        FileUpload.socket.emit("base64_start", {"name": name, "data": data, "callback": callback})
 
 
     initialize: () ->
@@ -109,20 +114,29 @@ FileUpload =
             FileUpload.serverFilename = data["name"]
             img = new Image()
             img.onload = () ->
-                eval("var fn=" + data["on_load"])
-                fn(this)
-            img.src = "../upload/" + FileUpload.getFilename()
+                eval("var callback=" + data["callback"])
+                callback(this)
+            img.src = "../upload/" + data["name"]
         )
 
         FileUpload.socket.on("base64_done", (data) ->
             FileUpload.serverFilename = data["name"]
-            eval("var fn=" + data["on_load"])
-            fn()
+            eval("var callback=" + data["callback"])
+            callback()
+        )
+
+        FileUpload.socket.on("duplicate_done", (data) ->
+            if data["error"]
+                alert(data["error"])
+            else
+                FileUpload.serverFilename = data["name"]
+                eval("var callback=" + data["callback"])
+                callback()
         )
 
         FileUpload.socket.on("thumbnail_done", (data) ->
-            eval("var fn=" + data["on_load"])
-            fn()
+            eval("var callback=" + data["callback"])
+            callback()
         )
 
         return;
