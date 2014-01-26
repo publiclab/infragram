@@ -1012,7 +1012,7 @@ $(document).ready(function() {
         return $("#save-form").submit();
       });
     };
-    $("#save").prop("disabled", false);
+    $("#save").prop("disabled", true);
     $("#save").html("Saving...");
     if (FileUpload.getFilename() === "") {
       img = getCurrentImage();
