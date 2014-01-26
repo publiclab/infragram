@@ -66,6 +66,6 @@ exports.create = function (req, res) {
     log: req.body.log,
     updated_at: Date.now(),
   }).save(function (err, todo, count) {
-    res.redirect('/');
+    res.redirect('/#new');
   });
 };
