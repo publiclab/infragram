@@ -33,7 +33,8 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 // all environments
-app.set('port', process.env.PORT || 8001);
+app.set('port', process.env.PORT || 80);
+//app.set('port', process.env.PORT || 8001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
