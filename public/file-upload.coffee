@@ -28,6 +28,10 @@ FileUpload =
         return FileUpload.serverFilename
 
 
+    setFilename: (name) ->
+        FileUpload.serverFilename = name
+
+
     uploadThumbnail: (src, callback) ->
         img = new Image()
         img.onload = () ->
@@ -66,12 +70,6 @@ FileUpload =
             reader.readAsDataURL(files[0])
 
 
-    fromUrl: (url, callback) ->
-        name = url.substring(url.lastIndexOf("/") + 1)
-        callback = callback.toString()
-        FileUpload.socket.emit("url_start", {"name": name, "url": url, "callback": callback})
-
-
     duplicate: (callback) ->
         callback = callback.toString()
         FileUpload.socket.emit("duplicate_start", {"name": FileUpload.serverFilename, "callback": callback})
@@ -108,15 +106,6 @@ FileUpload =
             $("#save-modal-btn").html(txt)
             $("#file-sel").prop("disabled", false)
             $("#save-modal-btn").prop("disabled", false)
-        )
-
-        FileUpload.socket.on("url_done", (data) ->
-            FileUpload.serverFilename = data["name"]
-            img = new Image()
-            img.onload = () ->
-                eval("var callback=" + data["callback"])
-                callback(this)
-            img.src = "../upload/" + data["name"]
         )
 
         FileUpload.socket.on("base64_done", (data) ->

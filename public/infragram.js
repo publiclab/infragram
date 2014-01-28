@@ -739,6 +739,9 @@ FileUpload = {
   getFilename: function() {
     return FileUpload.serverFilename;
   },
+  setFilename: function(name) {
+    return FileUpload.serverFilename = name;
+  },
   uploadThumbnail: function(src, callback) {
     var img;
     img = new Image();
@@ -790,16 +793,6 @@ FileUpload = {
       return reader.readAsDataURL(files[0]);
     }
   },
-  fromUrl: function(url, callback) {
-    var name;
-    name = url.substring(url.lastIndexOf("/") + 1);
-    callback = callback.toString();
-    return FileUpload.socket.emit("url_start", {
-      "name": name,
-      "url": url,
-      "callback": callback
-    });
-  },
   duplicate: function(callback) {
     callback = callback.toString();
     return FileUpload.socket.emit("duplicate_start", {
@@ -845,16 +838,6 @@ FileUpload = {
       $("#file-sel").prop("disabled", false);
       return $("#save-modal-btn").prop("disabled", false);
     });
-    FileUpload.socket.on("url_done", function(data) {
-      var img;
-      FileUpload.serverFilename = data["name"];
-      img = new Image();
-      img.onload = function() {
-        eval("var callback=" + data["callback"]);
-        return callback(this);
-      };
-      return img.src = "../upload/" + data["name"];
-    });
     FileUpload.socket.on("base64_done", function(data) {
       FileUpload.serverFilename = data["name"];
       eval("var callback=" + data["callback"]);
@@ -882,7 +865,7 @@ log = [];
 
 getURLParameter = function(name) {
   var result;
-  result = decodeURI((RegExp(name + "=" + "(.+?)(&|$)").exec(location.search) || [null, null])[1]);
+  result = decodeURI((RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]);
   if (result === "null") {
     return null;
   } else {
@@ -927,7 +910,7 @@ getCurrentImage = function() {
 $(document).ready(function() {
   FileUpload.initialize();
   $("#image-container").ready(function() {
-    var enablewebgl, idNameMap, src;
+    var enablewebgl, idNameMap, img, src;
     enablewebgl = getURLParameter("enablewebgl") === "true" ? true : false;
     webGlSupported = enablewebgl && glInitInfragram();
     if (webGlSupported) {
@@ -946,9 +929,11 @@ $(document).ready(function() {
     src = getURLParameter("src");
     if (src) {
       $("#save-modal-btn").show();
-      FileUpload.fromUrl(src, function(img) {
+      img = new Image();
+      img.onload = function() {
         var color, infraMode;
-        updateImage(img);
+        FileUpload.setFilename(src);
+        updateImage(this);
         infraMode = getURLParameter("mode");
         if (infraMode) {
           if (infraMode.substring(0, 5) === "infra") {
@@ -964,7 +949,8 @@ $(document).ready(function() {
           $("button#color").button("toggle");
           return $("button#color").click();
         }
-      });
+      };
+      img.src = "../upload/" + src;
     }
     return true;
   });
