@@ -19,14 +19,27 @@ var mongoose = require('mongoose');
 var Image = mongoose.model('Image');
 
 exports.index = function (req, res) {
+  var pageNumber = (req.query.page && (req.query.page > 0)) ? req.query.page : 1;
+  var resultsPerPage = 8;
+  var skipFrom = (pageNumber * resultsPerPage) - resultsPerPage;
+
   Image
-    .find({})
+    .find()
     .sort('-updated_at')
-    .limit(8)
-    .exec(function (err, images, count) {
-      res.render('index', {
-        title: 'Infragram: online infrared image analysis',
-        images: images
+    .skip(skipFrom)
+    .limit(resultsPerPage)
+    .exec(function (err, images) {
+      Image.count({}, function(error, count) {
+        var pageCount = Math.ceil(count / resultsPerPage);
+        if (pageCount == 0) {
+          pageCount = 1;
+        }
+        res.render('index', {
+          title: 'Infragram: online infrared image analysis',
+          images: images,
+          pageNumber: pageNumber,
+          pageCount: pageCount
+        });
       });
     });
 };

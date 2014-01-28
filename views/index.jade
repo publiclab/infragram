@@ -31,6 +31,27 @@ block content
   hr 
   h2#new Recent images <small>uploaded by contributors like you</small>
 
+  div.well
+    - var p = {current: parseInt(pageNumber), total: parseInt(pageCount)}
+    - if (p.current > 1)
+      a.page.btn(href="./?page=1#new") &lt;&lt;
+      a.page.btn(href="./?page=" + (p.current - 1) + "#new") &lt;
+    - else
+      span.page.disabled.btn <<
+      span.page.disabled.btn <
+    - for (var i = p.current - 5; i <= p.current + 5; ++i)
+      - if (i <= p.total && i > 0)
+        - if (i !== p.current)
+          a.page.btn(href="./?page=" + i + "#new")=i
+        - else
+          span.page.disabled.btn=i
+    - if (p.current < p.total)
+      a.page.btn(href="./?page=" + (p.current + 1) + "#new") &gt;
+      a.page.btn(href="./?page=" + p.total + "#new") &gt;&gt;
+    - else
+      span.page.disabled.btn &gt;
+      span.page.disabled.btn &gt;&gt;
+
   div.row-fluid
     - each image, index in images
       - var log = []
