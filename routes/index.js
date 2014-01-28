@@ -76,10 +76,10 @@ exports.delete = function (req, res) {
 
 exports.create = function (req, res) {
   new Image({
-    filename: req.body.filename,
-    title: req.body.title,
-    author: req.body.author,
-    desc: req.body.desc,
+    filename: req.body.filename.substring(0, 128),
+    title: req.body.title.substring(0, 25),
+    author: req.body.author.substring(0, 25),
+    desc: req.body.desc.substring(0, 50),
     log: req.body.log,
     updated_at: Date.now(),
   }).save(function (err, todo, count) {

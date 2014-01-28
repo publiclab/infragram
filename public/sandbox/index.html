@@ -35,9 +35,9 @@
         <div class="modal-body">
           <h3>Save your image</h3>
           <form id="save-form" class="form" action="/create" method="post">
-            <input type="text" name="title" placeholder="Title" /><br />
-            <input type="text" name="author" placeholder="Your name" /><br />
-            <textarea name="desc" placeholder="A description of your work"></textarea>
+            <input type="text" name="title" maxlength="25" placeholder="Title" /><br />
+            <input type="text" name="author" maxlength="25" placeholder="Your name" /><br />
+            <textarea name="desc" maxlength="50" placeholder="A description of your work"></textarea>
             <input id="form-filename" type="hidden" name="filename" />
             <input id="form-log" type="hidden" name="log" />
           </form>
