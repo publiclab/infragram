@@ -16,16 +16,11 @@
 
 webGlSupported = false
 log = [] # a record of previous commands run
-params = {}
 
-last_command = () ->
-    log[log.length-1]
-        
 
 getURLParameter = (name) ->
     result = decodeURI(
-        #(RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
-        (RegExp(name + "=" + "(.+?)(&|$|/.)").exec(location.search) || [null, null])[1]
+        (RegExp(name + "=" + "(.+?)(&|$)").exec(location.search) || [null, null])[1]
     )
     return if result == "null" then null else result
 
@@ -43,28 +38,15 @@ updateImage = (img) ->
     else
         jsUpdateImage(img)
 
+
 $(document).ready(() ->
-
-    if location.toString().split('?')[1]
-        $.each(location.toString().split('?')[1].split('&'), (i,o) -> 
-            k = o.split('=')[0]
-            v = o.split('=')[1]
-            params[k] = v
-        )
-    
-    
-    if params["src"]
-        src_img = new Image()
-        src_img.onload = () ->
-            e = $("#image")[0];
-            e.width = this.width
-            e.height = this.height
-            ctx = e.getContext("2d");
-            ctx.drawImage(this,0,0)
-        src_img.src = params["src"]
- 
-
     $("#image-container").ready(() ->
+        enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
+        webGlSupported = enablewebgl && glInitInfragram()
+
+        if webGlSupported
+            $("#webgl-activate").html("&laquo; Go back to JS version")
+
         idNameMap =
             "#m_exp": "m"
             "#r_exp": "r"
@@ -75,26 +57,24 @@ $(document).ready(() ->
             "#v_exp": "v"
         setParametersFromURL(idNameMap)
 
-        enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
-        webGlSupported = enablewebgl && glInitInfragram()
+        src = getURLParameter("src")
+        if src
+            $("#download").show()
+            $("#save-modal-btn").show()
+            loadFileFromUrl(src, updateImage)
 
-        if webGlSupported
-            $("#webgl-activate").html("&laquo; Go back to JS version")
         return true
     )
 
     $("#file-sel").change(() ->
-        if this.files && this.files[0]
-            reader = new FileReader()
-            reader.onload = (event) ->
-                img = new Image()
-                img.onload = () -> updateImage(this)
-                img.src = event.target.result
-            reader.readAsDataURL(this.files[0])
+        $("#download").show()
+        $("#save-modal-btn").show()
+        handleOnChangeFile(this.files, updateImage)
         return true
     )
 
     $("button#raw").click(() ->
+        log.push("raw")
         if webGlSupported
             glHandleOnClickRaw()
         else
@@ -103,10 +83,7 @@ $(document).ready(() ->
     )
 
     $("button#ndvi").click(() ->
-        #$('#h_exp').val() # <-- some viable NDVI expression...
-        #$('#s_exp').val(1)
-        #$('#v_exp').val(1)
-        #$('#modeSwitcher').val('infragrammar_mono').click()
+        log.push("ndvi")
         if webGlSupported
             glHandleOnClickNdvi()
         else
@@ -115,8 +92,9 @@ $(document).ready(() ->
     )
 
     $("button#nir").click(() ->
-        $('#m_exp').val('R')
-        $('#modeSwitcher').val('infragrammar_mono').change()
+        log.push("nir")
+        $("#m_exp").val("R")
+        $("#modeSwitcher").val("infragrammar_mono").change()
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
@@ -125,21 +103,44 @@ $(document).ready(() ->
     )
 
     $("#download").click(() ->
+        # create an "off-screen" anchor tag
+        lnk = document.createElement("a")
+        # the key here is to set the download attribute of the a tag
+        lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
         if webGlSupported
-            glHandleOnClickDownload()
+            lnk.href = glGetCurrentImage()
         else
-            jsHandleOnClickDownload()
+            lnk.href = jsGetCurrentImage()
+
+        # create a "fake" click-event to trigger the download
+        if document.createEvent
+            event = document.createEvent("MouseEvents")
+            event.initMouseEvent(
+                "click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+            lnk.dispatchEvent(event)
+        else if lnk.fireEvent
+            lnk.fireEvent("onclick")
+
         return true
     )
 
     $("#save").click(() ->
         if webGlSupported
-            glHandleOnClickSave()
+            img = glGetCurrentImage()
         else
-            jsHandleOnClickSave()
+            img = jsGetCurrentImage()
+        sendThumbnail(img)
+
+        $("#form-filename").val(getFilename())
+        $("#form-log").val(JSON.stringify(log))
+        $("#save-form").submit()
     )
 
     $("#infragrammar_hsv").submit(() ->
+        log.push($("#h_exp").val())
+        log.push($("#s_exp").val())
+        log.push($("#v_exp").val())
+        log.push("infragrammar_hsv")
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
@@ -148,6 +149,10 @@ $(document).ready(() ->
     )
 
     $("#infragrammar").submit(() ->
+        log.push($("#r_exp").val())
+        log.push($("#g_exp").val())
+        log.push($("#b_exp").val())
+        log.push("infragrammar")
         if webGlSupported
             glHandleOnSubmitInfra()
         else
@@ -156,6 +161,8 @@ $(document).ready(() ->
     )
 
     $("#infragrammar_mono").submit(() ->
+        log.push($("#m_exp").val())
+        log.push("infragrammar_mono")
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
@@ -206,6 +213,8 @@ $(document).ready(() ->
     )
 
     $("#webcam-activate").click(() ->
+        $("#download").show()
+        $("#save-modal-btn").show()
         camera.initialize()
         return true
     )
@@ -216,10 +225,10 @@ $(document).ready(() ->
     )
 
     $("#exit-fullscreen").click(() ->
-        $("#image").css('display','inline')
-        $("#image").css('position','relative')
-        $("#image").css('height','auto')
-        $('#image').css('left',0)
+        $("#image").css("display", "inline")
+        $("#image").css("position", "relative")
+        $("#image").css("height", "auto")
+        $("#image").css("left", 0)
         $("#backdrop").hide()
         $("#exit-fullscreen").hide()
         $("#fullscreen").show()
@@ -227,13 +236,13 @@ $(document).ready(() ->
     )
 
     $("#fullscreen").click(() ->
-        $("#image").css('display','block')
-        $("#image").css('height','100%')
-        $("#image").css('width','auto')
-        $("#image").css('position','absolute')
-        $("#image").css('top','0px')
-        $("#image").css('left',parseInt((window.innerWidth-$('#image').width())/2)+'px')
-        $("#image").css('z-index','2')
+        $("#image").css("display", "block")
+        $("#image").css("height", "100%")
+        $("#image").css("width", "auto")
+        $("#image").css("position", "absolute")
+        $("#image").css("top", "0px")
+        $("#image").css("left", parseInt((window.innerWidth - $("#image").width()) / 2) + "px")
+        $("#image").css("z-index", "2")
         $("#backdrop").show()
         $("#exit-fullscreen").show()
         $("#fullscreen").hide()
@@ -249,8 +258,8 @@ $(document).ready(() ->
     )
 
     $("#modeSwitcher").change(() ->
-        $('#infragrammar, #infragrammar_mono, #infragrammar_hsv').hide()
-        $('#'+$("#modeSwitcher").val()).css('display','inline')
+        $("#infragrammar, #infragrammar_mono, #infragrammar_hsv").hide()
+        $("#" + $("#modeSwitcher").val()).css("display", "inline")
         return true 
     )
 
