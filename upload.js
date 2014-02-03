@@ -17,6 +17,7 @@
 
 var fs = require('fs');
 var http = require('http');
+var async = require('async');
 
 var FILE_NAME_LIMIT = 128;
 var ID_LENGTH_LIMIT = 64;
@@ -27,6 +28,10 @@ var THUMBNAIL_SUFIX = '_thumb.jpg';
 var FILE_SIZE_LIMIT = 5242880; // 5MB
 var FILE_CHUNK_SIZE = 131072; // 128kB
 var FILE_CHUNK_BASE64_SIZE = FILE_CHUNK_SIZE * 2;
+
+var CLEANUP_INTERVAL = 300000; // 5 minutes in ms
+var CLEANUP_TIME_THRESHOLD = 60000; //1 minute in ms
+var CLEANUP_SIZE_THRESHOLD = 1024; // 1kB
 
 getValue = function (data, key, maxLen) {
     var value = '';
@@ -125,6 +130,23 @@ exports.onConnection = function (socket) {
         });
     });
 };
+
+// Clean up damaged files.
+setInterval(function () {
+        var time = Date.now();
+        fs.readdir(UPLOAD_PREFIX, function (err, list) {
+            async.forEach(list, function (diritem, cb) {
+                fs.lstat(UPLOAD_PREFIX + diritem, function (err, stats) {
+                    var timeDiff = time - stats.ctime.getTime();
+                    if ((stats.size < CLEANUP_SIZE_THRESHOLD) && (timeDiff > CLEANUP_TIME_THRESHOLD)) {
+                        fs.unlink(UPLOAD_PREFIX + diritem, function () {});
+                    }
+                });
+            });
+        });
+    },
+    CLEANUP_INTERVAL
+);
 
 exports.UPLOAD_PREFIX = UPLOAD_PREFIX;
 
