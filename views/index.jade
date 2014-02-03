@@ -29,17 +29,39 @@ block content
       p Public Lab tools are <a href="http://publiclab.org/wiki/licenses">open source</a>, and you can <a href="http://publiclab.org/wiki/infragram">build one yourself</a>. The Public Lab non-profit also <a href="http://store.publiclab.org/collections/diy-infrared-photography">distributes kits to help you get started</a>.
 
   hr 
-  h2 Recent images <small>uploaded by contributors like you</small>
+  h2#new Recent images <small>uploaded by contributors like you</small>
+
 
   div.row-fluid
-    - each image, index in images.reverse()
+    - each image, index in images
       div.image-div.span3
         div.thumbnail
-          a(href="/i/"+image._id+"?src="+image.filename): img.image(src="./upload/"+image.filename+"_thumb.jpg")
+          a(href="/i/"+image._id): img.image(src="./upload/"+image.filename+"_thumb.jpg")
         h4.title= image.title
         div.meta
           span.author= "by "+(image.author || "anon")
           span.updated_at= " on "+image.updated_at+" "
+          a(href="#delete-modal" data-toggle="modal" onclick="$('#delete-form').attr('action', '/delete/" + image._id + "');") Delete
       if (index+1) % 4 == 0
         | </div><hr style="clear:both;"/><div class="row-fluid">
 
+  div.btn-group
+    - var p = {current: parseInt(pageNumber), total: parseInt(pageCount)}
+    - if (p.current > 1)
+      a.page.btn(href="/#new") &lt;&lt;
+      a.page.btn(href="/p/" + (p.current - 1) + "#new") &lt;
+    - else
+      span.page.disabled.btn <<
+      span.page.disabled.btn <
+    - for (var i = p.current - 5; i <= p.current + 5; ++i)
+      - if (i <= p.total && i > 0)
+        - if (i !== p.current)
+          a.page.btn(href="/p/" + i + "#new")=i
+        - else
+          span.page.disabled.btn=i
+    - if (p.current < p.total)
+      a.page.btn(href="/p/" + (p.current + 1) + "#new") &gt;
+      a.page.btn(href="/p/" + p.total + "#new") &gt;&gt;
+    - else
+      span.page.disabled.btn &gt;
+      span.page.disabled.btn &gt;&gt;

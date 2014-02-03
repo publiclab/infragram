@@ -20,7 +20,7 @@
     <script src="/bootstrap/js/bootstrap-slider.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/webgl-utils.js"></script>
-    <script src="/infragram.js?hash=9d6596291c758b881354e0c522dbfd9e9f306c2a"></script>
+    <script src="/infragram.js?hash=421adfc577e1e49a0ca738542fc449803ee9dea7"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -35,9 +35,9 @@
         <div class="modal-body">
           <h3>Save your image</h3>
           <form id="save-form" class="form" action="/create" method="post">
-            <input type="text" name="title" placeholder="Title" /><br />
-            <input type="text" name="author" placeholder="Your name" /><br />
-            <textarea name="desc" placeholder="A description of your work"></textarea>
+            <input type="text" name="title" maxlength="25" placeholder="Title" /><br />
+            <input type="text" name="author" maxlength="25" placeholder="Your name" /><br />
+            <textarea name="desc" maxlength="50" placeholder="A description of your work"></textarea>
             <input id="form-filename" type="hidden" name="filename" />
             <input id="form-log" type="hidden" name="log" />
           </form>
@@ -48,7 +48,7 @@
       </div>
 
       <button id="webgl-activate" type="button" class="btn btn-secondary pull-right">Try WebGL version &raquo;</button>
-      <h1><img src="/static/img/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"/> <a style="color:#444;padding-top:8px;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
+      <h1><img src="/images/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"/> <a style="color:#444;padding-top:8px;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
 
       <p>Infragram is an online tool for analyzing plant health with near-infrared imagery! To learn more, <a href="http://publiclab.org/wiki/near-infrared-camera">read about our open source cameras</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a> from the Public Lab non-profit.</p>
       <hr>
@@ -60,7 +60,7 @@
           <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
           <input type="file" id="file-sel">
 
-          <b>Or use a USB webcam: </b>
+          <b>Or use a USB webcam (<a href="http://publiclab.org/notes/warren/01-07-2014/infragram-live-infragram-webcams-en-route-from-factory">tutorial</a>): </b>
           <button id="webcam-activate" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Activate webcam</button>
           <button style="display:none;" id="snapshot" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Take snapshot</button>
           <button style="display:none;" id="live-video" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Live video</button>
@@ -103,6 +103,8 @@
           <br>
           <br>
 
+          <button style="display:none;margin-left:30px;" href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
+
           <div id="colormaps-group" style="display:none;">
             <b>Color maps:</b>
             <div class="btn-group" data-toggle="buttons-radio">
@@ -110,9 +112,6 @@
               <button id="color" type="button" class="btn">Color</button>
             </div>
           </div>
-
-          <button style="display:none;margin-left:30px;" id="download" type="button" class="btn btn-primary"><i class="icon-white icon-download"></i> Download</button>
-          <button style="display:none;margin-left:30px;" href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
 
           <b style="margin-left:20px;">Slider (X): &nbsp; </b>
           <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">

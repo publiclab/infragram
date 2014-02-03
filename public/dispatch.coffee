@@ -20,7 +20,7 @@ log = [] # a record of previous commands run
 
 getURLParameter = (name) ->
     result = decodeURI(
-        (RegExp(name + "=" + "(.+?)(&|$)").exec(location.search) || [null, null])[1]
+        (RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
     )
     return if result == "null" then null else result
 
@@ -39,7 +39,18 @@ updateImage = (img) ->
         jsUpdateImage(img)
 
 
+getCurrentImage = () ->
+    img = null
+    if webGlSupported
+        img = glGetCurrentImage()
+    else
+        img = jsGetCurrentImage()
+    return img
+
+
 $(document).ready(() ->
+    FileUpload.initialize()
+
     $("#image-container").ready(() ->
         enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
         webGlSupported = enablewebgl && glInitInfragram()
@@ -59,22 +70,37 @@ $(document).ready(() ->
 
         src = getURLParameter("src")
         if src
-            $("#download").show()
             $("#save-modal-btn").show()
-            loadFileFromUrl(src, updateImage)
+            img = new Image()
+            img.onload = () ->
+                FileUpload.setFilename(src)
+                updateImage(this)
+                infraMode = getURLParameter("mode")
+                if infraMode
+                    if infraMode.substring(0, 5) == "infra"
+                        $("#modeSwitcher").val(infraMode).change()
+                        $("#" + infraMode).submit()
+                    else
+                        $("button#" + infraMode).button("toggle");
+                        $("button#" + infraMode).click()
+
+                color = getURLParameter("color")
+                if color
+                    $("button#color").button("toggle");
+                    $("button#color").click()
+            img.src = "../upload/" + src
 
         return true
     )
 
     $("#file-sel").change(() ->
-        $("#download").show()
         $("#save-modal-btn").show()
-        handleOnChangeFile(this.files, updateImage)
+        FileUpload.fromFile(this.files, updateImage)
         return true
     )
 
     $("button#raw").click(() ->
-        log.push("raw")
+        log.push("mode=raw")
         if webGlSupported
             glHandleOnClickRaw()
         else
@@ -83,7 +109,7 @@ $(document).ready(() ->
     )
 
     $("button#ndvi").click(() ->
-        log.push("ndvi")
+        log.push("mode=ndvi")
         if webGlSupported
             glHandleOnClickNdvi()
         else
@@ -92,7 +118,7 @@ $(document).ready(() ->
     )
 
     $("button#nir").click(() ->
-        log.push("nir")
+        log.push("mode=nir")
         $("#m_exp").val("R")
         $("#modeSwitcher").val("infragrammar_mono").change()
         if webGlSupported
@@ -107,10 +133,7 @@ $(document).ready(() ->
         lnk = document.createElement("a")
         # the key here is to set the download attribute of the a tag
         lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
-        if webGlSupported
-            lnk.href = glGetCurrentImage()
-        else
-            lnk.href = jsGetCurrentImage()
+        lnk.href = getCurrentImage()
 
         # create a "fake" click-event to trigger the download
         if document.createEvent
@@ -125,22 +148,31 @@ $(document).ready(() ->
     )
 
     $("#save").click(() ->
-        if webGlSupported
-            img = glGetCurrentImage()
+        sendThumbnail = () ->
+            img = getCurrentImage()
+            FileUpload.uploadThumbnail(img, ()->
+                $("#form-filename").val(FileUpload.getFilename())
+                $("#form-log").val(JSON.stringify(log))
+                $("#save-form").submit()
+            )
+        $("#save").prop("disabled", true)
+        $("#save").html("Saving...")
+        if FileUpload.getFilename() == ""
+            img = getCurrentImage()
+            FileUpload.fromBase64("camera", img, sendThumbnail)
+        else if FileUpload.isLoadedFromFile() == false
+            FileUpload.duplicate(sendThumbnail)
         else
-            img = jsGetCurrentImage()
-        sendThumbnail(img)
-
-        $("#form-filename").val(getFilename())
-        $("#form-log").val(JSON.stringify(log))
-        $("#save-form").submit()
+            sendThumbnail()
+        return true
     )
 
     $("#infragrammar_hsv").submit(() ->
-        log.push($("#h_exp").val())
-        log.push($("#s_exp").val())
-        log.push($("#v_exp").val())
-        log.push("infragrammar_hsv")
+        logEntry = "mode=infragrammar_hsv"
+        logEntry += if $("#h_exp").val() then "&h=" + $("#h_exp").val() else ""
+        logEntry += if $("#s_exp").val() then "&s=" + $("#s_exp").val() else ""
+        logEntry += if $("#v_exp").val() then "&v=" + $("#v_exp").val() else ""
+        log.push(logEntry)
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
@@ -149,10 +181,11 @@ $(document).ready(() ->
     )
 
     $("#infragrammar").submit(() ->
-        log.push($("#r_exp").val())
-        log.push($("#g_exp").val())
-        log.push($("#b_exp").val())
-        log.push("infragrammar")
+        logEntry = "mode=infragrammar"
+        logEntry += if $("#r_exp").val() then "&r=" + $("#r_exp").val() else ""
+        logEntry += if $("#g_exp").val() then "&g=" + $("#g_exp").val() else ""
+        logEntry += if $("#b_exp").val() then "&b=" + $("#b_exp").val() else ""
+        log.push(logEntry)
         if webGlSupported
             glHandleOnSubmitInfra()
         else
@@ -161,8 +194,9 @@ $(document).ready(() ->
     )
 
     $("#infragrammar_mono").submit(() ->
-        log.push($("#m_exp").val())
-        log.push("infragrammar_mono")
+        logEntry = "mode=infragrammar_mono"
+        logEntry += if $("#m_exp").val() then "&m=" + $("#m_exp").val() else ""
+        log.push(logEntry)
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
@@ -171,6 +205,7 @@ $(document).ready(() ->
     )
 
     $("button#grey").click(() ->
+        log.push("mode=ndvi")
         if webGlSupported
             glHandleOnClickGrey()
         else
@@ -187,6 +222,7 @@ $(document).ready(() ->
     )
 
     $("button#color").click(() ->
+        log.push("mode=ndvi&color=true")
         if webGlSupported
             glHandleOnClickColor()
         else
@@ -205,15 +241,14 @@ $(document).ready(() ->
     $("#webgl-activate").click(() ->
         href = window.location.href
         if webGlSupported
-            href = href.replace(/enablewebgl=true&?/gi, "")
+            href = href.replace(/(?:\?|&)enablewebgl=true/gi, "")
         else
-            href += if href.indexOf("?") >= 0 then "enablewebgl=true" else "?enablewebgl=true"
+            href += if href.indexOf("?") >= 0 then "&enablewebgl=true" else "?enablewebgl=true"
         window.location.href = href
         return true
     )
 
     $("#webcam-activate").click(() ->
-        $("#download").show()
         $("#save-modal-btn").show()
         camera.initialize()
         return true

@@ -23,17 +23,23 @@ require('./db');
 
 var express = require('express');
 var routes = require('./routes');
+var upload = require('./upload');
 
 var http = require('http');
 var path = require('path');
-var fs = require('fs');
 
 var app = express();
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+
+var ioOptions = {
+    rememberTransport: false,
+    transports: ['WebSocket', 'AJAX long-polling']
+};
+var io = require('socket.io', ioOptions).listen(server, {log: false});
 
 // all environments
-app.set('port', process.env.PORT || 8001);
+app.set('port', process.env.PORT || 80);
+//app.set('port', process.env.PORT || 8001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
@@ -51,6 +57,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/p/:page', routes.index);
 app.get('/i/:id', routes.show);
 app.get('/raw/:id', routes.raw);
 app.post('/create', routes.create);
@@ -61,58 +68,4 @@ server.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-getFilename = function (data, noDate) {
-    var date = Date.now()
-    var name = (noDate) ? '' : date + '_';
-    if ('name' in data) {
-        name += String(data['name']).substring(0, 128).toLowerCase();
-        name = name.replace(/[^a-z0-9]/g, '_');
-        name = name.replace(/(?:[0-9]+_){2}/g, date + '_');
-        n = name.lastIndexOf('_');
-        if (n > -1) {
-            name = name.substring(0, n) + '.' + name.substring(n + 1);
-        }
-    }
-    return name;
-}
-
-io.sockets.on('connection', function (socket) {
-	socket.on('image', function (data) {
-        var name = getFilename(data);
-        if ('data' in data) {
-            var buffer = String(data['data']);
-            fs.writeFile('./public/upload/' + name, buffer, 'binary',  function () {
-                socket.emit('done', {'name': name});
-            });
-        }
-    });
-
-    socket.on('thumbnail', function (data) {
-        var name = getFilename(data, 'no_date') + '_thumb.jpg';
-        if ('data' in data) {
-            var buffer = String(data['data']).split(',');
-            buffer = buffer[buffer.length - 1];
-            fs.writeFile('./public/upload/' + name, buffer, 'base64',  function () {});
-        }
-    });
-
-	socket.on('url', function (data) {
-        var name = getFilename(data, 'no_date');
-        if (('data' in data) && ('on_load' in data)) {
-            var buffer = String(data['data']).substring(0, 256).split(':');
-            if (buffer[0] == 'http' || buffer[0] == 'https') {
-                buffer = 'http:' + buffer[buffer.length - 1];
-                var file = fs.createWriteStream('./public/upload/' + name);
-                file.on('finish', function () {
-                    socket.emit('done_url', {'name': name, 'on_load': data['on_load']});
-                });
-                http.get(buffer, function (response) {
-                    response.pipe(file);
-                }).on('error', function () {}).end();
-            }
-            else {
-                socket.emit('done_url', {'name': name, 'on_load': data['on_load']});
-            }
-        }
-    });
-});
+io.sockets.on('connection', upload.onConnection);

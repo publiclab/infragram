@@ -108,7 +108,7 @@ drawScene = (ctx, returnImage) ->
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / vertices.itemSize)
 
     if returnImage
-        return ctx.canvas.toDataURL("image/png")
+        return ctx.canvas.toDataURL("image/jpeg")
 
 
 generateShader = (ctx) ->
