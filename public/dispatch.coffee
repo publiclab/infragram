@@ -20,7 +20,7 @@ log = [] # a record of previous commands run
 
 getURLParameter = (name) ->
     result = decodeURI(
-        (RegExp(name + "=" + "(.+?)(&|$|/)").exec(location.search) || [null, null])[1]
+        (RegExp("[\\?&]" + name + "=([^&#]*)").exec(location.search) || [null, null])[1]
     )
     return if result == "null" then null else result
 
