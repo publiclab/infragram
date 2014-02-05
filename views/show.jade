@@ -8,7 +8,7 @@ block content
     div.navbar-inner
       ul.nav
         li
-          a(href="/sandbox/?src="+image.filename+"&infragrammar="+log[log.length-1])
+          a(href="/sandbox/?src="+image.filename+"&"+log[log.length-1])
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
         li: a(onClick="$('#image').toggle();$('#original').toggle();") See original
