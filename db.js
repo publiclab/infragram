@@ -25,9 +25,11 @@ var Image = new Schema({
     desc      : String,
     log       : String,
     updated_at: Date,
-    ip_addr   : String
+    creator_ip: String,
+    deleted_at: Date,
+    deleter_ip: String,
 });
- 
+
 mongoose.model( 'Image', Image );
 
 //Image.schema.path('desc').validate(function (value) {

@@ -27,6 +27,7 @@ exports.index = function (req, res) {
 
   Image
     .find()
+    .where('deleted_at').equals(null)
     .sort('-updated_at')
     .skip(skipFrom)
     .limit(resultsPerPage)
@@ -67,15 +68,9 @@ exports.raw = function(req, res){
 
 exports.delete = function(req, res){
   if (req.query.pwd == "easytohack") { // very temporary solution
-    Image.findOne({_id: req.params.id}, 'filename', function (err, image) {
-      if (err) return res.redirect('/');
-      var obj = image.toObject();
-      fs.unlink(upload.UPLOAD_PREFIX + obj.filename, function () {});
-      fs.unlink(upload.UPLOAD_PREFIX + obj.filename + upload.THUMBNAIL_SUFIX, function () {});
-
-      Image.remove({ _id: req.params.id }, function (err, image) {
-        res.redirect('/');
-      });
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    Image.update({ _id: req.params.id }, { 'deleted_at': Date.now(), 'deleter_ip': ip.substring(0, 40) }, {}, function () {
+      res.redirect('/');
     });
   }
   else {
@@ -99,12 +94,12 @@ exports.create = function (req, res) {
         desc: req.body.desc.substring(0, 50),
         log: req.body.log,
         updated_at: Date.now(),
-        ip_addr: ip.substring(0, 40),
+        creator_ip: ip.substring(0, 40),
+        deleted_at: null,
+        deleter_ip: null,
       }).save(function (err, todo, count) {
         res.redirect('/#new');
       });
     }
   });
 };
-
-
