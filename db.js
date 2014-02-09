@@ -24,7 +24,8 @@ var Image = new Schema({
     title     : String,
     desc      : String,
     log       : String,
-    updated_at: Date
+    updated_at: Date,
+    ip_addr   : String
 });
  
 mongoose.model( 'Image', Image );
