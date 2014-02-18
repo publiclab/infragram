@@ -27,6 +27,7 @@ exports.index = function (req, res) {
 
   Image
     .find()
+    .ne('filename','')
     .where('deleted_at').equals(null)
     .sort('-updated_at')
     .skip(skipFrom)
