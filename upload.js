@@ -130,3 +130,5 @@ exports.onConnection = function (socket) {
 exports.UPLOAD_PREFIX = UPLOAD_PREFIX;
 
 exports.THUMBNAIL_SUFIX = THUMBNAIL_SUFIX;
+
+exports.getFilename = getFilename;

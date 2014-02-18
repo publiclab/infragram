@@ -17,6 +17,8 @@
 
 var mongoose = require('mongoose');
 var Image = mongoose.model('Image');
+var upload = require('../upload');
+var fs = require('fs');
 
 exports.index = function (req, res) {
   var pageNumber = (req.params.page && (req.params.page > 0)) ? req.params.page : 1;
@@ -25,6 +27,7 @@ exports.index = function (req, res) {
 
   Image
     .find()
+    .where('deleted_at').equals(null)
     .sort('-updated_at')
     .skip(skipFrom)
     .limit(resultsPerPage)
@@ -46,7 +49,7 @@ exports.index = function (req, res) {
 
 exports.show = function(req, res){
   Image.findOne({ _id: req.params.id }, 'filename title desc author updated_at log', function (err, image) {
-    if (err) return handleError(err);
+    if (err) return res.redirect('/');
     res.render('show', {
       image: image
     });
@@ -65,18 +68,9 @@ exports.raw = function(req, res){
 
 exports.delete = function(req, res){
   if (req.query.pwd == "easytohack") { // very temporary solution
-    Image.findOne({_id: req.params.id}, 'filename', function (err, image) {
-      if (err) return handleError(err);
-      var upload = require('../upload');
-      var fs = require('fs');
-      var obj = image.toObject();
-      fs.unlink(upload.UPLOAD_PREFIX + obj.filename, function () {});
-      fs.unlink(upload.UPLOAD_PREFIX + obj.filename + upload.THUMBNAIL_SUFIX, function () {});
-
-      Image.remove({ _id: req.params.id }, function (err, image) {
-        if (err) return handleError(err);
-        res.redirect('/');
-      });
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    Image.update({ _id: req.params.id }, { 'deleted_at': Date.now(), 'deleter_ip': ip.substring(0, 40) }, {}, function () {
+      res.redirect('/');
     });
   }
   else {
@@ -85,16 +79,27 @@ exports.delete = function(req, res){
 };
 
 exports.create = function (req, res) {
-  new Image({
-    filename: req.body.filename.substring(0, 128),
-    title: req.body.title.substring(0, 25),
-    author: req.body.author.substring(0, 25),
-    desc: req.body.desc.substring(0, 50),
-    log: req.body.log,
-    updated_at: Date.now(),
-  }).save(function (err, todo, count) {
-    res.redirect('/#new');
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  var filename = upload.getFilename({'name': req.body.filename}, 'no_date');
+  fs.open(upload.UPLOAD_PREFIX + filename, 'r', function (err, fd) {
+    if (err) {
+      res.redirect('/');
+    }
+    else {
+      fs.close(fd, function () {});
+      new Image({
+        filename: filename,
+        title: req.body.title.substring(0, 25),
+        author: req.body.author.substring(0, 25),
+        desc: req.body.desc.substring(0, 50),
+        log: req.body.log,
+        updated_at: Date.now(),
+        creator_ip: ip.substring(0, 40),
+        deleted_at: null,
+        deleter_ip: null,
+      }).save(function (err, todo, count) {
+        res.redirect('/#new');
+      });
+    }
   });
 };
-
-
