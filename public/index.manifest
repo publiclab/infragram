@@ -1,0 +1,36 @@
+CACHE MANIFEST
+# v1 - 2014-3-2
+/sandbox
+#/stylesheets/*
+/assets/css/application.css
+/infragram.css
+/assets/junction-webfont.eot
+/assets/junction-webfont.woff
+/assets/junction-webfont.ttf
+/assets/junction-webfont.svg
+#/bootstrap/*
+/bootstrap/js/bootstrap.min.js
+/bootstrap/js/bootstrap.typeahead.js
+/bootstrap/css/bootstrap.css
+/bootstrap/css/bootstrap-responsive.css
+/bootstrap/img/glyphicons-halflings-white.png
+#/fontawesome/*
+/fontawesome/font/fontawesome-webfont.woff?v=3.0.1
+/fontawesome/css/font-awesome.min.css
+#/javascripts/*
+/jquery.min.js
+/bootstrap/js/bootstrap.min.js
+/getUserMedia.js/lib/getUserMedia.js
+/bootstrap/js/bootstrap-slider.js
+/socket.io/socket.io.js
+/webgl-utils.js
+/infragram.js
+# images
+/images/infragram-logo.png
+
+/500.html
+/404.html
+
+NETWORK:
+
+FALLBACK:

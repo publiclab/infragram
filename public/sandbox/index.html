@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" manifest="/index.manifest">
   <head>
     
     <title>Infragram | by Public Lab - Home</title>
@@ -145,16 +145,38 @@
  
     </div>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <script>
+      (function() {
+        $("[rel=tooltip]").tooltip()
+        $("[rel=popover]").popover()
+      })()
 
-  ga('create', 'UA-43030180-1', 'infragram.org');
-  ga('send', 'pageview');
+      window.addEventListener('load', function(e) {
+        if (window.applicationCache) {
+          window.applicationCache.addEventListener('updateready', function(e) {
+              if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                // Browser downloaded a new app cache.
+                // Swap it in and reload the page to get the new hotness.
+                window.applicationCache.swapCache();
+                if (confirm('A new version of this site is available. Load it?')) {
+                  window.location.reload();
+                }
+              } else {
+                // Manifest didn't changed. Nothing new to server.
+              }
+          }, false);
+        }
+      }, false);
 
-</script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-43030180-1', 'infragram.org');
+      ga('send', 'pageview');
+
+    </script>
 
   </body>
 </html>
