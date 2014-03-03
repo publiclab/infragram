@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v4 - 2014-3-3
+# v5 - 2014-3-3
 /sandbox/
 #/stylesheets/*
 /assets/css/application.css
@@ -11,6 +11,7 @@ CACHE MANIFEST
 #/bootstrap/*
 /bootstrap/js/bootstrap.min.js
 /bootstrap/css/bootstrap.css
+/bootstrap/css/slider.css
 /bootstrap/css/bootstrap-responsive.css
 #/fontawesome/*
 /fontawesome/font/fontawesome-webfont.woff?v=3.0.1
