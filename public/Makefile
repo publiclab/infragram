@@ -25,7 +25,7 @@ all : $(TARGET)
 
 $(TARGET) : $(SRCS)
 	coffee --compile --bare --join $@ $^
-	bash update_hash.sh $@ sandbox/index.html
+#	bash update_hash.sh $@ sandbox/index.html
 	bash update_hash.sh $@ ../views/layout.jade
 
 commit : $(TARGET)

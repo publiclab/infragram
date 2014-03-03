@@ -1,6 +1,6 @@
 CACHE MANIFEST
-# v1 - 2014-3-2
-/sandbox
+# v4 - 2014-3-3
+/sandbox/
 #/stylesheets/*
 /assets/css/application.css
 /infragram.css
@@ -10,10 +10,8 @@ CACHE MANIFEST
 /assets/junction-webfont.svg
 #/bootstrap/*
 /bootstrap/js/bootstrap.min.js
-/bootstrap/js/bootstrap.typeahead.js
 /bootstrap/css/bootstrap.css
 /bootstrap/css/bootstrap-responsive.css
-/bootstrap/img/glyphicons-halflings-white.png
 #/fontawesome/*
 /fontawesome/font/fontawesome-webfont.woff?v=3.0.1
 /fontawesome/css/font-awesome.min.css
@@ -28,8 +26,8 @@ CACHE MANIFEST
 # images
 /images/infragram-logo.png
 
-/500.html
-/404.html
+#/500.html
+#/404.html
 
 NETWORK:
 
