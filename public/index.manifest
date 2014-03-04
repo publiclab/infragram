@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v5 - 2014-3-3
+# v6 - 2014-3-4
 /sandbox/
 #/stylesheets/*
 /assets/css/application.css
@@ -26,6 +26,9 @@ CACHE MANIFEST
 /infragram.js
 # images
 /images/infragram-logo.png
+# shaders
+/shader.frag
+/shader.vert
 
 #/500.html
 #/404.html
