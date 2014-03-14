@@ -21,7 +21,6 @@ CACHE MANIFEST
 /bootstrap/js/bootstrap.min.js
 /getUserMedia.js/lib/getUserMedia.js
 /bootstrap/js/bootstrap-slider.js
-/socket.io/socket.io.js
 /webgl-utils.js
 /infragram.js
 # images
@@ -34,5 +33,7 @@ CACHE MANIFEST
 #/404.html
 
 NETWORK:
+/socket.io/socket.io.js
+/socket.io/1/
 
 FALLBACK:
