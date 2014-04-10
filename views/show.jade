@@ -12,6 +12,10 @@ block content
             i.icon.icon-pencil
             |  Open in Infragram Sandbox &raquo;
         li: a(onClick="$('#image').toggle();$('#original').toggle();") See original
+        li
+          a(onClick="download();")
+            i.icon.icon-download
+            | Download image
 
   div#image-container
     canvas#image(width="800" height="600" style="width:800px; height:600px;")
