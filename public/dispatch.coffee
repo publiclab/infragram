@@ -47,6 +47,22 @@ getCurrentImage = () ->
         img = jsGetCurrentImage()
     return img
 
+download = () ->
+    # create an "off-screen" anchor tag
+    lnk = document.createElement("a")
+    # the key here is to set the download attribute of the a tag
+    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
+    lnk.href = getCurrentImage()
+
+    # create a "fake" click-event to trigger the download
+    if document.createEvent
+        event = document.createEvent("MouseEvents")
+        event.initMouseEvent(
+            "click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+        lnk.dispatchEvent(event)
+    else if lnk.fireEvent
+        lnk.fireEvent("onclick")
+    return true
 
 $(document).ready(() ->
     FileUpload.initialize()
@@ -129,21 +145,7 @@ $(document).ready(() ->
     )
 
     $("#download").click(() ->
-        # create an "off-screen" anchor tag
-        lnk = document.createElement("a")
-        # the key here is to set the download attribute of the a tag
-        lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
-        lnk.href = getCurrentImage()
-
-        # create a "fake" click-event to trigger the download
-        if document.createEvent
-            event = document.createEvent("MouseEvents")
-            event.initMouseEvent(
-                "click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-            lnk.dispatchEvent(event)
-        else if lnk.fireEvent
-            lnk.fireEvent("onclick")
-
+        download()
         return true
     )
 
