@@ -60,13 +60,12 @@ block content
 
     input#slider(type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100")
 
-    div.body= image.desc
-    br
-    h3.title= image.title
-    div.meta
-      span.title= image.title
-      span.author= "by "+(image.author || "anon")
-      span.updated_at= " on "+image.updated_at
+  div.body= image.desc
+  br
+  h3.title= image.title
+  div.meta
+    span.author= " by "+(image.author || "anon")
+    span.updated_at= " on "+image.updated_at
 
   hr 
   h4 Command log
