@@ -47,7 +47,7 @@ getCurrentImage = () ->
         img = jsGetCurrentImage()
     return img
 
-download = () ->
+downloadImage = () ->
     # create an "off-screen" anchor tag
     lnk = document.createElement("a")
     # the key here is to set the download attribute of the a tag
@@ -150,7 +150,7 @@ $(document).ready(() ->
     )
 
     $("#download").click(() ->
-        download()
+        downloadImage()
         return true
     )
 
