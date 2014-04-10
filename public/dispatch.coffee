@@ -56,7 +56,7 @@ download = () ->
       format = "jpg"
     else
       format = "png"
-    end
+
     lnk.download = (new Date()).toISOString().replace(/:/g, "_") + "." + format
 
     # create a "fake" click-event to trigger the download

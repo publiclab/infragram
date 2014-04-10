@@ -917,8 +917,6 @@ download = function() {
   } else {
     format = "png";
   }
-  end;
-
   lnk.download = (new Date()).toISOString().replace(/:/g, "_") + "." + format;
   if (document.createEvent) {
     event = document.createEvent("MouseEvents");
