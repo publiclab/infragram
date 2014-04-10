@@ -51,8 +51,13 @@ download = () ->
     # create an "off-screen" anchor tag
     lnk = document.createElement("a")
     # the key here is to set the download attribute of the a tag
-    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png"
     lnk.href = getCurrentImage()
+    if lnk.href.match('image/jpeg')
+      format = "jpg"
+    else
+      format = "png"
+    end
+    lnk.download = (new Date()).toISOString().replace(/:/g, "_") + "." + format
 
     # create a "fake" click-event to trigger the download
     if document.createEvent

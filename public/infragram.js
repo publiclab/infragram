@@ -911,8 +911,9 @@ getCurrentImage = function() {
 download = function() {
   var event, lnk;
   lnk = document.createElement("a");
-  lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png";
   lnk.href = getCurrentImage();
+  var frmt = "jpg"
+  lnk.download = (new Date()).toISOString().replace(/:/g, "_") + ".png";
   if (document.createEvent) {
     event = document.createEvent("MouseEvents");
     event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
