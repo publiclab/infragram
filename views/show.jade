@@ -16,6 +16,10 @@ block content
           a(onClick="downloadImage();")
             i.icon.icon-download 
             | Download image
+        li
+          a(href="../upload/"+image.filename)
+            i.icon.icon-download 
+            | Download original
 
   div#image-container
     canvas#image(width="800" height="600" style="width:800px; height:600px;")
