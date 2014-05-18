@@ -66,6 +66,13 @@
           <h3>Quick start</h3>
           <p>Choose from these presets to get up and running quickly:</p>
           <script>
+            preset_raw = function() {
+              $('#modeSwitcher').val("infragrammar").change()
+              $('#r_exp').val("R")
+              $('#g_exp').val("G")
+              $('#b_exp').val("B")
+              $('#preset-modal').modal('hide')
+            }
             preset_ndvi_red = function() {
               $('#modeSwitcher').val("infragrammar_mono").change()
               $('#m_exp').val("(B-R)/(B+R)")
@@ -79,6 +86,11 @@
           </script>
           <table class="table">
             <tr>
+              <td width="30%"><b>Raw</b></td>
+              <td>Just what your camera sees.</td>
+              <td><a class="btn btn-primary" onClick="preset_raw()">Begin</a></td>
+            </tr>
+            <tr>
               <td width="30%"><b>NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
               <td>basic plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
               <td><a class="btn btn-primary" onClick="preset_ndvi_blue()">Begin</a></td>
@@ -89,6 +101,7 @@
               <td><a class="btn btn-primary" onClick="preset_ndvi_red()">Begin</a></td>
             </tr>
           </table>
+          <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
         </div>
         <div class="modal-footer">
           <a data-dismiss="modal" data-toggle="modal" class="btn">cancel</a>
