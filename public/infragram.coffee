@@ -105,6 +105,7 @@ colorify = (img, colormap) ->
         cimg.data = data;
         return new JsImage(data, img.width, img.height, 4);
 
+# This returns values between 0 and 255, inclusive
 infragrammar = (img) ->
         n = img.width * img.height;
         r = new Float32Array(n);
@@ -120,6 +121,20 @@ infragrammar = (img) ->
                 o[4*i + 2] = 255*b_exp(r[i],g[i],b[i]);
                 o[4*i + 3] = 255
         return new JsImage(o, img.width, img.height, 4);
+
+# This returns values between 0 and 1, inclusive
+infragrammar_mono = (img) ->
+        n = img.width * img.height;
+        r = new Float32Array(n);
+        g = new Float32Array(n);
+        b = new Float32Array(n);
+        o = new Float32Array(n);
+        for i in [0...n]
+                r[i] = img.data[4*i + 0]/255.0;
+                g[i] = img.data[4*i + 1]/255.0;
+                b[i] = img.data[4*i + 2]/255.0;
+                o[i] = r_exp(r[i],g[i],b[i]);
+        return new JsImage(o, img.width, img.height, 1);
 
 render = (img) ->
         e = $("#image")[0];
