@@ -61,6 +61,40 @@
   
     <div class="container page" style="padding-top:10px;">
 
+      <div class="modal hide fade" id="preset-modal">
+        <div class="modal-body">
+          <h3>Quick start</h3>
+          <p>Choose from these presets to get up and running quickly:</p>
+          <script>
+            preset_ndvi_red = function() {
+              $('#modeSwitcher').val("infragrammar_mono").change()
+              $('#m_exp').val("(B-R)/(B+R)")
+              $('#preset-modal').modal('hide')
+            }
+            preset_ndvi_blue = function() {
+              $('#modeSwitcher').val("infragrammar_mono").change()
+              $('#m_exp').val("(R-B)/(R+B)")
+              $('#preset-modal').modal('hide')
+            }
+          </script>
+          <table class="table">
+            <tr>
+              <td width="30%"><b>NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
+              <td>basic plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
+              <td><a class="btn btn-primary" onClick="preset_ndvi_blue()">Begin</a></td>
+            </tr>
+            <tr>
+              <td><b>NDVI for <span style="color:red;">RED</span> filters</b></td>
+              <td>basic plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
+              <td><a class="btn btn-primary" onClick="preset_ndvi_red()">Begin</a></td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <a data-dismiss="modal" data-toggle="modal" class="btn">cancel</a>
+        </div>
+      </div>
+
       <div class="modal hide fade" id="save-modal">
         <div class="modal-body">
           <h3>Save your image</h3>
@@ -87,15 +121,10 @@
         <div id="toolbar">
 
           <div class="zone">
-            <p>HELP</p>
-            <button href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-large"><i class="icon icon-question-sign"></i></button>
-          </div>
-
-          <div class="zone">
-            <p>FILTER TYPE (<a target="_blank" href="http://publiclab.org/wiki/infragram#filters">HELP</a>)</p>
-            <div class="btn-group" data-toggle="buttons-radio" id="filter">
-              <button rel="tooltip" title="Using a blue filter" type="button" class="btn btn-large btn-primary active">B</button>
-              <button rel="tooltip" title="Using a red filter" type="button" class="btn btn-large btn-danger" onClick="filter_switch()">R</button>
+            <p>QUICK START</p>
+            <div class="btn-group">
+              <button href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-large"><i class="icon icon-question-sign"></i></button>
+              <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-large btn-primary"><i class="icon icon-magic"></i> Presets</button>
             </div>
           </div>
 
