@@ -65,25 +65,10 @@
         <div class="modal-body">
           <h3>Quick start</h3>
           <p>Choose from these presets to get up and running quickly:</p>
+
           <script>
-            preset_raw = function() {
-              $('#modeSwitcher').val("infragrammar").change()
-              $('#r_exp').val("R")
-              $('#g_exp').val("G")
-              $('#b_exp').val("B")
-              $('#preset-modal').modal('hide')
-            }
-            preset_ndvi_red = function() {
-              $('#modeSwitcher').val("infragrammar_mono").change()
-              $('#m_exp').val("(B-R)/(B+R)")
-              $('#preset-modal').modal('hide')
-            }
-            preset_ndvi_blue = function() {
-              $('#modeSwitcher').val("infragrammar_mono").change()
-              $('#m_exp').val("(R-B)/(R+B)")
-              $('#preset-modal').modal('hide')
-            }
           </script>
+
           <table class="table">
             <tr>
               <td width="30%"><b>Raw</b></td>
@@ -99,6 +84,16 @@
               <td><b>NDVI for <span style="color:red;">RED</span> filters</b></td>
               <td>basic plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
               <td><a class="btn btn-primary" onClick="preset_ndvi_red()">Begin</a></td>
+            </tr>
+            <tr>
+              <td><b>Colorized NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
+              <td>color-mapped plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
+              <td><a class="btn btn-primary" onClick="preset_ndvi_blue_color()">Begin</a></td>
+            </tr>
+            <tr>
+              <td><b>Colorized NDVI for <span style="color:red;">RED</span> filters</b></td>
+              <td>color-mapped plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
+              <td><a class="btn btn-primary" onClick="preset_ndvi_red_color()">Begin</a></td>
             </tr>
           </table>
           <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
@@ -136,7 +131,7 @@
           <div class="zone">
             <p>QUICK START</p>
             <div class="btn-group">
-              <button href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-large"><i class="icon icon-question-sign"></i></button>
+              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-large"><i class="icon icon-question-sign"></i></a>
               <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-large btn-primary"><i class="icon icon-magic"></i> Presets</button>
             </div>
           </div>
@@ -144,16 +139,23 @@
           <div class="zone">
             <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
             <div class="btn-group" data-toggle="buttons-radio" id="imageselect">
-              <button rel="tooltip" title="Upload an image" onClick="$('#fileupload').toggle();$('#imageselect').toggle()" id="btn-upload" type="button" class="btn btn-large btn-primary"><i class="icon icon-upload"></i></button>
+              <button id="btn-upload" type="button" class="btn btn-large btn-primary"><i class="icon icon-upload"></i></button>
+              <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
+              <style>
+                #file-sel {
+                  position:absolute; left:0;
+                  width:55px;
+                  height:42px;
+                  opacity:0;
+                }
+              </style>
               <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-large btn-primary"><i class="icon icon-facetime-video"></i></button>
-              <button style="display:none;" id="live-video" type="button" class="btn btn-large btn-success">Go</button>
             </div>
-            <div style="width:95px;overflow:hidden;display:none;" id="fileupload"><input type="file" id="file-sel"></div>
           </div>
 
           <div class="zone">
             <p>2. ANALYSIS (<a target="_blank" href="http://publiclab.org/wiki/infragrammar">ABOUT INFRAGRAMMAR</a>)</p>
-            <select style="margin-top:10px;width:80px;" id="modeSwitcher" onChange="if(this.value != 'infragrammar_mono') $('#colorize').hide()">
+            <select style="margin-top:10px;width:80px;" id="modeSwitcher" onChange="if(this.value == 'infragrammar_mono'){$('#colorize').show()}else{$('#colorize').hide()}">
               <option value='infragrammar_mono'>Grey</option>
               <option value='infragrammar'>RGB</option>
               <option value='infragrammar_hsv'>HSV</option>
@@ -182,16 +184,27 @@
 
           <div class="zone" id="colorize">
             <p>3. COLOR</p>
-            <button onClick="colormap=colormap1;render(colorify(infragrammar_mono(image),function(x){return colormap((x+1)/2)}))" type="submit" class="btn btn-large"><i class="icon icon-adjust"></i></button>
+            <div class="btn-group">
+              <button id="btn-colorize" onClick="colorized=true;jsHandleOnSubmit();run_colorize()" type="submit" class="btn btn-large"><i class="icon icon-adjust"></i></button> 
+              <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a onClick="colorized=true;colormap = colormap1;run_colorize();$('#btn-colorize').addClass('active')">Default colormap</a></li>
+                <li><a onClick="colorized=true;colormap = colormap2;run_colorize();$('#btn-colorize').addClass('active')">Stretched colormap</a></li>
+              </ul>
+            </div>
+
             <select style="display:none;margin-top:10px;width:80px;" id="colorize">
-              <option value='mono'>Grey</option>
-              <option value='default_color'>Default color</option>
+              <option value='colormap1'>Default colormap</option>
+              <option value='colormap2'>Blue &gt; Red</option>
+              <option value='greyscale_colormap'>Grey</option>
             </select>
           </div>
 
-          <div class="zone last">
+          <div class="zone last" id="save-zone" style="display:none;">
             <p>OUTPUT</p>
-            <button href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-large disabled">Save</button>
+            <button href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn-primary btn-large">Save</button>
           </div>
 
           <br style="clear:both;" />

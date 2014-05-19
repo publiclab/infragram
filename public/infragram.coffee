@@ -90,6 +90,7 @@ ndvi = (nir, vis) ->
 
 # Apply the given colormap to a single-channel image
 colorify = (img, colormap) -> 
+        $('#btn-colorize').addClass('active')
         n = img.width * img.height;
         data = new Uint8ClampedArray(4*n);
         j = 0;
@@ -107,6 +108,7 @@ colorify = (img, colormap) ->
 
 # This returns values between 0 and 255, inclusive
 infragrammar = (img) ->
+        $('#btn-colorize').removeClass('active')
         n = img.width * img.height;
         r = new Float32Array(n);
         g = new Float32Array(n);
@@ -154,7 +156,14 @@ colormap1 = segmented_colormap(
           [ 0.5, [0,150,0],  [255,255,0]],
           [0.75, [255,255,0], [255,50,50]] ])
 
-colormap = greyscale_colormap
+colormap2 = segmented_colormap(
+        [ [   0, [0,0,255],   [0,0,255]],
+          [ 0.1, [0,0,255],   [38,195,195]],
+          [ 0.5, [0,150,0],  [255,255,0]],
+          [ 0.7, [255,255,0],  [255,50,50]],
+          [0.9, [255,50,50], [255,50,50]] ])
+
+colormap = colormap1
 
 update_colorbar = (min,max) =>        
         $('#colorbar-container')[0].style.display = 'inline-block'
@@ -265,7 +274,7 @@ set_mode = (new_mode) ->
     if mode == "ndvi"
         $("#colormaps-group")[0].style.display = "inline-block"
     else
-        $("#colormaps-group")[0].style.display = "none"
+        $("#colormaps-group")[0].style.display = "none" if ($("#colormaps-group").size() > 0)
 
 jsUpdateImage = (img) ->
     imgCanvas = document.getElementById("image")
@@ -287,6 +296,16 @@ jsGetCurrentImage = () ->
     ctx = e.getContext("2d");
     return ctx.canvas.toDataURL("image/jpeg")
 
+jsHandleOnSubmit = () ->
+    colorized = false
+    if ($('#modeSwitcher').val() == "infragrammar")
+      save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val())
+    else if ($('#modeSwitcher').val() == "infragrammar_mono")
+      save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val())
+    else if ($('#modeSwitcher').val() == "infragrammar_hsv")
+      save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
+    set_mode($('#modeSwitcher').val())
+
 jsHandleOnSubmitInfraHsv = () ->
     save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
     set_mode("infragrammar_hsv")
@@ -301,10 +320,6 @@ jsHandleOnSubmitInfraMono = () ->
 
 jsHandleOnClickGrey = () ->
     colormap = greyscale_colormap
-    update(image)
-
-jsHandleOnClickColor = () ->
-    colormap = colormap1
     update(image)
 
 jsHandleOnSlide = (event) ->

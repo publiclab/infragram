@@ -15,6 +15,8 @@
 
 
 webGlSupported = false
+colorized = false
+video_live = false
 log = [] # a record of previous commands run
 
 
@@ -46,6 +48,60 @@ getCurrentImage = () ->
     else
         img = jsGetCurrentImage()
     return img
+
+
+run_colorize = () ->
+    render(colorify(infragrammar_mono(image),(x) -> return colormap((x+1)/2)))
+    return true
+
+
+handleOnSubmit = () ->
+    if webGlSupported
+        glHandleOnSubmit()
+    else
+        jsHandleOnSubmit()
+
+
+preset_raw = () ->
+    $('#modeSwitcher').val("infragrammar").change()
+    $('#r_exp').val("R")
+    $('#g_exp').val("G")
+    $('#b_exp').val("B")
+    $('#preset-modal').modal('hide')
+    handleOnSubmit()
+
+
+preset_ndvi_red = () ->
+    $('#modeSwitcher').val("infragrammar_mono").change()
+    $('#m_exp').val("(B-R)/(B+R)")
+    $('#preset-modal').modal('hide')
+    handleOnSubmit()
+
+
+preset_ndvi_blue = () ->
+    $('#modeSwitcher').val("infragrammar_mono").change()
+    $('#m_exp').val("(R-B)/(R+B)")
+    $('#preset-modal').modal('hide')
+    handleOnSubmit()
+
+
+preset_ndvi_red_color = () ->
+    $('#modeSwitcher').val("infragrammar_mono").change()
+    $('#m_exp').val("(B-R)/(B+R)")
+    $('#preset-modal').modal('hide')
+    handleOnSubmit()
+    colorized = true
+    run_colorize()
+
+
+preset_ndvi_blue_color = () ->
+    $('#modeSwitcher').val("infragrammar_mono").change()
+    $('#m_exp').val("(R-B)/(R+B)")
+    $('#preset-modal').modal('hide')
+    handleOnSubmit()
+    colorized = true
+    run_colorize()
+
 
 downloadImage = () ->
     # create an "off-screen" anchor tag
@@ -92,6 +148,7 @@ $(document).ready(() ->
         src = getURLParameter("src")
         if src
             $("#save-modal-btn").show()
+            $("#save-zone").show()
             img = new Image()
             img.onload = () ->
                 FileUpload.setFilename(src)
@@ -116,7 +173,9 @@ $(document).ready(() ->
 
     $("#file-sel").change(() ->
         $("#save-modal-btn").show()
+        $("#save-zone").show()
         FileUpload.fromFile(this.files, updateImage)
+        handleOnSubmit()
         return true
     )
 
@@ -183,7 +242,7 @@ $(document).ready(() ->
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
-            jsHandleOnSubmitInfraHsv()
+            jsHandleOnSubmit()
         return true
     )
 
@@ -196,7 +255,7 @@ $(document).ready(() ->
         if webGlSupported
             glHandleOnSubmitInfra()
         else
-            jsHandleOnSubmitInfra()
+            jsHandleOnSubmit()
         return true
     )
 
@@ -207,7 +266,7 @@ $(document).ready(() ->
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
-            jsHandleOnSubmitInfraMono()
+            jsHandleOnSubmit()
         return true
     )
 
@@ -257,7 +316,26 @@ $(document).ready(() ->
 
     $("#webcam-activate").click(() ->
         $("#save-modal-btn").show()
+        $("#save-zone").show()
         camera.initialize()
+        if webGlSupported
+            setInterval(() -> 
+               if image && video_live
+                   handleOnSubmit()
+                   video_live = true
+               camera.getSnapshot()
+               if colorized
+                   run_colorize() 
+            , 33)
+        else
+            setInterval(() -> 
+               if image && video_live
+                   handleOnSubmit()
+                   video_live = true
+               camera.getSnapshot()
+               if colorized
+                   run_colorize() 
+            , 250)
         return true
     )
 
@@ -288,14 +366,6 @@ $(document).ready(() ->
         $("#backdrop").show()
         $("#exit-fullscreen").show()
         $("#fullscreen").hide()
-        return true
-    )
-
-    $("#live-video").click(() ->
-        if webGlSupported
-            setInterval(camera.getSnapshot, 33)
-        else
-            setInterval(camera.getSnapshot, 250)
         return true
     )
 

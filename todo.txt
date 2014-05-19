@@ -1,19 +1,15 @@
 To do:
 =======================
-* trigger choose file on upload button click
-* auto-start live video on video button click
-* make colorization work for live video
-* make percentage upload fit in btn (remove word saving)
-* run what's in infragrammar field automatically when image is uploaded or video feed begins
-* add a "raw" preset
+* run what's in infragrammar field automatically when video feed begins - handleOnSubmit not running infragrammar or something
+* colorize state stuck on in video
 * run infragrammar expression onChange of infragrammar mode
 * port to WebGL
-* B/R switch... swapts B and R, maybe? but have a "presets" modal which shows options "for blue filters" and "for red filters"
-  * filter_switch() - replace "R" -> "X" -> "B"
-* "Start by uploading an image source" popover if no localStorage flag
 
+==lower priority==
+
+* "Start by uploading an image source" popover if no localStorage flag
 * auto-stretch for webcam NDVI
 * add slider back in (advanced tools?)
-
+* make percentage upload fit in btn (remove word saving) - only for small screens
 
 
