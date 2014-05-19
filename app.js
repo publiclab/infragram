@@ -39,8 +39,8 @@ var ioOptions = {
 var io = require('socket.io', ioOptions).listen(server, {log: false});
 
 // all environments
-app.set('port', process.env.PORT || 80);
-//app.set('port', process.env.PORT || 8001);
+//app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 8001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
@@ -64,6 +64,7 @@ app.get('/raw/:id', routes.raw);
 app.post('/create', routes.create);
 app.get('/delete/:id', routes.delete);
 app.get('/static/sandbox/', function (req, res) { res.redirect('/sandbox/'); });
+app.get('/sandbox/index-beta.html', function (req, res) { res.redirect('/sandbox/beta/'); });
 
 server.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
