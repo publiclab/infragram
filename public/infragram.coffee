@@ -297,7 +297,6 @@ jsGetCurrentImage = () ->
     return ctx.canvas.toDataURL("image/jpeg")
 
 jsRunInfragrammar = (mode) ->
-    colorized = false
     set_mode(mode)
 
 jsHandleOnSubmitInfraHsv = () ->

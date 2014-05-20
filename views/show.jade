@@ -5,9 +5,9 @@ block content
   - if (image.log) log = JSON.parse(image.log)
 
   script(type='text/javascript').
-    var mode = "#{log[log.length-1].split('&')[0].split('=')[1]}"
-    var params = parametersObject("#{log[log.length-1]}")
-    var src = "/upload/#{image.filename}"
+    mode = "#{log[log.length-1].split('&')[0].split('=')[1]}"
+    params = parametersObject("#{log[log.length-1]}")
+    src = "/upload/#{image.filename}"
     fetch_image(src,mode)
     save_infragrammar_expressions(params)
     if (mode == "ndvi") {
@@ -20,8 +20,8 @@ block content
       save_infragrammar_expressions({'r':'R','g':'G','b':'B'})
       mode = "infragrammar"
     }
-    run_infragrammar()
-    if (params['color'] || params['c']) run_colorize()
+    run_infragrammar(mode)
+    if (params['color'] == "true" || params['c'] == "true") run_colorize()
 
   div.navbar.clearfix
     div.navbar-inner

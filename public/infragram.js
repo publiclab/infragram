@@ -401,8 +401,6 @@ jsGetCurrentImage = function() {
 };
 
 jsRunInfragrammar = function(mode) {
-  var colorized;
-  colorized = false;
   return set_mode(mode);
 };
 
@@ -910,7 +908,7 @@ decodeParameters = function(name, string) {
 parametersObject = function(string) {
   var key, param, val, _i, _len, _ref;
   params = {};
-  _ref = string.replace('&amp;', '&').split('&');
+  _ref = string.replace(/&amp;/g, '&').split('&');
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     param = _ref[_i];
     key = param.split('=')[0];
@@ -988,6 +986,7 @@ save_infragrammar_expressions = function(args) {
 
 run_infragrammar = function(mode) {
   save_log();
+  colorized = false;
   if (webGlSupported) {
     return glHandleOnSubmit();
   } else {
@@ -1110,7 +1109,6 @@ fetch_image = function(src, mode) {
     if (mode) {
       if (mode.substring(0, 5) === "infra") {
         $("#modeSwitcher").val(mode).change();
-        $("#" + mode).submit();
       } else {
         $("button#" + mode).button("toggle");
         $("button#" + mode).click();
@@ -1135,14 +1133,16 @@ fetch_image = function(src, mode) {
       });
       mode = "infragrammar";
     }
-    if (params['color'] || params['c']) {
+    updateImage(this);
+    if (params['color'] === "true" || params['c'] === "true") {
       colorized = true;
     }
-    updateImage(this);
     run_infragrammar(mode);
+    if (params['color'] === "true" || params['c'] === "true") {
+      colorized = true;
+    }
     if (colorized) {
       $("button#color").button("toggle");
-      $("button#color").click();
       return run_colorize();
     }
   };

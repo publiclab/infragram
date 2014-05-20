@@ -33,7 +33,7 @@ decodeParameters = (name,string) ->
 
 parametersObject = (string) ->
     params = {}
-    for param in string.replace('&amp;','&').split('&')
+    for param in string.replace(/&amp;/g,'&').split('&')
         key = param.split('=')[0]
         val = param.split('=')[1]
         params[key] = val
@@ -94,6 +94,7 @@ save_infragrammar_expressions = (args) ->
 # this should accept an object with parameters r,g,b,h,s,v,m and mode
 run_infragrammar = (mode) ->
     save_log()
+    colorized = false
     if webGlSupported
         glHandleOnSubmit()
     else
@@ -208,7 +209,6 @@ fetch_image = (src,mode) ->
         if mode
             if mode.substring(0, 5) == "infra"
                 $("#modeSwitcher").val(mode).change()
-                $("#" + mode).submit()
             else
                 $("button#" + mode).button("toggle");
                 $("button#" + mode).click() # this should be via a direct call, not a click; the show.jade page should not require buttons!
@@ -222,12 +222,14 @@ fetch_image = (src,mode) ->
         else if mode == "raw"
             save_infragrammar_expressions({'r':'R','g':'G','b':'B'})
             mode = "infragrammar"
-        if params['color'] || params['c'] then colorized = true
         updateImage(this)
-        run_infragrammar(mode)
+        if params['color'] == "true" || params['c'] == "true"
+          colorized = true # before run_infrag, so it gets logged
+        run_infragrammar(mode) # this sets colorized to false!
+        if params['color'] == "true" || params['c'] == "true"
+          colorized = true # again, so it gets run 
         if colorized
           $("button#color").button("toggle");
-          $("button#color").click()
           run_colorize()
     img.src = src
 
