@@ -111,13 +111,12 @@ drawScene = (ctx, returnImage) ->
         return ctx.canvas.toDataURL("image/jpeg")
 
 
-generateShader = (ctx) ->
+generateShader = (ctx,args) ->
     [r, g, b] = modeToEquationMap[ctx.mode]
 
-    # draw directly from DOM inputs (we should parameterize this):
-    r = if r.charAt(0) == "#" then $(r).val() else r
-    g = if g.charAt(0) == "#" then $(g).val() else g
-    b = if b.charAt(0) == "#" then $(b).val() else b
+    r = if r.charAt(0) == "#" then expressions[r] else r
+    g = if g.charAt(0) == "#" then expressions[g] else g
+    b = if b.charAt(0) == "#" then expressions[b] else b
 
     # Map HSV to shader variable names
     r = r.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b")
@@ -195,6 +194,7 @@ glGetCurrentImage = () ->
     return drawScene(imgContext, true)
 
 
+glRunInfragram            = (mode)  -> glSetMode(imgContext, mode)
 glHandleOnClickRaw        = ()      -> glSetMode(imgContext, "raw")
 glHandleOnClickNdvi       = ()      -> glSetMode(imgContext, "ndvi")
 glHandleOnSubmitInfraHsv  = ()      -> glSetMode(imgContext, "hsv")

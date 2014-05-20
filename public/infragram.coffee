@@ -285,19 +285,14 @@ jsUpdateImage = (img) ->
     image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height)
     set_mode(mode)
 
-jsHandleOnClickRaw = () ->
-    set_mode("raw")
-
-jsHandleOnClickNdvi = () ->
-    set_mode("ndvi")
+jsHandleOnClickRaw  = ()     ->    set_mode("raw")
+jsHandleOnClickNdvi = ()     ->    set_mode("ndvi")
+jsRunInfragrammar   = (mode) ->    set_mode(mode)
 
 jsGetCurrentImage = () ->
     e = $("#image")[0];
     ctx = e.getContext("2d");
     return ctx.canvas.toDataURL("image/jpeg")
-
-jsRunInfragrammar = (mode) ->
-    set_mode(mode)
 
 jsHandleOnSubmitInfraHsv = () ->
     save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())

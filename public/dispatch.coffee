@@ -19,6 +19,8 @@ colorized = false
 video_live = false
 log = [] # a record of previous commands run
 params = {} # the url hash
+expressions = {}
+mode = "raw"
 
 getURLParameter = (name) ->
     decodeParameters(name,location.search)
@@ -81,8 +83,9 @@ save_infragrammar_inputs = () ->
     })
 
 
-# this is unfortunately js/gl specific; currently only js?
 save_infragrammar_expressions = (args) ->
+    expressions = args # this is for the gl version
+    # the following for js:
     if mode == "infragrammar"
         save_expressions(args['r'],args['g'],args['b'])
     if mode == "infragrammar_mono"
@@ -96,7 +99,7 @@ run_infragrammar = (mode) ->
     save_log()
     colorized = false
     if webGlSupported
-        glHandleOnSubmit()
+        glRunInfragrammar(mode)
     else
         jsRunInfragrammar(mode)
 
@@ -238,7 +241,7 @@ $(document).ready(() ->
     FileUpload.initialize()
 
     $("#image-container").ready(() ->
-        enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
+        enablewebgl = if (getURLParameter("enablewebgl") == "true" || getURLParameter("webgl") == "true") then true else false
         webGlSupported = enablewebgl && glInitInfragram()
 
         if webGlSupported
@@ -396,7 +399,7 @@ $(document).ready(() ->
         if webGlSupported
             href = href.replace(/(?:\?|&)enablewebgl=true/gi, "")
         else
-            href += if href.indexOf("?") >= 0 then "&enablewebgl=true" else "?enablewebgl=true"
+            href += if href.indexOf("?") >= 0 then "&webgl=true" else "?webgl=true"
         window.location.href = href
         return true
     )
