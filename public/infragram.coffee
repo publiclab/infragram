@@ -296,15 +296,9 @@ jsGetCurrentImage = () ->
     ctx = e.getContext("2d");
     return ctx.canvas.toDataURL("image/jpeg")
 
-jsHandleOnSubmit = () ->
+jsRunInfragrammar = (mode) ->
     colorized = false
-    if ($('#modeSwitcher').val() == "infragrammar")
-      save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val())
-    else if ($('#modeSwitcher').val() == "infragrammar_mono")
-      save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val())
-    else if ($('#modeSwitcher').val() == "infragrammar_hsv")
-      save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
-    set_mode($('#modeSwitcher').val())
+    set_mode(mode)
 
 jsHandleOnSubmitInfraHsv = () ->
     save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())

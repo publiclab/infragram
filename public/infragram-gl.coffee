@@ -113,6 +113,8 @@ drawScene = (ctx, returnImage) ->
 
 generateShader = (ctx) ->
     [r, g, b] = modeToEquationMap[ctx.mode]
+
+    # draw directly from DOM inputs (we should parameterize this):
     r = if r.charAt(0) == "#" then $(r).val() else r
     g = if g.charAt(0) == "#" then $(g).val() else g
     b = if b.charAt(0) == "#" then $(b).val() else b

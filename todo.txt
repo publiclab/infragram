@@ -1,6 +1,5 @@
 To do:
 =======================
-* run what's in infragrammar field automatically when video feed begins - handleOnSubmit not running infragrammar or something
 * colorize state stuck on in video
 * run infragrammar expression onChange of infragrammar mode
 * port to WebGL

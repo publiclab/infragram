@@ -18,13 +18,26 @@ webGlSupported = false
 colorized = false
 video_live = false
 log = [] # a record of previous commands run
-
+params = {} # the url hash
 
 getURLParameter = (name) ->
+    decodeParameters(name,location.search)
+
+
+decodeParameters = (name,string) ->
     result = decodeURI(
-        (RegExp("[\\?&]" + name + "=([^&#]*)").exec(location.search) || [null, null])[1]
+        (RegExp("[\\?&]" + name + "=([^&#]*)").exec(string) || [null, null])[1]
     )
     return if result == "null" then null else result
+
+
+parametersObject = (string) ->
+    params = {}
+    for param in string.replace('&amp;','&').split('&')
+        key = param.split('=')[0]
+        val = param.split('=')[1]
+        params[key] = val
+    params
 
 
 setParametersFromURL = (idNameMap) ->
@@ -55,12 +68,64 @@ run_colorize = () ->
     return true
 
 
-handleOnSubmit = () ->
+save_infragrammar_inputs = () ->
+    mode = $('#modeSwitcher').val()
+    save_infragrammar_expressions({
+        'r':$('#r_exp').val(),
+        'g':$('#g_exp').val(),
+        'b':$('#b_exp').val(),
+        'm':$('#m_exp').val(),
+        'h':$('#h_exp').val(),
+        's':$('#s_exp').val(),
+        'v':$('#v_exp').val()
+    })
+
+
+# this is unfortunately js/gl specific; currently only js?
+save_infragrammar_expressions = (args) ->
+    if mode == "infragrammar"
+        save_expressions(args['r'],args['g'],args['b'])
+    if mode == "infragrammar_mono"
+        save_expressions(args['m'],args['m'],args['m'])
+    if mode == "infragrammar_hsv"
+        save_expressions_hsv(args['h'],args['s'],args['v'])
+
+
+# this should accept an object with parameters r,g,b,h,s,v,m and mode
+run_infragrammar = (mode) ->
+    save_log()
     if webGlSupported
         glHandleOnSubmit()
     else
-        jsHandleOnSubmit()
+        jsRunInfragrammar(mode)
 
+log_mono = () ->
+    logEntry = "mode=infragrammar_mono"
+    logEntry += if $("#m_exp").val() then "&m=" + $("#m_exp").val() else ""
+    logEntry += if colorized then "&c=true" else "" # no way to succinctly store the colormap... just offer range of colorizations at view-time?
+    log.push(logEntry)
+
+log_hsv = () ->
+    logEntry = "mode=infragrammar_hsv"
+    logEntry += if $("#h_exp").val() then "&h=" + $("#h_exp").val() else ""
+    logEntry += if $("#s_exp").val() then "&s=" + $("#s_exp").val() else ""
+    logEntry += if $("#v_exp").val() then "&v=" + $("#v_exp").val() else ""
+    log.push(logEntry)
+
+log_rgb = () ->
+    logEntry = "mode=infragrammar"
+    logEntry += if $("#r_exp").val() then "&r=" + $("#r_exp").val() else ""
+    logEntry += if $("#g_exp").val() then "&g=" + $("#g_exp").val() else ""
+    logEntry += if $("#b_exp").val() then "&b=" + $("#b_exp").val() else ""
+    log.push(logEntry)
+
+save_log = () ->
+    if mode == "infragrammar_mono"
+      log_mono()
+    else if mode == "infragrammar_hsv"
+      log_hsv()
+    else if mode == "infragrammar"
+      log_rgb()
 
 preset_raw = () ->
     $('#modeSwitcher').val("infragrammar").change()
@@ -68,29 +133,33 @@ preset_raw = () ->
     $('#g_exp').val("G")
     $('#b_exp').val("B")
     $('#preset-modal').modal('hide')
-    handleOnSubmit()
+    save_infragrammar_inputs()
+    run_infragrammar(mode)
 
 
 preset_ndvi_red = () ->
     $('#modeSwitcher').val("infragrammar_mono").change()
     $('#m_exp').val("(B-R)/(B+R)")
     $('#preset-modal').modal('hide')
-    handleOnSubmit()
+    save_infragrammar_inputs()
+    run_infragrammar(mode)
 
 
 preset_ndvi_blue = () ->
     $('#modeSwitcher').val("infragrammar_mono").change()
     $('#m_exp').val("(R-B)/(R+B)")
     $('#preset-modal').modal('hide')
-    handleOnSubmit()
+    save_infragrammar_inputs()
+    run_infragrammar(mode)
 
 
 preset_ndvi_red_color = () ->
     $('#modeSwitcher').val("infragrammar_mono").change()
     $('#m_exp').val("(B-R)/(B+R)")
     $('#preset-modal').modal('hide')
-    handleOnSubmit()
+    save_infragrammar_inputs()
     colorized = true
+    run_infragrammar(mode)
     run_colorize()
 
 
@@ -98,8 +167,9 @@ preset_ndvi_blue_color = () ->
     $('#modeSwitcher').val("infragrammar_mono").change()
     $('#m_exp').val("(R-B)/(R+B)")
     $('#preset-modal').modal('hide')
-    handleOnSubmit()
+    save_infragrammar_inputs()
     colorized = true
+    run_infragrammar(mode)
     run_colorize()
 
 
@@ -125,6 +195,40 @@ downloadImage = () ->
         lnk.fireEvent("onclick")
     return true
 
+
+# from a local URL (remote may be against js security rules)
+fetch_image = (src,mode) ->
+    $("#save-modal-btn").show()
+    $("#save-zone").show()
+    img = new Image()
+    img.onload = () ->
+        filename = src.split('/')
+        filename = filename[filename.length-1]
+        FileUpload.setFilename(filename)
+        if mode
+            if mode.substring(0, 5) == "infra"
+                $("#modeSwitcher").val(mode).change()
+                $("#" + mode).submit()
+            else
+                $("button#" + mode).button("toggle");
+                $("button#" + mode).click() # this should be via a direct call, not a click; the show.jade page should not require buttons!
+        save_infragrammar_expressions(params)
+        if mode == "ndvi"
+            save_infragrammar_expressions({'m':'(R-B)/(R+B)'})
+            mode = "infragrammar_mono"
+        else if mode == "nir"
+            save_infragrammar_expressions({'m':'R'})
+            mode = "infragrammar_mono"
+        if params['color'] || params['c'] then colorized = true
+        updateImage(this)
+        run_infragrammar(mode)
+        if colorized
+          $("button#color").button("toggle");
+          $("button#color").click()
+          run_colorize()
+    img.src = src
+
+
 $(document).ready(() ->
     FileUpload.initialize()
 
@@ -145,29 +249,13 @@ $(document).ready(() ->
             "#v_exp": "v"
         setParametersFromURL(idNameMap)
 
-        src = getURLParameter("src")
+        src = getURLParameter('src')
+
         if src
-            $("#save-modal-btn").show()
-            $("#save-zone").show()
-            img = new Image()
-            img.onload = () ->
-                FileUpload.setFilename(src)
-                updateImage(this)
-                infraMode = getURLParameter("mode")
-                if infraMode
-                    if infraMode.substring(0, 5) == "infra"
-                        $("#modeSwitcher").val(infraMode).change()
-                        $("#" + infraMode).submit()
-                    else
-                        $("button#" + infraMode).button("toggle");
-                        $("button#" + infraMode).click()
-
-                color = getURLParameter("color")
-                if color
-                    $("button#color").button("toggle");
-                    $("button#color").click()
-            img.src = "../upload/" + src
-
+          params = parametersObject(location.search.split('?')[1])
+          mode = params['mode']
+          fetch_image(src)
+        
         return true
     )
 
@@ -175,7 +263,8 @@ $(document).ready(() ->
         $("#save-modal-btn").show()
         $("#save-zone").show()
         FileUpload.fromFile(this.files, updateImage)
-        handleOnSubmit()
+        save_infragrammar_inputs()
+        run_infragrammar(mode)
         return true
     )
 
@@ -234,39 +323,32 @@ $(document).ready(() ->
     )
 
     $("#infragrammar_hsv").submit(() ->
-        logEntry = "mode=infragrammar_hsv"
-        logEntry += if $("#h_exp").val() then "&h=" + $("#h_exp").val() else ""
-        logEntry += if $("#s_exp").val() then "&s=" + $("#s_exp").val() else ""
-        logEntry += if $("#v_exp").val() then "&v=" + $("#v_exp").val() else ""
-        log.push(logEntry)
+        mode = "infragrammar_hsv"
+        log_hsv()
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
-            jsHandleOnSubmit()
+            run_infragrammar(mode)
         return true
     )
 
     $("#infragrammar").submit(() ->
-        logEntry = "mode=infragrammar"
-        logEntry += if $("#r_exp").val() then "&r=" + $("#r_exp").val() else ""
-        logEntry += if $("#g_exp").val() then "&g=" + $("#g_exp").val() else ""
-        logEntry += if $("#b_exp").val() then "&b=" + $("#b_exp").val() else ""
-        log.push(logEntry)
+        mode = "infragrammar"
+        log_rgb()
         if webGlSupported
             glHandleOnSubmitInfra()
         else
-            jsHandleOnSubmit()
+            run_infragrammar(mode)
         return true
     )
 
     $("#infragrammar_mono").submit(() ->
-        logEntry = "mode=infragrammar_mono"
-        logEntry += if $("#m_exp").val() then "&m=" + $("#m_exp").val() else ""
-        log.push(logEntry)
+        mode = "infragrammar_mono"
+        log_mono()
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
-            jsHandleOnSubmit()
+            run_infragrammar(mode)
         return true
     )
 
@@ -318,10 +400,11 @@ $(document).ready(() ->
         $("#save-modal-btn").show()
         $("#save-zone").show()
         camera.initialize()
+        save_infragrammar_inputs()
         if webGlSupported
             setInterval(() -> 
                if image && video_live
-                   handleOnSubmit()
+                   run_infragrammar(mode)
                    video_live = true
                camera.getSnapshot()
                if colorized
@@ -330,7 +413,7 @@ $(document).ready(() ->
         else
             setInterval(() -> 
                if image && video_live
-                   handleOnSubmit()
+                   run_infragrammar(mode)
                    video_live = true
                camera.getSnapshot()
                if colorized
