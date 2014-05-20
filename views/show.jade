@@ -16,6 +16,9 @@ block content
     } else if (mode == "nir") {
       save_infragrammar_expressions({'m':'R'})
       mode = "infragrammar_mono"
+    } else if (mode == "raw") {
+      save_infragrammar_expressions({'r':'R','g':'G','b':'B'})
+      mode = "infragrammar"
     }
     run_infragrammar()
     if (params['color'] || params['c']) run_colorize()

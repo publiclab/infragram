@@ -1127,6 +1127,13 @@ fetch_image = function(src, mode) {
         'm': 'R'
       });
       mode = "infragrammar_mono";
+    } else if (mode === "raw") {
+      save_infragrammar_expressions({
+        'r': 'R',
+        'g': 'G',
+        'b': 'B'
+      });
+      mode = "infragrammar";
     }
     if (params['color'] || params['c']) {
       colorized = true;

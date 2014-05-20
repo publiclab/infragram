@@ -219,6 +219,9 @@ fetch_image = (src,mode) ->
         else if mode == "nir"
             save_infragrammar_expressions({'m':'R'})
             mode = "infragrammar_mono"
+        else if mode == "raw"
+            save_infragrammar_expressions({'r':'R','g':'G','b':'B'})
+            mode = "infragrammar"
         if params['color'] || params['c'] then colorized = true
         updateImage(this)
         run_infragrammar(mode)
