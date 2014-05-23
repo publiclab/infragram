@@ -333,6 +333,7 @@ $(document).ready(() ->
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
+            save_infragrammar_inputs()
             run_infragrammar(mode)
         return true
     )
@@ -343,6 +344,7 @@ $(document).ready(() ->
         if webGlSupported
             glHandleOnSubmitInfra()
         else
+            save_infragrammar_inputs()
             run_infragrammar(mode)
         return true
     )
@@ -353,6 +355,7 @@ $(document).ready(() ->
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
+            save_infragrammar_inputs()
             run_infragrammar(mode)
         return true
     )
