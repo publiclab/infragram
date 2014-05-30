@@ -64,7 +64,8 @@ app.get('/raw/:id', routes.raw);
 app.post('/create', routes.create);
 app.get('/delete/:id', routes.delete);
 app.get('/static/sandbox/', function (req, res) { res.redirect('/sandbox/'); });
-app.get('/sandbox/index-beta.html', function (req, res) { res.redirect('/sandbox/beta/'); });
+app.get('/sandbox/index-beta.html', function (req, res) { res.redirect('/sandbox/'); });
+app.get('/sandbox/beta/', function (req, res) { res.redirect('/sandbox/'); });
 
 server.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
