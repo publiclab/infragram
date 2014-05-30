@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" manifest="/index.manifest">
+  <head>
+    
+    <title>Infragram | by Public Lab - Home</title>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/bootstrap/css/slider.css" rel="stylesheet">
+    <link href="/assets/css/application.css" rel="stylesheet">
+    <link href="/infragram.css" rel="stylesheet">
+    <link href="/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/getUserMedia.js/lib/getUserMedia.js"></script>
+    <script src="/bootstrap/js/bootstrap-slider.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/webgl-utils.js"></script>
+    <script src="/infragram.js"></script>
+
+    <script type="x-shader/x-vertex" id="shader-vs"></script>
+    <script type="x-shader/x-fragment" id="shader-fs-template"></script>
+    <script type="x-shader/x-fragment" id="shader-fs"></script>
+  </head>
+
+  <body>
+  
+    <div class="container page" style="padding-top:10px;">
+
+      <div class="modal hide fade" id="save-modal">
+        <div class="modal-body">
+          <h3>Save your image</h3>
+          <form id="save-form" class="form" action="/create" method="post">
+            <input type="text" name="title" maxlength="25" placeholder="Title" /><br />
+            <input type="text" name="author" maxlength="25" placeholder="Your name" /><br />
+            <textarea name="desc" maxlength="50" placeholder="A description of your work"></textarea>
+            <input id="form-filename" type="hidden" name="filename" />
+            <input id="form-log" type="hidden" name="log" />
+          </form>
+        </div>
+        <div class="modal-footer">
+            <button id="save" class="btn btn-primary">Save</button> or if you do not wish to share your work, <a class="btn" id="download">Download</a>
+        </div>
+      </div>
+
+      <button style="margin-left:4px;" id="webgl-activate" type="button" class="btn btn-secondary pull-right">WebGL beta</button>
+      <a href="/sandbox/" id="legacy" type="button" class="btn btn-secondary pull-right">Standard version</a>
+      <h1><img src="/images/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"/> <a style="color:#444;padding-top:8px;" href="/">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
+
+      <p>Infragram is an online tool for analyzing plant health with near-infrared imagery! To learn more, <a href="http://publiclab.org/wiki/near-infrared-camera">read about our open source cameras</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a> from the Public Lab non-profit.</p>
+      <hr>
+
+      <div class="content">
+
+        <div class="well">
+
+          <b>Select an <a href="http://publiclab.org/wiki/near-infrared-camera">infrablue image</a>: </b>
+          <input type="file" id="file-sel">
+
+          <b>Or use a USB webcam (<a href="http://publiclab.org/notes/warren/01-07-2014/infragram-live-infragram-webcams-en-route-from-factory">tutorial</a>): </b>
+          <button id="webcam-activate" type="button" class="btn btn-primary"><i class="icon-white icon-camera"></i> Activate webcam</button>
+
+          <hr>
+
+          <b>Presets:</b>
+          <div class="btn-group" data-toggle="buttons-radio">
+            <button id="raw" type="button" class="btn active">Raw</button>
+            <button id="ndvi" type="button" class="btn">NDVI</button>
+            <button id="nir" type="button" class="btn">NIR</button>
+          </div>
+
+          <b style="margin-left:20px;">Infragrammar:</b>
+          <select style="margin-top:10px;width:120px;" id="modeSwitcher">
+            <option value='infragrammar'>RGB</option>
+            <option value='infragrammar_hsv'>HSV</option>
+            <option value='infragrammar_mono'>Monochrome</option>
+          </select>
+
+          <form id="infragrammar" class="form-inline" style="display:inline;margin-right:20px;" action="javascript:void(0);">
+            <input placeholder="R" type="text" id="r_exp" class="input-small">
+            <input placeholder="G" type="text" id="g_exp" class="input-small">
+            <input placeholder="B" type="text" id="b_exp" class="input-small">
+            <button type="submit" class="btn btn-primary">Run</button>
+          </form>
+
+          <form id="infragrammar_mono" class="form-inline" style="display:none;margin-right:20px;" action="javascript:void(0);">
+            <input placeholder="monochrome" type="text" id="m_exp" class="input-small">
+            <button type="submit" class="btn btn-primary">Run</button>
+          </form>
+
+          <form id="infragrammar_hsv" class="form-inline" style="display:none;margin-right:20px;" action="javascript:void(0);">
+            <input placeholder="H" type="text" id="h_exp" class="input-small">
+            <input placeholder="S" type="text" id="s_exp" class="input-small" value="1">
+            <input placeholder="V" type="text" id="v_exp" class="input-small" value="1">
+            <button type="submit" class="btn btn-primary">Run</button>
+          </form>
+
+          <br>
+          <br>
+
+          <button style="display:none;margin-left:30px;" href="#save-modal" data-toggle="modal" id="save-modal-btn" type="button" class="btn btn-primary"><i class="icon-white icon-file"></i> Save</button>
+
+          <div id="colormaps-group" style="display:none;">
+            <b>Color maps:</b>
+            <div class="btn-group" data-toggle="buttons-radio">
+              <button id="grey" type="button" class="btn active">Greyscale</button>
+              <button id="color" type="button" class="btn">Color</button>
+            </div>
+          </div>
+
+          <b style="margin-left:20px;">Slider (X): &nbsp; </b>
+          <input id="slider" type="text" value="100" data-slider-min="0" data-slider-max="100" data-slider-value="100">
+          <div style="float:right;margin-right:20px;">
+            <a style="margin-right:20px;" class="btn" href="http://publiclab.org/wiki/infragram-sandbox"><i class="icon icon-question-sign"></i> Help</a>
+          </div>
+        </div>
+
+        <div id="image-container">
+          <div style="display:none;" id="webcam"></div>
+          <a class="btn-inverse btn-small" style="position:absolute;z-index:3;margin:6px;" id="fullscreen"><i class="icon-white icon-fullscreen"></i> Full screen</a>
+          <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
+          <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="icon-white icon-remove"></i> Exit full screen</a>
+
+          <canvas style="width:800px; height:600px;" id="image" width="800" height="600"></canvas>
+
+          <div id="colorbar-container" style="display:none;">
+            <span id="colorbar-min">-1.00</span>
+            <canvas id="colorbar"></canvas>
+            <span id="colorbar-max">1.00</span>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="footer">
+          <hr>
+          <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/wiki/infragram">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/Pioneer-Valley-Open-Source/infragram-js/">open source software</a>; <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues">please report bugs</a></small></h4>
+          <p>Infragram was created by <a href="https://github.com/bgamari">Ben Gamari</a>, <a href="http://github.com/donblair">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn">Piotr Foltyn</a>.</p>
+      </footer>
+ 
+    </div>
+
+    <script>
+      (function() {
+        $("[rel=tooltip]").tooltip()
+        $("[rel=popover]").popover()
+      })()
+
+      window.addEventListener('load', function(e) {
+        if (window.applicationCache) {
+          window.applicationCache.addEventListener('updateready', function(e) {
+              if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                // Browser downloaded a new app cache.
+                // Swap it in and reload the page to get the new hotness.
+                window.applicationCache.swapCache();
+                if (confirm('A new version of this site is available. Load it?')) {
+                  window.location.reload();
+                }
+              } else {
+                // Manifest didn't changed. Nothing new to server.
+              }
+          }, false);
+        }
+      }, false);
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+      ga('create', 'UA-43030180-1', 'infragram.org');
+      ga('send', 'pageview');
+
+    </script>
+
+  </body>
+</html>

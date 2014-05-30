@@ -268,8 +268,7 @@ $(document).ready(() ->
         $("#save-modal-btn").show()
         $("#save-zone").show()
         FileUpload.fromFile(this.files, updateImage)
-        save_infragrammar_inputs()
-        run_infragrammar(mode)
+        $('#preset-modal').modal('show');
         return true
     )
 
