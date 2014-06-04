@@ -436,12 +436,9 @@ jsHandleOnSlide = function(event) {
 };
 
 modeToEquationMap = {
-  "hsv": ["#h_exp", "#s_exp", "#v_exp"],
-  "rgb": ["#r_exp", "#g_exp", "#b_exp"],
-  "mono": ["#m_exp", "#m_exp", "#m_exp"],
-  "raw": ["r", "g", "b"],
-  "ndvi": ["(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2"],
-  "nir": ["r", "r", "r"]
+  "hsv": ["h", "s", "v"],
+  "rgb": ["r", "g", "b"],
+  "mono": ["m", "m", "m"]
 };
 
 vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0];
@@ -543,9 +540,9 @@ drawScene = function(ctx, returnImage) {
 generateShader = function(ctx, args) {
   var b, code, g, r, _ref;
   _ref = modeToEquationMap[ctx.mode], r = _ref[0], g = _ref[1], b = _ref[2];
-  r = r.charAt(0) === "#" ? expressions[r] : r;
-  g = g.charAt(0) === "#" ? expressions[g] : g;
-  b = b.charAt(0) === "#" ? expressions[b] : b;
+  r = expressions[r];
+  g = expressions[g];
+  b = expressions[b];
   r = r.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b");
   g = g.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b");
   b = b.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b");

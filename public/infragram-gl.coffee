@@ -15,12 +15,9 @@
 
 
 modeToEquationMap = {
-    "hsv":  ["#h_exp", "#s_exp", "#v_exp"],
-    "rgb":  ["#r_exp", "#g_exp", "#b_exp"],
-    "mono": ["#m_exp", "#m_exp", "#m_exp"],
-    "raw":  ["r", "g", "b"],
-    "ndvi": ["(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2"],
-    "nir":  ["r", "r", "r"],
+    "hsv":  ["h", "s", "v"],
+    "rgb":  ["r", "g", "b"],
+    "mono": ["m", "m", "m"]
 }
 
 vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]
@@ -114,9 +111,9 @@ drawScene = (ctx, returnImage) ->
 generateShader = (ctx,args) ->
     [r, g, b] = modeToEquationMap[ctx.mode]
 
-    r = if r.charAt(0) == "#" then expressions[r] else r
-    g = if g.charAt(0) == "#" then expressions[g] else g
-    b = if b.charAt(0) == "#" then expressions[b] else b
+    r = expressions[r]
+    g = expressions[g]
+    b = expressions[b]
 
     # Map HSV to shader variable names
     r = r.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b")
