@@ -15,12 +15,9 @@
 
 
 modeToEquationMap = {
-    "hsv":  ["#h_exp", "#s_exp", "#v_exp"],
-    "rgb":  ["#r_exp", "#g_exp", "#b_exp"],
-    "mono": ["#m_exp", "#m_exp", "#m_exp"],
-    "raw":  ["r", "g", "b"],
-    "ndvi": ["(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2", "(((r-b)/(r+b))+1)/2"],
-    "nir":  ["r", "r", "r"],
+    "hsv":  ["h", "s", "v"],
+    "rgb":  ["r", "g", "b"],
+    "mono": ["m", "m", "m"]
 }
 
 vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]
@@ -111,13 +108,12 @@ drawScene = (ctx, returnImage) ->
         return ctx.canvas.toDataURL("image/jpeg")
 
 
-generateShader = (ctx) ->
+generateShader = (ctx,args) ->
     [r, g, b] = modeToEquationMap[ctx.mode]
 
-    # draw directly from DOM inputs (we should parameterize this):
-    r = if r.charAt(0) == "#" then $(r).val() else r
-    g = if g.charAt(0) == "#" then $(g).val() else g
-    b = if b.charAt(0) == "#" then $(b).val() else b
+    r = expressions[r]
+    g = expressions[g]
+    b = expressions[b]
 
     # Map HSV to shader variable names
     r = r.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b")
@@ -147,8 +143,11 @@ generateShader = (ctx) ->
     ctx.shaderProgram = createProgramFromScripts(ctx.gl, ["shader-vs", "shader-fs"])
 
 
-glSetMode = (ctx, newMode) ->
+glSetMode = (ctx, newMode, colorized) ->
     ctx.mode = newMode
+    # for some reason we can't seem to set colorizing here. These lines work but i just see red.
+    imgContext.greyscale = mapContext.greyscale = !(colorized == true)
+    imgContext.colormap = mapContext.colormap = (colorized == true)
     ctx.updateShader = true
     if ctx.mode == "ndvi"
         $("#colorbar-container")[0].style.display = "inline-block"
@@ -195,11 +194,12 @@ glGetCurrentImage = () ->
     return drawScene(imgContext, true)
 
 
-glHandleOnClickRaw        = ()      -> glSetMode(imgContext, "raw")
-glHandleOnClickNdvi       = ()      -> glSetMode(imgContext, "ndvi")
-glHandleOnSubmitInfraHsv  = ()      -> glSetMode(imgContext, "hsv")
-glHandleOnSubmitInfra     = ()      -> glSetMode(imgContext, "rgb")
-glHandleOnSubmitInfraMono = ()      -> glSetMode(imgContext, "mono")
-glHandleOnClickGrey       = ()      -> imgContext.greyscale = mapContext.greyscale = true
-glHandleOnClickColor      = ()      -> imgContext.greyscale = mapContext.greyscale = false
-glHandleOnSlide           = (event) -> imgContext.slider = event.value / 100.0
+glRunInfragrammar         = (mode, colorized)  -> glSetMode(imgContext, mode, colorized)
+glHandleOnClickRaw        = ()                 -> glSetMode(imgContext, "raw")
+glHandleOnClickNdvi       = ()                 -> glSetMode(imgContext, "ndvi")
+glHandleOnSubmitInfraHsv  = ()                 -> glSetMode(imgContext, "hsv")
+glHandleOnSubmitInfra     = ()                 -> glSetMode(imgContext, "rgb")
+glHandleOnSubmitInfraMono = ()                 -> glSetMode(imgContext, "mono")
+glHandleOnClickGrey       = ()                 -> imgContext.greyscale = mapContext.greyscale = true
+glHandleOnClickColor      = ()                 -> imgContext.greyscale = mapContext.greyscale = false
+glHandleOnSlide           = (event)            -> imgContext.slider = event.value / 100.0

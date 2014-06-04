@@ -19,6 +19,8 @@ colorized = false
 video_live = false
 log = [] # a record of previous commands run
 params = {} # the url hash
+expressions = {}
+mode = "raw"
 
 getURLParameter = (name) ->
     decodeParameters(name,location.search)
@@ -64,7 +66,10 @@ getCurrentImage = () ->
 
 
 run_colorize = () ->
-    render(colorify(infragrammar_mono(image),(x) -> return colormap((x+1)/2)))
+    if webGlSupported
+      # this is not an extra stage, it seems, in the gl code
+    else
+      render(colorify(infragrammar_mono(image),(x) -> return colormap((x+1)/2)))
     return true
 
 
@@ -81,8 +86,9 @@ save_infragrammar_inputs = () ->
     })
 
 
-# this is unfortunately js/gl specific; currently only js?
 save_infragrammar_expressions = (args) ->
+    expressions = args # this is for the gl version
+    # the following for js:
     if mode == "infragrammar"
         save_expressions(args['r'],args['g'],args['b'])
     if mode == "infragrammar_mono"
@@ -94,10 +100,10 @@ save_infragrammar_expressions = (args) ->
 # this should accept an object with parameters r,g,b,h,s,v,m and mode
 run_infragrammar = (mode) ->
     save_log()
-    colorized = false
     if webGlSupported
-        glHandleOnSubmit()
+        glRunInfragrammar(mode.substr(13,4),colorized) # removing "infragrammar_" prefix
     else
+        colorized = false
         jsRunInfragrammar(mode)
 
 log_mono = () ->
@@ -238,7 +244,7 @@ $(document).ready(() ->
     FileUpload.initialize()
 
     $("#image-container").ready(() ->
-        enablewebgl = if getURLParameter("enablewebgl") == "true" then true else false
+        enablewebgl = if (getURLParameter("enablewebgl") == "true" || getURLParameter("webgl") == "true") then true else false
         webGlSupported = enablewebgl && glInitInfragram()
 
         if webGlSupported
@@ -398,7 +404,7 @@ $(document).ready(() ->
         if webGlSupported
             href = href.replace(/(?:\?|&)enablewebgl=true/gi, "")
         else
-            href += if href.indexOf("?") >= 0 then "&enablewebgl=true" else "?enablewebgl=true"
+            href += if href.indexOf("?") >= 0 then "&webgl=true" else "?webgl=true"
         window.location.href = href
         return true
     )

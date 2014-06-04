@@ -89,7 +89,7 @@ ndvi = (nir, vis) ->
         return new JsImage(d, nir.width, nir.height, 1);
 
 # Apply the given colormap to a single-channel image
-colorify = (img, colormap) -> 
+jsColorify = (img, colormap) -> 
         $('#btn-colorize').addClass('active')
         n = img.width * img.height;
         data = new Uint8ClampedArray(4*n);
@@ -192,13 +192,13 @@ update = (img) ->
             min = -1
             max = 1
             normalize = (x) -> (x - min) / (max - min)
-            result = colorify(ndvi_img, (x) -> colormap(normalize(x)))
+            result = jsColorify(ndvi_img, (x) -> colormap(normalize(x)))
             update_colorbar(min, max)
         else if mode == "raw"
             result = new JsImage(img.data, img.width, img.height, 4);
         else if mode == "nir"
             [r,g,b] = get_channels(img)
-            result = colorify(r, (x) -> [x, x, x])
+            result = jsColorify(r, (x) -> [x, x, x])
         else
             result = infragrammar(img)
         render(result)
@@ -285,19 +285,14 @@ jsUpdateImage = (img) ->
     image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height)
     set_mode(mode)
 
-jsHandleOnClickRaw = () ->
-    set_mode("raw")
-
-jsHandleOnClickNdvi = () ->
-    set_mode("ndvi")
+jsHandleOnClickRaw  = ()     ->    set_mode("raw")
+jsHandleOnClickNdvi = ()     ->    set_mode("ndvi")
+jsRunInfragrammar   = (mode) ->    set_mode(mode)
 
 jsGetCurrentImage = () ->
     e = $("#image")[0];
     ctx = e.getContext("2d");
     return ctx.canvas.toDataURL("image/jpeg")
-
-jsRunInfragrammar = (mode) ->
-    set_mode(mode)
 
 jsHandleOnSubmitInfraHsv = () ->
     save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val())
