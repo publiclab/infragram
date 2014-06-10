@@ -83,7 +83,7 @@ FileUpload =
     initialize: () ->
         options =
             rememberTransport: false
-            transports: ['WebSocket', 'AJAX long-polling']
+            transports: ['websocket', 'AJAX long-polling']
         FileUpload.socket = io.connect(window.location.protocol + "//" + window.location.host, options)
 
         FileUpload.socket.on("image_request", (data) ->

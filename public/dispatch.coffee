@@ -1,5 +1,5 @@
 # This file is part of infragram-js.
-# 
+#
 # infragram-js is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
@@ -19,8 +19,8 @@ colorized = false
 video_live = false
 log = [] # a record of previous commands run
 params = {} # the url hash
-expressions = {}
 mode = "raw"
+
 
 getURLParameter = (name) ->
     decodeParameters(name,location.search)
@@ -69,7 +69,7 @@ run_colorize = () ->
     if webGlSupported
       # this is not an extra stage, it seems, in the gl code
     else
-      render(colorify(infragrammar_mono(image),(x) -> return colormap((x+1)/2)))
+        render(jsColorify(infragrammar_mono(image),(x) -> return colormap((x+1)/2)))
     return true
 
 
@@ -87,30 +87,39 @@ save_infragrammar_inputs = () ->
 
 
 save_infragrammar_expressions = (args) ->
-    expressions = args # this is for the gl version
-    # the following for js:
     if mode == "infragrammar"
-        save_expressions(args['r'],args['g'],args['b'])
+        if webGlSupported
+            glSaveExpression(args['r'],args['g'],args['b'])
+        else
+            save_expressions(args['r'],args['g'],args['b'])
     if mode == "infragrammar_mono"
-        save_expressions(args['m'],args['m'],args['m'])
+        if webGlSupported
+            glSaveExpression(args['m'],args['m'],args['m'])
+        else
+            save_expressions(args['m'],args['m'],args['m'])
     if mode == "infragrammar_hsv"
-        save_expressions_hsv(args['h'],args['s'],args['v'])
+        if webGlSupported
+            glSaveExpression(args['h'],args['s'],args['v'])
+        else
+            save_expressions_hsv(args['h'],args['s'],args['v'])
 
 
 # this should accept an object with parameters r,g,b,h,s,v,m and mode
 run_infragrammar = (mode) ->
     save_log()
     if webGlSupported
-        glRunInfragrammar(mode.substr(13,4),colorized) # removing "infragrammar_" prefix
+        glRunInfragrammar(mode)
     else
         colorized = false
         jsRunInfragrammar(mode)
+
 
 log_mono = () ->
     logEntry = "mode=infragrammar_mono"
     logEntry += if $("#m_exp").val() then "&m=" + $("#m_exp").val() else ""
     logEntry += if colorized then "&c=true" else "" # no way to succinctly store the colormap... just offer range of colorizations at view-time?
     log.push(logEntry)
+
 
 log_hsv = () ->
     logEntry = "mode=infragrammar_hsv"
@@ -119,12 +128,14 @@ log_hsv = () ->
     logEntry += if $("#v_exp").val() then "&v=" + $("#v_exp").val() else ""
     log.push(logEntry)
 
+
 log_rgb = () ->
     logEntry = "mode=infragrammar"
     logEntry += if $("#r_exp").val() then "&r=" + $("#r_exp").val() else ""
     logEntry += if $("#g_exp").val() then "&g=" + $("#g_exp").val() else ""
     logEntry += if $("#b_exp").val() then "&b=" + $("#b_exp").val() else ""
     log.push(logEntry)
+
 
 save_log = () ->
     if mode == "infragrammar_mono"
@@ -133,51 +144,6 @@ save_log = () ->
       log_hsv()
     else if mode == "infragrammar"
       log_rgb()
-
-preset_raw = () ->
-    $('#modeSwitcher').val("infragrammar").change()
-    $('#r_exp').val("R")
-    $('#g_exp').val("G")
-    $('#b_exp').val("B")
-    $('#preset-modal').modal('hide')
-    save_infragrammar_inputs()
-    run_infragrammar(mode)
-
-
-preset_ndvi_red = () ->
-    $('#modeSwitcher').val("infragrammar_mono").change()
-    $('#m_exp').val("(B-R)/(B+R)")
-    $('#preset-modal').modal('hide')
-    save_infragrammar_inputs()
-    run_infragrammar(mode)
-
-
-preset_ndvi_blue = () ->
-    $('#modeSwitcher').val("infragrammar_mono").change()
-    $('#m_exp').val("(R-B)/(R+B)")
-    $('#preset-modal').modal('hide')
-    save_infragrammar_inputs()
-    run_infragrammar(mode)
-
-
-preset_ndvi_red_color = () ->
-    $('#modeSwitcher').val("infragrammar_mono").change()
-    $('#m_exp').val("(B-R)/(B+R)")
-    $('#preset-modal').modal('hide')
-    save_infragrammar_inputs()
-    colorized = true
-    run_infragrammar(mode)
-    run_colorize()
-
-
-preset_ndvi_blue_color = () ->
-    $('#modeSwitcher').val("infragrammar_mono").change()
-    $('#m_exp').val("(R-B)/(R+B)")
-    $('#preset-modal').modal('hide')
-    save_infragrammar_inputs()
-    colorized = true
-    run_infragrammar(mode)
-    run_colorize()
 
 
 downloadImage = () ->
@@ -244,7 +210,7 @@ $(document).ready(() ->
     FileUpload.initialize()
 
     $("#image-container").ready(() ->
-        enablewebgl = if (getURLParameter("enablewebgl") == "true" || getURLParameter("webgl") == "true") then true else false
+        enablewebgl = if (getURLParameter("webgl") == "true") then true else false
         webGlSupported = enablewebgl && glInitInfragram()
 
         if webGlSupported
@@ -266,7 +232,7 @@ $(document).ready(() ->
           params = parametersObject(location.search.split('?')[1])
           mode = params['mode']
           fetch_image(src)
-        
+
         return true
     )
 
@@ -276,6 +242,101 @@ $(document).ready(() ->
         FileUpload.fromFile(this.files, updateImage)
         $('#preset-modal').modal('show');
         return true
+    )
+
+    $("#preset_raw").click(() ->
+        $('#modeSwitcher').val("infragrammar").change()
+        $('#r_exp').val("R")
+        $('#g_exp').val("G")
+        $('#b_exp').val("B")
+        $('#preset-modal').modal('hide')
+        save_infragrammar_inputs()
+        if webGlSupported
+            glHandleOnClickRaw()
+        else
+            run_infragrammar(mode)
+    )
+
+    $("#preset_ndvi_blue").click(() ->
+        $('#modeSwitcher').val("infragrammar_mono").change()
+        $('#m_exp').val("(R-B)/(R+B)")
+        $('#preset-modal').modal('hide')
+        save_infragrammar_inputs()
+        if webGlSupported
+            glHandleOnSubmitInfraMono()
+        else
+            run_infragrammar(mode)
+    )
+
+    $("#preset_ndvi_blue_color").click(() ->
+        $('#modeSwitcher').val("infragrammar_mono").change()
+        $('#m_exp').val("(R-B)/(R+B)")
+        $('#preset-modal').modal('hide')
+        save_infragrammar_inputs()
+        if webGlSupported
+            glHandleOnClickColor()
+            glHandleOnClickNdvi()
+        else
+            colorized = true
+            run_infragrammar(mode)
+            run_colorize()
+    )
+
+    $("#preset_ndvi_red").click(() ->
+        $('#modeSwitcher').val("infragrammar_mono").change()
+        $('#m_exp').val("(B-R)/(B+R)")
+        $('#preset-modal').modal('hide')
+        save_infragrammar_inputs()
+        if webGlSupported
+            glHandleOnSubmitInfraMono()
+        else
+            run_infragrammar(mode)
+    )
+
+    $("#preset_ndvi_red_color").click(() ->
+        $('#modeSwitcher').val("infragrammar_mono").change()
+        $('#m_exp').val("(B-R)/(B+R)")
+        $('#preset-modal').modal('hide')
+        save_infragrammar_inputs()
+        if webGlSupported
+            glHandleOnClickColor()
+            glHandleOnClickNdvi()
+        else
+            colorized = true
+            run_infragrammar(mode)
+            run_colorize()
+    )
+
+    $("#btn-colorize").click(() ->
+        if webGlSupported
+            glHandleOnClickColor()
+            glHandleOnClickNdvi()
+        else
+            colorized=true
+            run_infragrammar(mode)
+            run_colorize()
+    )
+
+    $("#default_colormap").click(() ->
+        if webGlSupported
+            glHandleDefaultColormap()
+            glHandleOnClickNdvi()
+        else
+            colorized = true
+            colormap = colormap1
+            run_colorize()
+        $("#btn-colorize").addClass("active")
+    )
+
+    $("#stretched_colormap").click(() ->
+        if webGlSupported
+            glHandleStretchedColormap()
+            glHandleOnClickNdvi()
+        else
+            colorized = true
+            colormap = colormap2
+            run_colorize()
+        $("#btn-colorize").addClass("active")
     )
 
     $("button#raw").click(() ->
@@ -335,10 +396,10 @@ $(document).ready(() ->
     $("#infragrammar_hsv").submit(() ->
         mode = "infragrammar_hsv"
         log_hsv()
+        save_infragrammar_inputs()
         if webGlSupported
             glHandleOnSubmitInfraHsv()
         else
-            save_infragrammar_inputs()
             run_infragrammar(mode)
         return true
     )
@@ -346,10 +407,10 @@ $(document).ready(() ->
     $("#infragrammar").submit(() ->
         mode = "infragrammar"
         log_rgb()
+        save_infragrammar_inputs()
         if webGlSupported
             glHandleOnSubmitInfra()
         else
-            save_infragrammar_inputs()
             run_infragrammar(mode)
         return true
     )
@@ -357,10 +418,10 @@ $(document).ready(() ->
     $("#infragrammar_mono").submit(() ->
         mode = "infragrammar_mono"
         log_mono()
+        save_infragrammar_inputs()
         if webGlSupported
             glHandleOnSubmitInfraMono()
         else
-            save_infragrammar_inputs()
             run_infragrammar(mode)
         return true
     )
@@ -402,7 +463,7 @@ $(document).ready(() ->
     $("#webgl-activate").click(() ->
         href = window.location.href
         if webGlSupported
-            href = href.replace(/(?:\?|&)enablewebgl=true/gi, "")
+            href = href.replace(/(?:\?|&)webgl=true/gi, "")
         else
             href += if href.indexOf("?") >= 0 then "&webgl=true" else "?webgl=true"
         window.location.href = href

@@ -13,13 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with infragram-js.  If not, see <http://www.gnu.org/licenses/>.
 
-
-modeToEquationMap = {
-    "hsv":  ["h", "s", "v"],
-    "rgb":  ["r", "g", "b"],
-    "mono": ["m", "m", "m"]
-}
-
 vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0]
 vertices.itemSize = 2
 
@@ -51,10 +44,11 @@ createTexture = (ctx, textureUnit) ->
     return texture
 
 
-createContext = (mode, greyscale, colormap, slider, canvasName) ->
+createContext = (mode, selColormap, colormap, slider, canvasName) ->
     ctx = new Object()
     ctx.mode = mode
-    ctx.greyscale = greyscale
+    ctx.expression = ["", "", ""];
+    ctx.selColormap = selColormap
     ctx.colormap = colormap
     ctx.slider = slider
     ctx.updateShader = true
@@ -95,8 +89,8 @@ drawScene = (ctx, returnImage) ->
     gl.uniform1f(pSliderUniform, ctx.slider)
     pNdviUniform = gl.getUniformLocation(ctx.shaderProgram, "uNdvi")
     gl.uniform1i(pNdviUniform, (if ctx.mode == "ndvi" || ctx.colormap then 1 else 0))
-    pGreyscaleUniform = gl.getUniformLocation(ctx.shaderProgram, "uGreyscale")
-    gl.uniform1i(pGreyscaleUniform, (if ctx.greyscale then 1 else 0))
+    pSelColormapUniform = gl.getUniformLocation(ctx.shaderProgram, "uSelectColormap")
+    gl.uniform1i(pSelColormapUniform, ctx.selColormap)
     pHsvUniform = gl.getUniformLocation(ctx.shaderProgram, "uHsv")
     gl.uniform1i(pHsvUniform, (if ctx.mode == "hsv" then 1 else 0))
     pColormap = gl.getUniformLocation(ctx.shaderProgram, "uColormap")
@@ -108,12 +102,8 @@ drawScene = (ctx, returnImage) ->
         return ctx.canvas.toDataURL("image/jpeg")
 
 
-generateShader = (ctx,args) ->
-    [r, g, b] = modeToEquationMap[ctx.mode]
-
-    r = expressions[r]
-    g = expressions[g]
-    b = expressions[b]
+generateShader = (ctx) ->
+    [r, g, b] = ctx.expression
 
     # Map HSV to shader variable names
     r = r.toLowerCase().replace(/h/g, "r").replace(/s/g, "g").replace(/v/g, "b")
@@ -130,6 +120,11 @@ generateShader = (ctx,args) ->
     g = g.replace(/([0-9])([^\.])?/g, "$1.0$2")
     b = b.replace(/([0-9])([^\.])?/g, "$1.0$2")
 
+    if ctx.mode == "ndvi"
+        r = "((" + r + ") + 1.0) / 2.0" if r != ""
+        g = "((" + g + ") + 1.0) / 2.0" if g != ""
+        b = "((" + b + ") + 1.0) / 2.0" if b != ""
+
     r = "r" if r == ""
     g = "g" if g == ""
     b = "b" if b == ""
@@ -143,11 +138,8 @@ generateShader = (ctx,args) ->
     ctx.shaderProgram = createProgramFromScripts(ctx.gl, ["shader-vs", "shader-fs"])
 
 
-glSetMode = (ctx, newMode, colorized) ->
+glSetMode = (ctx, newMode) ->
     ctx.mode = newMode
-    # for some reason we can't seem to set colorizing here. These lines work but i just see red.
-    imgContext.greyscale = mapContext.greyscale = !(colorized == true)
-    imgContext.colormap = mapContext.colormap = (colorized == true)
     ctx.updateShader = true
     if ctx.mode == "ndvi"
         $("#colorbar-container")[0].style.display = "inline-block"
@@ -165,8 +157,8 @@ glShaderLoaded = () ->
 
 
 glInitInfragram = () ->
-    imgContext = createContext("raw", true, false, 1.0, "image")
-    mapContext = createContext("raw", true, true, 1.0, "colorbar")
+    imgContext = createContext("raw", 1, 0, 1.0, "image")
+    mapContext = createContext("raw", 1, 1, 1.0, "colorbar")
     waitForShadersToLoad = 2
     $("#shader-vs").load("/shader.vert", glShaderLoaded)
     $("#shader-fs-template").load("/shader.frag", glShaderLoaded)
@@ -176,9 +168,9 @@ glInitInfragram = () ->
 glRestoreContext = () ->
     imageData = imgContext.imageData
     imgContext = createContext(
-        imgContext.mode, imgContext.greyscale, imgContext.colormap, imgContext.slider, "image")
+        imgContext.mode, imgContext.selColormap, imgContext.colormap, imgContext.slider, "image")
     mapContext = createContext(
-        mapContext.mode, mapContext.greyscale, mapContext.colormap, mapContext.slider, "colorbar")
+        mapContext.mode, mapContext.selColormap, mapContext.colormap, mapContext.slider, "colorbar")
     if imgContext && mapContext
         glUpdateImage(imageData)
 
@@ -194,12 +186,15 @@ glGetCurrentImage = () ->
     return drawScene(imgContext, true)
 
 
-glRunInfragrammar         = (mode, colorized)  -> glSetMode(imgContext, mode, colorized)
+glHandleDefaultColormap   = ()                 -> imgContext.selColormap = mapContext.selColormap = 0
+glHandleStretchedColormap = ()                 -> imgContext.selColormap = mapContext.selColormap = 2
+glSaveExpression          = (a, b, c)          -> imgContext.expression = [a, b, c]
+glRunInfragrammar         = (mode)             -> glSetMode(imgContext, "ndvi")
 glHandleOnClickRaw        = ()                 -> glSetMode(imgContext, "raw")
 glHandleOnClickNdvi       = ()                 -> glSetMode(imgContext, "ndvi")
 glHandleOnSubmitInfraHsv  = ()                 -> glSetMode(imgContext, "hsv")
 glHandleOnSubmitInfra     = ()                 -> glSetMode(imgContext, "rgb")
 glHandleOnSubmitInfraMono = ()                 -> glSetMode(imgContext, "mono")
-glHandleOnClickGrey       = ()                 -> imgContext.greyscale = mapContext.greyscale = true
-glHandleOnClickColor      = ()                 -> imgContext.greyscale = mapContext.greyscale = false
+glHandleOnClickGrey       = ()                 -> imgContext.selColormap = mapContext.selColormap = 1
+glHandleOnClickColor      = ()                 -> imgContext.selColormap = mapContext.selColormap = 0
 glHandleOnSlide           = (event)            -> imgContext.slider = event.value / 100.0
