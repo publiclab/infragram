@@ -5,7 +5,7 @@ varying vec2 vTextureCoord;
 uniform sampler2D uSampler;
 uniform float uSlider;
 uniform int uNdvi;
-uniform int uGreyscale;
+uniform int uSelectColormap;
 uniform int uHsv;
 uniform int uColormap;
 
@@ -48,6 +48,43 @@ vec4 color_colormap(float n)
         1.0);
 }
 
+vec4 color_colormap2(float n)
+{
+    vec2 x = vec2(0.0, 0.1);
+    vec3 y0 = vec3(0.0, 0.0, 255.0) / 255.0;
+    vec3 y1 = vec3(0.0, 0.0, 255.0) / 255.0;
+
+    if ((n >= 0.1) && (n < 0.5))
+    {
+        x = vec2(0.1, 0.5);
+        y0 = vec3(0.0, 0.0, 255.0) / 255.0;
+        y1 = vec3(38.0, 195.0, 195.0) / 255.0;
+    }
+    else if ((n >= 0.5) && (n < 0.7))
+    {
+        x = vec2(0.5, 0.7);
+        y0 = vec3(0.0, 150.0, 0.0) / 255.0;
+        y1 = vec3(255.0, 255.0, 0.0) / 255.0;
+    }
+    else if ((n >= 0.7) && (n < 0.9))
+    {
+        x = vec2(0.7, 0.9);
+        y0 = vec3(255.0, 255.0, 0.0) / 255.0;
+        y1 = vec3(255.0, 50.0, 50.0) / 255.0;
+    }
+    else if (n >= 0.9)
+    {
+        x = vec2(0.9, 1.0);
+        y0 = vec3(255.0, 50.0, 50.0) / 255.0;
+        y1 = vec3(255.0, 50.0, 50.0) / 255.0;
+    }
+
+    return vec4(
+        (n - x[0]) / (x[1] - x[0]) * (y1[0] - y0[0]) + y0[0],
+        (n - x[0]) / (x[1] - x[0]) * (y1[1] - y0[1]) + y0[1],
+        (n - x[0]) / (x[1] - x[0]) * (y1[2] - y0[2]) + y0[2],
+        1.0);
+}
 vec4 rgb2hsv(vec4 c)
 {
     vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
@@ -91,6 +128,17 @@ void main(void)
     }
     else
     {
-        gl_FragColor = (uGreyscale == 0) ? color_colormap(rr) : greyscale_colormap(rr);
+        if (uSelectColormap == 0)
+        {
+            gl_FragColor = color_colormap(rr);
+        }
+        else if (uSelectColormap == 1)
+        {
+            gl_FragColor = greyscale_colormap(rr);
+        }
+        else
+        {
+            gl_FragColor = color_colormap2(rr);
+        }
     }
 }
