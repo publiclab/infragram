@@ -1428,6 +1428,7 @@ $(document).ready(function() {
         }
       }, 250);
     }
+    $('#preset-modal').modal('show');
     return true;
   });
   $("#snapshot").click(function() {

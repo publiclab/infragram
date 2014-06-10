@@ -493,6 +493,7 @@ $(document).ready(() ->
                if colorized
                    run_colorize() 
             , 250)
+        $('#preset-modal').modal('show');
         return true
     )
 
