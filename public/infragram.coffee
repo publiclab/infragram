@@ -204,26 +204,26 @@ update = (img) ->
         render(result)
 
 save_expressions = (r,g,b) ->
-        r = r.toUpperCase().replace(/X/g,$('#slider').val()/100)
-        g = g.toUpperCase().replace(/X/g,$('#slider').val()/100)
-        b = b.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        r = r.replace(/X/g,$('#slider').val()/100)
+        g = g.replace(/X/g,$('#slider').val()/100)
+        b = b.replace(/X/g,$('#slider').val()/100)
         r = "R" if r == ""
         g = "G" if g == ""
         b = "B" if b == ""
-        eval("r_exp = function(R,G,B){return "+r+";}")
-        eval("g_exp = function(R,G,B){return "+g+";}")
-        eval("b_exp = function(R,G,B){return "+b+";}")
+        eval("r_exp = function(R,G,B){var r=R,g=G,b=B;return "+r+";}")
+        eval("g_exp = function(R,G,B){var r=R,g=G,b=B;return "+g+";}")
+        eval("b_exp = function(R,G,B){var r=R,g=G,b=B;return "+b+";}")
 
 save_expressions_hsv = (h,s,v) ->
-        h = h.toUpperCase().replace(/X/g,$('#slider').val()/100)
-        s = s.toUpperCase().replace(/X/g,$('#slider').val()/100)
-        v = v.toUpperCase().replace(/X/g,$('#slider').val()/100)
+        h = h.replace(/X/g,$('#slider').val()/100)
+        s = s.replace(/X/g,$('#slider').val()/100)
+        v = v.replace(/X/g,$('#slider').val()/100)
         h = "H" if h == ""
         s = "S" if s == ""
         v = "V" if v == ""
-        eval("r_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[0];}")
-        eval("g_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[1];}")
-        eval("b_exp = function(R,G,B){var hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[2];}")
+        eval("r_exp = function(R,G,B){var h=H,s=S,v=V,hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[0];}")
+        eval("g_exp = function(R,G,B){var h=H,s=S,v=V,hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[1];}")
+        eval("b_exp = function(R,G,B){var h=H,s=S,v=V,hsv = rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return hsv2rgb("+h+","+s+","+v+")[2];}")
 
 # modified from:
 # http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c

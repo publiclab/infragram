@@ -19,3 +19,9 @@ To run the whole node server:
 * run `node app.js` or `nodejs app.js` from the root directory.
 * navigate to http://localhost:8001/sandbox/
 
+You'll need coffeescript (`sudo apt-get install coffeescript`) to compile the javascript source. After editing the various .coffee files in the public directory, run make to compile them:
+
+* `cd public`
+* `make`
+
+
