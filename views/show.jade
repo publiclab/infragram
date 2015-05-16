@@ -3,9 +3,9 @@ block content
 
   - var log = []
   - if (image.log) log = JSON.parse(image.log)
-
+  
   script(type='text/javascript').
-    mode = "#{log[log.length-1].split('&')[0].split('=')[1]}"
+    mode = "#{log.length > 0 ? log[log.length-1].split('&')[0].split('=')[1] : ''}"
     params = parametersObject("#{log[log.length-1]}")
     src = "/upload/#{image.filename}"
     fetch_image(src,mode)
