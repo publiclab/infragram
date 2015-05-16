@@ -46,7 +46,6 @@ getFilename = function (data, noDate) {
     var name = (noDate) ? '' : date + '_';
     name += getValue(data, 'name', FILE_NAME_LIMIT).toLowerCase();
     name = name.replace(/[^a-z0-9]/g, '_');
-    name = name.replace(/(?:[0-9]+_){2}/g, date + '_');
     var n = name.lastIndexOf('_');
     if (n > -1) {
         name = name.substring(0, n) + '.' + name.substring(n + 1);
