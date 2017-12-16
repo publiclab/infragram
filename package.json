@@ -23,10 +23,10 @@
   },
   "dependencies": {
     "getusermedia": "~1.0.0",
-    "socketio": "~1.0.0",
     "webgl-utils": "~1.0.0",
     "font-awesome": "~4.5.0",
     "bootstrap": "~3.2.0",
+    "bootstrap-slider-basic": "~3.3.0",
     "jquery": "~2"
   },
   "devDependencies": {

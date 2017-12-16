@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" manifest="../index.manifest">
+<html lang="en">
   <head>
     
     <title>Infragram | by Public Lab - Home</title>
@@ -8,20 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
-    <link href="node_modules/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="node_modules/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="node_modules/bootstrap/css/slider.css" rel="stylesheet">
-    <link href="node_modules/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="node_modules/bootstrap-slider-basic/sass/bootstrap-slider.scss" rel="stylesheet">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="dist/assets/css/application.css" rel="stylesheet">
     <link href="dist/infragram.css" rel="stylesheet">
 
-    <script src="node_modules/jquery.min.js"></script>
-    <script src="node_modules/bootstrap/js/bootstrap.min.js"></script>
-    <script src="node_modules/getUserMedia.js/lib/getUserMedia.js"></script>
-    <script src="node_modules/bootstrap/js/bootstrap-slider.js"></script>
-    <script src="node_modules/socket.io/socket.io.js"></script>
-    <script src="node_modules/webgl-utils.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/getusermedia/getusermedia.bundle.js"></script>
+    <script src="node_modules/bootstrap-slider-basic/js/bootstrap-slider.js"></script>
+    <script src="node_modules/webgl-utils/index.js"></script>
 
     <script src="dist/infragram.js"></script>
 
@@ -127,7 +124,7 @@
 
       <button style="margin-left:4px;" id="webgl-activate" type="button" class="btn btn-secondary pull-right">WebGL beta</button>
       <a href="../sandbox/legacy/" id="legacy" type="button" class="btn btn-secondary pull-right">Legacy version</a>
-      <h1><img src="../images/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"../> <a style="color:#444;padding-top:8px;" href="../">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
+      <h1><img src="/assets/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"../> <a style="color:#444;padding-top:8px;" href="../">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
 
       <p>Analyze plant health with near-infrared imagery! <a href="http://publiclab.org/wiki/infragram">Learn more &amp; mod a camera</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a>.</p>
 
@@ -140,15 +137,15 @@
           <div class="zone">
             <p>QUICK START</p>
             <div class="btn-group">
-              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-large"><i class="icon icon-question-sign"></i></a>
-              <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-large btn-primary"><i class="icon icon-magic"></i> Presets</button>
+              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-large"><i class="fa fa-question-sign"></i></a>
+              <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-large btn-primary"><i class="fa fa-magic"></i> Presets</button>
             </div>
           </div>
 
           <div class="zone">
             <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
             <div class="btn-group" data-toggle="buttons-radio" id="imageselect">
-              <button id="btn-upload" type="button" class="btn btn-large btn-primary"><i class="icon icon-upload"></i></button>
+              <button id="btn-upload" type="button" class="btn btn-large btn-primary"><i class="fa fa-upload"></i></button>
               <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
               <style>
                 #file-sel {
@@ -158,7 +155,7 @@
                   opacity:0;
                 }
               </style>
-              <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-large btn-primary"><i class="icon icon-facetime-video"></i></button>
+              <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-large btn-primary"><i class="fa fa-facetime-video"></i></button>
             </div>
           </div>
 
@@ -194,7 +191,7 @@
           <div class="zone" id="colorize">
             <p>3. COLOR</p>
             <div class="btn-group">
-              <button id="btn-colorize" type="submit" class="btn btn-large"><i class="icon icon-adjust"></i></button> 
+              <button id="btn-colorize" type="submit" class="btn btn-large"><i class="fa fa-adjust"></i></button> 
               <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
               </a>
@@ -222,9 +219,9 @@
 
         <div id="image-container">
           <div style="display:none;"><div id="webcam"></div></div>
-          <a class="btn-inverse btn-small" style="position:absolute;z-index:3;margin:6px;" id="fullscreen"><i class="icon-white icon-fullscreen"></i> Full screen</a>
+          <a class="btn-inverse btn-small" style="position:absolute;z-index:3;margin:6px;" id="fullscreen"><i class="fa fa-fullscreen"></i> Full screen</a>
           <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
-          <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="icon-white icon-remove"></i> Exit full screen</a>
+          <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="fa fa-remove"></i> Exit full screen</a>
 
           <canvas id="image" width="800" height="600"></canvas>
 
