@@ -1,18 +1,41 @@
 {
   "name": "infragram",
   "version": "0.0.1",
-  "private": true,
+  "description": "A minimal core of the Infragram project in JavaScript.",
+  "main": "dist/infragram.js",
   "scripts": {
-  "start": "node app.js"
+    "build": "grunt build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/publiclab/infragram.git"
+  },
+  "keywords": [
+    "infrared",
+    "imaging",
+    "multispectral",
+    "Public Lab"
+  ],
+  "author": "Public Lab",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/publiclab/infragram/issues"
   },
   "dependencies": {
-    "express": "3.4.7",
-    "jade": "*",
-    "stylus": "*",
-    "atob": "*",
-    "mongodb": ">= 0.9.6-7",
-    "mongoose": "3.8.1",
-    "socket.io": "*",
-    "async": "*"
-  }
+    "getusermedia.js": "~1.0.0",
+    "socket.io": "~1.0.0",
+    "webgl-utils": "~1.0.0",
+    "font-awesome": "~4.5.0",
+    "bootstrap": "~3.2.0",
+    "jquery": "~2"
+  },
+  "devDependencies": {
+    "browserify": "13.0.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "matchdep": "^0.3.0"
+  },
+  "homepage": "https://github.com/publiclab/infragram"
 }
