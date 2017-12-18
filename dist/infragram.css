@@ -24,3 +24,41 @@ div#colorbar-container canvas#colorbar {
  height: 2em;
  vertical-align: middle;
 }
+
+#toolbar {
+  clear:both;
+  background:#eee;
+  margin-bottom:10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+
+}
+#toolbar .zone {
+  margin:6px 0 6px 6px;
+  padding:0 12px 0 6px;
+  border-right:1px solid #ddd;
+  float:left;
+}
+#toolbar .zone.last {
+  border:none;
+}
+#toolbar .zone p {
+  color:#bbb;
+  font-weight:bold;
+  font-size:10px;
+  margin-bottom:0;
+}
+
+#image {
+  background:#ddd;
+  width:800px;
+  height:600px;
+}
+
+@media (max-width: 700px){
+  #image {
+    width:100%;
+    height:auto;
+  }
+}

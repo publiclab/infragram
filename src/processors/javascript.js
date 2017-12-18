@@ -2,21 +2,38 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
-  var JsImage, b_exp, colormap, colormap1, colormap2, g_exp, get_channels, greyscale_colormap, histogram, hsv2rgb, image, infragrammar, infragrammar_mono, jsColorify, jsGetCurrentImage, jsHandleOnClickGrey, jsHandleOnClickNdvi, jsHandleOnClickRaw, jsHandleOnSlide, jsHandleOnSubmitInfra, jsHandleOnSubmitInfraHsv, jsHandleOnSubmitInfraMono, jsRunInfragrammar, jsUpdateImage, m_exp, mode, ndvi, r_exp, render, rgb2hsv, save_expressions, save_expressions_hsv, segmented_colormap, set_mode, update, update_colorbar;
+module.exports = function javascriptProcessor() {
 
-(function() {
-
-  image = null;
-
-  mode = "raw";
-
-  r_exp = "";
-
-  g_exp = "";
-
-  b_exp = "";
-
-  m_exp = ""; //monochrome
+  var JsImage,
+      b_exp = "",
+      colormap,
+      colormap1,
+      colormap2,
+      g_exp = "",
+      get_channels,
+      greyscale_colormap,
+      histogram,
+      hsv2rgb,
+      image = null,
+      infragrammar,
+      infragrammar_mono,
+      jsHandleOnClickGrey,
+      jsHandleOnClickNdvi,
+      jsHandleOnClickRaw,
+      jsHandleOnSlide,
+      jsHandleOnSubmitInfra,
+      jsHandleOnSubmitInfraHsv,
+      jsHandleOnSubmitInfraMono,
+      m_exp = "",
+      mode = "raw",
+      ndvi,
+      r_exp = "",
+      render,
+      rgb2hsv,
+      segmented_colormap,
+      set_mode,
+      update,
+      update_colorbar;
 
   JsImage = class JsImage {
     constructor(data1, width1, height1, channels) {
@@ -142,7 +159,7 @@
     return new JsImage(d, nir.width, nir.height, 1);
   };
 
-  jsColorify = function(img, colormap) {
+  function colorify(img, colormap) {
     var b, cimg, data, g, i, j, l, n, r, ref;
     $('#btn-colorize').addClass('active');
     n = img.width * img.height;
@@ -162,7 +179,7 @@
     return new JsImage(data, img.width, img.height, 4);
   };
 
-  infragrammar = function(img) {
+  function infragrammar(img) {
     var b, g, i, l, n, o, r, ref;
     $('#btn-colorize').removeClass('active');
     n = img.width * img.height;
@@ -182,7 +199,7 @@
     return new JsImage(o, img.width, img.height, 4);
   };
 
-  infragrammar_mono = function(img) {
+  function infragrammar_mono(img) {
     var b, g, i, l, n, o, r, ref;
     n = img.width * img.height;
     r = new Float32Array(n);
@@ -198,7 +215,7 @@
     return new JsImage(o, img.width, img.height, 1);
   };
 
-  render = function(img) {
+  function render(img) {
     var ctx, d, e;
     e = $("#image")[0];
     e.width = img.width;
@@ -251,7 +268,7 @@
       normalize = function(x) {
         return (x - min) / (max - min);
       };
-      result = jsColorify(ndvi_img, function(x) {
+      result = colorify(ndvi_img, function(x) {
         return colormap(normalize(x));
       });
       update_colorbar(min, max);
@@ -259,7 +276,7 @@
       result = new JsImage(img.data, img.width, img.height, 4);
     } else if (mode === "nir") {
       [r, g, b] = get_channels(img);
-      result = jsColorify(r, function(x) {
+      result = colorify(r, function(x) {
         return [x, x, x];
       });
     } else {
@@ -366,7 +383,7 @@
     return [h, s, v];
   };
 
-  set_mode = function(new_mode) {
+  function set_mode(new_mode) {
     mode = new_mode;
     update(image);
     if (mode === "ndvi") {
@@ -378,7 +395,7 @@
     }
   };
 
-  jsUpdateImage = function(img) {
+  function updateImage(img) {
     var ctx, height, imgCanvas, width;
     imgCanvas = document.getElementById("image");
     ctx = imgCanvas.getContext("2d");
@@ -397,11 +414,11 @@
     return set_mode("ndvi");
   };
 
-  jsRunInfragrammar = function(mode) {
+  function runInfragrammar(mode) {
     return set_mode(mode);
   };
 
-  jsGetCurrentImage = function() {
+  function getCurrentImage() {
     var ctx, e;
     e = $("#image")[0];
     ctx = e.getContext("2d");
@@ -439,4 +456,13 @@
     return update(image);
   };
 
-}).call(this);
+  return {
+    colorify: colorify,
+    getCurrentImage: getCurrentImage,
+    runInfragrammar: runInfragrammar,
+    save_expressions: save_expressions,
+    save_expressions_hsv: save_expressions_hsv,
+    updateImage: updateImage
+  }
+
+}

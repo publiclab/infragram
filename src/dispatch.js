@@ -2,141 +2,38 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
-var colorized, downloadImage, fetch_image, getCurrentImage, log, log_hsv, log_mono, log_rgb, mode, run_colorize, run_infragrammar, save_infragrammar_expressions, save_infragrammar_inputs, save_log, updateImage, video_live, webGlSupported;
+module.exports = function Dispatch(options, processor) {
 
-(function() {
+  options.colorized      = options.colorized      || false;
+  options.mode           = options.mode           || "raw",
+  options.video_live     = options.video_live     || false,
+  options.webGlSupported = options.webGlSupported || false; // move into processor
 
-  webGlSupported = false;
+  var log = []; // a record of previous commands run
 
-  colorized = false;
+  // this should accept an object with parameters r,g,b,h,s,v,m and mode
+  options.run_infragrammar = function run_infragrammar(mode) {
+    save_log();
+    options.colorized = false;
+    return processor.runInfragrammar(mode);
+  }
 
-  video_live = false;
-
-  log = []; // a record of previous commands run
-
-  mode = "raw";
-
-  updateImage = function(img) {
-    if (webGlSupported) {
-      return glUpdateImage(img);
-    } else {
-      return jsUpdateImage(img);
-    }
-  };
-
-  getCurrentImage = function() {
-    var img;
-    img = null;
-    if (webGlSupported) {
-      img = glGetCurrentImage();
-    } else {
-      img = jsGetCurrentImage();
-    }
-    return img;
-  };
-
-  run_colorize = function() {
-    if (webGlSupported) {
-
-    } else {
-      // this is not an extra stage, it seems, in the gl code
-      render(jsColorify(infragrammar_mono(image), function(x) {
+  // this maps -1-1 to 0-1, i guess
+  options.run_colorize = function run_colorize() {
+    if (processor.colorify) {
+      render(processor.colorify(infragrammar_mono(image), function(x) {
         return colormap((x + 1) / 2);
       }));
     }
     return true;
-  };
+  }
 
-  save_infragrammar_inputs = function() {
-    mode = $('#modeSwitcher').val();
-    return save_infragrammar_expressions({
-      'r': $('#r_exp').val(),
-      'g': $('#g_exp').val(),
-      'b': $('#b_exp').val(),
-      'm': $('#m_exp').val(),
-      'h': $('#h_exp').val(),
-      's': $('#s_exp').val(),
-      'v': $('#v_exp').val()
-    });
-  };
-
-  save_infragrammar_expressions = function(args) {
-    if (mode === "infragrammar") {
-      if (webGlSupported) {
-        glSaveExpression(args['r'], args['g'], args['b']);
-      } else {
-        save_expressions(args['r'], args['g'], args['b']);
-      }
-    }
-    if (mode === "infragrammar_mono") {
-      if (webGlSupported) {
-        glSaveExpression(args['m'], args['m'], args['m']);
-      } else {
-        save_expressions(args['m'], args['m'], args['m']);
-      }
-    }
-    if (mode === "infragrammar_hsv") {
-      if (webGlSupported) {
-        return glSaveExpression(args['h'], args['s'], args['v']);
-      } else {
-        return save_expressions_hsv(args['h'], args['s'], args['v']);
-      }
-    }
-  };
-
-  // this should accept an object with parameters r,g,b,h,s,v,m and mode
-  run_infragrammar = function(mode) {
-    save_log();
-    if (webGlSupported) {
-      return glRunInfragrammar(mode);
-    } else {
-      colorized = false;
-      return jsRunInfragrammar(mode);
-    }
-  };
-
-  log_mono = function() {
-    var logEntry;
-    logEntry = "mode=infragrammar_mono";
-    logEntry += $("#m_exp").val() ? "&m=" + $("#m_exp").val() : "";
-    logEntry += colorized ? "&c=true" : ""; // no way to succinctly store the colormap... just offer range of colorizations at view-time?
-    return log.push(logEntry);
-  };
-
-  log_hsv = function() {
-    var logEntry;
-    logEntry = "mode=infragrammar_hsv";
-    logEntry += $("#h_exp").val() ? "&h=" + $("#h_exp").val() : "";
-    logEntry += $("#s_exp").val() ? "&s=" + $("#s_exp").val() : "";
-    logEntry += $("#v_exp").val() ? "&v=" + $("#v_exp").val() : "";
-    return log.push(logEntry);
-  };
-
-  log_rgb = function() {
-    var logEntry;
-    logEntry = "mode=infragrammar";
-    logEntry += $("#r_exp").val() ? "&r=" + $("#r_exp").val() : "";
-    logEntry += $("#g_exp").val() ? "&g=" + $("#g_exp").val() : "";
-    logEntry += $("#b_exp").val() ? "&b=" + $("#b_exp").val() : "";
-    return log.push(logEntry);
-  };
-
-  save_log = function() {
-    if (mode === "infragrammar_mono") {
-      return log_mono();
-    } else if (mode === "infragrammar_hsv") {
-      return log_hsv();
-    } else if (mode === "infragrammar") {
-      return log_rgb();
-    }
-  };
-
-  downloadImage = function() {
+  function downloadImage() {
     var event, format, lnk;
     // create an "off-screen" anchor tag
     lnk = document.createElement("a");
     // the key here is to set the download attribute of the a tag
-    lnk.href = getCurrentImage();
+    lnk.href = options.processor.getCurrentImage();
     if (lnk.href.match('image/jpeg')) {
       format = "jpg";
     } else {
@@ -152,60 +49,140 @@ var colorized, downloadImage, fetch_image, getCurrentImage, log, log_hsv, log_mo
       lnk.fireEvent("onclick");
     }
     return true;
-  };
+  }
 
   // from a local URL (remote may be against js security rules)
-  fetch_image = function(src, mode) {
+  function fetch_image(src, mode) {
     var img;
     $("#save-modal-btn").show();
     $("#save-zone").show();
     img = new Image();
-    img.onload = function() {
-      var filename;
-      filename = src.split('/');
-      filename = filename[filename.length - 1];
-      FileUpload.setFilename(filename);
-      if (mode) {
-        if (mode.substring(0, 5) === "infra") {
-          $("#modeSwitcher").val(mode).change();
-        } else {
-          $("button#" + mode).button("toggle");
-          $("button#" + mode).click(); // this should be via a direct call, not a click; the show.jade page should not require buttons!
+    if (options.uploader) {
+      img.onload = function() {
+        var filename;
+        filename = src.split('/');
+        filename = filename[filename.length - 1];
+        FileUpload.setFilename(filename);
+        if (mode) {
+          if (mode.substring(0, 5) === "infra") {
+            $("#modeSwitcher").val(mode).change();
+          } else {
+            $("button#" + mode).button("toggle");
+            $("button#" + mode).click(); // this should be via a direct call, not a click; the show.jade page should not require buttons!
+          }
+        }
+        options.save_infragrammar_expressions(params);
+        if (mode === "ndvi") {
+          options.save_infragrammar_expressions({
+            'm': '(R-B)/(R+B)'
+          });
+          mode = "infragrammar_mono";
+        } else if (mode === "nir") {
+          options.save_infragrammar_expressions({
+            'm': 'R'
+          });
+          mode = "infragrammar_mono";
+        } else if (mode === "raw") {
+          options.save_infragrammar_expressions({
+            'r': 'R',
+            'g': 'G',
+            'b': 'B'
+          });
+          mode = "infragrammar";
+        }
+        options.processor.updateImage(this);
+        if (params['color'] === "true" || params['c'] === "true") {
+          options.colorized = true; // before run_infrag, so it gets logged
+        }
+        run_infragrammar(mode); // this sets colorized to false!
+        if (params['color'] === "true" || params['c'] === "true") {
+          options.colorized = true; // again, so it gets run 
+        }
+        if (options.colorized) {
+          $("button#color").button("toggle");
+          return run_colorize();
         }
       }
-      save_infragrammar_expressions(params);
-      if (mode === "ndvi") {
-        save_infragrammar_expressions({
-          'm': '(R-B)/(R+B)'
-        });
-        mode = "infragrammar_mono";
-      } else if (mode === "nir") {
-        save_infragrammar_expressions({
-          'm': 'R'
-        });
-        mode = "infragrammar_mono";
-      } else if (mode === "raw") {
-        save_infragrammar_expressions({
-          'r': 'R',
-          'g': 'G',
-          'b': 'B'
-        });
-        mode = "infragrammar";
-      }
-      updateImage(this);
-      if (params['color'] === "true" || params['c'] === "true") {
-        colorized = true; // before run_infrag, so it gets logged
-      }
-      run_infragrammar(mode); // this sets colorized to false!
-      if (params['color'] === "true" || params['c'] === "true") {
-        colorized = true; // again, so it gets run 
-      }
-      if (colorized) {
-        $("button#color").button("toggle");
-        return run_colorize();
-      }
-    };
+    }
     return img.src = src;
-  };
+  }
 
-}).call(this);
+  // saving inputs/expressions:
+
+  // can we move this into interface?
+  options.save_infragrammar_inputs = function save_infragrammar_inputs() {
+    mode = $('#modeSwitcher').val();
+    return options.save_infragrammar_expressions({
+      'r': $('#r_exp').val(),
+      'g': $('#g_exp').val(),
+      'b': $('#b_exp').val(),
+      'm': $('#m_exp').val(),
+      'h': $('#h_exp').val(),
+      's': $('#s_exp').val(),
+      'v': $('#v_exp').val()
+    });
+  }
+
+  options.save_infragrammar_expressions = function save_infragrammar_expressions(args) {
+    if (mode === "infragrammar") {
+      processor.save_expressions(args['r'], args['g'], args['b']);
+    } else if (mode === "infragrammar_mono") {
+      processor.save_expressions(args['m'], args['m'], args['m']);
+    } else if (mode === "infragrammar_hsv") {
+      return processor.save_expressions_hsv(args['h'], args['s'], args['v']);
+    }
+  }
+
+  // Move this all to a log.js file:
+
+  function log_mono() {
+    var logEntry;
+    logEntry = "mode=infragrammar_mono";
+    logEntry += $("#m_exp").val() ? "&m=" + $("#m_exp").val() : "";
+    logEntry += options.colorized ? "&c=true" : ""; // no way to succinctly store the colormap... just offer range of colorizations at view-time?
+    return log.push(logEntry);
+  }
+
+  function log_hsv() {
+    var logEntry;
+    logEntry = "mode=infragrammar_hsv";
+    logEntry += $("#h_exp").val() ? "&h=" + $("#h_exp").val() : "";
+    logEntry += $("#s_exp").val() ? "&s=" + $("#s_exp").val() : "";
+    logEntry += $("#v_exp").val() ? "&v=" + $("#v_exp").val() : "";
+    return log.push(logEntry);
+  }
+
+  function log_rgb() {
+    var logEntry;
+    logEntry = "mode=infragrammar";
+    logEntry += $("#r_exp").val() ? "&r=" + $("#r_exp").val() : "";
+    logEntry += $("#g_exp").val() ? "&g=" + $("#g_exp").val() : "";
+    logEntry += $("#b_exp").val() ? "&b=" + $("#b_exp").val() : "";
+    return log.push(logEntry);
+  }
+
+  function save_log() {
+    if (mode === "infragrammar_mono") {
+      return log_mono();
+    } else if (mode === "infragrammar_hsv") {
+      return log_hsv();
+    } else if (mode === "infragrammar") {
+      return log_rgb();
+    }
+  }
+
+  return {
+    downloadImage: downloadImage,
+    fetch_image: fetch_image,
+    log: log,
+    log_hsv: log_hsv,
+    log_mono: log_mono,
+    log_rgb: log_rgb,
+    run_colorize: options.run_colorize,
+    run_infragrammar: options.run_infragrammar,
+    save_infragrammar_expressions: options.save_infragrammar_expressions,
+    save_infragrammar_inputs: options.save_infragrammar_inputs,
+    save_log: save_log
+  }
+
+}

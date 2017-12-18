@@ -19,62 +19,14 @@
     <script src="node_modules/getusermedia/getusermedia.bundle.js"></script>
     <script src="node_modules/bootstrap-slider-basic/js/bootstrap-slider.js"></script>
     <script src="node_modules/webgl-utils/index.js"></script>
+
     <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 
-    <script src="src/infragram.js"></script>
-    <script src="src/urlParams.js"></script>
-    <script src="src/infragram-gl.js"></script>
-    <script src="src/camera.js"></script>
-    <script src="src/file-upload.js"></script>
-    <script src="src/interface.js"></script>
-    <script src="src/dispatch.js"></script>
-    <!--
     <script src="dist/infragram.js"></script>
-    -->
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
     <script type="x-shader/x-fragment" id="shader-fs"></script>
-
-<style>
-#toolbar {
-  clear:both;
-  background:#eee;
-  margin-bottom:10px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-
-}
-#toolbar .zone {
-  margin:6px 0 6px 6px;
-  padding:0 12px 0 6px;
-  border-right:1px solid #ddd;
-  float:left;
-}
-#toolbar .zone.last {
-  border:none;
-}
-#toolbar .zone p {
-  color:#bbb;
-  font-weight:bold;
-  font-size:10px;
-  margin-bottom:0;
-}
-
-#image {
-  background:#ddd;
-  width:800px;
-  height:600px;
-}
-
-@media (max-width: 700px){
-  #image {
-    width:100%;
-    height:auto;
-  }
-}
-</style>
 
   </head>
 
@@ -154,7 +106,7 @@
           <div class="zone">
             <p>QUICK START</p>
             <div class="btn-group">
-              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-lg btn-default"><i class="fa fa-question"></i></a>
+              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-lg btn-default"><i class="fa fa-question-circle"></i></a>
               <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-lg btn-primary"><i class="fa fa-magic"></i> Presets</button>
             </div>
           </div>
@@ -245,54 +197,32 @@
           <div id="colormaps-group" style="display:none;">
             <!-- legacy -->
           </div>
-          <div id="colorbar-container" style="display:none;">
+
+	  <div id="colorbar-container" style="display:none;">
             <span id="colorbar-min">-1.00</span>
             <canvas id="colorbar"></canvas>
             <span id="colorbar-max">1.00</span>
           </div>
-        </div>
+
+	</div>
 
       </div>
 
       <footer class="footer">
           <hr>
-          <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/wiki/infragram">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/Pioneer-Valley-Open-Source/infragram-js/">open source software</a>; <a href="https://github.com/Pioneer-Valley-Open-Science/infragram-js/issues">please report bugs</a></small></h4>
+          <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/infragram">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a> | This web app is <a href="https://github.com/publiclab/infragram/">open source software</a>; <a href="https://github.com/publiclab/infragram-js/issues">please report bugs</a></small></h4>
           <p>Infragram was created by <a href="https://github.com/bgamari">Ben Gamari</a>, <a href="http://github.com/donblair">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn">Piotr Foltyn</a> and others from <a href="http://publiclab.org/contributors/infragram">Public Lab</a>.</p>
       </footer>
  
     </div>
 
     <script>
+      var infragram;
       (function() {
-        $("[rel=tooltip]").tooltip()
-        $("[rel=popover]").popover()
+        infragram = Infragram({
+          uploader: false
+        });
       })()
-
-      window.addEventListener('load', function(e) {
-        if (window.applicationCache) {
-          window.applicationCache.addEventListener('updateready', function(e) {
-              if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-                // Browser downloaded a new app cache.
-                // Swap it in and reload the page to get the new hotness.
-                window.applicationCache.swapCache();
-                if (confirm('A new version of this site is available. Load it?')) {
-                  window.location.reload();
-                }
-              } else {
-                // Manifest didn't changed. Nothing new to server.
-              }
-          }, false);
-        }
-      }, false);
-
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-      ga('create', 'UA-43030180-1', 'infragram.org');
-      ga('send', 'pageview');
-
     </script>
 
   </body>
