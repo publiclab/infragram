@@ -2,25 +2,25 @@ body { padding-top: 20px; }
 span.group { display: inline-block; }
 
 footer.footer {
-    clear: both;
-    padding-top: 10px;
+ clear: both;
+ padding-top: 10px;
 }
 
 div#image-container {
-    text-align: center;
+ text-align: center;
 }
 
 div#image-container canvas#image {
-    margin: 0px auto;
+ margin: 0px auto;
 }
 
 div#colorbar-container {
-    display: inline-block;
-    width: 70%;
+ display: inline-block;
+ width: 70%;
 }
 
 div#colorbar-container canvas#colorbar {
-    width: 80%;
-    height: 2em;
-    vertical-align: middle;
+ width: 80%;
+ height: 2em;
+ vertical-align: middle;
 }
