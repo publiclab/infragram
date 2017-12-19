@@ -1,14 +1,14 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 module.exports = function Camera(options) {
-
-  var canvas = options.canvas || document.getElementById("image");
-  var ctx = canvas.getContext("2d");
+  var canvas, ctx;
 
   // Initialize getUserMedia with options
   function initialize() {
     getUserMedia(webRtcOptions, success, deviceError);
-
+    window.webcam = webRtcOptions; // this is weird but maybe used for flash fallback?
+    canvas = options.canvas || document.getElementById("image");
+    ctx = canvas.getContext("2d");
     // Trigger a snapshot w/ button
     // -- move this to interface.js?
     $("#webcam-activate").hide();
@@ -41,7 +41,7 @@ module.exports = function Camera(options) {
     // a debugger callback is available if needed
     debug: function() {},
     // callback for capturing the fallback stream
-    onCapture: function() {
+    onCapture: function onWebRtcCapture() {
       return window.webcam.save();
     },
     // callback for saving the stream, useful for
@@ -51,30 +51,30 @@ module.exports = function Camera(options) {
   }
 
   function onSaveGetUserMedia(data) {
-    var col, h, i, img, j, ref, tmp, w;
+    var col, h, i, img, j, ref, tmp, w, pos = 0;
     col = data.split("");
     img = camera.image;
     tmp = null;
-    w = this.width;
-    h = this.height;
+    w = webRtcOptions.width;
+    h = webRtcOptions.height;
     for (i = j = 0, ref = w - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
       tmp = parseInt(col[i], 10);
-      img.data[camera.pos + 0] = (tmp >> 16) & 0xff;
-      img.data[camera.pos + 1] = (tmp >> 8) & 0xff;
-      img.data[camera.pos + 2] = tmp & 0xff;
-      img.data[camera.pos + 3] = 0xff;
-      camera.pos += 4;
+      img.data[pos + 0] = (tmp >> 16) & 0xff;
+      img.data[pos + 1] = (tmp >> 8) & 0xff;
+      img.data[pos + 2] = tmp & 0xff;
+      img.data[pos + 3] = 0xff;
+      pos += 4;
     }
-    if (camera.pos >= 4 * w * h) {
-      camera.ctx.putImageData(img, 0, 0);
-      return camera.pos = 0;
+    if (pos >= 4 * w * h) {
+      ctx.putImageData(img, 0, 0);
+      return pos = 0;
     }
   }
 
   function success(stream) {
     var vendorURL, video;
-    if (camera.options.context === "webrtc") {
-      video = camera.options.videoEl;
+    if (webRtcOptions.context === "webrtc") {
+      video = webRtcOptions.videoEl;
       vendorURL = window.URL || window.webkitURL;
       if (navigator.mozGetUserMedia) {
         video.mozSrcObject = stream;
@@ -106,21 +106,23 @@ module.exports = function Camera(options) {
     // passed back from the shim to avoid doing further feature
     // detection), we handle getting video/images for our canvas 
     // from our HTML5 <video> element.
-    if (camera.options.context === "webrtc") {
+console.log (webRtcOptions)
+    if (webRtcOptions.context === "webrtc") {
       video = document.getElementsByTagName("video")[0];
       updateImage(video);
       return $("#webcam").hide();
     // Otherwise, if the context is Flash, we ask the shim to
     // directly call window.webcam, where our shim is located
     // and ask it to capture for us.
-    } else if (camera.options.context === "flash") {
+    } else if (webRtcOptions.context === "flash") {
       return window.webcam.capture();
     } else {
-      return alert("No context was supplied to getSnapshot()");
+      console.log("No context was supplied to getSnapshot()");
     }
   }
 
   return {
+    getSnapshot: getSnapshot,
     initialize: initialize,
     onSaveGetUserMedia: onSaveGetUserMedia,
     webRtcOptions: webRtcOptions

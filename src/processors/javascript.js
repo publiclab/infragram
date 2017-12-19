@@ -166,7 +166,7 @@ module.exports = function javascriptProcessor() {
         return [x, x, x];
       });
     } else {
-      result = infragrammar(jsImage);
+      resultJsImage = infragrammar(jsImage);
     }
     return render(resultJsImage);
   }
