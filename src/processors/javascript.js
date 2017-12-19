@@ -73,22 +73,6 @@ module.exports = function javascriptProcessor() {
     return new JsImage(d, nirJsImg.width, nirJsImg.height, 1);
   }
 
-  function colorify(jsImage, colormap) {
-    var b, data, g, i, j, l, n, r, ref;
-    $('#btn-colorize').addClass('active');
-    n = jsImage.width * jsImage.height;
-    data = new Uint8ClampedArray(4 * n);
-    j = 0;
-    for (i = l = 0, ref = n; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
-      [r, g, b] = colormap(jsImage.data[i]);
-      data[j++] = r;
-      data[j++] = g;
-      data[j++] = b;
-      data[j++] = 255;
-    }
-    return new JsImage(data, jsImage.width, jsImage.height, 4);
-  }
-
   function infragrammar(jsImage) {
     var b, g, i, l, n, o, r, ref;
     $('#btn-colorize').removeClass('active');
@@ -170,7 +154,7 @@ module.exports = function javascriptProcessor() {
       function normalize(x) {
         return (x - min) / (max - min);
       };
-      resultJsImage = colorify(ndvi_jsImg, function(x) {
+      resultJsImage = Colormaps.colorify(ndvi_jsImg, function(x) {
         return colormap(normalize(x));
       });
       update_colorbar(min, max);
@@ -178,7 +162,7 @@ module.exports = function javascriptProcessor() {
       resultJsImage = new JsImage(jsImage.data, jsImage.width, jsImage.height, 4);
     } else if (mode === "nir") {
       [r, g, b] = get_channels(jsImage);
-      resultJsImage = colorify(r, function(x) {
+      resultJsImage = Colormaps.colorify(r, function(x) {
         return [x, x, x];
       });
     } else {
@@ -188,9 +172,6 @@ module.exports = function javascriptProcessor() {
   }
 
   function save_expressions(r, g, b) {
-    r = r.replace(/X/g, $('#slider').val() / 100);
-    g = g.replace(/X/g, $('#slider').val() / 100);
-    b = b.replace(/X/g, $('#slider').val() / 100);
     if (r === "") {
       r = "R";
     }
@@ -206,9 +187,6 @@ module.exports = function javascriptProcessor() {
   };
 
   save_expressions_hsv = function(h, s, v) {
-    h = h.replace(/X/g, $('#slider').val() / 100);
-    s = s.replace(/X/g, $('#slider').val() / 100);
-    v = v.replace(/X/g, $('#slider').val() / 100);
     if (h === "") {
       h = "H";
     }
@@ -225,7 +203,10 @@ module.exports = function javascriptProcessor() {
 
   function getImageData() {
     var ctx = $('#image')[0].getContext("2d");
-    return ctx.getImageData(0, 0, imageData.width, imageData.height);
+// risks being circular
+    var width = $('#image').width();
+    var height = $('#image').height();
+    return ctx.getImageData(0, 0, width, height);
   }
 
   function getJsImage() {
@@ -253,7 +234,6 @@ module.exports = function javascriptProcessor() {
     width = img.videoWidth || img.width;
     height = img.videoHeight || img.height;
     ctx.drawImage(img, 0, 0, width, height, 0, 0, imgCanvas.width, imgCanvas.height);
-    imageData = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
     return set_mode(mode);
   }
 
@@ -296,19 +276,7 @@ module.exports = function javascriptProcessor() {
     return update(image);
   }
 
-  jsHandleOnSlide = function(event) {
-    if (mode === "infragrammar") {
-      save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val());
-    } else if (mode === "infragrammar_hsv") {
-      save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val());
-    } else {
-      save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val());
-    }
-    return update(image);
-  }
-
   return {
-    colorify: colorify,
     colormap: colormap,
     getCurrentImage: getCurrentImage,
     getImageData: getImageData,

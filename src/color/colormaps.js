@@ -3,11 +3,18 @@
 
 module.exports = function Colormaps(options) {
 
-  var greyscale_colormap = segmented_colormap([[0, [0, 0, 0], [255, 255, 255]], [1, [255, 255, 255], [255, 255, 255]]]);
+  var greyscale_colormap = segmented_colormap([[0, [0,   0,   0  ], [255, 255, 255]], 
+                                               [1, [255, 255, 255], [255, 255, 255]]]);
 
-  var colormap1 = segmented_colormap([[0, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.75, [255, 255, 0], [255, 50, 50]]]);
+  var colormap1 = segmented_colormap([[0,    [0,   0,   255], [38,  195, 195]],
+                                      [0.5,  [0,   150, 0  ], [255, 255, 0  ]],
+                                      [0.75, [255, 255, 0  ], [255, 50,  50 ]]]);
 
-  var colormap2 = segmented_colormap([[0, [0, 0, 255], [0, 0, 255]], [0.1, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.7, [255, 255, 0], [255, 50, 50]], [0.9, [255, 50, 50], [255, 50, 50]]]);
+  var colormap2 = segmented_colormap([[0,   [0,   0,   255], [0,   0,   255]], 
+                                      [0.1, [0,   0,   255], [38,  195, 195]],
+                                      [0.5, [0,   150, 0  ], [255, 255, 0  ]],
+                                      [0.7, [255, 255, 0  ], [255, 50,  50 ]],
+                                      [0.9, [255, 50,  50 ], [255, 50,  50 ]]]);
 
   function segmented_colormap(segments) {
     return function(x) {
@@ -37,11 +44,28 @@ module.exports = function Colormaps(options) {
     }
   }
 
+  function colorify(jsImage, colormap) {
+    var b, data, g, i, j, l, n, r, ref;
+    $('#btn-colorize').addClass('active');
+    n = jsImage.width * jsImage.height;
+    data = new Uint8ClampedArray(4 * n);
+    j = 0;
+    for (i = l = 0, ref = n; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
+      [r, g, b] = colormap(jsImage.data[i]);
+      data[j++] = r;
+      data[j++] = g;
+      data[j++] = b;
+      data[j++] = 255;
+    }
+    return new JsImage(data, jsImage.width, jsImage.height, 4);
+  }
+
   return {
-    segmented_colormap: segmented_colormap,
+    colorify: colorify,
     colormap1: colormap1,
     colormap2: colormap2,
-    greyscale_colormap: greyscale_colormap
+    greyscale_colormap: greyscale_colormap,
+    segmented_colormap: segmented_colormap
   }
 
 }

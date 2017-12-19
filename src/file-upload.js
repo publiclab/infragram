@@ -26,7 +26,7 @@ module.exports = FileUpload = {
   uploadThumbnail: function(src, callback) {
     var img;
     img = new Image();
-    img.onload = function() {
+    img.onload = function onImageLoad() {
       var canvas, ctx, dataUrl;
       canvas = document.createElement("canvas");
       ctx = canvas.getContext("2d");
@@ -52,7 +52,7 @@ module.exports = FileUpload = {
       FileUpload.file = files[0];
       FileUpload.file.reader = new FileReader();
       if (upload) {
-        FileUpload.file.reader.onload = function(event) {
+        FileUpload.file.reader.onload = function onReaderLoad(event) {
           return FileUpload.socket.emit("image_send", {
             "name": FileUpload.serverFilename,
             "size": FileUpload.file.size,
@@ -66,10 +66,10 @@ module.exports = FileUpload = {
       }
       FileUpload.file.uploaded = 0;
       reader = new FileReader();
-      reader.onload = function(event) {
+      reader.onload = function onReaderLoad(event) {
         var img;
         img = new Image();
-        img.onload = function() {
+        img.onload = function onImageLoad() {
           return callback(this);
         };
         return img.src = event.target.result;

@@ -1,5 +1,8 @@
 module.exports = function Interface(options) {
 
+  options.imageSelector = options.imageSelector || "#image-container";
+  options.fileSelector = options.fileSelector || "#file-sel";
+
   var urlHash = require('urlhash')();
   var FileUpload = require('./file-upload');
   var logger = options.logger;
@@ -9,14 +12,16 @@ module.exports = function Interface(options) {
 
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
-    $("#image-container").ready(function() {
+    $(options.imageSelector).ready(function() {
       var enablewebgl, idNameMap, src;
       enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
       var initialized = options.processor.initialize && options.processor.initialize();
       webGlSupported = enablewebgl && initialized;
+
       if (webGlSupported) {
         $("#webgl-activate").html("&laquo; Go back to JS version");
       }
+
       // broken:  
       idNameMap = {
         "#m_exp": "m",
@@ -27,7 +32,8 @@ module.exports = function Interface(options) {
         "#s_exp": "s",
         "#v_exp": "v"
       };
-      urlHash.setUrlHashParameter(idNameMap);
+
+      urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
       src = urlHash.getUrlHashParameter('src');
       if (src) {
         params = parametersObject(location.search.split('?')[1]);
@@ -37,7 +43,7 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    $("#file-sel").change(function() {
+    $(options.fileSelector).change(function() {
       $("#save-modal-btn").show();
       $("#save-zone").show();
       FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -275,15 +281,6 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    $("#slider").slider().on("slide", function(event) {
-      if (webGlSupported) {
-        glHandleOnSlide(event);
-      } else {
-        jsHandleOnSlide(event);
-      }
-      return true;
-    });
-
     $("#webgl-activate").click(function() {
       var href;
       href = window.location.href;
@@ -299,26 +296,24 @@ module.exports = function Interface(options) {
     $("#webcam-activate").click(function() {
       $("#save-modal-btn").show();
       $("#save-zone").show();
-      camera.initialize();
+      options.camera.initialize();
       options.save_infragrammar_inputs();
       if (webGlSupported) {
         setInterval(function() {
-          if (image && video_live) {
+          if (image) {
             options.run_infragrammar(mode);
-            video_live = true;
           }
-          camera.getSnapshot();
+          options.camera.getSnapshot();
           if (options.colorized) {
             return options.run_colorize();
           }
         }, 33);
       } else {
         setInterval(function() {
-          if (image && video_live) {
+          if (image) {
             options.run_infragrammar(mode);
-            video_live = true;
           }
-          camera.getSnapshot();
+          options.camera.getSnapshot();
           if (options.colorized) {
             return options.run_colorize();
           }
@@ -329,7 +324,7 @@ module.exports = function Interface(options) {
     });
 
     $("#snapshot").click(function() {
-      camera.getSnapshot();
+      options.camera.getSnapshot();
       return true;
     });
 

@@ -60,6 +60,7 @@ Infragram = function Infragram(options) {
   options = options || {};
   options.uploader = options.uploader || false;
   options.processor = options.processor || 'javascript';
+  options.camera = require('./camera')(options);
 
   JsImage = require('./util/JsImage.js'),
 
@@ -73,6 +74,7 @@ Infragram = function Infragram(options) {
   options.logger = require('./logger')(options);
 
   return {
+    Camera: options.camera,
     Dispatch: require('./dispatch')(options, options.processor),
     Interface: require('./interface')(options),
     logger: options.logger,
@@ -81,17 +83,154 @@ Infragram = function Infragram(options) {
 }
 module.exports = Infragram;
 
-},{"./dispatch":5,"./interface":7,"./logger":8,"./processors/javascript":9,"./processors/webgl":10,"./util/JsImage.js":11}],3:[function(require,module,exports){
+},{"./camera":3,"./dispatch":6,"./interface":8,"./logger":9,"./processors/javascript":10,"./processors/webgl":11,"./util/JsImage.js":12}],3:[function(require,module,exports){
+// This file was adapted from infragram-js:
+// http://github.com/p-v-o-s/infragram-js.
+module.exports = function Camera(options) {
+
+  var canvas = options.canvas || document.getElementById("image");
+  var ctx = canvas.getContext("2d");
+
+  // Initialize getUserMedia with options
+  function initialize() {
+    getUserMedia(webRtcOptions, success, deviceError);
+
+    // Trigger a snapshot w/ button
+    // -- move this to interface.js?
+    $("#webcam-activate").hide();
+    $("#snapshot").show();
+    $("#live-video").show();
+    $("#webcam").show();
+  }
+
+  // webRtcOptions contains the configuration information for the shim
+  // it allows us to specify the width and height of the video
+  // output we"re working with, the location of the fallback swf,
+  // events that are triggered onCapture and onSave (for the fallback)
+  // and so on.
+  var webRtcOptions = options.webRtcOptions || {
+    "audio": false,
+    "video": true,
+    // the element (by id) you wish to use for 
+    // displaying the stream from a camera
+    el: "webcam",
+    extern: null,
+    append: true,
+    // height and width of the output stream
+    // container
+    width: 640,
+    height: 480,
+    // the recommended mode to be used is 
+    // "callback " where a callback is executed 
+    // once data is available
+    mode: "callback",
+    // a debugger callback is available if needed
+    debug: function() {},
+    // callback for capturing the fallback stream
+    onCapture: function() {
+      return window.webcam.save();
+    },
+    // callback for saving the stream, useful for
+    // relaying data further.
+    onSave: onSaveGetUserMedia,
+    onLoad: function onLoadGetUserMedia() {}
+  }
+
+  function onSaveGetUserMedia(data) {
+    var col, h, i, img, j, ref, tmp, w;
+    col = data.split("");
+    img = camera.image;
+    tmp = null;
+    w = this.width;
+    h = this.height;
+    for (i = j = 0, ref = w - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+      tmp = parseInt(col[i], 10);
+      img.data[camera.pos + 0] = (tmp >> 16) & 0xff;
+      img.data[camera.pos + 1] = (tmp >> 8) & 0xff;
+      img.data[camera.pos + 2] = tmp & 0xff;
+      img.data[camera.pos + 3] = 0xff;
+      camera.pos += 4;
+    }
+    if (camera.pos >= 4 * w * h) {
+      camera.ctx.putImageData(img, 0, 0);
+      return camera.pos = 0;
+    }
+  }
+
+  function success(stream) {
+    var vendorURL, video;
+    if (camera.options.context === "webrtc") {
+      video = camera.options.videoEl;
+      vendorURL = window.URL || window.webkitURL;
+      if (navigator.mozGetUserMedia) {
+        video.mozSrcObject = stream;
+        console.log("mozilla???");
+      } else if ((typeof MediaStream !== "undefined" && MediaStream !== null) && stream instanceof MediaStream) {
+        video.src = stream;
+        return video.play();
+      } else {
+        video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
+      }
+      return video.onerror = function(e) {
+        return stream.stop();
+      }
+    } else {
+
+    }
+  }
+
+  function deviceError(error) {
+    alert("No camera available.");
+    console.log(error);
+    return console.error("An error occurred: [CODE " + error.code + "]");
+  }
+
+  // not doing anything now... for copying to a 2nd canvas
+  function getSnapshot() {
+    var video;
+    // If the current context is WebRTC/getUserMedia (something
+    // passed back from the shim to avoid doing further feature
+    // detection), we handle getting video/images for our canvas 
+    // from our HTML5 <video> element.
+    if (camera.options.context === "webrtc") {
+      video = document.getElementsByTagName("video")[0];
+      updateImage(video);
+      return $("#webcam").hide();
+    // Otherwise, if the context is Flash, we ask the shim to
+    // directly call window.webcam, where our shim is located
+    // and ask it to capture for us.
+    } else if (camera.options.context === "flash") {
+      return window.webcam.capture();
+    } else {
+      return alert("No context was supplied to getSnapshot()");
+    }
+  }
+
+  return {
+    initialize: initialize,
+    onSaveGetUserMedia: onSaveGetUserMedia,
+    webRtcOptions: webRtcOptions
+  }
+}
+
+},{}],4:[function(require,module,exports){
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
 module.exports = function Colormaps(options) {
 
-  var greyscale_colormap = segmented_colormap([[0, [0, 0, 0], [255, 255, 255]], [1, [255, 255, 255], [255, 255, 255]]]);
+  var greyscale_colormap = segmented_colormap([[0, [0,   0,   0  ], [255, 255, 255]], 
+                                               [1, [255, 255, 255], [255, 255, 255]]]);
 
-  var colormap1 = segmented_colormap([[0, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.75, [255, 255, 0], [255, 50, 50]]]);
+  var colormap1 = segmented_colormap([[0,    [0,   0,   255], [38,  195, 195]],
+                                      [0.5,  [0,   150, 0  ], [255, 255, 0  ]],
+                                      [0.75, [255, 255, 0  ], [255, 50,  50 ]]]);
 
-  var colormap2 = segmented_colormap([[0, [0, 0, 255], [0, 0, 255]], [0.1, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.7, [255, 255, 0], [255, 50, 50]], [0.9, [255, 50, 50], [255, 50, 50]]]);
+  var colormap2 = segmented_colormap([[0,   [0,   0,   255], [0,   0,   255]], 
+                                      [0.1, [0,   0,   255], [38,  195, 195]],
+                                      [0.5, [0,   150, 0  ], [255, 255, 0  ]],
+                                      [0.7, [255, 255, 0  ], [255, 50,  50 ]],
+                                      [0.9, [255, 50,  50 ], [255, 50,  50 ]]]);
 
   function segmented_colormap(segments) {
     return function(x) {
@@ -121,16 +260,33 @@ module.exports = function Colormaps(options) {
     }
   }
 
+  function colorify(jsImage, colormap) {
+    var b, data, g, i, j, l, n, r, ref;
+    $('#btn-colorize').addClass('active');
+    n = jsImage.width * jsImage.height;
+    data = new Uint8ClampedArray(4 * n);
+    j = 0;
+    for (i = l = 0, ref = n; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
+      [r, g, b] = colormap(jsImage.data[i]);
+      data[j++] = r;
+      data[j++] = g;
+      data[j++] = b;
+      data[j++] = 255;
+    }
+    return new JsImage(data, jsImage.width, jsImage.height, 4);
+  }
+
   return {
-    segmented_colormap: segmented_colormap,
+    colorify: colorify,
     colormap1: colormap1,
     colormap2: colormap2,
-    greyscale_colormap: greyscale_colormap
+    greyscale_colormap: greyscale_colormap,
+    segmented_colormap: segmented_colormap
   }
 
 }
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
@@ -200,7 +356,7 @@ module.exports = Converters = {
 
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
@@ -210,6 +366,8 @@ module.exports = function Dispatch(options, processor) {
   options.mode           = options.mode           || "raw",
   options.video_live     = options.video_live     || false,
   options.webGlSupported = options.webGlSupported || false; // move into processor
+
+  var Colormaps = require('./color/colormaps')();
 
   var logger = options.logger;
 
@@ -223,11 +381,9 @@ module.exports = function Dispatch(options, processor) {
   // this maps -1-1 to 0-1, i guess
   options.run_colorize = function run_colorize() {
     var imageData = processor.getImageData();
-    if (processor.colorify) {
-      processor.render(processor.colorify(processor.infragrammar_mono(imageData), function(x) {
-        return processor.colormap((x + 1) / 2);
-      }));
-    }
+    processor.render(Colormaps.colorify(processor.infragrammar_mono(imageData), function(x) {
+      return processor.colormap((x + 1) / 2);
+    }));
     return true;
   }
 
@@ -266,7 +422,7 @@ module.exports = function Dispatch(options, processor) {
 
 }
 
-},{}],6:[function(require,module,exports){
+},{"./color/colormaps":4}],7:[function(require,module,exports){
 // Generated by CoffeeScript 2.1.0
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
@@ -295,7 +451,7 @@ module.exports = FileUpload = {
   uploadThumbnail: function(src, callback) {
     var img;
     img = new Image();
-    img.onload = function() {
+    img.onload = function onImageLoad() {
       var canvas, ctx, dataUrl;
       canvas = document.createElement("canvas");
       ctx = canvas.getContext("2d");
@@ -321,7 +477,7 @@ module.exports = FileUpload = {
       FileUpload.file = files[0];
       FileUpload.file.reader = new FileReader();
       if (upload) {
-        FileUpload.file.reader.onload = function(event) {
+        FileUpload.file.reader.onload = function onReaderLoad(event) {
           return FileUpload.socket.emit("image_send", {
             "name": FileUpload.serverFilename,
             "size": FileUpload.file.size,
@@ -335,10 +491,10 @@ module.exports = FileUpload = {
       }
       FileUpload.file.uploaded = 0;
       reader = new FileReader();
-      reader.onload = function(event) {
+      reader.onload = function onReaderLoad(event) {
         var img;
         img = new Image();
-        img.onload = function() {
+        img.onload = function onImageLoad() {
           return callback(this);
         };
         return img.src = event.target.result;
@@ -417,8 +573,11 @@ module.exports = FileUpload = {
   }
 }
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = function Interface(options) {
+
+  options.imageSelector = options.imageSelector || "#image-container";
+  options.fileSelector = options.fileSelector || "#file-sel";
 
   var urlHash = require('urlhash')();
   var FileUpload = require('./file-upload');
@@ -429,14 +588,16 @@ module.exports = function Interface(options) {
 
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
-    $("#image-container").ready(function() {
+    $(options.imageSelector).ready(function() {
       var enablewebgl, idNameMap, src;
       enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
       var initialized = options.processor.initialize && options.processor.initialize();
       webGlSupported = enablewebgl && initialized;
+
       if (webGlSupported) {
         $("#webgl-activate").html("&laquo; Go back to JS version");
       }
+
       // broken:  
       idNameMap = {
         "#m_exp": "m",
@@ -447,7 +608,8 @@ module.exports = function Interface(options) {
         "#s_exp": "s",
         "#v_exp": "v"
       };
-      urlHash.setUrlHashParameter(idNameMap);
+
+      urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
       src = urlHash.getUrlHashParameter('src');
       if (src) {
         params = parametersObject(location.search.split('?')[1]);
@@ -457,7 +619,7 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    $("#file-sel").change(function() {
+    $(options.fileSelector).change(function() {
       $("#save-modal-btn").show();
       $("#save-zone").show();
       FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -695,15 +857,6 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    $("#slider").slider().on("slide", function(event) {
-      if (webGlSupported) {
-        glHandleOnSlide(event);
-      } else {
-        jsHandleOnSlide(event);
-      }
-      return true;
-    });
-
     $("#webgl-activate").click(function() {
       var href;
       href = window.location.href;
@@ -719,26 +872,24 @@ module.exports = function Interface(options) {
     $("#webcam-activate").click(function() {
       $("#save-modal-btn").show();
       $("#save-zone").show();
-      camera.initialize();
+      options.camera.initialize();
       options.save_infragrammar_inputs();
       if (webGlSupported) {
         setInterval(function() {
-          if (image && video_live) {
+          if (image) {
             options.run_infragrammar(mode);
-            video_live = true;
           }
-          camera.getSnapshot();
+          options.camera.getSnapshot();
           if (options.colorized) {
             return options.run_colorize();
           }
         }, 33);
       } else {
         setInterval(function() {
-          if (image && video_live) {
+          if (image) {
             options.run_infragrammar(mode);
-            video_live = true;
           }
-          camera.getSnapshot();
+          options.camera.getSnapshot();
           if (options.colorized) {
             return options.run_colorize();
           }
@@ -749,7 +900,7 @@ module.exports = function Interface(options) {
     });
 
     $("#snapshot").click(function() {
-      camera.getSnapshot();
+      options.camera.getSnapshot();
       return true;
     });
 
@@ -790,7 +941,7 @@ module.exports = function Interface(options) {
   });
 }
 
-},{"./color/colormaps":3,"./file-upload":6,"urlhash":1}],8:[function(require,module,exports){
+},{"./color/colormaps":4,"./file-upload":7,"urlhash":1}],9:[function(require,module,exports){
 // refactor to access state, not dom
 module.exports = function Logger(options) {
 
@@ -842,7 +993,7 @@ module.exports = function Logger(options) {
 
 }
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
@@ -916,22 +1067,6 @@ module.exports = function javascriptProcessor() {
       d[i] = (nirJsImg.data[i] - visJsImg.data[i]) / (nirJsImg.data[i] + visJsImg.data[i]);
     }
     return new JsImage(d, nirJsImg.width, nirJsImg.height, 1);
-  }
-
-  function colorify(jsImage, colormap) {
-    var b, data, g, i, j, l, n, r, ref;
-    $('#btn-colorize').addClass('active');
-    n = jsImage.width * jsImage.height;
-    data = new Uint8ClampedArray(4 * n);
-    j = 0;
-    for (i = l = 0, ref = n; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
-      [r, g, b] = colormap(jsImage.data[i]);
-      data[j++] = r;
-      data[j++] = g;
-      data[j++] = b;
-      data[j++] = 255;
-    }
-    return new JsImage(data, jsImage.width, jsImage.height, 4);
   }
 
   function infragrammar(jsImage) {
@@ -1015,7 +1150,7 @@ module.exports = function javascriptProcessor() {
       function normalize(x) {
         return (x - min) / (max - min);
       };
-      resultJsImage = colorify(ndvi_jsImg, function(x) {
+      resultJsImage = Colormaps.colorify(ndvi_jsImg, function(x) {
         return colormap(normalize(x));
       });
       update_colorbar(min, max);
@@ -1023,7 +1158,7 @@ module.exports = function javascriptProcessor() {
       resultJsImage = new JsImage(jsImage.data, jsImage.width, jsImage.height, 4);
     } else if (mode === "nir") {
       [r, g, b] = get_channels(jsImage);
-      resultJsImage = colorify(r, function(x) {
+      resultJsImage = Colormaps.colorify(r, function(x) {
         return [x, x, x];
       });
     } else {
@@ -1033,9 +1168,6 @@ module.exports = function javascriptProcessor() {
   }
 
   function save_expressions(r, g, b) {
-    r = r.replace(/X/g, $('#slider').val() / 100);
-    g = g.replace(/X/g, $('#slider').val() / 100);
-    b = b.replace(/X/g, $('#slider').val() / 100);
     if (r === "") {
       r = "R";
     }
@@ -1051,9 +1183,6 @@ module.exports = function javascriptProcessor() {
   };
 
   save_expressions_hsv = function(h, s, v) {
-    h = h.replace(/X/g, $('#slider').val() / 100);
-    s = s.replace(/X/g, $('#slider').val() / 100);
-    v = v.replace(/X/g, $('#slider').val() / 100);
     if (h === "") {
       h = "H";
     }
@@ -1070,7 +1199,10 @@ module.exports = function javascriptProcessor() {
 
   function getImageData() {
     var ctx = $('#image')[0].getContext("2d");
-    return ctx.getImageData(0, 0, imageData.width, imageData.height);
+// risks being circular
+    var width = $('#image').width();
+    var height = $('#image').height();
+    return ctx.getImageData(0, 0, width, height);
   }
 
   function getJsImage() {
@@ -1098,7 +1230,6 @@ module.exports = function javascriptProcessor() {
     width = img.videoWidth || img.width;
     height = img.videoHeight || img.height;
     ctx.drawImage(img, 0, 0, width, height, 0, 0, imgCanvas.width, imgCanvas.height);
-    imageData = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
     return set_mode(mode);
   }
 
@@ -1141,19 +1272,7 @@ module.exports = function javascriptProcessor() {
     return update(image);
   }
 
-  jsHandleOnSlide = function(event) {
-    if (mode === "infragrammar") {
-      save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val());
-    } else if (mode === "infragrammar_hsv") {
-      save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val());
-    } else {
-      save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val());
-    }
-    return update(image);
-  }
-
   return {
-    colorify: colorify,
     colormap: colormap,
     getCurrentImage: getCurrentImage,
     getImageData: getImageData,
@@ -1170,7 +1289,7 @@ module.exports = function javascriptProcessor() {
 
 }
 
-},{"../color/colormaps":3,"../color/converters":4}],10:[function(require,module,exports){
+},{"../color/colormaps":4,"../color/converters":5}],11:[function(require,module,exports){
 // Generated by CoffeeScript 2.1.0
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
@@ -1428,7 +1547,7 @@ module.exports = function webglProcessor() {
 
 }
 
-},{"../util/webgl-utils":12}],11:[function(require,module,exports){
+},{"../util/webgl-utils":13}],12:[function(require,module,exports){
 module.exports = class JsImage {
   constructor(data1, width1, height1, channels) {
     this.data = data1;
@@ -1477,7 +1596,7 @@ module.exports = class JsImage {
 
 }
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /*
  * Copyright 2012, Gregg Tavares.
  * All rights reserved.

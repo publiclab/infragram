@@ -8,6 +8,8 @@ module.exports = function Dispatch(options, processor) {
   options.video_live     = options.video_live     || false,
   options.webGlSupported = options.webGlSupported || false; // move into processor
 
+  var Colormaps = require('./color/colormaps')();
+
   var logger = options.logger;
 
   // this should accept an object with parameters r,g,b,h,s,v,m and mode
@@ -20,11 +22,9 @@ module.exports = function Dispatch(options, processor) {
   // this maps -1-1 to 0-1, i guess
   options.run_colorize = function run_colorize() {
     var imageData = processor.getImageData();
-    if (processor.colorify) {
-      processor.render(processor.colorify(processor.infragrammar_mono(imageData), function(x) {
-        return processor.colormap((x + 1) / 2);
-      }));
-    }
+    processor.render(Colormaps.colorify(processor.infragrammar_mono(imageData), function(x) {
+      return processor.colormap((x + 1) / 2);
+    }));
     return true;
   }
 
