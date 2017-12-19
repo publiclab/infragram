@@ -9,11 +9,11 @@ module.exports = function Dispatch(options, processor) {
   options.video_live     = options.video_live     || false,
   options.webGlSupported = options.webGlSupported || false; // move into processor
 
-  var log = []; // a record of previous commands run
+  var logger = options.logger;
 
   // this should accept an object with parameters r,g,b,h,s,v,m and mode
   options.run_infragrammar = function run_infragrammar(mode) {
-    save_log();
+    logger.save_log();
     options.colorized = false;
     return processor.runInfragrammar(mode);
   }
@@ -133,56 +133,13 @@ module.exports = function Dispatch(options, processor) {
     }
   }
 
-  // Move this all to a log.js file:
-
-  function log_mono() {
-    var logEntry;
-    logEntry = "mode=infragrammar_mono";
-    logEntry += $("#m_exp").val() ? "&m=" + $("#m_exp").val() : "";
-    logEntry += options.colorized ? "&c=true" : ""; // no way to succinctly store the colormap... just offer range of colorizations at view-time?
-    return log.push(logEntry);
-  }
-
-  function log_hsv() {
-    var logEntry;
-    logEntry = "mode=infragrammar_hsv";
-    logEntry += $("#h_exp").val() ? "&h=" + $("#h_exp").val() : "";
-    logEntry += $("#s_exp").val() ? "&s=" + $("#s_exp").val() : "";
-    logEntry += $("#v_exp").val() ? "&v=" + $("#v_exp").val() : "";
-    return log.push(logEntry);
-  }
-
-  function log_rgb() {
-    var logEntry;
-    logEntry = "mode=infragrammar";
-    logEntry += $("#r_exp").val() ? "&r=" + $("#r_exp").val() : "";
-    logEntry += $("#g_exp").val() ? "&g=" + $("#g_exp").val() : "";
-    logEntry += $("#b_exp").val() ? "&b=" + $("#b_exp").val() : "";
-    return log.push(logEntry);
-  }
-
-  function save_log() {
-    if (mode === "infragrammar_mono") {
-      return log_mono();
-    } else if (mode === "infragrammar_hsv") {
-      return log_hsv();
-    } else if (mode === "infragrammar") {
-      return log_rgb();
-    }
-  }
-
   return {
     downloadImage: downloadImage,
     fetch_image: fetch_image,
-    log: log,
-    log_hsv: log_hsv,
-    log_mono: log_mono,
-    log_rgb: log_rgb,
     run_colorize: options.run_colorize,
     run_infragrammar: options.run_infragrammar,
     save_infragrammar_expressions: options.save_infragrammar_expressions,
-    save_infragrammar_inputs: options.save_infragrammar_inputs,
-    save_log: save_log
+    save_infragrammar_inputs: options.save_infragrammar_inputs
   }
 
 }

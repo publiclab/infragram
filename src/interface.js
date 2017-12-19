@@ -2,6 +2,7 @@ module.exports = function Interface(options) {
 
   var urlHash = require('urlhash')();
   var FileUpload = require('./file-upload');
+  var logger = options.logger;
 
   $(document).ready(function() {
 
@@ -10,10 +11,12 @@ module.exports = function Interface(options) {
     $("#image-container").ready(function() {
       var enablewebgl, idNameMap, src;
       enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
-      webGlSupported = enablewebgl && glInitInfragram();
+      var initialized = options.processor.initialize && options.processor.initialize();
+      webGlSupported = enablewebgl && initialized;
       if (webGlSupported) {
         $("#webgl-activate").html("&laquo; Go back to JS version");
       }
+      // broken:  
       idNameMap = {
         "#m_exp": "m",
         "#r_exp": "r",
@@ -122,7 +125,7 @@ module.exports = function Interface(options) {
 
     $("#default_colormap").click(function() {
       var colormap;
-      if (webglsupported) {
+      if (webGlSupported) {
         glhandledefaultcolormap();
         glhandleonclickndvi();
       } else {
@@ -147,7 +150,7 @@ module.exports = function Interface(options) {
     });
 
     $("button#raw").click(function() {
-      log.push("mode=raw");
+      logger.log.push("mode=raw");
       if (webGlSupported) {
         glHandleOnClickRaw();
       } else {
@@ -157,7 +160,7 @@ module.exports = function Interface(options) {
     });
 
     $("button#ndvi").click(function() {
-      log.push("mode=ndvi");
+      logger.log.push("mode=ndvi");
       if (webGlSupported) {
         glHandleOnClickNdvi();
       } else {
@@ -167,7 +170,7 @@ module.exports = function Interface(options) {
     });
 
     $("button#nir").click(function() {
-      log.push("mode=nir");
+      logger.log.push("mode=nir");
       $("#m_exp").val("R");
       $("#modeSwitcher").val("infragrammar_mono").change();
       if (webGlSupported) {
@@ -189,7 +192,7 @@ module.exports = function Interface(options) {
         img = getCurrentImage();
         return FileUpload.uploadThumbnail(img, function() {
           $("#form-filename").val(FileUpload.getFilename());
-          $("#form-log").val(JSON.stringify(log));
+          $("#form-log").val(JSON.stringify(logger.log));
           return $("#save-form").submit();
         });
       };
@@ -208,7 +211,7 @@ module.exports = function Interface(options) {
 
     $("#infragrammar_hsv").submit(function() {
       mode = "infragrammar_hsv";
-      log_hsv();
+      logger.log_hsv();
       options.save_infragrammar_inputs();
       if (webGlSupported) {
         glHandleOnSubmitInfraHsv();
@@ -220,7 +223,7 @@ module.exports = function Interface(options) {
 
     $("#infragrammar").submit(function() {
       mode = "infragrammar";
-      log_rgb();
+      logger.log_rgb();
       options.save_infragrammar_inputs();
       if (webGlSupported) {
         glHandleOnSubmitInfra();
@@ -232,7 +235,7 @@ module.exports = function Interface(options) {
 
     $("#infragrammar_mono").submit(function() {
       mode = "infragrammar_mono";
-      log_mono();
+      logger.log_mono();
       options.save_infragrammar_inputs();
       if (webGlSupported) {
         glHandleOnSubmitInfraMono();
@@ -243,7 +246,7 @@ module.exports = function Interface(options) {
     });
 
     $("button#grey").click(function() {
-      log.push("mode=ndvi");
+      logger.log.push("mode=ndvi");
       if (webGlSupported) {
         glHandleOnClickGrey();
       } else {
@@ -262,7 +265,7 @@ module.exports = function Interface(options) {
     });
 
     $("button#color").click(function() {
-      log.push("mode=ndvi&color=true");
+      logger.log.push("mode=ndvi&color=true");
       if (webGlSupported) {
         glHandleOnClickColor();
       } else {
