@@ -3,6 +3,7 @@ module.exports = function Interface(options) {
   var urlHash = require('urlhash')();
   var FileUpload = require('./file-upload');
   var logger = options.logger;
+  var Colormaps = require('./color/colormaps');
 
   $(document).ready(function() {
 
@@ -119,7 +120,7 @@ module.exports = function Interface(options) {
       } else {
         options.colorized = true;
         options.run_infragrammar(mode);
-        return run_colorize();
+        return options.run_colorize();
       }
     });
 
@@ -130,7 +131,7 @@ module.exports = function Interface(options) {
         glhandleonclickndvi();
       } else {
         options.colorized = true;
-        colormap = colormap1;
+        colormap = Colormaps.colormap1;
         options.run_colorize();
       }
       return $("#btn-colorize").addClass("active");
@@ -143,7 +144,7 @@ module.exports = function Interface(options) {
         glHandleOnClickNdvi();
       } else {
         options.colorized = true;
-        colormap = colormap2;
+        colormap = Colormaps.colormap2;
         options.run_colorize();
       }
       return $("#btn-colorize").addClass("active");
@@ -319,7 +320,7 @@ module.exports = function Interface(options) {
           }
           camera.getSnapshot();
           if (options.colorized) {
-            return run_colorize();
+            return options.run_colorize();
           }
         }, 250);
       }

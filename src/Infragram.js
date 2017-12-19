@@ -3,6 +3,8 @@ Infragram = function Infragram(options) {
   options.uploader = options.uploader || false;
   options.processor = options.processor || 'javascript';
 
+  JsImage = require('./util/JsImage.js'),
+
   options.processors = {
     'webgl':           require('./processors/webgl'),
     'javascript':      require('./processors/javascript'),

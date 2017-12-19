@@ -248,7 +248,7 @@ module.exports = function webglProcessor() {
     initialize: initialize,
     getCurrentImage: getCurrentImage,
     runInfragrammar: runInfragrammar,
-    saveExpression: saveExpression,
+    save_expressions: saveExpression,
     setMode: setMode,
     updateImage: updateImage
   }
