@@ -65,7 +65,8 @@ module.exports = function File(options, processor) {
           });
           mode = "infragrammar";
         }
-        processor.updateImage(this);
+console.log('updateImage')
+	processor.updateImage(this);
         if (params['color'] === "true" || params['c'] === "true") {
           options.colorized = true; // before run_infrag, so it gets logged
         }

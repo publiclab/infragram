@@ -141,11 +141,11 @@ module.exports = function javascriptProcessor() {
     return $("#colorbar-max")[0].textContent = max.toFixed(2);
   }
 
-  function update(jsImage) {
-    var b, g, max, min, ndvi_jsImg, normalize, r, result;
+  function update(image) {
+    var b, g, max, min, ndvi_jsImg, normalize, r, resultJsImage;
     $('#colorbar-container')[0].style.display = 'none';
     if (mode === "ndvi") {
-      [r, g, b] = get_channels(jsImg);
+      [r, g, b] = get_channels(image);
       ndvi_jsImg = ndvi(r, b);
       // this isn't correct for NDVI; we want values from -1 to 1:
       // [[min],[max]] = ndvi_img.extrema()
@@ -159,14 +159,14 @@ module.exports = function javascriptProcessor() {
       });
       update_colorbar(min, max);
     } else if (mode === "raw") {
-      resultJsImage = new JsImage(jsImage.data, jsImage.width, jsImage.height, 4);
+      resultJsImage = new JsImage(image.data, image.width, image.height, 4);
     } else if (mode === "nir") {
-      [r, g, b] = get_channels(jsImage);
+      [r, g, b] = get_channels(image);
       resultJsImage = Colormaps.colorify(r, function(x) {
         return [x, x, x];
       });
     } else {
-      result = infragrammar(jsImage);
+      resultJsImage = infragrammar(image);
     }
     return render(resultJsImage);
   }
@@ -203,10 +203,10 @@ module.exports = function javascriptProcessor() {
 
   function getImageData() {
     var ctx = $('#image')[0].getContext("2d");
-// risks being circular
+// risks being circular def of width/height
     var width = $('#image').width();
     var height = $('#image').height();
-    return ctx.getImageData(0, 0, width, height);
+    return image || ctx.getImageData(0, 0, width, height);
   }
 
   function getJsImage() {
@@ -234,6 +234,7 @@ module.exports = function javascriptProcessor() {
     width = img.videoWidth || img.width;
     height = img.videoHeight || img.height;
     ctx.drawImage(img, 0, 0, width, height, 0, 0, imgCanvas.width, imgCanvas.height);
+    image = ctx.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
     return set_mode(mode);
   }
 
