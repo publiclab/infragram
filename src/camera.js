@@ -1,7 +1,8 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 module.exports = function Camera(options) {
-  var canvas, ctx;
+  var canvas, 
+      ctx;
 
   // Initialize getUserMedia with options
   function initialize() {
@@ -79,9 +80,6 @@ module.exports = function Camera(options) {
       if (navigator.mozGetUserMedia) {
         video.mozSrcObject = stream;
         console.log("mozilla???");
-      } else if ((typeof MediaStream !== "undefined" && MediaStream !== null) && stream instanceof MediaStream) {
-        video.src = stream;
-        return video.play();
       } else {
         video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
       }
@@ -106,10 +104,10 @@ module.exports = function Camera(options) {
     // passed back from the shim to avoid doing further feature
     // detection), we handle getting video/images for our canvas 
     // from our HTML5 <video> element.
-console.log (webRtcOptions)
+console.log ('options', webRtcOptions)
     if (webRtcOptions.context === "webrtc") {
       video = document.getElementsByTagName("video")[0];
-      updateImage(video);
+      options.processor.updateImage(video);
       return $("#webcam").hide();
     // Otherwise, if the context is Flash, we ask the shim to
     // directly call window.webcam, where our shim is located

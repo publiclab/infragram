@@ -206,6 +206,7 @@ module.exports = function javascriptProcessor() {
 // risks being circular def of width/height
     var width = $('#image').width();
     var height = $('#image').height();
+// this now just defaults to file-scoped 'image' which we want to avoid
     return image || ctx.getImageData(0, 0, width, height);
   }
 

@@ -22,7 +22,7 @@
     "url": "https://github.com/publiclab/infragram/issues"
   },
   "dependencies": {
-    "getusermedia": "~1.0.0",
+    "woofmark": "git://github.com/addyosmani/getUserMedia.js#semver:~1.0.0",
     "webgl-utils": "~1.0.0",
     "font-awesome": "~4.5.0",
     "bootstrap": "~3.2.0",
