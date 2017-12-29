@@ -190,7 +190,6 @@ module.exports = function Camera(options) {
     // passed back from the shim to avoid doing further feature
     // detection), we handle getting video/images for our canvas 
     // from our HTML5 <video> element.
-console.log ('options', webRtcOptions)
     if (webRtcOptions.context === "webrtc") {
       video = document.getElementsByTagName("video")[0];
       options.processor.updateImage(video);
@@ -380,11 +379,16 @@ module.exports = function Dispatch(options, processor) {
 
   // this maps -1-1 to 0-1, i guess
   options.run_colorize = function run_colorize() {
-    var imageData = processor.getImageData();
-    processor.render(Colormaps.colorify(processor.infragrammar_mono(imageData), function(x) {
-      return processor.colormap((x + 1) / 2);
-    }));
-    return true;
+    // not needed for webgl -- but then we should refactor this 
+    // to be within the JS processor if it's not universally 
+    // part of the processor API
+    if (processor.type !== 'webgl') {
+      var imageData = processor.getImageData();
+      processor.render(Colormaps.colorify(processor.infragrammar_mono(imageData), function(x) {
+        return processor.colormap((x + 1) / 2);
+      }));
+      return true;
+    }
   }
 
   // saving inputs/expressions:
@@ -414,6 +418,7 @@ module.exports = function Dispatch(options, processor) {
   }
 
   return {
+    options: options,
     run_colorize: options.run_colorize,
     run_infragrammar: options.run_infragrammar,
     save_infragrammar_expressions: options.save_infragrammar_expressions,
@@ -1275,6 +1280,7 @@ module.exports = function javascriptProcessor() {
   }
 
   return {
+    type: 'javascript',
     colormap: colormap,
     getCurrentImage: getCurrentImage,
     getImageData: getImageData,
@@ -1490,6 +1496,10 @@ module.exports = function webglProcessor() {
     return drawScene(imgContext, true);
   };
 
+  function getImageData() {
+    return imgContext.imageData;
+  };
+
   function glHandleDefaultColormap() {
     return imgContext.selColormap = mapContext.selColormap = 0;
   };
@@ -1539,8 +1549,10 @@ module.exports = function webglProcessor() {
   };
 
   return {
+    type: 'webgl',
     initialize: initialize,
     getCurrentImage: getCurrentImage,
+    getImageData: getImageData,
     runInfragrammar: runInfragrammar,
     save_expressions: saveExpression,
     setMode: setMode,

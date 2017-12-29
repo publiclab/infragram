@@ -196,6 +196,10 @@ module.exports = function webglProcessor() {
     return drawScene(imgContext, true);
   };
 
+  function getImageData() {
+    return imgContext.imageData;
+  };
+
   function glHandleDefaultColormap() {
     return imgContext.selColormap = mapContext.selColormap = 0;
   };
@@ -245,8 +249,10 @@ module.exports = function webglProcessor() {
   };
 
   return {
+    type: 'webgl',
     initialize: initialize,
     getCurrentImage: getCurrentImage,
+    getImageData: getImageData,
     runInfragrammar: runInfragrammar,
     save_expressions: saveExpression,
     setMode: setMode,

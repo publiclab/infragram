@@ -279,6 +279,7 @@ module.exports = function javascriptProcessor() {
   }
 
   return {
+    type: 'javascript',
     colormap: colormap,
     getCurrentImage: getCurrentImage,
     getImageData: getImageData,

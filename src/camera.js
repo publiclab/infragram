@@ -104,7 +104,6 @@ module.exports = function Camera(options) {
     // passed back from the shim to avoid doing further feature
     // detection), we handle getting video/images for our canvas 
     // from our HTML5 <video> element.
-console.log ('options', webRtcOptions)
     if (webRtcOptions.context === "webrtc") {
       video = document.getElementsByTagName("video")[0];
       options.processor.updateImage(video);

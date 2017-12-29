@@ -21,11 +21,16 @@ module.exports = function Dispatch(options, processor) {
 
   // this maps -1-1 to 0-1, i guess
   options.run_colorize = function run_colorize() {
-    var imageData = processor.getImageData();
-    processor.render(Colormaps.colorify(processor.infragrammar_mono(imageData), function(x) {
-      return processor.colormap((x + 1) / 2);
-    }));
-    return true;
+    // not needed for webgl -- but then we should refactor this 
+    // to be within the JS processor if it's not universally 
+    // part of the processor API
+    if (processor.type !== 'webgl') {
+      var imageData = processor.getImageData();
+      processor.render(Colormaps.colorify(processor.infragrammar_mono(imageData), function(x) {
+        return processor.colormap((x + 1) / 2);
+      }));
+      return true;
+    }
   }
 
   // saving inputs/expressions:
@@ -55,6 +60,7 @@ module.exports = function Dispatch(options, processor) {
   }
 
   return {
+    options: options,
     run_colorize: options.run_colorize,
     run_infragrammar: options.run_infragrammar,
     save_infragrammar_expressions: options.save_infragrammar_expressions,
