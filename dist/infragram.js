@@ -388,6 +388,8 @@ module.exports = function Dispatch(options, processor) {
         return processor.colormap((x + 1) / 2);
       }));
       return true;
+    } else {
+      processor.glHandleOnClickColor();
     }
   }
 
@@ -1556,7 +1558,8 @@ module.exports = function webglProcessor() {
     runInfragrammar: runInfragrammar,
     save_expressions: saveExpression,
     setMode: setMode,
-    updateImage: updateImage
+    updateImage: updateImage,
+    glHandleOnClickColor: glHandleOnClickColor
   }
 
 }

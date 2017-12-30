@@ -30,6 +30,8 @@ module.exports = function Dispatch(options, processor) {
         return processor.colormap((x + 1) / 2);
       }));
       return true;
+    } else {
+      processor.glHandleOnClickColor();
     }
   }
 

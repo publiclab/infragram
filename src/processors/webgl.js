@@ -256,7 +256,8 @@ module.exports = function webglProcessor() {
     runInfragrammar: runInfragrammar,
     save_expressions: saveExpression,
     setMode: setMode,
-    updateImage: updateImage
+    updateImage: updateImage,
+    glHandleOnClickColor: glHandleOnClickColor
   }
 
 }
