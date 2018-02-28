@@ -84,6 +84,7 @@ module.exports = function webglProcessor() {
     }
     if (ctx.updateShader) {
       ctx.updateShader = false;
+console.log('generate')
       generateShader(ctx);
     }
     gl = ctx.gl;
@@ -155,6 +156,7 @@ module.exports = function webglProcessor() {
   };
 
   function setMode(ctx, newMode) {
+console.log('setMode', newMode);
     ctx.mode = newMode;
     ctx.updateShader = true;
     if (ctx.mode === "ndvi") {
@@ -180,7 +182,7 @@ module.exports = function webglProcessor() {
     imgContext = createContext(imgContext.mode, imgContext.selColormap, imgContext.colormap, imgContext.slider, "image");
     mapContext = createContext(mapContext.mode, mapContext.selColormap, mapContext.colormap, mapContext.slider, "colorbar");
     if (imgContext && mapContext) {
-      return glUpdateImage(imageData);
+      return updateImage(imageData);
     }
   };
 
@@ -217,23 +219,23 @@ module.exports = function webglProcessor() {
   };
 
   function glHandleOnClickRaw() {
-    return glSetMode(imgContext, "raw");
+    return setMode(imgContext, "raw");
   };
 
   function glHandleOnClickNdvi() {
-    return glSetMode(imgContext, "ndvi");
+    return setMode(imgContext, "ndvi");
   };
 
   function glHandleOnSubmitInfraHsv() {
-    return glSetMode(imgContext, "hsv");
+    return setMode(imgContext, "hsv");
   };
 
   function glHandleOnSubmitInfra() {
-    return glSetMode(imgContext, "rgb");
+    return setMode(imgContext, "rgb");
   };
 
   function glHandleOnSubmitInfraMono() {
-    return glSetMode(imgContext, "mono");
+    return setMode(imgContext, "mono");
   };
 
   function glHandleOnClickGrey() {

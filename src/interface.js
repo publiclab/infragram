@@ -301,6 +301,7 @@ module.exports = function Interface(options) {
       if (webGlSupported) {
         setInterval(function() {
           if (image) {
+// THIS IS IT 
             options.run_infragrammar(mode);
           }
           options.camera.getSnapshot();

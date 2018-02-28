@@ -7,6 +7,11 @@ module.exports = function Camera(options) {
   // Initialize getUserMedia with options
   function initialize() {
     getUserMedia(webRtcOptions, success, deviceError);
+
+    // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685
+    webRtcOptions.videoEl.setAttribute('autoplay', 'autoplay');
+    webRtcOptions.videoEl.setAttribute('playsinline', 'playsinline');
+
     window.webcam = webRtcOptions; // this is weird but maybe used for flash fallback?
     canvas = options.canvas || document.getElementById("image");
     ctx = canvas.getContext("2d");

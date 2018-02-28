@@ -16,6 +16,7 @@
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script src="node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
     <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 
@@ -90,13 +91,11 @@
 
       <button style="margin-left:4px;" id="webgl-activate" type="button" class="btn btn-secondary pull-right">WebGL beta</button>
       <a href="../sandbox/legacy/" id="legacy" type="button" class="btn btn-secondary pull-right">Legacy version</a>
-      <h1><img src="/assets/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"../> <a style="color:#444;padding-top:8px;" href="../">Infragram</a> <br class="visible-phone"><small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
+      <h1><img src="/assets/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:100px;"../> <a style="color:#444;padding-top:8px;" href="../">Infragram</a> <small>by <a href="http://publiclab.org">Public Lab</a></small></h1>
 
       <p>Analyze plant health with near-infrared imagery! <a href="http://publiclab.org/wiki/infragram">Learn more &amp; mod a camera</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a>.</p>
 
       <div class="content">
-
-        <p class="alert" style="clear:both;margin-top:12px;">On most modern computers and smartphones, you can <a href="../sandbox/?webgl=true">use the faster WebGL version</a> of this site. Try it out!</p>
 
         <div id="toolbar">
 
@@ -218,7 +217,7 @@
       (function() {
         infragram = Infragram({
           uploader: false,
-          //processor: 'webgl'
+          processor: 'webgl'
         });
       })()
     </script>
