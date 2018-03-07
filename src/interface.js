@@ -16,9 +16,9 @@ module.exports = function Interface(options) {
       var enablewebgl, idNameMap, src;
       enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
       var initialized = options.processor.initialize && options.processor.initialize();
-      webGlSupported = enablewebgl && initialized;
+      options.webGlSupported = enablewebgl && initialized;
 
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         $("#webgl-activate").html("&laquo; Go back to JS version");
       }
 
@@ -37,7 +37,7 @@ module.exports = function Interface(options) {
       src = urlHash.getUrlHashParameter('src');
       if (src) {
         params = parametersObject(location.search.split('?')[1]);
-        mode = params['mode'];
+        options.mode = params['mode'];
         fetch_image(src);
       }
       return true;
@@ -58,10 +58,10 @@ module.exports = function Interface(options) {
       $('#b_exp').val("B");
       $('#preset-modal').modal('hide');
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         return glHandleOnClickRaw();
       } else {
-        return options.run_infragrammar(mode);
+        return options.run_infragrammar(options.mode);
       }
     });
 
@@ -70,10 +70,10 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(R-B)/(R+B)");
       $('#preset-modal').modal('hide');
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         return glHandleOnSubmitInfraMono();
       } else {
-        return options.run_infragrammar(mode);
+        return options.run_infragrammar(options.mode);
       }
     });
 
@@ -82,12 +82,12 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(R-B)/(R+B)");
       $('#preset-modal').modal('hide');
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickColor();
         return glHandleOnClickNdvi();
       } else {
         options.colorized = true;
-        options.run_infragrammar(mode);
+        options.run_infragrammar(options.mode);
         return options.run_colorize();
       }
     });
@@ -97,10 +97,10 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(B-R)/(B+R)");
       $('#preset-modal').modal('hide');
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         return glHandleOnSubmitInfraMono();
       } else {
-        return options.run_infragrammar(mode);
+        return options.run_infragrammar(options.mode);
       }
     });
 
@@ -109,30 +109,30 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(B-R)/(B+R)");
       $('#preset-modal').modal('hide');
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickColor();
         return glHandleOnClickNdvi();
       } else {
         options.colorized = true;
-        options.run_infragrammar(mode);
+        options.run_infragrammar(options.mode);
         return options.run_colorize();
       }
     });
 
     $("#btn-colorize").click(function() {
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickColor();
         return glHandleOnClickNdvi();
       } else {
         options.colorized = true;
-        options.run_infragrammar(mode);
+        options.run_infragrammar(options.mode);
         return options.run_colorize();
       }
     });
 
     $("#default_colormap").click(function() {
       var colormap;
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glhandledefaultcolormap();
         glhandleonclickndvi();
       } else {
@@ -145,7 +145,7 @@ module.exports = function Interface(options) {
 
     $("#stretched_colormap").click(function() {
       var colormap;
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleStretchedColormap();
         glHandleOnClickNdvi();
       } else {
@@ -158,7 +158,7 @@ module.exports = function Interface(options) {
 
     $("button#raw").click(function() {
       logger.log.push("mode=raw");
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickRaw();
       } else {
         jsHandleOnClickRaw();
@@ -168,7 +168,7 @@ module.exports = function Interface(options) {
 
     $("button#ndvi").click(function() {
       logger.log.push("mode=ndvi");
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickNdvi();
       } else {
         jsHandleOnClickNdvi();
@@ -180,7 +180,7 @@ module.exports = function Interface(options) {
       logger.log.push("mode=nir");
       $("#m_exp").val("R");
       $("#modeSwitcher").val("infragrammar_mono").change();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnSubmitInfraMono();
       } else {
         jsHandleOnSubmitInfraMono();
@@ -217,44 +217,44 @@ module.exports = function Interface(options) {
     });
 
     $("#infragrammar_hsv").submit(function() {
-      mode = "infragrammar_hsv";
+      options.mode = "infragrammar_hsv";
       logger.log_hsv();
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnSubmitInfraHsv();
       } else {
-        options.run_infragrammar(mode);
+        options.run_infragrammar(options.mode);
       }
       return true;
     });
 
     $("#infragrammar").submit(function() {
-      mode = "infragrammar";
+      options.mode = "infragrammar";
       logger.log_rgb();
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnSubmitInfra();
       } else {
-        options.run_infragrammar(mode);
+        options.run_infragrammar(options.mode);
       }
       return true;
     });
 
     $("#infragrammar_mono").submit(function() {
-      mode = "infragrammar_mono";
+      options.mode = "infragrammar_mono";
       logger.log_mono();
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnSubmitInfraMono();
       } else {
-        options.run_infragrammar(mode);
+        options.run_infragrammar(options.mode);
       }
       return true;
     });
 
     $("button#grey").click(function() {
       logger.log.push("mode=ndvi");
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickGrey();
       } else {
         jsHandleOnClickGrey();
@@ -263,7 +263,7 @@ module.exports = function Interface(options) {
     });
 
     $("button#colorify").click(function() {
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickColorify();
       } else {
         jsHandleOnClickColorify();
@@ -273,7 +273,7 @@ module.exports = function Interface(options) {
 
     $("button#color").click(function() {
       logger.log.push("mode=ndvi&color=true");
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         glHandleOnClickColor();
       } else {
         jsHandleOnClickColor();
@@ -284,7 +284,7 @@ module.exports = function Interface(options) {
     $("#webgl-activate").click(function() {
       var href;
       href = window.location.href;
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         href = href.replace(/(?:\?|&)webgl=true/gi, "");
       } else {
         href += href.indexOf("?") >= 0 ? "&webgl=true" : "?webgl=true";
@@ -298,11 +298,10 @@ module.exports = function Interface(options) {
       $("#save-zone").show();
       options.camera.initialize();
       options.save_infragrammar_inputs();
-      if (webGlSupported) {
+      if (options.webGlSupported) {
         setInterval(function() {
           if (image) {
-// THIS IS IT 
-            options.run_infragrammar(mode);
+            options.run_infragrammar(options.mode);
           }
           options.camera.getSnapshot();
           if (options.colorized) {
@@ -312,7 +311,7 @@ module.exports = function Interface(options) {
       } else {
         setInterval(function() {
           if (image) {
-            options.run_infragrammar(mode);
+            options.run_infragrammar(options.mode);
           }
           options.camera.getSnapshot();
           if (options.colorized) {

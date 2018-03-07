@@ -32,7 +32,9 @@
 // These funcitions are meant solely to help unclutter the tutorials.
 // They are not meant as production type functions.
 
-(function() {
+// This file was adapted from the above author for Node.js use.
+
+module.exports = function webglUtils() {
 
 /**
  * Wrapped logging function.
@@ -367,19 +369,10 @@ var resizeCanvasToDisplaySize = function(canvas) {
   }
 }
 
-/* export functions */
-this.createProgram = loadProgram;
-this.createProgramFromScripts = createProgramFromScripts;
-this.createShaderFromScriptElement = createShaderFromScript;
-this.getWebGLContext = getWebGLContext;
-this.updateCSSIfInIFrame = updateCSSIfInIFrame;
-this.getExtensionWithKnownPrefixes = getExtensionWithKnownPrefixes;
-this.resizeCanvasToDisplaySize = resizeCanvasToDisplaySize;
-
 /**
  * Provides requestAnimationFrame in a cross browser way.
  */
-this.requestAnimFrame = (function() {
+var requestAnimFrame = (function() {
   return window.requestAnimationFrame ||
          window.webkitRequestAnimationFrame ||
          window.mozRequestAnimationFrame ||
@@ -393,7 +386,7 @@ this.requestAnimFrame = (function() {
 /**
  * Provides cancelRequestAnimationFrame in a cross browser way.
  */
-this.cancelRequestAnimFrame = (function() {
+var cancelRequestAnimFrame = (function() {
   return window.cancelCancelRequestAnimationFrame ||
          window.webkitCancelRequestAnimationFrame ||
          window.mozCancelRequestAnimationFrame ||
@@ -402,7 +395,16 @@ this.cancelRequestAnimFrame = (function() {
          window.clearTimeout;
 })();
 
+return {
+  createProgram: loadProgram,
+  createProgramFromScripts: createProgramFromScripts,
+  createShaderFromScriptElement: createShaderFromScript,
+  getWebGLContext: getWebGLContext,
+  updateCSSIfInIFrame: updateCSSIfInIFrame,
+  getExtensionWithKnownPrefixes: getExtensionWithKnownPrefixes,
+  resizeCanvasToDisplaySize: resizeCanvasToDisplaySize,
+  requestAnimFrame: requestAnimFrame,
+  cancelRequestAnimFrame: cancelRequestAnimFrame
+};
 
-
-}());
-
+};

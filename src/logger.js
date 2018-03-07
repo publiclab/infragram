@@ -30,11 +30,11 @@ module.exports = function Logger(options) {
   }
 
   function save_log() {
-    if (mode === "infragrammar_mono") {
+    if (options.mode === "infragrammar_mono") {
       return log_mono();
-    } else if (mode === "infragrammar_hsv") {
+    } else if (options.mode === "infragrammar_hsv") {
       return log_hsv();
-    } else if (mode === "infragrammar") {
+    } else if (options.mode === "infragrammar") {
       return log_rgb();
     }
   }

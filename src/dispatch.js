@@ -39,7 +39,7 @@ module.exports = function Dispatch(options, processor) {
 
   // can we move this into interface?
   options.save_infragrammar_inputs = function save_infragrammar_inputs() {
-    mode = $('#modeSwitcher').val();
+    options.mode = $('#modeSwitcher').val();
     return options.save_infragrammar_expressions({
       'r': $('#r_exp').val(),
       'g': $('#g_exp').val(),
@@ -52,11 +52,11 @@ module.exports = function Dispatch(options, processor) {
   }
 
   options.save_infragrammar_expressions = function save_infragrammar_expressions(args) {
-    if (mode === "infragrammar") {
+    if (options.mode === "infragrammar") {
       processor.save_expressions(args['r'], args['g'], args['b']);
-    } else if (mode === "infragrammar_mono") {
+    } else if (options.mode === "infragrammar_mono") {
       processor.save_expressions(args['m'], args['m'], args['m']);
-    } else if (mode === "infragrammar_hsv") {
+    } else if (options.mode === "infragrammar_hsv") {
       return processor.save_expressions_hsv(args['h'], args['s'], args['v']);
     }
   }

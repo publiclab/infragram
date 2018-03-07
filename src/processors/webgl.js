@@ -6,9 +6,11 @@ module.exports = function webglProcessor() {
   var imgContext = null,
       mapContext = null,
       vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
-      waitForShadersToLoad = 0;
+      waitForShadersToLoad = 0,
+      webglUtils = require('../util/webgl-utils')();
 
   vertices.itemSize = 2;
+
 
   function initialize() {
     imgContext = createContext("raw", 1, 0, 1.0, "image");
@@ -48,7 +50,7 @@ module.exports = function webglProcessor() {
     return texture;
   };
 
-  createContext = function(mode, selColormap, colormap, slider, canvasName) {
+  function createContext(mode, selColormap, colormap, slider, canvasName) {
     var ctx;
     ctx = new Object();
     ctx.mode = mode;
@@ -62,8 +64,7 @@ module.exports = function webglProcessor() {
       return event.preventDefault();
     }), false);
     ctx.canvas.addEventListener("webglcontextrestored", glRestoreContext, false);
-    require('../util/webgl-utils');
-    ctx.gl = getWebGLContext(ctx.canvas);
+    ctx.gl = webglUtils.getWebGLContext(ctx.canvas);
     if (ctx.gl) {
       ctx.gl.getExtension("OES_texture_float");
       ctx.vertexBuffer = createBuffer(ctx, vertices);
@@ -78,13 +79,13 @@ module.exports = function webglProcessor() {
   function drawScene(ctx, returnImage) {
     var gl, pColormap, pHsvUniform, pNdviUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition;
     if (!returnImage) {
-      requestAnimFrame(function() {
+      window.requestAnimationFrame(function() {
+ //     webglUtils.requestAnimFrame(function() {
         return drawScene(ctx, false);
       });
     }
     if (ctx.updateShader) {
       ctx.updateShader = false;
-console.log('generate')
       generateShader(ctx);
     }
     gl = ctx.gl;
@@ -113,6 +114,7 @@ console.log('generate')
   };
 
   function generateShader(ctx) {
+console.log('generateShader');
     var b, code, g, r;
     [r, g, b] = ctx.expression;
     // Map HSV to shader variable names
@@ -152,13 +154,13 @@ console.log('generate')
     code = code.replace(/@2@/g, g);
     code = code.replace(/@3@/g, b);
     $("#shader-fs").html(code);
-    return ctx.shaderProgram = createProgramFromScripts(ctx.gl, ["shader-vs", "shader-fs"]);
+    return ctx.shaderProgram = webglUtils.createProgramFromScripts(ctx.gl, ["shader-vs", "shader-fs"]);
   };
 
   function setMode(ctx, newMode) {
 console.log('setMode', newMode);
+    if (ctx.mode != newMode) ctx.updateShader = true;
     ctx.mode = newMode;
-    ctx.updateShader = true;
     if (ctx.mode === "ndvi") {
       $("#colorbar-container")[0].style.display = "inline-block";
       return $("#colormaps-group")[0].style.display = "inline-block";

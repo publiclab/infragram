@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-babel');
 
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -21,6 +22,19 @@ module.exports = function(grunt) {
               ],
               tasks: [ 'build:js' ]
           }
+      },
+
+
+      babel: {
+        options: {
+          sourceMap: true,
+          presets: ['env']
+        },
+        dist: {
+          files: {
+            'dist/infragram.js': 'dist/infragram.js'
+          }
+        }
       },
 
       browserify: {
@@ -44,6 +58,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'browserify:dist',
+        'babel:dist',
         'uglify:dist'
     ]);
 
