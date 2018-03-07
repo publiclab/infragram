@@ -122,6 +122,16 @@ module.exports = function javascriptProcessor() {
     return ctx.putImageData(d, 0, 0);
   }
 
+  function colorize() {
+    var imageData = getImageData();
+    render(
+      Colormaps.colorify(infragrammar_mono(imageData), function(x) {
+        return colormap((x + 1) / 2);
+      })
+    );
+    return true;
+  }
+
   update_colorbar = (min, max) => {
     var b, ctx, d, e, g, i, j, k, l, m, r, ref, ref1;
     $('#colorbar-container')[0].style.display = 'inline-block';
@@ -241,7 +251,7 @@ module.exports = function javascriptProcessor() {
     return set_mode(mode);
   }
 
-  function runInfragrammar(mode) {
+  function run(mode) {
     return set_mode(mode);
   }
 
@@ -289,11 +299,12 @@ module.exports = function javascriptProcessor() {
     infragrammar_mono: infragrammar_mono,
     infragrammar: infragrammar,
     render: render,
-    runInfragrammar: runInfragrammar,
+    run: run,
     save_expressions: save_expressions,
     save_expressions_hsv: save_expressions_hsv,
     update: update,
-    updateImage: updateImage
+    updateImage: updateImage,
+    colorize: colorize
   }
 
 }

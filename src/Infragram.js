@@ -4,6 +4,11 @@ window.Infragram = function Infragram(options) {
   options.processor = options.processor || 'javascript';
   options.camera = require('./io/camera')(options);
 
+  options.colorized      = options.colorized      || false;
+  options.mode           = options.mode           || "raw",
+  options.video_live     = options.video_live     || false,
+  options.webGlSupported = options.webGlSupported || false; // move into processor
+
   options.processors = {
     'webgl':           require('./processors/webgl'),
     'javascript':      require('./processors/javascript'),
@@ -12,13 +17,50 @@ window.Infragram = function Infragram(options) {
   options.processor = options.processors[options.processor]();
   options.logger = require('./logger')(options);
 
+  options.colorize = function colorize() {
+    options.processor.colorize();
+  }
+
+  // this should accept an object with parameters r,g,b,h,s,v,m and mode
+  options.run = function run(mode) {
+    options.logger.save_log();
+    return options.processor.run(mode);
+  }
+
+  // split into processor.video() methods
+  options.video = function video() {
+    options.camera.initialize();
+    if (options.webGlSupported) {
+      setInterval(function() {
+        if (image) {
+          options.run(options.mode);
+        }
+        options.camera.getSnapshot();
+        if (options.colorized) {
+          return options.run_colorize();
+        }
+      }, 33);
+    } else {
+      setInterval(function() {
+        if (image) {
+          options.run(options.mode);
+        }
+        options.camera.getSnapshot();
+        if (options.colorized) {
+          return options.colorize();
+        }
+      }, 250);
+    }
+  }
+
   return {
     Camera: options.camera,
-    Dispatch: require('./dispatch')(options, options.processor),
     Interface: require('./interface')(options),
     logger: options.logger,
+    run: options.run,
+    colorize: options.colorize,
     processors: options.processors,
-    options
+    options: options
   }
 }
 module.exports = Infragram;

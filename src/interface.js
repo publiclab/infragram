@@ -39,6 +39,8 @@ module.exports = function Interface(options) {
 
     $(options.imageSelector).ready(function() {
       var enablewebgl, idNameMap, src;
+
+      // move into Infragram.js
       enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
       var initialized = options.processor.initialize && options.processor.initialize();
       options.webGlSupported = enablewebgl && initialized;
@@ -83,11 +85,7 @@ module.exports = function Interface(options) {
       $('#b_exp').val("B");
       $('#preset-modal').modal('hide');
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        return glHandleOnClickRaw();
-      } else {
-        return options.run_infragrammar(options.mode);
-      }
+      return options.run(options.mode);
     });
 
     $("#preset_ndvi_blue").click(function() {
@@ -95,26 +93,18 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(R-B)/(R+B)");
       $('#preset-modal').modal('hide');
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        return glHandleOnSubmitInfraMono();
-      } else {
-        return options.run_infragrammar(options.mode);
-      }
+      return options.run(options.mode);
     });
 
+    // we should explicitly set mode here... to ndvi?
     $("#preset_ndvi_blue_color").click(function() {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(R-B)/(R+B)");
       $('#preset-modal').modal('hide');
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        glHandleOnClickColor();
-        return glHandleOnClickNdvi();
-      } else {
-        options.colorized = true;
-        options.run_infragrammar(options.mode);
-        return options.run_colorize();
-      }
+      options.colorized = true;
+      options.run(options.mode);
+      return options.colorize();
     });
 
     $("#preset_ndvi_red").click(function() {
@@ -122,11 +112,7 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(B-R)/(B+R)");
       $('#preset-modal').modal('hide');
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        return glHandleOnSubmitInfraMono();
-      } else {
-        return options.run_infragrammar(options.mode);
-      }
+      return options.run(options.mode);
     });
 
     $("#preset_ndvi_red_color").click(function() {
@@ -134,27 +120,19 @@ module.exports = function Interface(options) {
       $('#m_exp').val("(B-R)/(B+R)");
       $('#preset-modal').modal('hide');
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        glHandleOnClickColor();
-        return glHandleOnClickNdvi();
-      } else {
-        options.colorized = true;
-        options.run_infragrammar(options.mode);
-        return options.run_colorize();
-      }
+      options.colorized = true;
+      options.run(options.mode);
+      return options.colorize();
     });
 
     $("#btn-colorize").click(function() {
-      if (options.webGlSupported) {
-        glHandleOnClickColor();
-        return glHandleOnClickNdvi();
-      } else {
-        options.colorized = true;
-        options.run_infragrammar(options.mode);
-        return options.run_colorize();
-      }
+      options.colorized = true;
+      options.run(options.mode);
+      return options.colorize();
     });
 
+
+    // refactor colormaps based on list
     $("#default_colormap").click(function() {
       var colormap;
       if (options.webGlSupported) {
@@ -163,7 +141,7 @@ module.exports = function Interface(options) {
       } else {
         options.colorized = true;
         colormap = Colormaps.colormap1;
-        options.run_colorize();
+        options.colorize();
       }
       return $("#btn-colorize").addClass("active");
     });
@@ -176,29 +154,21 @@ module.exports = function Interface(options) {
       } else {
         options.colorized = true;
         colormap = Colormaps.colormap2;
-        options.run_colorize();
+        options.colorize();
       }
       return $("#btn-colorize").addClass("active");
     });
 
     $("button#raw").click(function() {
+      options.mode = "raw";
       logger.log.push("mode=raw");
-      if (options.webGlSupported) {
-        glHandleOnClickRaw();
-      } else {
-        jsHandleOnClickRaw();
-      }
-      return true;
+      return options.run(options.mode);
     });
 
     $("button#ndvi").click(function() {
+      options.mode = "raw";
       logger.log.push("mode=ndvi");
-      if (options.webGlSupported) {
-        glHandleOnClickNdvi();
-      } else {
-        jsHandleOnClickNdvi();
-      }
-      return true;
+      return options.run(options.mode);
     });
 
     $("button#nir").click(function() {
@@ -212,6 +182,7 @@ module.exports = function Interface(options) {
       }
       return true;
     });
+
     $("#download").click(function() {
       downloadImage();
       return true;
@@ -245,11 +216,7 @@ module.exports = function Interface(options) {
       options.mode = "infragrammar_hsv";
       logger.log_hsv();
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        glHandleOnSubmitInfraHsv();
-      } else {
-        options.run_infragrammar(options.mode);
-      }
+      options.run(options.mode);
       return true;
     });
 
@@ -257,11 +224,7 @@ module.exports = function Interface(options) {
       options.mode = "infragrammar";
       logger.log_rgb();
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        glHandleOnSubmitInfra();
-      } else {
-        options.run_infragrammar(options.mode);
-      }
+      options.run(options.mode);
       return true;
     });
 
@@ -269,41 +232,26 @@ module.exports = function Interface(options) {
       options.mode = "infragrammar_mono";
       logger.log_mono();
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        glHandleOnSubmitInfraMono();
-      } else {
-        options.run_infragrammar(options.mode);
-      }
+      options.run(options.mode);
       return true;
     });
 
+    // not sure about this one
     $("button#grey").click(function() {
+      options.mode = "infragrammar_mono";
       logger.log.push("mode=ndvi");
-      if (options.webGlSupported) {
-        glHandleOnClickGrey();
-      } else {
-        jsHandleOnClickGrey();
-      }
+      options.run(options.mode);
       return true;
     });
 
     $("button#colorify").click(function() {
-      if (options.webGlSupported) {
-        glHandleOnClickColorify();
-      } else {
-        jsHandleOnClickColorify();
-      }
-      return true;
+      return options.colorize();
     });
 
+    // redundant? 
     $("button#color").click(function() {
       logger.log.push("mode=ndvi&color=true");
-      if (options.webGlSupported) {
-        glHandleOnClickColor();
-      } else {
-        jsHandleOnClickColor();
-      }
-      return true;
+      return options.colorize();
     });
 
     $("#webgl-activate").click(function() {
@@ -321,29 +269,8 @@ module.exports = function Interface(options) {
     $("#webcam-activate").click(function() {
       $("#save-modal-btn").show();
       $("#save-zone").show();
-      options.camera.initialize();
       save_infragrammar_inputs();
-      if (options.webGlSupported) {
-        setInterval(function() {
-          if (image) {
-            options.run_infragrammar(options.mode);
-          }
-          options.camera.getSnapshot();
-          if (options.colorized) {
-            return options.run_colorize();
-          }
-        }, 33);
-      } else {
-        setInterval(function() {
-          if (image) {
-            options.run_infragrammar(options.mode);
-          }
-          options.camera.getSnapshot();
-          if (options.colorized) {
-            return options.run_colorize();
-          }
-        }, 250);
-      }
+      options.video();
       $('#preset-modal').modal('show');
       return true;
     });

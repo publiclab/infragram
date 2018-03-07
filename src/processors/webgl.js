@@ -216,52 +216,28 @@ console.log('setMode', newMode);
     return imgContext.expression = [a, b, c];
   };
 
-  function runInfragrammar(mode) {
-    return setMode(imgContext, "ndvi");
-  };
-
-  function glHandleOnClickRaw() {
-    return setMode(imgContext, "raw");
-  };
-
-  function glHandleOnClickNdvi() {
-    return setMode(imgContext, "ndvi");
-  };
-
-  function glHandleOnSubmitInfraHsv() {
-    return setMode(imgContext, "hsv");
-  };
-
-  function glHandleOnSubmitInfra() {
-    return setMode(imgContext, "rgb");
-  };
-
-  function glHandleOnSubmitInfraMono() {
-    return setMode(imgContext, "mono");
+  function run(mode) {
+    return setMode(imgContext, mode);
   };
 
   function glHandleOnClickGrey() {
     return imgContext.selColormap = mapContext.selColormap = 1;
   };
 
-  function glHandleOnClickColor() {
+  function colorize() {
     return imgContext.selColormap = mapContext.selColormap = 0;
-  };
-
-  function glHandleOnSlide(event) {
-    return imgContext.slider = event.value / 100.0;
-  };
+  }
 
   return {
     type: 'webgl',
     initialize: initialize,
     getCurrentImage: getCurrentImage,
     getImageData: getImageData,
-    runInfragrammar: runInfragrammar,
+    run: run,
     save_expressions: saveExpression,
     setMode: setMode,
     updateImage: updateImage,
-    glHandleOnClickColor: glHandleOnClickColor
+    colorize: colorize
   }
 
 }
