@@ -1,7 +1,7 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
-module.exports = Converters = {
+module.exports = window.Converters = {
 
   // modified from:
   // http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c

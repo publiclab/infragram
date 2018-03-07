@@ -15,7 +15,7 @@ module.exports = function Dispatch(options, processor) {
   // this should accept an object with parameters r,g,b,h,s,v,m and mode
   options.run_infragrammar = function run_infragrammar(mode) {
     logger.save_log();
-    options.colorized = false;
+    //options.colorized = false;
     return processor.runInfragrammar(mode);
   }
 

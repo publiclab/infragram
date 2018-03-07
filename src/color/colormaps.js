@@ -16,6 +16,8 @@ module.exports = function Colormaps(options) {
                                       [0.7, [255, 255, 0  ], [255, 50,  50 ]],
                                       [0.9, [255, 50,  50 ], [255, 50,  50 ]]]);
 
+  var JsImage = require('../util/JsImage.js');
+
   function segmented_colormap(segments) {
     return function(x) {
       var i, l, len, m, ref, result, x0, x1, xstart, y0, y1;

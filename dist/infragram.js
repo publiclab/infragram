@@ -91,9 +91,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       options.uploader = options.uploader || false;
       options.processor = options.processor || 'javascript';
       options.camera = require('./io/camera')(options);
-
-      var JsImage = require('./util/JsImage.js');
-
       options.processors = {
         'webgl': require('./processors/webgl'),
         'javascript': require('./processors/javascript')
@@ -105,7 +102,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         Dispatch: require('./dispatch')(options, options.processor),
         Interface: require('./interface')(options),
         logger: options.logger,
-        processors: options.processors
+        processors: options.processors,
+        options: options
       };
     };
 
@@ -116,8 +114,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     "./io/camera": 8,
     "./logger": 9,
     "./processors/javascript": 10,
-    "./processors/webgl": 11,
-    "./util/JsImage.js": 12
+    "./processors/webgl": 11
   }],
   3: [function (require, module, exports) {
     // This file was adapted from infragram-js:
@@ -126,6 +123,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       var greyscale_colormap = segmented_colormap([[0, [0, 0, 0], [255, 255, 255]], [1, [255, 255, 255], [255, 255, 255]]]);
       var colormap1 = segmented_colormap([[0, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.75, [255, 255, 0], [255, 50, 50]]]);
       var colormap2 = segmented_colormap([[0, [0, 0, 255], [0, 0, 255]], [0.1, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.7, [255, 255, 0], [255, 50, 50]], [0.9, [255, 50, 50], [255, 50, 50]]]);
+
+      var JsImage = require('../util/JsImage.js');
 
       function segmented_colormap(segments) {
         return function (x) {
@@ -202,11 +201,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         segmented_colormap: segmented_colormap
       };
     };
-  }, {}],
+  }, {
+    "../util/JsImage.js": 12
+  }],
   4: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
-    module.exports = Converters = {
+    module.exports = window.Converters = {
       // modified from:
       // http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
       hsv2rgb: function hsv2rgb(h, s, v) {
@@ -294,8 +295,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       var logger = options.logger; // this should accept an object with parameters r,g,b,h,s,v,m and mode
 
       options.run_infragrammar = function run_infragrammar(mode) {
-        logger.save_log();
-        options.colorized = false;
+        logger.save_log(); //options.colorized = false;
+
         return processor.runInfragrammar(mode);
       }; // this maps -1-1 to 0-1, i guess
 
@@ -1090,7 +1091,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       var b_exp = "",
           g_exp = "",
           get_channels,
-          Colormaps = require('../color/colormaps')(),
+          Colormaps = require('../color/colormaps')(JsImage),
           colormap = Colormaps.colormap1,
           converters = require('../color/converters'),
           image = null,
@@ -1107,6 +1108,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           r_exp = "",
           set_mode,
           update_colorbar;
+
+      var JsImage = require('../util/JsImage.js');
 
       function histogram(array, _ref2, nbins) {
         var _ref3 = _slicedToArray(_ref2, 2),
@@ -1319,7 +1322,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       ;
 
-      save_expressions_hsv = function save_expressions_hsv(h, s, v) {
+      function save_expressions_hsv(h, s, v) {
         if (h === "") {
           h = "H";
         }
@@ -1335,7 +1338,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         eval("r_exp = function(R,G,B){var h=H,s=S,v=V,hsv = converters.rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return converters.hsv2rgb(" + h + "," + s + "," + v + ")[0];}");
         eval("g_exp = function(R,G,B){var h=H,s=S,v=V,hsv = converters.rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return converters.hsv2rgb(" + h + "," + s + "," + v + ")[1];}");
         return eval("b_exp = function(R,G,B){var h=H,s=S,v=V,hsv = converters.rgb2hsv(R, G, B), H = hsv[0], S = hsv[1], V = hsv[2]; return converters.hsv2rgb(" + h + "," + s + "," + v + ")[2];}");
-      };
+      }
 
       function getImageData() {
         var ctx = $('#image')[0].getContext("2d"); // risks being circular def of width/height
@@ -1358,7 +1361,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (mode === "ndvi") {
           return $("#colormaps-group")[0].style.display = "inline-block";
         } else {
-          if ($("#colormaps-group").size() > 0) {
+          if ($("#colormaps-group").length > 0) {
             return $("#colormaps-group")[0].style.display = "none";
           }
         }
@@ -1433,7 +1436,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
   }, {
     "../color/colormaps": 3,
-    "../color/converters": 4
+    "../color/converters": 4,
+    "../util/JsImage.js": 12
   }],
   11: [function (require, module, exports) {
     // Generated by CoffeeScript 2.1.0

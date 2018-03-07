@@ -6,7 +6,7 @@ module.exports = function javascriptProcessor() {
   var b_exp = "",
       g_exp = "",
       get_channels,
-      Colormaps = require('../color/colormaps')(),
+      Colormaps = require('../color/colormaps')(JsImage),
       colormap = Colormaps.colormap1,
       converters = require('../color/converters'),
       image = null,
@@ -23,6 +23,8 @@ module.exports = function javascriptProcessor() {
       r_exp = "",
       set_mode,
       update_colorbar;
+
+  var JsImage = require('../util/JsImage.js');
 
   function histogram(array, [min, max], nbins) {
     var a, bins, d, i, l, len;
@@ -186,7 +188,7 @@ module.exports = function javascriptProcessor() {
     return eval("b_exp = function(R,G,B){var r=R,g=G,b=B;return " + b + ";}");
   };
 
-  save_expressions_hsv = function(h, s, v) {
+  function save_expressions_hsv(h, s, v) {
     if (h === "") {
       h = "H";
     }
@@ -221,7 +223,7 @@ module.exports = function javascriptProcessor() {
     if (mode === "ndvi") {
       return $("#colormaps-group")[0].style.display = "inline-block";
     } else {
-      if ($("#colormaps-group").size() > 0) {
+      if ($("#colormaps-group").length > 0) {
         return $("#colormaps-group")[0].style.display = "none";
       }
     }
