@@ -35,38 +35,10 @@ module.exports = function Dispatch(options, processor) {
     }
   }
 
-  // saving inputs/expressions:
-
-  // can we move this into interface?
-  options.save_infragrammar_inputs = function save_infragrammar_inputs() {
-    options.mode = $('#modeSwitcher').val();
-    return options.save_infragrammar_expressions({
-      'r': $('#r_exp').val(),
-      'g': $('#g_exp').val(),
-      'b': $('#b_exp').val(),
-      'm': $('#m_exp').val(),
-      'h': $('#h_exp').val(),
-      's': $('#s_exp').val(),
-      'v': $('#v_exp').val()
-    });
-  }
-
-  options.save_infragrammar_expressions = function save_infragrammar_expressions(args) {
-    if (options.mode === "infragrammar") {
-      processor.save_expressions(args['r'], args['g'], args['b']);
-    } else if (options.mode === "infragrammar_mono") {
-      processor.save_expressions(args['m'], args['m'], args['m']);
-    } else if (options.mode === "infragrammar_hsv") {
-      return processor.save_expressions_hsv(args['h'], args['s'], args['v']);
-    }
-  }
-
   return {
     options: options,
     run_colorize: options.run_colorize,
-    run_infragrammar: options.run_infragrammar,
-    save_infragrammar_expressions: options.save_infragrammar_expressions,
-    save_infragrammar_inputs: options.save_infragrammar_inputs
+    run_infragrammar: options.run_infragrammar
   }
 
 }

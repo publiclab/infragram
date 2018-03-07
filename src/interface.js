@@ -8,6 +8,31 @@ module.exports = function Interface(options) {
   var logger = options.logger;
   var Colormaps = require('./color/colormaps');
 
+  // saving inputs/expressions:
+
+  function save_infragrammar_inputs() {
+    options.mode = $('#modeSwitcher').val();
+    return save_infragrammar_expressions({
+      'r': $('#r_exp').val(),
+      'g': $('#g_exp').val(),
+      'b': $('#b_exp').val(),
+      'm': $('#m_exp').val(),
+      'h': $('#h_exp').val(),
+      's': $('#s_exp').val(),
+      'v': $('#v_exp').val()
+    });
+  }
+
+  function save_infragrammar_expressions(args) {
+    if (options.mode === "infragrammar") {
+      options.processor.save_expressions(args['r'], args['g'], args['b']);
+    } else if (options.mode === "infragrammar_mono") {
+      options.processor.save_expressions(args['m'], args['m'], args['m']);
+    } else if (options.mode === "infragrammar_hsv") {
+      return options.processor.save_expressions_hsv(args['h'], args['s'], args['v']);
+    }
+  }
+
   $(document).ready(function() {
 
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
@@ -57,7 +82,7 @@ module.exports = function Interface(options) {
       $('#g_exp').val("G");
       $('#b_exp').val("B");
       $('#preset-modal').modal('hide');
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         return glHandleOnClickRaw();
       } else {
@@ -69,7 +94,7 @@ module.exports = function Interface(options) {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(R-B)/(R+B)");
       $('#preset-modal').modal('hide');
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         return glHandleOnSubmitInfraMono();
       } else {
@@ -81,7 +106,7 @@ module.exports = function Interface(options) {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(R-B)/(R+B)");
       $('#preset-modal').modal('hide');
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         glHandleOnClickColor();
         return glHandleOnClickNdvi();
@@ -96,7 +121,7 @@ module.exports = function Interface(options) {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(B-R)/(B+R)");
       $('#preset-modal').modal('hide');
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         return glHandleOnSubmitInfraMono();
       } else {
@@ -108,7 +133,7 @@ module.exports = function Interface(options) {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(B-R)/(B+R)");
       $('#preset-modal').modal('hide');
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         glHandleOnClickColor();
         return glHandleOnClickNdvi();
@@ -219,7 +244,7 @@ module.exports = function Interface(options) {
     $("#infragrammar_hsv").submit(function() {
       options.mode = "infragrammar_hsv";
       logger.log_hsv();
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         glHandleOnSubmitInfraHsv();
       } else {
@@ -231,7 +256,7 @@ module.exports = function Interface(options) {
     $("#infragrammar").submit(function() {
       options.mode = "infragrammar";
       logger.log_rgb();
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         glHandleOnSubmitInfra();
       } else {
@@ -243,7 +268,7 @@ module.exports = function Interface(options) {
     $("#infragrammar_mono").submit(function() {
       options.mode = "infragrammar_mono";
       logger.log_mono();
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         glHandleOnSubmitInfraMono();
       } else {
@@ -297,7 +322,7 @@ module.exports = function Interface(options) {
       $("#save-modal-btn").show();
       $("#save-zone").show();
       options.camera.initialize();
-      options.save_infragrammar_inputs();
+      save_infragrammar_inputs();
       if (options.webGlSupported) {
         setInterval(function() {
           if (image) {
