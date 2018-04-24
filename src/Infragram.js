@@ -40,9 +40,9 @@ window.Infragram = function Infragram(options) {
         }
         options.camera.getSnapshot();
         if (options.colorized) {
-          return options.run_colorize();
+          return options.colorize();
         }
-      }, 33);
+      }, 15);
     } else {
       setInterval(function() {
         if (image) {

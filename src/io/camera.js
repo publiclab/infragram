@@ -17,7 +17,6 @@ module.exports = function Camera(options) {
     ctx = canvas.getContext("2d");
     // Trigger a snapshot w/ button
     // -- move this to interface.js?
-    $("#webcam-activate").hide();
     $("#snapshot").show();
     $("#live-video").show();
     $("#webcam").show();

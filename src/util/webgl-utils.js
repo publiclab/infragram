@@ -36,6 +36,8 @@
 
 module.exports = function webglUtils() {
 
+var lastError;
+
 /**
  * Wrapped logging function.
  * @param {string} msg The message to log.
