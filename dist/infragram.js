@@ -6,37 +6,41 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-(function e(t, n, r) {
-  function s(o, u) {
-    if (!n[o]) {
-      if (!t[o]) {
-        var a = typeof require == "function" && require;
-        if (!u && a) return a(o, !0);
-        if (i) return i(o, !0);
-        var f = new Error("Cannot find module '" + o + "'");
-        throw f.code = "MODULE_NOT_FOUND", f;
+(function () {
+  function e(t, n, r) {
+    function s(o, u) {
+      if (!n[o]) {
+        if (!t[o]) {
+          var a = typeof require == "function" && require;
+          if (!u && a) return a(o, !0);
+          if (i) return i(o, !0);
+          var f = new Error("Cannot find module '" + o + "'");
+          throw f.code = "MODULE_NOT_FOUND", f;
+        }
+
+        var l = n[o] = {
+          exports: {}
+        };
+        t[o][0].call(l.exports, function (e) {
+          var n = t[o][1][e];
+          return s(n ? n : e);
+        }, l, l.exports, e, t, n, r);
       }
 
-      var l = n[o] = {
-        exports: {}
-      };
-      t[o][0].call(l.exports, function (e) {
-        var n = t[o][1][e];
-        return s(n ? n : e);
-      }, l, l.exports, e, t, n, r);
+      return n[o].exports;
     }
 
-    return n[o].exports;
+    var i = typeof require == "function" && require;
+
+    for (var o = 0; o < r.length; o++) {
+      s(r[o]);
+    }
+
+    return s;
   }
 
-  var i = typeof require == "function" && require;
-
-  for (var o = 0; o < r.length; o++) {
-    s(r[o]);
-  }
-
-  return s;
-})({
+  return e;
+})()({
   1: [function (require, module, exports) {
     function urlHash() {
       function getUrlHashParameter(param) {
@@ -101,6 +105,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       options.processor = options.processors[options.processor]();
       options.logger = require('./logger')(options);
 
+      var Interface = require('./interface')(options); // this can change processor based on URL hash
+
+
+      options.processor.initialize();
+      console.log('processor:', options.processor.type);
+
       options.colorize = function colorize() {
         options.processor.colorize();
       }; // this should accept an object with parameters r,g,b,h,s,v,m and mode
@@ -144,7 +154,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       return {
         Camera: options.camera,
-        Interface: require('./interface')(options),
+        Interface: Interface,
         logger: options.logger,
         run: options.run,
         colorize: options.colorize,
@@ -523,13 +533,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           socket: options.uploadable
         });
         $(options.imageSelector).ready(function () {
-          var enablewebgl, idNameMap, src; // move into Infragram.js
+          var idNameMap, src;
+          if (urlHash.getUrlHashParameter("webgl") === "true") options.processor = options.processors.webgl();
+          console.log(urlHash.getUrlHashParameters);
 
-          enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
-          var initialized = options.processor.initialize && options.processor.initialize();
-          options.webGlSupported = enablewebgl && initialized;
-
-          if (options.webGlSupported) {
+          if (options.processor === "webgl") {
             $("#webgl-activate").html("&laquo; Go back to JS version");
           } // broken:  
 

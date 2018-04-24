@@ -1,6 +1,6 @@
 {
   "name": "infragram",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A minimal core of the Infragram project in JavaScript.",
   "main": "dist/infragram.js",
   "scripts": {
@@ -22,7 +22,6 @@
     "url": "https://github.com/publiclab/infragram/issues"
   },
   "dependencies": {
-    "woofmark": "git://github.com/addyosmani/getUserMedia.js#semver:~1.0.0",
     "webrtc-adapter": "^1.1.0",
     "webgl-utils": "~1.0.0",
     "font-awesome": "~4.5.0",

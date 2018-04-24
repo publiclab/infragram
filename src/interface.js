@@ -38,14 +38,12 @@ module.exports = function Interface(options) {
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
     $(options.imageSelector).ready(function() {
-      var enablewebgl, idNameMap, src;
+      var idNameMap, src;
 
-      // move into Infragram.js
-      enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
-      var initialized = options.processor.initialize && options.processor.initialize();
-      options.webGlSupported = enablewebgl && initialized;
+      if (urlHash.getUrlHashParameter("webgl") === "true") options.processor = options.processors.webgl();
+console.log(urlHash.getUrlHashParameters)
 
-      if (options.webGlSupported) {
+      if (options.processor === "webgl") {
         $("#webgl-activate").html("&laquo; Go back to JS version");
       }
 
