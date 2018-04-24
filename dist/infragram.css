@@ -1,3 +1,18 @@
+/* https://github.com/theleagueof/junction */
+@font-face {
+  font-family:'junctionregular';
+  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
+  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot?#iefix") format("embedded-opentype"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff") format("woff"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf") format("truetype"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular") format("svg");
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family:junctionregular, lucida grande,lucida sans console,sans-serif;
+  font-weight:normal
+}
+
 body { padding-top: 20px; }
 span.group { display: inline-block; }
 
