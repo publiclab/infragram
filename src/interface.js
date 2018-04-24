@@ -38,19 +38,15 @@ module.exports = function Interface(options) {
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
     $(options.imageSelector).ready(function() {
-      var enablewebgl, idNameMap, src;
 
-      // move into Infragram.js
-      enablewebgl = urlHash.getUrlHashParameter("webgl") === "true" ? true : false;
-      var initialized = options.processor.initialize && options.processor.initialize();
-      options.webGlSupported = enablewebgl && initialized;
+      if (urlHash.getUrlHashParameter("legacy") === "true") options.processor = options.processors.javascript();
+      else options.processor = options.processors.webgl();
 
-      if (options.webGlSupported) {
+      if (options.processor === "webgl") {
         $("#webgl-activate").html("&laquo; Go back to JS version");
       }
 
-      // broken:  
-      idNameMap = {
+      var src, idNameMap = {
         "#m_exp": "m",
         "#r_exp": "r",
         "#g_exp": "g",
@@ -60,7 +56,8 @@ module.exports = function Interface(options) {
         "#v_exp": "v"
       };
 
-      urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
+      // broken:  
+      //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
       src = urlHash.getUrlHashParameter('src');
       if (src) {
         params = parametersObject(location.search.split('?')[1]);

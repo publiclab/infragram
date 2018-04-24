@@ -11,7 +11,6 @@ module.exports = function webglProcessor() {
 
   vertices.itemSize = 2;
 
-
   function initialize() {
     imgContext = createContext("raw", 1, 0, 1.0, "image");
     mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
@@ -129,6 +128,7 @@ console.log('generateShader');
     r = r.replace(/([0-9])([^\.])?/g, "$1.0$2");
     g = g.replace(/([0-9])([^\.])?/g, "$1.0$2");
     b = b.replace(/([0-9])([^\.])?/g, "$1.0$2");
+    // adjust NDVI range
     if (ctx.mode === "ndvi") {
       if (r !== "") {
         r = "((" + r + ") + 1.0) / 2.0";
@@ -224,9 +224,15 @@ console.log('setMode', newMode);
     return imgContext.selColormap = mapContext.selColormap = 1;
   };
 
-  function colorize() {
-    return imgContext.selColormap = mapContext.selColormap = 0;
+  function colorize(val) {
+    if (val === "hsv") run('hsv');
+    else {
+      imgContext.selColormap = mapContext.selColormap = val;
+      run('ndvi');
+    }
   }
+
+  initialize();
 
   return {
     type: 'webgl',

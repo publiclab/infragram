@@ -3,7 +3,6 @@ window.Infragram = function Infragram(options) {
   options.uploader = options.uploader || false;
   options.processor = options.processor || 'javascript';
   options.camera = require('./io/camera')(options);
-
   options.colorized      = options.colorized      || false;
   options.mode           = options.mode           || "raw",
   options.video_live     = options.video_live     || false,
@@ -16,6 +15,10 @@ window.Infragram = function Infragram(options) {
 
   options.processor = options.processors[options.processor]();
   options.logger = require('./logger')(options);
+
+  var Interface = require('./interface')(options); // this can change processor based on URL hash
+  options.processor.initialize();
+  console.log('processor:', options.processor.type)
 
   options.colorize = function colorize() {
     options.processor.colorize();
@@ -37,9 +40,9 @@ window.Infragram = function Infragram(options) {
         }
         options.camera.getSnapshot();
         if (options.colorized) {
-          return options.run_colorize();
+          return options.colorize();
         }
-      }, 33);
+      }, 15);
     } else {
       setInterval(function() {
         if (image) {
@@ -55,7 +58,7 @@ window.Infragram = function Infragram(options) {
 
   return {
     Camera: options.camera,
-    Interface: require('./interface')(options),
+    Interface: Interface,
     logger: options.logger,
     run: options.run,
     colorize: options.colorize,
