@@ -7,13 +7,15 @@ module.exports = function webglProcessor() {
       mapContext = null,
       vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
       waitForShadersToLoad = 0,
-      webglUtils = require('../util/webgl-utils')();
+      webglUtils = require('../util/webgl-utils')(),
+      colorized = false;
 
   vertices.itemSize = 2;
 
   function initialize() {
     imgContext = createContext("raw", 1, 0, 1.0, "image");
     mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
+    decolorize();
     waitForShadersToLoad = 2;
     $("#shader-vs").load("dist/shader.vert", glShaderLoaded);
     $("#shader-fs-template").load("dist/shader.frag", glShaderLoaded);
@@ -23,6 +25,28 @@ module.exports = function webglProcessor() {
       return false;
     }
   };
+
+  function colorize(val) {
+    if (val === "hsv") run('hsv');
+    else {
+      var colormaps = {
+        default: 0,
+        stretched: 2,
+        grey: 1
+      }
+      if (typeof val === 'string') val = colormaps[val];
+      imgContext.selColormap = mapContext.selColormap = val;
+      colorized = true;
+      $("#colorbar-container").css('display', 'inline-block');
+      $("#colormaps-group").css('display', 'inline-block');
+    }
+  }
+
+  function decolorize() {
+    colorized = false;
+    $("#colorbar-container").css('display', 'none');
+    $("#colormaps-group").css('display', 'none');
+  }
 
   function createBuffer(ctx, data) {
     var buffer, gl;
@@ -76,7 +100,7 @@ module.exports = function webglProcessor() {
   };
 
   function drawScene(ctx, returnImage) {
-    var gl, pColormap, pHsvUniform, pNdviUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition;
+    var gl, pColormap, pHsvUniform, pColorizedUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition;
     if (!returnImage) {
       window.requestAnimationFrame(function() {
  //     webglUtils.requestAnimFrame(function() {
@@ -85,7 +109,7 @@ module.exports = function webglProcessor() {
     }
     if (ctx.updateShader) {
       ctx.updateShader = false;
-      generateShader(ctx);
+      ctx.shaderProgram = generateShader(ctx);
     }
     gl = ctx.gl;
     gl.viewport(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -98,10 +122,13 @@ module.exports = function webglProcessor() {
     gl.uniform1i(pSampler, 0);
     pSliderUniform = gl.getUniformLocation(ctx.shaderProgram, "uSlider");
     gl.uniform1f(pSliderUniform, ctx.slider);
-    pNdviUniform = gl.getUniformLocation(ctx.shaderProgram, "uNdvi");
-    gl.uniform1i(pNdviUniform, (ctx.mode === "ndvi" || ctx.colormap ? 1 : 0));
+
+    pColorizedUniform = gl.getUniformLocation(ctx.shaderProgram, "uColorized");
+    gl.uniform1i(pColorizedUniform, (colorized || ctx.colormap ? 1 : 0));
+
     pSelColormapUniform = gl.getUniformLocation(ctx.shaderProgram, "uSelectColormap");
     gl.uniform1i(pSelColormapUniform, ctx.selColormap);
+
     pHsvUniform = gl.getUniformLocation(ctx.shaderProgram, "uHsv");
     gl.uniform1i(pHsvUniform, (ctx.mode === "hsv" ? 1 : 0));
     pColormap = gl.getUniformLocation(ctx.shaderProgram, "uColormap");
@@ -113,7 +140,6 @@ module.exports = function webglProcessor() {
   };
 
   function generateShader(ctx) {
-console.log('generateShader');
     var b, code, g, r;
     [r, g, b] = ctx.expression;
     // Map HSV to shader variable names
@@ -154,20 +180,12 @@ console.log('generateShader');
     code = code.replace(/@2@/g, g);
     code = code.replace(/@3@/g, b);
     $("#shader-fs").html(code);
-    return ctx.shaderProgram = webglUtils.createProgramFromScripts(ctx.gl, ["shader-vs", "shader-fs"]);
+    return webglUtils.createProgramFromScripts(ctx.gl, ["shader-vs", "shader-fs"]);
   };
 
   function setMode(ctx, newMode) {
-console.log('setMode', newMode);
     if (ctx.mode != newMode) ctx.updateShader = true;
     ctx.mode = newMode;
-    if (ctx.mode === "ndvi") {
-      $("#colorbar-container")[0].style.display = "inline-block";
-      return $("#colormaps-group")[0].style.display = "inline-block";
-    } else {
-      $("#colorbar-container")[0].style.display = "none";
-      return $("#colormaps-group")[0].style.display = "none";
-    }
   };
 
   function glShaderLoaded() {
@@ -204,14 +222,6 @@ console.log('setMode', newMode);
     return imgContext.imageData;
   };
 
-  function glHandleDefaultColormap() {
-    return imgContext.selColormap = mapContext.selColormap = 0;
-  };
-
-  function glHandleStretchedColormap() {
-    return imgContext.selColormap = mapContext.selColormap = 2;
-  };
-
   function saveExpression(a, b, c) {
     return imgContext.expression = [a, b, c];
   };
@@ -219,18 +229,6 @@ console.log('setMode', newMode);
   function run(mode) {
     return setMode(imgContext, mode);
   };
-
-  function glHandleOnClickGrey() {
-    return imgContext.selColormap = mapContext.selColormap = 1;
-  };
-
-  function colorize(val) {
-    if (val === "hsv") run('hsv');
-    else {
-      imgContext.selColormap = mapContext.selColormap = val;
-      run('ndvi');
-    }
-  }
 
   initialize();
 
@@ -243,6 +241,7 @@ console.log('setMode', newMode);
     save_expressions: saveExpression,
     setMode: setMode,
     updateImage: updateImage,
+    decolorize: decolorize,
     colorize: colorize
   }
 

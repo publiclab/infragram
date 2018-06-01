@@ -16,7 +16,7 @@ window.Infragram = function Infragram(options) {
   options.processor = options.processors[options.processor]();
   options.logger = require('./logger')(options);
 
-  var Interface = require('./interface')(options); // this can change processor based on URL hash
+  var Interface = require('./ui/interface')(options); // this can change processor based on URL hash
   options.processor.initialize();
   console.log('processor:', options.processor.type)
 

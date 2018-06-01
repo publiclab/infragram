@@ -4,9 +4,10 @@ module.exports = function Interface(options) {
   options.fileSelector = options.fileSelector || "#file-sel";
 
   var urlHash = require('urlhash')();
-  var FileUpload = require('./file-upload');
+  var FileUpload = require('../file-upload');
   var logger = options.logger;
-  var Colormaps = require('./color/colormaps');
+  var Colormaps = require('../color/colormaps');
+  var Fullscreen;
 
   // saving inputs/expressions:
 
@@ -34,6 +35,8 @@ module.exports = function Interface(options) {
   }
 
   $(document).ready(function() {
+
+    Fullscreen = require('./fullscreen')(options);
 
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
@@ -75,6 +78,7 @@ module.exports = function Interface(options) {
       return true;
     });
 
+    // preset button
     $("#preset_raw").click(function() {
       $('#modeSwitcher').val("infragrammar").change();
       $('#r_exp').val("R");
@@ -85,6 +89,7 @@ module.exports = function Interface(options) {
       return options.run(options.mode);
     });
 
+    // preset button
     $("#preset_ndvi_blue").click(function() {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(R-B)/(R+B)");
@@ -93,6 +98,7 @@ module.exports = function Interface(options) {
       return options.run(options.mode);
     });
 
+    // preset button
     // we should explicitly set mode here... to ndvi?
     $("#preset_ndvi_blue_color").click(function() {
       $('#modeSwitcher').val("infragrammar_mono").change();
@@ -104,6 +110,7 @@ module.exports = function Interface(options) {
       return options.colorize();
     });
 
+    // preset button
     $("#preset_ndvi_red").click(function() {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(B-R)/(B+R)");
@@ -112,6 +119,7 @@ module.exports = function Interface(options) {
       return options.run(options.mode);
     });
 
+    // preset button
     $("#preset_ndvi_red_color").click(function() {
       $('#modeSwitcher').val("infragrammar_mono").change();
       $('#m_exp').val("(B-R)/(B+R)");
@@ -129,55 +137,16 @@ module.exports = function Interface(options) {
     });
 
 
-    // refactor colormaps based on list
     $("#default_colormap").click(function() {
-      var colormap;
-      if (options.webGlSupported) {
-        glhandledefaultcolormap();
-        glhandleonclickndvi();
-      } else {
-        options.colorized = true;
-        colormap = Colormaps.colormap1;
-        options.colorize();
-      }
+      options.colorized = true;
+      options.colorize('default');
       return $("#btn-colorize").addClass("active");
     });
 
     $("#stretched_colormap").click(function() {
-      var colormap;
-      if (options.webGlSupported) {
-        glHandleStretchedColormap();
-        glHandleOnClickNdvi();
-      } else {
-        options.colorized = true;
-        colormap = Colormaps.colormap2;
-        options.colorize();
-      }
+      options.colorized = true;
+      options.colorize('stretched');
       return $("#btn-colorize").addClass("active");
-    });
-
-    $("button#raw").click(function() {
-      options.mode = "raw";
-      logger.log.push("mode=raw");
-      return options.run(options.mode);
-    });
-
-    $("button#ndvi").click(function() {
-      options.mode = "raw";
-      logger.log.push("mode=ndvi");
-      return options.run(options.mode);
-    });
-
-    $("button#nir").click(function() {
-      logger.log.push("mode=nir");
-      $("#m_exp").val("R");
-      $("#modeSwitcher").val("infragrammar_mono").change();
-      if (options.webGlSupported) {
-        glHandleOnSubmitInfraMono();
-      } else {
-        jsHandleOnSubmitInfraMono();
-      }
-      return true;
     });
 
     $("#download").click(function() {
@@ -185,11 +154,11 @@ module.exports = function Interface(options) {
       return true;
     });
 
+    // refactor this, it's a mess:
     $("#save").click(function() {
-      var img, sendThumbnail;
-      sendThumbnail = function() {
-        var img;
-        img = getCurrentImage();
+      var img;
+      function sendThumbnail() {
+        img = options.processor.getCurrentImage();
         return FileUpload.uploadThumbnail(img, function() {
           $("#form-filename").val(FileUpload.getFilename());
           $("#form-log").val(JSON.stringify(logger.log));
@@ -199,7 +168,7 @@ module.exports = function Interface(options) {
       $("#save").prop("disabled", true);
       $("#save").html("Saving...");
       if (FileUpload.getFilename() === "") {
-        img = getCurrentImage();
+        img = options.processor.getCurrentImage();
         FileUpload.fromBase64("camera", img, sendThumbnail);
       } else if (FileUpload.isLoadedFromFile() === false) {
         FileUpload.duplicate(sendThumbnail);
@@ -209,6 +178,7 @@ module.exports = function Interface(options) {
       return true;
     });
 
+    // buttons to run Analysis steps
     $("#infragrammar_hsv").submit(function() {
       options.mode = "infragrammar_hsv";
       logger.log_hsv();
@@ -233,36 +203,6 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    // not sure about this one
-    $("button#grey").click(function() {
-      options.mode = "infragrammar_mono";
-      logger.log.push("mode=ndvi");
-      options.run(options.mode);
-      return true;
-    });
-
-    $("button#colorify").click(function() {
-      return options.colorize();
-    });
-
-    // redundant? 
-    $("button#color").click(function() {
-      logger.log.push("mode=ndvi&color=true");
-      return options.colorize();
-    });
-
-    $("#webgl-activate").click(function() {
-      var href;
-      href = window.location.href;
-      if (options.webGlSupported) {
-        href = href.replace(/(?:\?|&)webgl=true/gi, "");
-      } else {
-        href += href.indexOf("?") >= 0 ? "&webgl=true" : "?webgl=true";
-      }
-      window.location.href = href;
-      return true;
-    });
-
     $("#webcam-activate").click(function() {
       $("#save-modal-btn").show();
       $("#save-zone").show();
@@ -274,31 +214,6 @@ module.exports = function Interface(options) {
 
     $("#snapshot").click(function() {
       options.camera.getSnapshot();
-      return true;
-    });
-
-    $("#exit-fullscreen").click(function() {
-      $("#image").css("display", "inline");
-      $("#image").css("position", "relative");
-      $("#image").css("height", "auto");
-      $("#image").css("left", 0);
-      $("#backdrop").hide();
-      $("#exit-fullscreen").hide();
-      $("#fullscreen").show();
-      return true;
-    });
-
-    $("#fullscreen").click(function() {
-      $("#image").css("display", "block");
-      $("#image").css("height", "100%");
-      $("#image").css("width", "auto");
-      $("#image").css("position", "absolute");
-      $("#image").css("top", "0px");
-      $("#image").css("left", parseInt((window.innerWidth - $("#image").width()) / 2) + "px");
-      $("#image").css("z-index", "2");
-      $("#backdrop").show();
-      $("#exit-fullscreen").show();
-      $("#fullscreen").hide();
       return true;
     });
 
