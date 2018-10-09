@@ -693,14 +693,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           colormap = Colormaps.colormap1,
           converters = require('../color/converters'),
           image = null,
-          jsHandleOnClickGrey,
-          jsHandleOnClickNdvi,
-          jsHandleOnClickRaw,
-          jsHandleOnSlide,
-          jsHandleOnSubmitInfra,
-          jsHandleOnSubmitInfraHsv,
-          jsHandleOnSubmitInfraMono,
-          m_exp = "",
           mode = "raw",
           ndvi,
           r_exp = "",
@@ -708,38 +700,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           update_colorbar;
 
       var JsImage = require('../util/JsImage.js');
-
-      function histogram(array, _ref2, nbins) {
-        var _ref3 = _slicedToArray(_ref2, 2),
-            min = _ref3[0],
-            max = _ref3[1];
-
-        var a, bins, d, i, l, len;
-
-        bins = function () {
-          var l, ref, results;
-          results = [];
-
-          for (i = l = 0, ref = nbins; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
-            results.push(0);
-          }
-
-          return results;
-        }();
-
-        d = (max - min) / nbins;
-
-        for (l = 0, len = array.length; l < len; l++) {
-          a = array[l];
-          i = Math.floor((a - min) / d);
-
-          if (0 <= i && i < nbins) {
-            bins[i]++;
-          }
-        }
-
-        return bins;
-      }
 
       function get_channels(jsImage) {
         var b, g, i, l, mkImage, n, r, ref;
@@ -996,34 +956,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         ctx = e.getContext("2d");
         return ctx.canvas.toDataURL("image/jpeg");
       }
-
-      jsHandleOnClickRaw = function jsHandleOnClickRaw() {
-        return set_mode("raw");
-      };
-
-      jsHandleOnClickNdvi = function jsHandleOnClickNdvi() {
-        return set_mode("ndvi");
-      };
-
-      jsHandleOnSubmitInfraHsv = function jsHandleOnSubmitInfraHsv() {
-        save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val());
-        return set_mode("infragrammar_hsv");
-      };
-
-      jsHandleOnSubmitInfra = function jsHandleOnSubmitInfra() {
-        save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val());
-        return set_mode("infragrammar");
-      };
-
-      jsHandleOnSubmitInfraMono = function jsHandleOnSubmitInfraMono() {
-        save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val());
-        return set_mode("infragrammar_mono");
-      };
-
-      jsHandleOnClickGrey = function jsHandleOnClickGrey() {
-        colormap = Colormaps.greyscale_colormap;
-        return update(image);
-      };
 
       return {
         type: 'javascript',
@@ -1375,11 +1307,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       $("#default_colormap").click(function () {
         options.colorized = true;
         options.colorize('default');
+        options.run(options.mode);
         return $("#btn-colorize").addClass("active");
       });
       $("#stretched_colormap").click(function () {
         options.colorized = true;
         options.colorize('stretched');
+        options.run(options.mode);
         return $("#btn-colorize").addClass("active");
       });
     };

@@ -10,14 +10,6 @@ module.exports = function javascriptProcessor() {
       colormap = Colormaps.colormap1,
       converters = require('../color/converters'),
       image = null,
-      jsHandleOnClickGrey,
-      jsHandleOnClickNdvi,
-      jsHandleOnClickRaw,
-      jsHandleOnSlide,
-      jsHandleOnSubmitInfra,
-      jsHandleOnSubmitInfraHsv,
-      jsHandleOnSubmitInfraMono,
-      m_exp = "",
       mode = "raw",
       ndvi,
       r_exp = "",
@@ -25,27 +17,6 @@ module.exports = function javascriptProcessor() {
       update_colorbar;
 
   var JsImage = require('../util/JsImage.js');
-
-  function histogram(array, [min, max], nbins) {
-    var a, bins, d, i, l, len;
-    bins = (function() {
-      var l, ref, results;
-      results = [];
-      for (i = l = 0, ref = nbins; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
-        results.push(0);
-      }
-      return results;
-    })();
-    d = (max - min) / nbins;
-    for (l = 0, len = array.length; l < len; l++) {
-      a = array[l];
-      i = Math.floor((a - min) / d);
-      if ((0 <= i && i < nbins)) {
-        bins[i]++;
-      }
-    }
-    return bins;
-  }
 
   function get_channels(jsImage) {
     var b, g, i, l, mkImage, n, r, ref;
@@ -261,34 +232,6 @@ module.exports = function javascriptProcessor() {
     e = $("#image")[0];
     ctx = e.getContext("2d");
     return ctx.canvas.toDataURL("image/jpeg");
-  }
-
-  jsHandleOnClickRaw = function() {
-    return set_mode("raw");
-  }
-
-  jsHandleOnClickNdvi = function() {
-    return set_mode("ndvi");
-  }
-
-  jsHandleOnSubmitInfraHsv = function() {
-    save_expressions_hsv($('#h_exp').val(), $('#s_exp').val(), $('#v_exp').val());
-    return set_mode("infragrammar_hsv");
-  }
-
-  jsHandleOnSubmitInfra = function() {
-    save_expressions($('#r_exp').val(), $('#g_exp').val(), $('#b_exp').val());
-    return set_mode("infragrammar");
-  }
-
-  jsHandleOnSubmitInfraMono = function() {
-    save_expressions($('#m_exp').val(), $('#m_exp').val(), $('#m_exp').val());
-    return set_mode("infragrammar_mono");
-  }
-
-  jsHandleOnClickGrey = function() {
-    colormap = Colormaps.greyscale_colormap;
-    return update(image);
   }
 
   return {
