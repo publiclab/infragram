@@ -18,6 +18,7 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     $('#m_exp').val("(R-B)/(R+B)");
     $('#preset-modal').modal('hide');
     options.colorized = false;
+    options.processor.decolorize();
     save_infragrammar_inputs();
     return options.run(options.mode);
   });
@@ -40,6 +41,7 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     $('#m_exp').val("(B-R)/(B+R)");
     $('#preset-modal').modal('hide');
     options.colorized = false;
+    options.processor.decolorize();
     save_infragrammar_inputs();
     return options.run(options.mode);
   });

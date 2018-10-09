@@ -1479,6 +1479,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $('#m_exp').val("(R-B)/(R+B)");
         $('#preset-modal').modal('hide');
         options.colorized = false;
+        options.processor.decolorize();
         save_infragrammar_inputs();
         return options.run(options.mode);
       }); // preset button
@@ -1499,6 +1500,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $('#m_exp').val("(B-R)/(B+R)");
         $('#preset-modal').modal('hide');
         options.colorized = false;
+        options.processor.decolorize();
         save_infragrammar_inputs();
         return options.run(options.mode);
       }); // preset button
