@@ -231,6 +231,7 @@ module.exports = function javascriptProcessor() {
     mode = new_mode;
     update(getImageData());
     if (mode === "ndvi") {
+      // TODO: move this into interface code:
       return $("#colormaps-group")[0].style.display = "inline-block";
     } else {
       if ($("#colormaps-group").length > 0) {

@@ -37,6 +37,7 @@ module.exports = function webglProcessor() {
       if (typeof val === 'string') val = colormaps[val];
       imgContext.selColormap = mapContext.selColormap = val;
       colorized = true;
+      // TODO: move into interface code:
       $("#colorbar-container").css('display', 'inline-block');
       $("#colormaps-group").css('display', 'inline-block');
     }

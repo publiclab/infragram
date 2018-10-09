@@ -7,7 +7,7 @@ module.exports = function Interface(options) {
   var FileUpload = require('../file-upload');
   var logger = options.logger;
   var Colormaps = require('../color/colormaps');
-  var Fullscreen;
+  var Fullscreen, Presets, Analysis, Colorize, Saving;
 
   // saving inputs/expressions:
 
@@ -37,6 +37,10 @@ module.exports = function Interface(options) {
   $(document).ready(function() {
 
     Fullscreen = require('./fullscreen')(options);
+    Presets = require('../ui/presets')(options, save_infragrammar_inputs);
+    Analysis = require('../ui/analysis')(options, save_infragrammar_inputs);
+    Colorize = require('../ui/colorize')(options);
+    Saving = require('../ui/saving')(options);
 
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
@@ -59,7 +63,7 @@ module.exports = function Interface(options) {
         "#v_exp": "v"
       };
 
-      // broken:  
+      // TODO: broken:  
       //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
       src = urlHash.getUrlHashParameter('src');
       if (src) {
@@ -75,131 +79,6 @@ module.exports = function Interface(options) {
       $("#save-zone").show();
       FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
       $('#preset-modal').modal('show');
-      return true;
-    });
-
-    // preset button
-    $("#preset_raw").click(function() {
-      $('#modeSwitcher').val("infragrammar").change();
-      $('#r_exp').val("R");
-      $('#g_exp').val("G");
-      $('#b_exp').val("B");
-      $('#preset-modal').modal('hide');
-      save_infragrammar_inputs();
-      return options.run(options.mode);
-    });
-
-    // preset button
-    $("#preset_ndvi_blue").click(function() {
-      $('#modeSwitcher').val("infragrammar_mono").change();
-      $('#m_exp').val("(R-B)/(R+B)");
-      $('#preset-modal').modal('hide');
-      save_infragrammar_inputs();
-      return options.run(options.mode);
-    });
-
-    // preset button
-    // we should explicitly set mode here... to ndvi?
-    $("#preset_ndvi_blue_color").click(function() {
-      $('#modeSwitcher').val("infragrammar_mono").change();
-      $('#m_exp').val("(R-B)/(R+B)");
-      $('#preset-modal').modal('hide');
-      save_infragrammar_inputs();
-      options.colorized = true;
-      options.run(options.mode);
-      return options.colorize();
-    });
-
-    // preset button
-    $("#preset_ndvi_red").click(function() {
-      $('#modeSwitcher').val("infragrammar_mono").change();
-      $('#m_exp').val("(B-R)/(B+R)");
-      $('#preset-modal').modal('hide');
-      save_infragrammar_inputs();
-      return options.run(options.mode);
-    });
-
-    // preset button
-    $("#preset_ndvi_red_color").click(function() {
-      $('#modeSwitcher').val("infragrammar_mono").change();
-      $('#m_exp').val("(B-R)/(B+R)");
-      $('#preset-modal').modal('hide');
-      save_infragrammar_inputs();
-      options.colorized = true;
-      options.run(options.mode);
-      return options.colorize();
-    });
-
-    $("#btn-colorize").click(function() {
-      options.colorized = true;
-      options.run(options.mode);
-      return options.colorize();
-    });
-
-
-    $("#default_colormap").click(function() {
-      options.colorized = true;
-      options.colorize('default');
-      return $("#btn-colorize").addClass("active");
-    });
-
-    $("#stretched_colormap").click(function() {
-      options.colorized = true;
-      options.colorize('stretched');
-      return $("#btn-colorize").addClass("active");
-    });
-
-    $("#download").click(function() {
-      downloadImage();
-      return true;
-    });
-
-    // refactor this, it's a mess:
-    $("#save").click(function() {
-      var img;
-      function sendThumbnail() {
-        img = options.processor.getCurrentImage();
-        return FileUpload.uploadThumbnail(img, function() {
-          $("#form-filename").val(FileUpload.getFilename());
-          $("#form-log").val(JSON.stringify(logger.log));
-          return $("#save-form").submit();
-        });
-      };
-      $("#save").prop("disabled", true);
-      $("#save").html("Saving...");
-      if (FileUpload.getFilename() === "") {
-        img = options.processor.getCurrentImage();
-        FileUpload.fromBase64("camera", img, sendThumbnail);
-      } else if (FileUpload.isLoadedFromFile() === false) {
-        FileUpload.duplicate(sendThumbnail);
-      } else {
-        sendThumbnail();
-      }
-      return true;
-    });
-
-    // buttons to run Analysis steps
-    $("#infragrammar_hsv").submit(function() {
-      options.mode = "infragrammar_hsv";
-      logger.log_hsv();
-      save_infragrammar_inputs();
-      options.run(options.mode);
-      return true;
-    });
-
-    $("#infragrammar").submit(function() {
-      options.mode = "infragrammar";
-      logger.log_rgb();
-      save_infragrammar_inputs();
-      options.run(options.mode);
-      return true;
-    });
-
-    $("#infragrammar_mono").submit(function() {
-      options.mode = "infragrammar_mono";
-      logger.log_mono();
-      save_infragrammar_inputs();
-      options.run(options.mode);
       return true;
     });
 
