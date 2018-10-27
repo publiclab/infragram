@@ -45,7 +45,7 @@ window.Infragram = function Infragram(options) {
   }
 
   function download() {
-    if (image) options.run(options.mode);
+    options.run(options.mode);
     //if (options.colorized) return options.colorize();
     return options.file.downloadImage();
   }

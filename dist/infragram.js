@@ -134,7 +134,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
 
       function download() {
-        if (image) options.run(options.mode); //if (options.colorized) return options.colorize();
+        options.run(options.mode); //if (options.colorized) return options.colorize();
 
         return options.file.downloadImage();
       }
