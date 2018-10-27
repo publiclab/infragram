@@ -8,7 +8,13 @@ module.exports = function webglProcessor() {
       vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
       waitForShadersToLoad = 0,
       webglUtils = require('../util/webgl-utils')(),
-      colorized = false;
+      colorized = false,
+      colormaps = {
+        default: 0,
+        stretched: 2,
+        grey: 1
+      },
+      colormap = colormaps.default;
 
   vertices.itemSize = 2;
 
@@ -29,24 +35,17 @@ module.exports = function webglProcessor() {
   function colorize(val) {
     if (val === "hsv") run('hsv');
     else {
-      var colormaps = {
-        default: 0,
-        stretched: 2,
-        grey: 1
-      }
+      val = val || colormap;
+      colormap = val;
+      console.log('colorize:' + val);
       if (typeof val === 'string') val = colormaps[val];
       imgContext.selColormap = mapContext.selColormap = val;
       colorized = true;
-      // TODO: move into interface code:
-      $("#colorbar-container").css('display', 'inline-block');
-      $("#colormaps-group").css('display', 'inline-block');
     }
   }
 
   function decolorize() {
     colorized = false;
-    $("#colorbar-container").css('display', 'none');
-    $("#colormaps-group").css('display', 'none');
   }
 
   function createBuffer(ctx, data) {

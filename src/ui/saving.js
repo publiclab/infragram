@@ -1,4 +1,6 @@
-module.exports = function Colorize(options) {
+module.exports = function Saving(options) {
+
+  // This is all unused...
 
   $("#download").click(function() {
     downloadImage();
@@ -6,7 +8,9 @@ module.exports = function Colorize(options) {
   });
 
   // refactor this, it's a mess:
-  $("#save").click(function() {
+  $("#save").click(saveImage);
+
+  function saveImage() {
     var img;
     function sendThumbnail() {
       img = options.processor.getCurrentImage();
@@ -26,7 +30,11 @@ module.exports = function Colorize(options) {
     } else {
       sendThumbnail();
     }
-    return true;
-  });
+    return img;
+  }
+
+  return {
+    saveImage: saveImage
+  }
 
 }

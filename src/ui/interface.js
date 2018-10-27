@@ -25,6 +25,7 @@ module.exports = function Interface(options) {
   }
 
   function save_infragrammar_expressions(args) {
+    console.log(args);
     if (options.mode === "infragrammar") {
       options.processor.save_expressions(args['r'], args['g'], args['b']);
     } else if (options.mode === "infragrammar_mono") {
