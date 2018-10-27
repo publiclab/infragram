@@ -1,6 +1,6 @@
 {
   "name": "infragram",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A minimal core of the Infragram project in JavaScript.",
   "main": "dist/infragram.js",
   "scripts": {
