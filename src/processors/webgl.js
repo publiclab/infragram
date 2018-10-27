@@ -103,7 +103,6 @@ module.exports = function webglProcessor() {
     var gl, pColormap, pHsvUniform, pColorizedUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition;
     if (!returnImage) {
       window.requestAnimationFrame(function() {
- //     webglUtils.requestAnimFrame(function() {
         return drawScene(ctx, false);
       });
     }
@@ -134,9 +133,8 @@ module.exports = function webglProcessor() {
     pColormap = gl.getUniformLocation(ctx.shaderProgram, "uColormap");
     gl.uniform1i(pColormap, (ctx.colormap ? 1 : 0));
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / vertices.itemSize);
-    if (returnImage) {
-      return ctx.canvas.toDataURL("image/jpeg");
-    }
+
+    if (returnImage) return ctx.canvas.toDataURL("image/jpeg");
   };
 
   function generateShader(ctx) {

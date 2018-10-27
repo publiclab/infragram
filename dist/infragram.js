@@ -131,12 +131,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           if (image) options.run(options.mode);
           options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
         }, interval);
-      };
+      }; // TODO: this doesn't work; it just downloads the unmodified image. 
+      // probably a timing issue?
+
 
       function download() {
-        options.run(options.mode); //if (options.colorized) return options.colorize();
-
-        return options.file.downloadImage();
+        //options.run(options.mode);
+        //if (options.colorized) return options.colorize();
+        options.file.downloadImage();
       }
 
       return {
@@ -1064,7 +1066,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         save_expressions_hsv: save_expressions_hsv,
         update: update,
         updateImage: updateImage,
-        colorize: colorize
+        colorize: colorize,
+        initialize: function initialize() {}
       };
     };
   }, {
@@ -1187,7 +1190,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         if (!returnImage) {
           window.requestAnimationFrame(function () {
-            //     webglUtils.requestAnimFrame(function() {
             return drawScene(ctx, false);
           });
         }
@@ -1217,10 +1219,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         pColormap = gl.getUniformLocation(ctx.shaderProgram, "uColormap");
         gl.uniform1i(pColormap, ctx.colormap ? 1 : 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / vertices.itemSize);
-
-        if (returnImage) {
-          return ctx.canvas.toDataURL("image/jpeg");
-        }
+        if (returnImage) return ctx.canvas.toDataURL("image/jpeg");
       }
 
       ;

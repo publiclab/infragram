@@ -44,10 +44,12 @@ window.Infragram = function Infragram(options) {
     }, interval);
   }
 
+  // TODO: this doesn't work; it just downloads the unmodified image. 
+  // probably a timing issue?
   function download() {
-    options.run(options.mode);
+    //options.run(options.mode);
     //if (options.colorized) return options.colorize();
-    return options.file.downloadImage();
+    options.file.downloadImage();
   }
 
   return {

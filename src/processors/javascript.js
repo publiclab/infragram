@@ -251,7 +251,8 @@ module.exports = function javascriptProcessor() {
     save_expressions_hsv: save_expressions_hsv,
     update: update,
     updateImage: updateImage,
-    colorize: colorize
+    colorize: colorize,
+    initialize: function() {}
   }
 
 }
