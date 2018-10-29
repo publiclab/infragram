@@ -1102,8 +1102,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
         decolorize();
         waitForShadersToLoad = 2;
-        $("#shader-vs").load(shaderVertPath, glShaderLoaded);
-        $("#shader-fs-template").load(shaderFragPath, glShaderLoaded);
+        $("#shader-vs").load(options.shaderVertPath, glShaderLoaded);
+        $("#shader-fs-template").load(options.shaderFragPath, glShaderLoaded);
 
         if (imgContext && mapContext) {
           return true;
