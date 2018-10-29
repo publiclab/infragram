@@ -13,12 +13,12 @@ window.Infragram = function Infragram(options) {
     'javascript':      require('./processors/javascript'),
   }
 
-  options.processor = options.processors[options.processor]();
+  options.processor = options.processors[options.processor](options);
   options.file = require('./io/file')(options, options.processor);
   options.logger = require('./logger')(options);
 
   var Interface = require('./ui/interface')(options); // this can change processor based on URL hash
-  options.processor.initialize(options);
+  //options.processor.initialize(options); // double initialize after end of processor code?
   console.log('processor:', options.processor.type)
 
   options.colorize = function colorize(map) {

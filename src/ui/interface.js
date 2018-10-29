@@ -47,13 +47,6 @@ module.exports = function Interface(options) {
 
     $(options.imageSelector).ready(function() {
 
-      if (urlHash.getUrlHashParameter("legacy") === "true") options.processor = options.processors.javascript();
-      else options.processor = options.processors.webgl();
-
-      if (options.processor === "webgl") {
-        $("#webgl-activate").html("&laquo; Go back to JS version");
-      }
-
       var src, idNameMap = {
         "#m_exp": "m",
         "#r_exp": "r",
