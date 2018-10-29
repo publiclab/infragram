@@ -165,13 +165,11 @@
       var infragram;
       (function() {
 
-        // make shaders available in different location
-        $("#shader-vs").load("../dist/shader.vert", glShaderLoaded);
-        $("#shader-fs-template").load("../dist/shader.frag", glShaderLoaded);
-
         infragram = Infragram({
           uploader: false,
-          processor: 'webgl'
+          processor: 'webgl',
+          shaderVertPath: "../dist/shader.vert",
+          shaderFragPath: "../dist/shader.frag"
         });
 
         var piImage = new Image();

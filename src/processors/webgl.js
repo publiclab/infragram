@@ -18,13 +18,15 @@ module.exports = function webglProcessor() {
 
   vertices.itemSize = 2;
 
-  function initialize() {
+  function initialize(options) {
+    options.shaderVertPath = options.shaderVertPath || "dist/shader.vert";
+    options.shaderFragPath = options.shaderFragPath || "dist/shader.frag";
     imgContext = createContext("raw", 1, 0, 1.0, "image");
     mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
     decolorize();
     waitForShadersToLoad = 2;
-    $("#shader-vs").load("dist/shader.vert", glShaderLoaded);
-    $("#shader-fs-template").load("dist/shader.frag", glShaderLoaded);
+    $("#shader-vs").load(shaderVertPath, glShaderLoaded);
+    $("#shader-fs-template").load(shaderFragPath, glShaderLoaded);
     if (imgContext && mapContext) {
       return true;
     } else {
