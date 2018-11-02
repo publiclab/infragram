@@ -49,13 +49,15 @@
                      <td><b>NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
                      <td>basic plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
                      <td><a class="btn btn-primary" id="preset_ndvi_blue">Basic</a>
-                         <a class="btn btn-success" id="preset_ndvi_blue_color">Colorized</a></td>
+                         <a class="btn btn-success" id="preset_ndvi_blue_color">Colorized</a>
+                         <a class="btn btn-success" onClick="boost('blue')">Colorized + boosted (for Pi cameras)</a></td>
                    </tr>
                    <tr>
                      <td><b>NDVI for <span style="color:red;">RED</span> filters</b></td>
                      <td>basic plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
                      <td><a class="btn btn-primary" id="preset_ndvi_red">Basic</a>
-                         <a class="btn btn-success" id="preset_ndvi_red_color">Colorized</a></td>
+                         <a class="btn btn-success" id="preset_ndvi_red_color">Colorized</a>
+                         <a class="btn btn-success" onClick="boost('red')">Colorized + boosted (for Pi cameras)</a></td>
                    </tr>
                  </table>
                  <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
@@ -162,7 +164,7 @@
     </div>
 
     <script>
-      var infragram;
+      var infragram, boost;
       (function() {
 
         infragram = Infragram({
@@ -180,6 +182,16 @@
           piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
         }, 50);
 
+        boost = function boost(filterColor) {
+          $('#modeSwitcher').val("infragrammar_mono").change();
+          if (filterColor == "blue") $('#m_exp').val("(R-B)/(R+B)+(1/3)");
+          if (filterColor == "red") $('#m_exp').val("(B-R)/(R+B)+(1/3)");
+          infragram.colorize();
+          infragram.options.processor.save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());
+          infragram.run();
+          $('#preset-modal').modal('hide');
+	}
+	      
       })()
     </script>
 
