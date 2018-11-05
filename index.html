@@ -188,7 +188,8 @@
         });
 
         openInSequencer = function openInSequencer() {
-          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi&src=" + infragram.options.processor.getCurrentImage();
+          var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
+          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},colormap{colormap:default}&src=" + infragram.options.processor.getCurrentImage();
         }
       })()
     </script>
