@@ -147,6 +147,7 @@
           <div class="zone last" id="save-zone" style="display:none;">
             <p>OUTPUT</p>
             <button onClick="infragram.download()" type="button" class="btn btn-primary btn-lg">Save</button>
+            <button onClick="openInSequencer()" type="button" class="btn btn-primary btn-lg">Export</button>
           </div>
 
           <br style="clear:both;" />
@@ -179,12 +180,16 @@
     </div>
 
     <script>
-      var infragram;
+      var infragram, openInSequencer;
       (function() {
         infragram = Infragram({
           uploader: false,
           processor: 'webgl'
         });
+
+        openInSequencer = function openInSequencer() {
+          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi&src=" + infragram.options.processor.getCurrentImage();
+        }
       })()
     </script>
 
