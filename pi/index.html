@@ -131,7 +131,7 @@
 
           <div class="zone last" id="save-zone" style="">
             <p>OUTPUT</p>
-            <button onClick="infragram.download();alert('The Download function is not working on the Pi right now, apologies. Please right-click the image to save or long-press, or take a screenshot. Updates soon.')" class="btn btn-primary btn-lg">Download</a>
+            <button onClick="infragram.download();alert('The Download function is not working on the Pi right now, apologies. Please right-click the image to save or long-press, or take a screenshot. The image will be opened in Image Sequencer for post-processing.');openInSequencer();" class="btn btn-primary btn-lg">Download</a>
           </div>
 
           <br style="clear:both;" />
@@ -164,7 +164,7 @@
     </div>
 
     <script>
-      var infragram, boost;
+      var infragram, boost, openInSequencer;
       (function() {
 
         infragram = Infragram({
@@ -191,6 +191,10 @@
           infragram.run();
           $('#preset-modal').modal('hide');
 	}
+
+        openInSequencer = function openInSequencer() {
+          window.location = "/image-sequencer/examples/#steps=ndvi&src=" + infragram.options.processor.getCurrentImage();
+        }
 	      
       })()
     </script>
