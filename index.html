@@ -189,7 +189,7 @@
 
         openInSequencer = function openInSequencer() {
           var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
-          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},colormap{colormap:default}&src=" + infragram.options.processor.getCurrentImage();
+          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},brightness{brightness:130},colormap{colormap:stretched}&src=" + infragram.options.processor.getCurrentImage();
         }
       })()
     </script>
