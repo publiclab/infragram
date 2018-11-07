@@ -28,6 +28,7 @@ module.exports = function Colorize(options) {
     return $("#btn-colorize").addClass("active");
   });
 
+  // duplicated in presets.js
   function colorize() {
     console.log('colorized on');
     options.colorized = true;

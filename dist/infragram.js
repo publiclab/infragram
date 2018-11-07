@@ -1082,7 +1082,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     module.exports = function webglProcessor(options) {
       var imgContext = null,
           mapContext = null,
-          vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
+          inputImage,
+          // the pre-processed image
+      vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
           waitForShadersToLoad = 0,
           webglUtils = require('../util/webgl-utils')(),
           colorized = false,
@@ -1319,9 +1321,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       function updateImage(img) {
         var gl;
         gl = imgContext.gl;
+        inputImage = img;
         imgContext.imageData = img;
         gl.activeTexture(gl.TEXTURE0);
         return gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      }
+
+      ; // not working
+
+      function getInputImage() {
+        var currentImage = getImageData();
+        updateImage(inputImage);
+        var dataUrl = imgContext.canvas.toDataURL();
+        updateImage(currentImage);
+        return dataUrl;
       }
 
       ;
@@ -1353,6 +1366,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return {
         type: 'webgl',
         initialize: initialize,
+        getInputImage: getInputImage,
         getCurrentImage: getCurrentImage,
         getImageData: getImageData,
         run: run,
@@ -1424,7 +1438,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorize('stretched');
         options.run(options.mode);
         return $("#btn-colorize").addClass("active");
-      });
+      }); // duplicated in presets.js
 
       function colorize() {
         console.log('colorized on');
@@ -1545,6 +1559,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return true;
         });
         $(options.fileSelector).change(function () {
+          $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
           FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -1552,6 +1567,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return true;
         });
         $("#webcam-activate").click(function () {
+          $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
           save_infragrammar_inputs();
@@ -1593,7 +1609,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $('#b_exp').val("B");
         $('#preset-modal').modal('hide');
         options.colorized = false;
+        options.processor.decolorize();
         save_infragrammar_inputs();
+        decolorize();
         return options.run(options.mode);
       }); // preset button
 
@@ -1604,6 +1622,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorized = false;
         options.processor.decolorize();
         save_infragrammar_inputs();
+        decolorize();
         return options.run(options.mode);
       }); // preset button
 
@@ -1615,6 +1634,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorized = true;
         options.run(options.mode);
         options.colorize();
+        colorize();
         return options.run();
       }); // preset button
 
@@ -1625,6 +1645,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorized = false;
         options.processor.decolorize();
         save_infragrammar_inputs();
+        decolorize();
         return options.run(options.mode);
       }); // preset button
 
@@ -1633,11 +1654,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $('#m_exp').val("(B-R)/(B+R)");
         $('#preset-modal').modal('hide');
         save_infragrammar_inputs();
-        options.colorized = true;
+        colorize();
         options.run(options.mode);
         options.colorize();
         return options.run();
       });
+
+      function colorize() {
+        console.log('colorized on');
+        options.colorized = true;
+        $("#btn-colorize").addClass("active");
+        $("#colorbar-container").css('display', 'inline-block');
+        $("#colormaps-group").css('display', 'inline-block');
+      }
+
+      function decolorize() {
+        console.log('colorized off');
+        options.colorized = false;
+        $("#btn-colorize").removeClass("active");
+        $("#colorbar-container").css('display', 'none');
+        $("#colormaps-group").css('display', 'none');
+      }
     };
   }, {}],
   16: [function (require, module, exports) {

@@ -5,6 +5,7 @@ module.exports = function webglProcessor(options) {
 
   var imgContext = null,
       mapContext = null,
+      inputImage, // the pre-processed image
       vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
       waitForShadersToLoad = 0,
       webglUtils = require('../util/webgl-utils')(),
@@ -211,9 +212,19 @@ console.log(options, 'webgl');
   function updateImage(img) {
     var gl;
     gl = imgContext.gl;
+    inputImage = img;
     imgContext.imageData = img;
     gl.activeTexture(gl.TEXTURE0);
     return gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  };
+
+  // not working
+  function getInputImage() {
+    var currentImage = getImageData();
+    updateImage(inputImage);
+    var dataUrl = imgContext.canvas.toDataURL();
+    updateImage(currentImage);
+    return dataUrl;
   };
 
   function getCurrentImage() {
@@ -237,6 +248,7 @@ console.log(options, 'webgl');
   return {
     type: 'webgl',
     initialize: initialize,
+    getInputImage: getInputImage,
     getCurrentImage: getCurrentImage,
     getImageData: getImageData,
     run: run,

@@ -157,6 +157,7 @@
         <div id="image-container">
           <div style="display:none;"><div id="webcam"></div></div>
           <a class="btn btn-default fullscreen" style="opacity:0.3;position:absolute;z-index:3;margin:6px;"><i class="fa fa-expand"></i></a>
+          <span class="choose-prompt" style="color:white;position:absolute;z-index:3;padding-left:40px;margin:14px;">Choose an input: select an image, or choose live video.</span>
           <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
 
           <canvas class="fullscreen" id="image" width="800" height="600"></canvas>
@@ -189,7 +190,8 @@
 
         openInSequencer = function openInSequencer() {
           var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
-          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},brightness{brightness:100},colormap{colormap:stretched}&src=" + infragram.options.processor.getCurrentImage();
+          var dataurl = infragram.options.processor.getInputImage();
+          window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},colormap{colormap:default}&src=" + dataurl;
         }
       })()
     </script>
