@@ -195,7 +195,7 @@
 
         openInSequencer = function openInSequencer() {
           var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
-          window.location = "/image-sequencer/examples/#steps=ndvi{filter:" + color + "},colormap{colormap:default}&src=" + "/cam/cam_pic.php?time=" + new Date().getTime();
+          window.location = "/image-sequencer/examples/#steps=ndvi{filter:" + color + "},brightness{brightness:133},colormap{colormap:default}&src=" + "/cam/cam_pic.php?time=" + new Date().getTime();
         }
 	      
       })()
