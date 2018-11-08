@@ -1245,11 +1245,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         r = r.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, "");
         g = g.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, "");
-        b = b.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, ""); // Convert int to float
+        b = b.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, ""); // Convert int to float if no decimals are present
 
-        r = r.replace(/([0-9])([^\.])?/g, "$1.0$2");
-        g = g.replace(/([0-9])([^\.])?/g, "$1.0$2");
-        b = b.replace(/([0-9])([^\.])?/g, "$1.0$2"); // adjust NDVI range
+        if (!r.includes('.')) r = r.replace(/([0-9])([^\.])?/g, "$1.0$2");
+        if (!g.includes('.')) g = g.replace(/([0-9])([^\.])?/g, "$1.0$2");
+        if (!b.includes('.')) b = b.replace(/([0-9])([^\.])?/g, "$1.0$2"); // adjust NDVI range
 
         if (ctx.mode === "ndvi") {
           if (r !== "") {
