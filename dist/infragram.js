@@ -1327,14 +1327,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
       }
 
-      ; // not working
+      ;
 
       function getInputImage() {
-        var currentImage = getImageData();
-        updateImage(inputImage);
-        var dataUrl = imgContext.canvas.toDataURL();
-        updateImage(currentImage);
-        return dataUrl;
+        function imageToBase64(img) {
+          var canvas = document.createElement('CANVAS');
+          var ctx = canvas.getContext('2d');
+          canvas.height = img.height;
+          canvas.width = img.width;
+          ctx.drawImage(img, 0, 0);
+          var dataURL = canvas.toDataURL('image/png|gif|jpg');
+          canvas = null;
+          return dataURL;
+        }
+
+        return imageToBase64(inputImage);
       }
 
       ;
