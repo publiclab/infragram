@@ -102,6 +102,10 @@ module.exports = function Interface(options) {
       return true;
     });
 
+    $("#overlay-btn").click(function() {
+      $("#overlay-container").toggle();
+    });
+
     $("[rel=tooltip]").tooltip()
     $("[rel=popover]").popover()
     return true;
