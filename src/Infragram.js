@@ -13,15 +13,16 @@ window.Infragram = function Infragram(options) {
     'javascript':      require('./processors/javascript'),
   }
 
-  options.processor = options.processors[options.processor]();
+  options.processor = options.processors[options.processor](options);
+  options.file = require('./io/file')(options, options.processor);
   options.logger = require('./logger')(options);
 
   var Interface = require('./ui/interface')(options); // this can change processor based on URL hash
-  options.processor.initialize();
+  //options.processor.initialize(options); // double initialize after end of processor code?
   console.log('processor:', options.processor.type)
 
-  options.colorize = function colorize() {
-    options.processor.colorize();
+  options.colorize = function colorize(map) {
+    options.processor.colorize(map);
   }
 
   // this should accept an object with parameters r,g,b,h,s,v,m and mode
@@ -33,27 +34,22 @@ window.Infragram = function Infragram(options) {
   // split into processor.video() methods
   options.video = function video() {
     options.camera.initialize();
-    if (options.webGlSupported) {
-      setInterval(function() {
-        if (image) {
-          options.run(options.mode);
-        }
-        options.camera.getSnapshot();
-        if (options.colorized) {
-          return options.colorize();
-        }
-      }, 15);
-    } else {
-      setInterval(function() {
-        if (image) {
-          options.run(options.mode);
-        }
-        options.camera.getSnapshot();
-        if (options.colorized) {
-          return options.colorize();
-        }
-      }, 250);
-    }
+    var interval;
+    if (options.processor.type == "webgl") interval = 15;
+    else interval = 150;
+    setInterval(function() {
+      if (image) options.run(options.mode);
+      options.camera.getSnapshot();
+      //if (options.colorized) return options.colorize();
+    }, interval);
+  }
+
+  // TODO: this doesn't work; it just downloads the unmodified image. 
+  // probably a timing issue?
+  function download() {
+    //options.run(options.mode);
+    //if (options.colorized) return options.colorize();
+    options.file.downloadImage();
   }
 
   return {
@@ -63,6 +59,7 @@ window.Infragram = function Infragram(options) {
     run: options.run,
     colorize: options.colorize,
     processors: options.processors,
+    download: download,
     options: options
   }
 }

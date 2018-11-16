@@ -1,6 +1,9 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 
+// not currently being used -- will replace with Image Sequencer perhaps?
+// https://github.com/publiclab/image-sequencer
+
 module.exports = function javascriptProcessor() {
 
   var b_exp = "",
@@ -248,7 +251,8 @@ module.exports = function javascriptProcessor() {
     save_expressions_hsv: save_expressions_hsv,
     update: update,
     updateImage: updateImage,
-    colorize: colorize
+    colorize: colorize,
+    initialize: function() {}
   }
 
 }

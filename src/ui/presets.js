@@ -8,7 +8,9 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     $('#b_exp').val("B");
     $('#preset-modal').modal('hide');
     options.colorized = false;
+    options.processor.decolorize();
     save_infragrammar_inputs();
+    decolorize();
     return options.run(options.mode);
   });
 
@@ -20,6 +22,7 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     options.colorized = false;
     options.processor.decolorize();
     save_infragrammar_inputs();
+    decolorize();
     return options.run(options.mode);
   });
 
@@ -32,6 +35,7 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     options.colorized = true;
     options.run(options.mode);
     options.colorize();
+    colorize();
     return options.run();
   });
 
@@ -43,6 +47,7 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     options.colorized = false;
     options.processor.decolorize();
     save_infragrammar_inputs();
+    decolorize();
     return options.run(options.mode);
   });
 
@@ -52,10 +57,26 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
     $('#m_exp').val("(B-R)/(B+R)");
     $('#preset-modal').modal('hide');
     save_infragrammar_inputs();
-    options.colorized = true;
+    colorize();
     options.run(options.mode);
     options.colorize();
     return options.run();
   });
+
+  function colorize() {
+    console.log('colorized on');
+    options.colorized = true;
+    $("#btn-colorize").addClass("active");
+    $("#colorbar-container").css('display', 'inline-block');
+    $("#colormaps-group").css('display', 'inline-block');
+  }
+
+  function decolorize() {
+    console.log('colorized off');
+    options.colorized = false;
+    $("#btn-colorize").removeClass("active");
+    $("#colorbar-container").css('display', 'none');
+    $("#colormaps-group").css('display', 'none');
+  }
 
 }

@@ -25,6 +25,7 @@ module.exports = function Interface(options) {
   }
 
   function save_infragrammar_expressions(args) {
+    console.log(args);
     if (options.mode === "infragrammar") {
       options.processor.save_expressions(args['r'], args['g'], args['b']);
     } else if (options.mode === "infragrammar_mono") {
@@ -45,13 +46,6 @@ module.exports = function Interface(options) {
     if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
     $(options.imageSelector).ready(function() {
-
-      if (urlHash.getUrlHashParameter("legacy") === "true") options.processor = options.processors.javascript();
-      else options.processor = options.processors.webgl();
-
-      if (options.processor === "webgl") {
-        $("#webgl-activate").html("&laquo; Go back to JS version");
-      }
 
       var src, idNameMap = {
         "#m_exp": "m",
@@ -75,6 +69,7 @@ module.exports = function Interface(options) {
     });
 
     $(options.fileSelector).change(function() {
+      $('.choose-prompt').hide();
       $("#save-modal-btn").show();
       $("#save-zone").show();
       FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -83,6 +78,7 @@ module.exports = function Interface(options) {
     });
 
     $("#webcam-activate").click(function() {
+      $('.choose-prompt').hide();
       $("#save-modal-btn").show();
       $("#save-zone").show();
       save_infragrammar_inputs();

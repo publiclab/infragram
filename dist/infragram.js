@@ -102,17 +102,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'webgl': require('./processors/webgl'),
         'javascript': require('./processors/javascript')
       };
-      options.processor = options.processors[options.processor]();
+      options.processor = options.processors[options.processor](options);
+      options.file = require('./io/file')(options, options.processor);
       options.logger = require('./logger')(options);
 
       var Interface = require('./ui/interface')(options); // this can change processor based on URL hash
+      //options.processor.initialize(options); // double initialize after end of processor code?
 
 
-      options.processor.initialize();
       console.log('processor:', options.processor.type);
 
-      options.colorize = function colorize() {
-        options.processor.colorize();
+      options.colorize = function colorize(map) {
+        options.processor.colorize(map);
       }; // this should accept an object with parameters r,g,b,h,s,v,m and mode
 
 
@@ -124,33 +125,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       options.video = function video() {
         options.camera.initialize();
+        var interval;
+        if (options.processor.type == "webgl") interval = 15;else interval = 150;
+        setInterval(function () {
+          if (image) options.run(options.mode);
+          options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
+        }, interval);
+      }; // TODO: this doesn't work; it just downloads the unmodified image. 
+      // probably a timing issue?
 
-        if (options.webGlSupported) {
-          setInterval(function () {
-            if (image) {
-              options.run(options.mode);
-            }
 
-            options.camera.getSnapshot();
-
-            if (options.colorized) {
-              return options.colorize();
-            }
-          }, 15);
-        } else {
-          setInterval(function () {
-            if (image) {
-              options.run(options.mode);
-            }
-
-            options.camera.getSnapshot();
-
-            if (options.colorized) {
-              return options.colorize();
-            }
-          }, 250);
-        }
-      };
+      function download() {
+        //options.run(options.mode);
+        //if (options.colorized) return options.colorize();
+        options.file.downloadImage();
+      }
 
       return {
         Camera: options.camera,
@@ -159,6 +148,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         run: options.run,
         colorize: options.colorize,
         processors: options.processors,
+        download: download,
         options: options
       };
     };
@@ -166,10 +156,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     module.exports = Infragram;
   }, {
     "./io/camera": 6,
-    "./logger": 7,
-    "./processors/javascript": 8,
-    "./processors/webgl": 9,
-    "./ui/interface": 13
+    "./io/file": 7,
+    "./logger": 8,
+    "./processors/javascript": 9,
+    "./processors/webgl": 10,
+    "./ui/interface": 14
   }],
   3: [function (require, module, exports) {
     // This file was adapted from infragram-js:
@@ -257,7 +248,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {
-    "../util/JsImage.js": 16
+    "../util/JsImage.js": 17
   }],
   4: [function (require, module, exports) {
     // This file was adapted from infragram-js:
@@ -632,6 +623,108 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
   }, {}],
   7: [function (require, module, exports) {
+    // This file was adapted from infragram-js:
+    // http://github.com/p-v-o-s/infragram-js.
+    module.exports = function File(options, processor) {
+      function downloadImage() {
+        var event, format, lnk; // create an "off-screen" anchor tag
+
+        lnk = document.createElement("a"); // the key here is to set the download attribute of the a tag
+
+        lnk.href = processor.getCurrentImage();
+
+        if (lnk.href.match('image/jpeg')) {
+          format = "jpg";
+        } else {
+          format = "png";
+        }
+
+        lnk.download = new Date().toISOString().replace(/:/g, "_") + "." + format; // create a "fake" click-event to trigger the download
+
+        if (document.createEvent) {
+          event = document.createEvent("MouseEvents");
+          event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+          lnk.dispatchEvent(event);
+        } else if (lnk.fireEvent) {
+          lnk.fireEvent("onclick");
+        }
+
+        return true;
+      } // from a local URL (remote may be against js security rules)
+
+
+      function fetchImage(src, mode) {
+        var img;
+        $("#save-modal-btn").show();
+        $("#save-zone").show();
+        img = new Image();
+
+        if (options.uploader) {
+          img.onload = function () {
+            var filename;
+            filename = src.split('/');
+            filename = filename[filename.length - 1];
+            FileUpload.setFilename(filename);
+
+            if (mode) {
+              if (mode.substring(0, 5) === "infra") {
+                $("#modeSwitcher").val(mode).change();
+              } else {
+                $("button#" + mode).button("toggle");
+                $("button#" + mode).click(); // this should be via a direct call, not a click; the show.jade page should not require buttons!
+              }
+            }
+
+            options.save_infragrammar_expressions(params);
+
+            if (mode === "ndvi") {
+              options.save_infragrammar_expressions({
+                'm': '(R-B)/(R+B)'
+              });
+              mode = "infragrammar_mono";
+            } else if (mode === "nir") {
+              options.save_infragrammar_expressions({
+                'm': 'R'
+              });
+              mode = "infragrammar_mono";
+            } else if (mode === "raw") {
+              options.save_infragrammar_expressions({
+                'r': 'R',
+                'g': 'G',
+                'b': 'B'
+              });
+              mode = "infragrammar";
+            }
+
+            processor.updateImage(this);
+
+            if (params['color'] === "true" || params['c'] === "true") {
+              options.colorized = true; // before run_infrag, so it gets logged
+            }
+
+            run_infragrammar(mode); // this sets colorized to false!
+
+            if (params['color'] === "true" || params['c'] === "true") {
+              options.colorized = true; // again, so it gets run 
+            }
+
+            if (options.colorized) {
+              $("button#color").button("toggle");
+              return run_colorize();
+            }
+          };
+        }
+
+        return img.src = src;
+      }
+
+      return {
+        fetchImage: fetchImage,
+        downloadImage: downloadImage
+      };
+    };
+  }, {}],
+  8: [function (require, module, exports) {
     // refactor to access state, not dom
     module.exports = function Logger(options) {
       var log = []; // a record of previous commands run
@@ -682,9 +775,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {}],
-  8: [function (require, module, exports) {
+  9: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
+    // not currently being used -- will replace with Image Sequencer perhaps?
+    // https://github.com/publiclab/image-sequencer
     module.exports = function javascriptProcessor() {
       var b_exp = "",
           g_exp = "",
@@ -971,35 +1066,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         save_expressions_hsv: save_expressions_hsv,
         update: update,
         updateImage: updateImage,
-        colorize: colorize
+        colorize: colorize,
+        initialize: function initialize() {}
       };
     };
   }, {
     "../color/colormaps": 3,
     "../color/converters": 4,
-    "../util/JsImage.js": 16
+    "../util/JsImage.js": 17
   }],
-  9: [function (require, module, exports) {
+  10: [function (require, module, exports) {
     // Generated by CoffeeScript 2.1.0
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
-    module.exports = function webglProcessor() {
+    module.exports = function webglProcessor(options) {
       var imgContext = null,
           mapContext = null,
-          vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
+          inputImage,
+          // the pre-processed image
+      vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
           waitForShadersToLoad = 0,
           webglUtils = require('../util/webgl-utils')(),
-          colorized = false;
+          colorized = false,
+          colormaps = {
+        default: 0,
+        stretched: 2,
+        grey: 1
+      },
+          colormap = colormaps.default;
 
       vertices.itemSize = 2;
 
-      function initialize() {
+      function initialize(options) {
+        console.log(options, 'webgl');
+        options = options || {};
+        options.shaderVertPath = options.shaderVertPath || "dist/shader.vert";
+        options.shaderFragPath = options.shaderFragPath || "dist/shader.frag";
         imgContext = createContext("raw", 1, 0, 1.0, "image");
         mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
         decolorize();
         waitForShadersToLoad = 2;
-        $("#shader-vs").load("dist/shader.vert", glShaderLoaded);
-        $("#shader-fs-template").load("dist/shader.frag", glShaderLoaded);
+        $("#shader-vs").load(options.shaderVertPath, glShaderLoaded);
+        $("#shader-fs-template").load(options.shaderFragPath, glShaderLoaded);
 
         if (imgContext && mapContext) {
           return true;
@@ -1012,24 +1120,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       function colorize(val) {
         if (val === "hsv") run('hsv');else {
-          var colormaps = {
-            default: 0,
-            stretched: 2,
-            grey: 1
-          };
+          val = val || colormap;
+          colormap = val;
+          console.log('colorize:' + val);
           if (typeof val === 'string') val = colormaps[val];
           imgContext.selColormap = mapContext.selColormap = val;
-          colorized = true; // TODO: move into interface code:
-
-          $("#colorbar-container").css('display', 'inline-block');
-          $("#colormaps-group").css('display', 'inline-block');
+          colorized = true;
         }
       }
 
       function decolorize() {
         colorized = false;
-        $("#colorbar-container").css('display', 'none');
-        $("#colormaps-group").css('display', 'none');
       }
 
       function createBuffer(ctx, data) {
@@ -1095,7 +1196,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         if (!returnImage) {
           window.requestAnimationFrame(function () {
-            //     webglUtils.requestAnimFrame(function() {
             return drawScene(ctx, false);
           });
         }
@@ -1125,10 +1225,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         pColormap = gl.getUniformLocation(ctx.shaderProgram, "uColormap");
         gl.uniform1i(pColormap, ctx.colormap ? 1 : 0);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / vertices.itemSize);
-
-        if (returnImage) {
-          return ctx.canvas.toDataURL("image/jpeg");
-        }
+        if (returnImage) return ctx.canvas.toDataURL("image/jpeg");
       }
 
       ;
@@ -1148,11 +1245,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         r = r.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, "");
         g = g.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, "");
-        b = b.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, ""); // Convert int to float
+        b = b.replace(/[^xrgb\/\-\+\*\(\)\.0-9]*/g, ""); // Convert int to float if no decimals are present
 
-        r = r.replace(/([0-9])([^\.])?/g, "$1.0$2");
-        g = g.replace(/([0-9])([^\.])?/g, "$1.0$2");
-        b = b.replace(/([0-9])([^\.])?/g, "$1.0$2"); // adjust NDVI range
+        if (!r.includes('.')) r = r.replace(/([0-9])([^\.])?/g, "$1.0$2");
+        if (!g.includes('.')) g = g.replace(/([0-9])([^\.])?/g, "$1.0$2");
+        if (!b.includes('.')) b = b.replace(/([0-9])([^\.])?/g, "$1.0$2"); // adjust NDVI range
 
         if (ctx.mode === "ndvi") {
           if (r !== "") {
@@ -1224,9 +1321,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       function updateImage(img) {
         var gl;
         gl = imgContext.gl;
+        inputImage = img;
         imgContext.imageData = img;
         gl.activeTexture(gl.TEXTURE0);
         return gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      }
+
+      ;
+
+      function getInputImage() {
+        function imageToBase64(img) {
+          var canvas = document.createElement('CANVAS');
+          var ctx = canvas.getContext('2d');
+          canvas.height = img.height;
+          canvas.width = img.width;
+          ctx.drawImage(img, 0, 0);
+          var dataURL = canvas.toDataURL('image/png|gif|jpg');
+          canvas = null;
+          return dataURL;
+        }
+
+        return imageToBase64(inputImage);
       }
 
       ;
@@ -1254,10 +1369,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       ;
-      initialize();
+      initialize(options);
       return {
         type: 'webgl',
         initialize: initialize,
+        getInputImage: getInputImage,
         getCurrentImage: getCurrentImage,
         getImageData: getImageData,
         run: run,
@@ -1269,83 +1385,115 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {
-    "../util/webgl-utils": 17
+    "../util/webgl-utils": 18
   }],
-  10: [function (require, module, exports) {
+  11: [function (require, module, exports) {
     module.exports = function Analysis(options, save_infragrammar_inputs) {
       // buttons to run Analysis steps
       $("#infragrammar_hsv").submit(function () {
+        console.log('hsv mode');
         options.mode = "infragrammar_hsv";
         options.logger.log_hsv();
         save_infragrammar_inputs();
         options.run(options.mode);
+        options.run();
         return true;
       });
       $("#infragrammar").submit(function () {
+        console.log('infragrammar mode');
         options.mode = "infragrammar";
         options.logger.log_rgb();
         save_infragrammar_inputs();
         options.run(options.mode);
+        options.run();
         return true;
       });
       $("#infragrammar_mono").submit(function () {
+        console.log('infragrammar mono mode');
         options.mode = "infragrammar_mono";
         options.logger.log_mono();
         save_infragrammar_inputs();
         options.run(options.mode);
+        options.run();
         return true;
       });
     };
   }, {}],
-  11: [function (require, module, exports) {
+  12: [function (require, module, exports) {
     module.exports = function Colorize(options) {
-      $("#btn-colorize").click(function () {
-        options.colorized = true;
-        options.run(options.mode);
-        return options.colorize();
+      $(".btn-colorize").click(function () {
+        if (options.colorized) {
+          decolorize();
+          options.run(options.mode);
+          return options.processor.decolorize();
+        } else {
+          colorize();
+          options.run(options.mode);
+          return options.colorize();
+        }
       });
       $("#default_colormap").click(function () {
-        options.colorized = true;
+        console.log('default colormap');
+        colorize();
         options.colorize('default');
         options.run(options.mode);
         return $("#btn-colorize").addClass("active");
       });
       $("#stretched_colormap").click(function () {
-        options.colorized = true;
+        console.log('stretched colormap');
+        colorize();
         options.colorize('stretched');
         options.run(options.mode);
         return $("#btn-colorize").addClass("active");
-      });
-    };
-  }, {}],
-  12: [function (require, module, exports) {
-    module.exports = function Fullscreen(options) {
-      $("#exit-fullscreen").click(function () {
-        $("#image").css("display", "inline");
-        $("#image").css("position", "relative");
-        $("#image").css("height", "auto");
-        $("#image").css("left", 0);
-        $("#backdrop").hide();
-        $("#exit-fullscreen").hide();
-        $("#fullscreen").show();
-        return true;
-      });
-      $("#fullscreen").click(function () {
-        $("#image").css("display", "block");
-        $("#image").css("height", "100%");
-        $("#image").css("width", "auto");
-        $("#image").css("position", "absolute");
-        $("#image").css("top", "0px");
-        $("#image").css("left", parseInt((window.innerWidth - $("#image").width()) / 2) + "px");
-        $("#image").css("z-index", "2");
-        $("#backdrop").show();
-        $("#exit-fullscreen").show();
-        $("#fullscreen").hide();
-        return true;
-      });
+      }); // duplicated in presets.js
+
+      function colorize() {
+        console.log('colorized on');
+        options.colorized = true;
+        $("#btn-colorize").addClass("active");
+        $("#colorbar-container").css('display', 'inline-block');
+        $("#colormaps-group").css('display', 'inline-block');
+      }
+
+      function decolorize() {
+        console.log('colorized off');
+        options.colorized = false;
+        $("#btn-colorize").removeClass("active");
+        $("#colorbar-container").css('display', 'none');
+        $("#colormaps-group").css('display', 'none');
+      }
     };
   }, {}],
   13: [function (require, module, exports) {
+    module.exports = function Fullscreen(options) {
+      var fullscreen = false;
+      $(".fullscreen").click(function () {
+        if (fullscreen) {
+          $("#image").css("display", "inline");
+          $("#image").css("position", "relative");
+          $("#image").css("height", "auto");
+          $("#image").css("left", 0);
+          $("#backdrop").hide();
+          $(".btn.fullscreen").show();
+          fullscreen = false;
+        } else {
+          $("#image").css("display", "block");
+          $("#image").css("height", "100%");
+          $("#image").css("width", "auto");
+          $("#image").css("position", "absolute");
+          $("#image").css("top", "0px");
+          $("#image").css("left", parseInt((window.innerWidth - $("#image").width()) / 2) + "px");
+          $("#image").css("z-index", "2");
+          $("#backdrop").show();
+          $(".btn.fullscreen").hide();
+          fullscreen = true;
+        }
+
+        return fullscreen;
+      });
+    };
+  }, {}],
+  14: [function (require, module, exports) {
     module.exports = function Interface(options) {
       options.imageSelector = options.imageSelector || "#image-container";
       options.fileSelector = options.fileSelector || "#file-sel";
@@ -1374,6 +1522,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       function save_infragrammar_expressions(args) {
+        console.log(args);
+
         if (options.mode === "infragrammar") {
           options.processor.save_expressions(args['r'], args['g'], args['b']);
         } else if (options.mode === "infragrammar_mono") {
@@ -1393,12 +1543,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           socket: options.uploadable
         });
         $(options.imageSelector).ready(function () {
-          if (urlHash.getUrlHashParameter("legacy") === "true") options.processor = options.processors.javascript();else options.processor = options.processors.webgl();
-
-          if (options.processor === "webgl") {
-            $("#webgl-activate").html("&laquo; Go back to JS version");
-          }
-
           var src,
               idNameMap = {
             "#m_exp": "m",
@@ -1422,6 +1566,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return true;
         });
         $(options.fileSelector).change(function () {
+          $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
           FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -1429,6 +1574,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return true;
         });
         $("#webcam-activate").click(function () {
+          $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
           save_infragrammar_inputs();
@@ -1453,14 +1599,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   }, {
     "../color/colormaps": 3,
     "../file-upload": 5,
-    "../ui/analysis": 10,
-    "../ui/colorize": 11,
-    "../ui/presets": 14,
-    "../ui/saving": 15,
-    "./fullscreen": 12,
+    "../ui/analysis": 11,
+    "../ui/colorize": 12,
+    "../ui/presets": 15,
+    "../ui/saving": 16,
+    "./fullscreen": 13,
     "urlhash": 1
   }],
-  14: [function (require, module, exports) {
+  15: [function (require, module, exports) {
     module.exports = function Presets(options, save_infragrammar_inputs) {
       // preset button
       $("#preset_raw").click(function () {
@@ -1470,7 +1616,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $('#b_exp').val("B");
         $('#preset-modal').modal('hide');
         options.colorized = false;
+        options.processor.decolorize();
         save_infragrammar_inputs();
+        decolorize();
         return options.run(options.mode);
       }); // preset button
 
@@ -1481,6 +1629,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorized = false;
         options.processor.decolorize();
         save_infragrammar_inputs();
+        decolorize();
         return options.run(options.mode);
       }); // preset button
 
@@ -1492,6 +1641,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorized = true;
         options.run(options.mode);
         options.colorize();
+        colorize();
         return options.run();
       }); // preset button
 
@@ -1502,6 +1652,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.colorized = false;
         options.processor.decolorize();
         save_infragrammar_inputs();
+        decolorize();
         return options.run(options.mode);
       }); // preset button
 
@@ -1510,21 +1661,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $('#m_exp').val("(B-R)/(B+R)");
         $('#preset-modal').modal('hide');
         save_infragrammar_inputs();
-        options.colorized = true;
+        colorize();
         options.run(options.mode);
         options.colorize();
         return options.run();
       });
+
+      function colorize() {
+        console.log('colorized on');
+        options.colorized = true;
+        $("#btn-colorize").addClass("active");
+        $("#colorbar-container").css('display', 'inline-block');
+        $("#colormaps-group").css('display', 'inline-block');
+      }
+
+      function decolorize() {
+        console.log('colorized off');
+        options.colorized = false;
+        $("#btn-colorize").removeClass("active");
+        $("#colorbar-container").css('display', 'none');
+        $("#colormaps-group").css('display', 'none');
+      }
     };
   }, {}],
-  15: [function (require, module, exports) {
-    module.exports = function Colorize(options) {
+  16: [function (require, module, exports) {
+    module.exports = function Saving(options) {
+      // This is all unused...
       $("#download").click(function () {
         downloadImage();
         return true;
       }); // refactor this, it's a mess:
 
-      $("#save").click(function () {
+      $("#save").click(saveImage);
+
+      function saveImage() {
         var img;
 
         function sendThumbnail() {
@@ -1549,11 +1719,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           sendThumbnail();
         }
 
-        return true;
-      });
+        return img;
+      }
+
+      return {
+        saveImage: saveImage
+      };
     };
   }, {}],
-  16: [function (require, module, exports) {
+  17: [function (require, module, exports) {
     module.exports = function () {
       function JsImage(data1, width1, height1, channels) {
         _classCallCheck(this, JsImage);
@@ -1620,7 +1794,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return JsImage;
     }();
   }, {}],
-  17: [function (require, module, exports) {
+  18: [function (require, module, exports) {
     /*
      * Copyright 2012, Gregg Tavares.
      * All rights reserved.
