@@ -62,7 +62,7 @@
 
 	    </div>
             <div class="modal-footer">
-              <a data-dismiss="modal" data-toggle="modal" class="btn">cancel</a>
+              <a data-dismiss="modal" data-toggle="modal" class="btn btn-default">cancel</a>
             </div>
           </div>
         </div>
@@ -77,16 +77,9 @@
         <div id="toolbar">
 
           <div class="zone">
-            <p>QUICK START</p>
-            <div class="btn-group">
-              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-lg btn-default"><i class="fa fa-question-circle"></i></a>
-              <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-lg btn-primary"><i class="fa fa-magic"></i> Presets</button>
-            </div>
-          </div>
-
-          <div class="zone">
             <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
             <div class="btn-group" data-toggle="buttons-radio" id="imageselect">
+              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-lg btn-default"><i class="fa fa-question-circle"></i></a>
               <button id="btn-upload" type="button" class="btn btn-lg btn-primary"><i class="fa fa-upload"></i></button>
               <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
               <style>
@@ -101,8 +94,13 @@
             </div>
           </div>
 
-          <div class="zone zone-analysis">
+          <div class="zone zone-analysis hide">
             <p>2. ANALYSIS (<a target="_blank" href="http://publiclab.org/wiki/infragrammar">ABOUT INFRAGRAMMAR</a>)</p>
+
+            <div class="btn-group">
+              <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-lg btn-primary"><i class="fa fa-magic"></i> Presets</button>
+            </div>
+
             <select class="form-control" style="display:inline;width:80px;" id="modeSwitcher" onChange="if(this.value == 'infragrammar_mono'){$('.colorize').show()}else{$('.colorize').hide()}">
               <option value='infragrammar_mono'>Grey</option>
               <option value='infragrammar'>RGB</option>
@@ -130,7 +128,7 @@
 
           </div>
 
-          <div class="zone colorize">
+          <div class="zone zone-colorize colorize hide">
             <p>3. COLORIZE</p>
             <div class="btn-group">
               <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button> 
@@ -156,9 +154,9 @@
 
         <div id="image-container">
           <div style="display:none;"><div id="webcam"></div></div>
-          <a class="btn btn-default fullscreen" style="opacity:0.3;position:absolute;z-index:3;margin:6px;"><i class="fa fa-expand"></i></a>
+          <a class="btn btn-link fullscreen" style="font-size:2em;color:white;opacity:0.3;position:absolute;z-index:3;margin:5px 10px;"><i class="fa fa-expand"></i></a>
           <div onClick="$('.choose-prompt').hide();" class="choose-prompt" style="display:inline;color:white;position:absolute;z-index:3;padding-top:14px;text-align:left;padding-left:60px;">
-            <p>1. Choose an input above: select an image, or choose live video.</p>
+            <p>1. Choose a source above: select an image or live video.</p>
             <p>2. Choose an analysis mode or click PRESETS.</p>
             <p>3. Colorize your results (optional).</p>
             <p></p>

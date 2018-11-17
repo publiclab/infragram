@@ -70,6 +70,8 @@ module.exports = function Interface(options) {
 
     $(options.fileSelector).change(function() {
       $('.choose-prompt').hide();
+      $('.zone-analysis').removeClass('hide');
+      $('.zone-colorize').removeClass('hide');
       $("#save-modal-btn").show();
       $("#save-zone").show();
       FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -79,6 +81,8 @@ module.exports = function Interface(options) {
 
     $("#webcam-activate").click(function() {
       $('.choose-prompt').hide();
+      $('.zone-analysis').removeClass('hide');
+      $('.zone-colorize').removeClass('hide');
       $("#save-modal-btn").show();
       $("#save-zone").show();
       save_infragrammar_inputs();
