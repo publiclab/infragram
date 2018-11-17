@@ -1582,6 +1582,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           $('#preset-modal').modal('show');
           return true;
         });
+        $("#overlay-btn").click(function() {
+          $("#overlay-container").toggle();
+        });
         $("#snapshot").click(function () {
           options.camera.getSnapshot();
           return true;

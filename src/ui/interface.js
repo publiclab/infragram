@@ -97,11 +97,7 @@ module.exports = function Interface(options) {
       $("#" + $("#modeSwitcher").val()).css("display", "inline");
       return true;
     });
-
-    $("#overlay-btn").click(function() {
-      $("#overlay-container").toggle();
-    });
-
+    
     $("[rel=tooltip]").tooltip()
     $("[rel=popover]").popover()
     return true;
