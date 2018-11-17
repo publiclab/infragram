@@ -1567,6 +1567,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         $(options.fileSelector).change(function () {
           $('.choose-prompt').hide();
+          $('.zone-analysis').removeClass('hide');
+          $('.zone-colorize').removeClass('hide');
           $("#save-modal-btn").show();
           $("#save-zone").show();
           FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
@@ -1575,6 +1577,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         $("#webcam-activate").click(function () {
           $('.choose-prompt').hide();
+          $('.zone-analysis').removeClass('hide');
+          $('.zone-colorize').removeClass('hide');
           $("#save-modal-btn").show();
           $("#save-zone").show();
           save_infragrammar_inputs();
