@@ -97,7 +97,7 @@ module.exports = function Interface(options) {
       $("#" + $("#modeSwitcher").val()).css("display", "inline");
       return true;
     });
-
+    
     $("[rel=tooltip]").tooltip()
     $("[rel=popover]").popover()
     return true;
