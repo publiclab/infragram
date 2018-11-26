@@ -146,9 +146,18 @@
 
           <div class="zone">
             <p>4. OVERLAY</p>
-            <button id="overlay-btn" class="btn btn-lg btn-primary">
-              <i class="fa fa-th" aria-hidden="true"></i>
-            </button>    
+            <div class="row">
+              <div class="col-md-4">
+                <button id="overlay-btn" class="btn btn-lg btn-primary">
+                  <i class="fa fa-th" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="col-md-8">
+                <input id="overlay-slider" type="range" value="100"/>
+                <button id="overlay-save-btn" class="btn btn-primary">Save</button>
+                <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
+              </div>
+            </div>
           </div>
 
           <div class="zone last" id="save-zone" style="display:none;">
@@ -173,7 +182,7 @@
           </div>
           <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
           <div id="overlay-container" class="container" style="position: absolute; display: none;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Lightblue_empty_grid.svg" width="800" height="600">
+              <img id="overlay-img" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Lightblue_empty_grid.svg" width="800" height="600">
           </div>
           <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="fa fa-remove"></i> Exit full screen</a>
           <canvas class="fullscreen" id="image" width="800" height="600"></canvas>

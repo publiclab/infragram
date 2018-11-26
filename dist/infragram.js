@@ -79,6 +79,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         setUrlHashParameters(params);
       }
 
+      $("#overlay-slider").val(localStorage.getItem("overlaySize"));
+
       return {
         getUrlHashParameter: getUrlHashParameter,
         getUrlHashParameters: getUrlHashParameters,
@@ -1584,6 +1586,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         $("#overlay-btn").click(function() {
           $("#overlay-container").toggle();
+          $("#overlay-btn").toggleClass("btn-success");
+        });
+        $("#overlay-slider").on("input", function() {
+          $("#overlay-img").width($("#overlay-slider").val() * 8);
+        });
+        $("#overlay-save-btn").click(function() {
+          localStorage.setItem("overlaySize", $("#overlay-slider").val())
+          $("#overlay-save-info").show().delay(2000).fadeOut();
         });
         $("#snapshot").click(function () {
           options.camera.getSnapshot();
