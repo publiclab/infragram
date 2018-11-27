@@ -56,6 +56,8 @@ module.exports = function Interface(options) {
         "#s_exp": "s",
         "#v_exp": "v"
       };
+ 
+      $("#overlay-slider").val(localStorage.getItem("overlaySize"));
 
       // TODO: broken:  
       //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
@@ -96,6 +98,20 @@ module.exports = function Interface(options) {
       $("#infragrammar, #infragrammar_mono, #infragrammar_hsv").hide();
       $("#" + $("#modeSwitcher").val()).css("display", "inline");
       return true;
+    });
+
+    $("#overlay-btn").click(function() {
+      $("#overlay-container").toggle();
+      $("#overlay-btn").toggleClass("btn-success");
+    });
+
+    $("#overlay-slider").on("input", function() {
+      $("#overlay-img").width($("#overlay-slider").val() * 8);
+    });
+
+    $("#overlay-save-btn").click(function() {
+      localStorage.setItem("overlaySize", $("#overlay-slider").val())
+      $("#overlay-save-info").show().delay(2000).fadeOut();
     });
     
     $("[rel=tooltip]").tooltip()
