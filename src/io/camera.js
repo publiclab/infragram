@@ -4,6 +4,10 @@ module.exports = function Camera(options) {
   var canvas, 
       ctx;
 
+  var options = options || {};
+  var width = options.width || 1024;
+  var height = options.height || 768;
+
   // Initialize getUserMedia with options
   function initialize() {
     getUserMedia(webRtcOptions, success, deviceError);
@@ -37,8 +41,8 @@ module.exports = function Camera(options) {
     append: true,
     // height and width of the output stream
     // container
-    width: 640,
-    height: 480,
+    width: width,
+    height: height,
     // the recommended mode to be used is 
     // "callback " where a callback is executed 
     // once data is available

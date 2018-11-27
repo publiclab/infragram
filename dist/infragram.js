@@ -486,7 +486,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function Camera(options) {
-      var canvas, ctx; // Initialize getUserMedia with options
+      var canvas, ctx;
+      var options = options || {};
+      var width = options.width || 1024;
+      var height = options.height || 768; // Initialize getUserMedia with options
 
       function initialize() {
         getUserMedia(webRtcOptions, success, deviceError); // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685
@@ -519,8 +522,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         append: true,
         // height and width of the output stream
         // container
-        width: 640,
-        height: 480,
+        width: width,
+        height: height,
         // the recommended mode to be used is 
         // "callback " where a callback is executed 
         // once data is available
@@ -1581,9 +1584,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           options.video();
           $('#preset-modal').modal('show');
           return true;
-        });
-        $("#overlay-btn").click(function() {
-          $("#overlay-container").toggle();
         });
         $("#snapshot").click(function () {
           options.camera.getSnapshot();
