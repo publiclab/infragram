@@ -81,3 +81,7 @@ div#colorbar-container canvas#colorbar {
 .container {
   padding-left: unset;
 }
+
+.element{
+  margin:4px;
+}
