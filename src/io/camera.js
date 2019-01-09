@@ -77,15 +77,14 @@ module.exports = function Camera(options) {
   }
 
   function success(stream) {
-    var vendorURL, video;
+    var video;
     if (webRtcOptions.context === "webrtc") {
       video = webRtcOptions.videoEl;
-      vendorURL = window.URL || window.webkitURL;
       if (navigator.mozGetUserMedia) {
         video.mozSrcObject = stream;
         console.log("mozilla???");
       } else {
-        video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
+        video.srcObject = stream;
       }
       return video.onerror = function(e) {
         return stream.stop();
