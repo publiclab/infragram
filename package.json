@@ -37,7 +37,7 @@
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-contrib-uglify": "^4.0.0",
-    "babel-core": "7.0.0-alpha.19",
+    "babel-core": "7.0.0-beta.3",
     "babel-preset-env": "2.0.0-alpha.19",
     "grunt-babel": "^7.0.0",
     "matchdep": "^2.0.0",
