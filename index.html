@@ -30,7 +30,7 @@
 
   <body>
   
-    <div class="container page" style="padding-top:10px;">
+    <div class="container page" style="padding:10px;">
 
        <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
          <div class="modal-dialog modal-lg" role="document">
@@ -60,7 +60,7 @@
                  </table>
                  <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
 
-	    </div>
+      </div>
             <div class="modal-footer">
               <a data-dismiss="modal" data-toggle="modal" class="btn">cancel</a>
             </div>
@@ -73,66 +73,80 @@
       <p>Analyze plant health with near-infrared imagery! <a href="http://publiclab.org/wiki/infragram">Learn more &amp; mod a camera</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a>.</p>
 
       <div class="content">
+      <div id="toolbar" class="row">
+        <div class="zone">
 
-        <div id="toolbar">
-
-          <div class="zone">
+          <div id="divide">
             <p>QUICK START</p>
-            <div class="btn-group">
+            <div class="btn-group element">
               <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-lg btn-default"><i class="fa fa-question-circle"></i></a>
               <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-lg btn-primary"><i class="fa fa-magic"></i> Presets</button>
             </div>
-          </div>
 
-          <div class="zone">
-            <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
-            <div class="btn-group" data-toggle="buttons-radio" id="imageselect">
-              <button id="btn-upload" type="button" class="btn btn-lg btn-primary"><i class="fa fa-upload"></i></button>
-              <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
-              <style>
-                #file-sel {
-                  position:absolute; left:0;
-                  width:55px;
-                  height:44px;
-                  opacity:0;
-                }
-              </style>
-              <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera"></i></button>
+          </div>
+        </div>
+        <div class="zone">
+          <div id="divide">
+              <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
+              <div class="btn-group element" data-toggle="buttons-radio" id="imageselect">
+                <button id="btn-upload" type="button" class="btn btn-lg btn-primary"><i class="fa fa-upload"></i></button>
+                <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
+                <style>
+                  #file-sel {
+                    position:absolute; left:0;
+                    width:55px;
+                    height:44px;
+                    opacity:0;
+                  }
+                </style>
+                <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera"></i></button>
+              </div>
             </div>
           </div>
-
-          <div class="zone zone-analysis">
+        <div class="zone zone-analysis">
+          <div id="divide">
             <p>2. ANALYSIS (<a target="_blank" href="http://publiclab.org/wiki/infragrammar">ABOUT INFRAGRAMMAR</a>)</p>
-            <select class="form-control" style="display:inline;width:80px;" id="modeSwitcher" onChange="if(this.value == 'infragrammar_mono'){$('.colorize').show()}else{$('.colorize').hide()}">
-              <option value='infragrammar_mono'>Grey</option>
-              <option value='infragrammar'>RGB</option>
-              <option value='infragrammar_hsv'>HSV</option>
-            </select>
-           
-            <form id="infragrammar_mono" class="form-inline" style="display:inline;" action="javascript:void(0);">
-              <input placeholder="monochrome" type="text" id="m_exp" class="form-control" value="(R-B)/(R+B)">
-              <button type="submit" class="btn btn-primary">Run</button>
-            </form>
-
-            <form id="infragrammar" class="form-inline" style="display:none;" action="javascript:void(0);">
-              <input placeholder="R" type="text" id="r_exp" class="form-control" value="R">
-              <input placeholder="G" type="text" id="g_exp" class="form-control" value="G">
-              <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
-              <button type="submit" class="btn btn-primary">Run</button>
-            </form>
-           
-            <form id="infragrammar_hsv" class="form-inline" style="display:none;" action="javascript:void(0);">
-              <input placeholder="H" type="text" id="h_exp" class="form-control" value="-(R-B)/(R+B)">
-              <input placeholder="S" type="text" id="s_exp" class="form-control" value="1">
-              <input placeholder="V" type="text" id="v_exp" class="form-control" value="1">
-              <button type="submit" class="btn btn-primary">Run</button>
-            </form>
-
+            <div class="row">
+              <div class="col-xs-2">
+                <select class="form-control element" style="display:inline;width:80px;" id="modeSwitcher" onChange="if(this.value == 'infragrammar_mono'){$('.colorize').show()}else{$('.colorize').hide()}">
+                    <option value='infragrammar_mono'>Grey</option>
+                    <option value='infragrammar'>RGB</option>
+                    <option value='infragrammar_hsv'>HSV</option>
+                  </select>
+                </div>
+                <div class="col-xs-10 col-lg-push-1 col-xs-push-2">
+                  <form id="infragrammar_mono" class="row" style="display:inline-block;margin-right:7px;" action="javascript:void(0);">
+                    <div class="col-xs-10" >
+                      <input placeholder="monochrome" type="text" id="m_exp" class="form-control element" value="(R-B)/(R+B)">
+                    </div>
+                    <div class="col-xs-2 col-lg-pull-1" >
+                      <button type="submit" class="btn btn-primary element">Run</button>
+                    </div>
+                  </form>
+      
+                  <form id="infragrammar" class="form-inline" style="display:none;" action="javascript:void(0);">
+                    <input placeholder="R" type="text" id="r_exp" class="form-control" value="R">
+                    <input placeholder="G" type="text" id="g_exp" class="form-control" value="G">
+                    <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
+                    <button type="submit" class="btn btn-primary">Run</button>
+                  </form>
+                 
+                  <form id="infragrammar_hsv" class="form-inline" style="display:none;" action="javascript:void(0);">
+                    <input placeholder="H" type="text" id="h_exp" class="form-control" value="-(R-B)/(R+B)">
+                    <input placeholder="S" type="text" id="s_exp" class="form-control" value="1">
+                    <input placeholder="V" type="text" id="v_exp" class="form-control" value="1">
+                    <button type="submit" class="btn btn-primary">Run</button>
+                  </form>
+                </div>
+            </div>
+            
           </div>
+        </div>
 
-          <div class="zone colorize">
+        <div class="zone colorize">
+          <div id="divide">
             <p>3. COLORIZE</p>
-            <div class="btn-group">
+            <div class="btn-group element">
               <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button> 
               <a class="btn btn-lg dropdown-toggle btn-default" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
@@ -143,31 +157,30 @@
               </ul>
             </div>
           </div>
-
-          <div class="zone">
+        </div>
+        <div class="zone">
+          <div id="divide">
             <p>4. OVERLAY</p>
-            <div class="row">
-              <div class="col-md-4">
+            <div class="row element">
                 <button id="overlay-btn" class="btn btn-lg btn-primary">
                   <i class="fa fa-th" aria-hidden="true"></i>
                 </button>
-              </div>
-              <div class="col-md-8">
-                <input id="overlay-slider" type="range" value="100"/>
-                <button id="overlay-save-btn" class="btn btn-primary">Save</button>
-                <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
-              </div>
+                <input id="overlay-slider"  type="range" value="100"/>
             </div>
           </div>
-
+        </div>
+        <div class="zone">
+          <div id="divide">
+                <button id="overlay-save-btn" class="btn btn-primary">Save</button>
+                <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
+          </div>
+        </div>
           <div class="zone last" id="save-zone" style="display:none;">
             <p>OUTPUT</p>
             <button onClick="infragram.download()" type="button" class="btn btn-primary btn-lg">Save</button>
             <button onClick="openInSequencer()" type="button" class="btn btn-primary btn-lg">Export</button>
           </div>
-
           <br style="clear:both;" />
-
         </div>
 
         <div id="image-container">
@@ -187,13 +200,13 @@
           <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="fa fa-remove"></i> Exit full screen</a>
           <canvas class="fullscreen" id="image" width="800" height="600"></canvas>
 
-	  <div id="colorbar-container" style="display:none;">
+          <div id="colorbar-container" style="display:none;">
             <span id="colorbar-min">-1.00</span>
             <canvas id="colorbar"></canvas>
             <span id="colorbar-max">1.00</span>
           </div>
 
-	</div>
+  </div>
 
       </div>
 
