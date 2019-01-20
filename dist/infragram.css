@@ -49,10 +49,16 @@ div#colorbar-container canvas#colorbar {
   border-radius: 4px;
 
 }
+#divide{
+  border-right:1px solid #ddd;
+  padding-right: 10px;
+  margin-right: -5px;
+  display: inline-block;
+  height: 75px;
+}
 #toolbar .zone {
   margin:6px 0 6px 6px;
-  padding:0 12px 0 6px;
-  border-right:1px solid #ddd;
+  padding:7px; 
   float:left;
 }
 #toolbar .zone.last {
@@ -84,4 +90,16 @@ div#colorbar-container canvas#colorbar {
 
 .element{
   margin:4px;
+}
+#overlay-slider{
+  margin:3px;
+}
+
+@media screen and (max-width: 480px) {
+  #divide{
+    border-right:none;
+    padding: 6px;
+    width: 250px;
+    height: 75px;
+  } 
 }
