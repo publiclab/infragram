@@ -1,4 +1,4 @@
-﻿This document was copied from its home at https://publiclab.org/conduct on October 12, 2017. See that page if you would like to submit your concerns in a safe, completely anonymous way, and to learn more about this document. 
+﻿This document was copied from its home at https://publiclab.org/conduct on February 10, 2019. See that page if you would like to submit your concerns in a safe, completely anonymous way, and to learn more about this document. 
 
 ****
 
@@ -49,7 +49,8 @@ During in-person gatherings, consent is important to highlight because the negot
 We make guesses or assessments of consent (willingness, welcome, invitation) all the time. Then we stay open to signs that the consent isn't there. Handshakes are a clear example of consent: someone offers a hand, and you take it if you want to shake it. A friendly smile might indicate consent to start a conversation. It might not. We learn that in the interaction. Sometimes we ask directly. We are open to making mistakes, and learning from them. The more we learn to be empathetic and see other people, the more we're able to talk about consent.
 
 Before you engage with someone on any level, be sure you have their consent. If your indications aren't being heard, you can also ask for help from other folks, especially Conduct Committee members and staff of the non-profit: "They aren't taking the hint. Will you help?" Turning a blind eye to hurtful interactions can be as bad for our community as the exchange itself. If you witness something, it's your responsibility to say something.  This is how we keep each other accountable, encourage empathy, and keep our community safe.
-
+
+
 ## Guidelines for in-person community behavior
 
 
