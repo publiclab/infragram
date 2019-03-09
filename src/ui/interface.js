@@ -106,7 +106,10 @@ module.exports = function Interface(options) {
     });
 
     $("#overlay-slider").on("input", function() {
-      $("#overlay-img").width($("#overlay-slider").val() * 8);
+      var scale = 12,
+          ratio = 1250/4000; // size of svg
+      $("#overlay-img").width($("#overlay-slider").val() * scale);
+      $("#overlay-img").height($("#overlay-slider").val() * scale * ratio); // 3:4 ratio
     });
 
     $("#overlay-save-btn").click(function() {
