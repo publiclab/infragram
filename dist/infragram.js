@@ -155,65 +155,124 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     module.exports = Infragram;
   }, {
-    "./io/camera": 6,
-    "./io/file": 7,
-    "./logger": 8,
-    "./processors/javascript": 9,
-    "./processors/webgl": 10,
-    "./ui/interface": 14
+    "./io/camera": 8,
+    "./io/file": 9,
+    "./logger": 10,
+    "./processors/javascript": 11,
+    "./processors/webgl": 12,
+    "./ui/interface": 16
   }],
   3: [function (require, module, exports) {
+    module.exports = function segmented_colormap(segments) {
+      return function (x) {
+        var i, l, len, m, ref, result, x0, x1, xstart, y0, y1;
+        y0 = 0;
+        y1 = 0;
+        var _ref = [segments[0][0], 1];
+        x0 = _ref[0];
+        x1 = _ref[1];
+
+        if (x < x0) {
+          return y0;
+        }
+
+        for (i = l = 0, len = segments.length; l < len; i = ++l) {
+          var _segments$i = _slicedToArray(segments[i], 3);
+
+          xstart = _segments$i[0];
+          y0 = _segments$i[1];
+          y1 = _segments$i[2];
+          x0 = xstart;
+
+          if (i === segments.length - 1) {
+            x1 = 1;
+            break;
+          }
+
+          x1 = segments[i + 1][0];
+
+          if (xstart <= x && x < x1) {
+            break;
+          }
+        }
+
+        result = [];
+
+        for (i = m = 0, ref = y0.length; 0 <= ref ? m < ref : m > ref; i = 0 <= ref ? ++m : --m) {
+          result[i] = (x - x0) / (x1 - x0) * (y1[i] - y0[i]) + y0[i];
+        }
+
+        return result;
+      };
+    };
+  }, {}],
+  4: [function (require, module, exports) {
+    module.exports = {
+      "greyscale": {
+        "author": "publiclab",
+        "description": "A simple linear greyscale colormap, black to white.",
+        "url": "https://publiclab.org/colormaps#greyscale",
+        "colormapRanges": [[0, [0, 0, 0], [255, 255, 255]], [1, [255, 255, 255], [255, 255, 255]]]
+      },
+      "default": {
+        "author": "publiclab",
+        "description": "A full-colorwheel colormap, covering the colors in the spectrum.",
+        "url": "https://publiclab.org/colormaps#default",
+        "colormapRanges": [[0, [45, 1, 121], [25, 1, 137]], [0.125, [25, 1, 137], [0, 6, 156]], [0.1875, [0, 6, 156], [7, 41, 172]], [0.25, [7, 41, 172], [22, 84, 187]], [0.3125, [22, 84, 187], [25, 125, 194]], [0.375, [25, 125, 194], [26, 177, 197]], [0.4375, [26, 177, 197], [23, 199, 193]], [0.47, [23, 199, 193], [25, 200, 170]], [0.50, [25, 200, 170], [21, 209, 27]], [0.5625, [21, 209, 27], [108, 215, 18]], [0.625, [108, 215, 18], [166, 218, 19]], [0.6875, [166, 218, 19], [206, 221, 20]], [0.75, [206, 221, 20], [222, 213, 19]], [0.7813, [222, 213, 19], [222, 191, 19]], [0.8125, [222, 191, 19], [227, 133, 17]], [0.875, [227, 133, 17], [231, 83, 16]], [0.9375, [231, 83, 16], [220, 61, 48]]]
+      },
+      "stretched": {
+        "author": "publiclab",
+        "description": "A simple colormap from blue to red, with no purple overlap.",
+        "url": "https://publiclab.org/colormaps#stretched",
+        "colormapRanges": [[0, [0, 0, 255], [0, 0, 255]], [0.1, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.7, [255, 255, 0], [255, 50, 50]], [0.9, [255, 50, 50], [255, 50, 50]]]
+      },
+      "bluwhtgrngis": {
+        "author": "MaggPi",
+        "description": "A colormap from blue to white to green to....",
+        "url": "https://publiclab.org/colormaps#bluwhtgrngis",
+        "colormapRanges": [[0, [6, 23, 86], [6, 25, 84]], [0.0625, [6, 25, 84], [6, 25, 84]], [0.125, [6, 25, 84], [6, 25, 84]], [0.1875, [6, 25, 84], [6, 25, 84]], [0.25, [6, 25, 84], [6, 25, 84]], [0.3125, [6, 25, 84], [9, 24, 84]], [0.3438, [9, 24, 84], [119, 120, 162]], [0.375, [119, 129, 162], [249, 250, 251]], [0.406, [249, 250, 251], [255, 255, 255]], [0.4375, [255, 255, 255], [255, 255, 255]], [0.50, [255, 255, 255], [214, 205, 191]], [0.52, [214, 205, 191], [178, 175, 96]], [0.5625, [178, 175, 96], [151, 176, 53]], [0.593, [151, 176, 53], [146, 188, 12]], [0.625, [146, 188, 12], [96, 161, 1]], [0.6875, [96, 161, 1], [30, 127, 3]], [0.75, [30, 127, 3], [0, 99, 1]], [0.8125, [0, 99, 1], [0, 74, 1]], [0.875, [0, 74, 1], [0, 52, 0]], [0.9375, [0, 52, 0], [0, 34, 0]], [0.968, [0, 34, 0], [68, 70, 67]]]
+      },
+      "brntogrn": {
+        "author": "MaggPi",
+        "description": "A colormap from brown to green.",
+        "url": "https://publiclab.org/colormaps#brntogrn",
+        "colormapRanges": [[0, [110, 12, 3], [118, 6, 1]], [0.0625, [118, 6, 1], [141, 19, 6]], [0.125, [141, 19, 6], [165, 35, 13]], [0.1875, [165, 35, 13], [177, 59, 25]], [0.2188, [177, 59, 25], [192, 91, 36]], [0.25, [192, 91, 36], [214, 145, 76]], [0.3125, [214, 145, 76], [230, 183, 134]], [0.375, [230, 183, 134], [243, 224, 194]], [0.4375, [243, 224, 194], [250, 252, 229]], [0.50, [250, 252, 229], [217, 235, 185]], [0.5625, [217, 235, 185], [184, 218, 143]], [0.625, [184, 218, 143], [141, 202, 89]], [0.6875, [141, 202, 89], [80, 176, 61]], [0.75, [80, 176, 61], [0, 147, 32]], [0.8125, [0, 147, 32], [1, 122, 22]], [0.875, [1, 122, 22], [0, 114, 19]], [0.90, [0, 114, 19], [0, 105, 18]], [0.9375, [0, 105, 18], [7, 70, 14]]]
+      },
+      "blutoredjet": {
+        "author": "MaggPi",
+        "description": "A colormap from blue to red.",
+        "url": "https://publiclab.org/colormaps#blutoredjet",
+        "colormapRanges": [[0, [0, 0, 140], [1, 1, 186]], [0.0625, [1, 1, 186], [0, 1, 248]], [0.125, [0, 1, 248], [0, 70, 254]], [0.1875, [0, 70, 254], [0, 130, 255]], [0.25, [0, 130, 255], [2, 160, 255]], [0.2813, [2, 160, 255], [0, 187, 255]], [0.3125, [0, 187, 255], [6, 250, 255]], [0.348, [0, 218, 255], [8, 252, 251]], [0.375, [8, 252, 251], [27, 254, 228]], [0.406, [27, 254, 228], [70, 255, 187]], [0.4375, [70, 255, 187], [104, 254, 151]], [0.47, [104, 254, 151], [132, 255, 19]], [0.50, [132, 255, 19], [195, 255, 60]], [0.5625, [195, 255, 60], [231, 254, 25]], [0.5976, [231, 254, 25], [253, 246, 1]], [0.625, [253, 246, 1], [252, 210, 1]], [0.657, [252, 210, 1], [255, 183, 0]], [0.6875, [255, 183, 0], [255, 125, 2]], [0.75, [255, 125, 2], [255, 65, 1]], [0.8125, [255, 65, 1], [247, 1, 1]], [0.875, [247, 1, 1], [200, 1, 3]], [0.9375, [200, 1, 3], [122, 3, 2]]]
+      },
+      "colors16": {
+        "author": "publiclab",
+        "description": "A segmented colormap of the full color spectrum, divided into 16 colors.",
+        "url": "https://publiclab.org/colormaps#colors16",
+        "colormapRanges": [[0, [0, 0, 0], [0, 0, 0]], [0.0625, [3, 1, 172], [3, 1, 172]], [0.125, [3, 1, 222], [3, 1, 222]], [0.1875, [0, 111, 255], [0, 111, 255]], [0.25, [3, 172, 255], [3, 172, 255]], [0.3125, [1, 226, 255], [1, 226, 255]], [0.375, [2, 255, 0], [2, 255, 0]], [0.4375, [198, 254, 0], [190, 254, 0]], [0.50, [252, 255, 0], [252, 255, 0]], [0.5625, [255, 223, 3], [255, 223, 3]], [0.625, [255, 143, 3], [255, 143, 3]], [0.6875, [255, 95, 3], [255, 95, 3]], [0.75, [242, 0, 1], [242, 0, 1]], [0.8125, [245, 0, 170], [245, 0, 170]], [0.875, [223, 180, 225], [223, 180, 225]], [0.9375, [255, 255, 255], [255, 255, 255]]]
+      },
+      "fastie": {
+        "author": "cfastie",
+        "description": "A colormap for highlighting NDVI values over 0 on a scale from -1 to 1; in this scale, values from 0-0.5 are greyscale, while those over 0.5 are color.",
+        "url": "https://publiclab.org/colormaps#fastie",
+        "colormapRanges": [[0, [255, 255, 255], [0, 0, 0]], [0.167, [0, 0, 0], [255, 255, 255]], [0.33, [255, 255, 255], [0, 0, 0]], [0.5, [0, 0, 0], [140, 140, 255]], [0.55, [140, 140, 255], [0, 255, 0]], [0.63, [0, 255, 0], [255, 255, 0]], [0.75, [255, 255, 0], [255, 0, 0]], [0.95, [255, 0, 0], [255, 0, 255]]]
+      }
+    };
+  }, {}],
+  5: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function Colormaps(options) {
-      var greyscale_colormap = segmented_colormap([[0, [0, 0, 0], [255, 255, 255]], [1, [255, 255, 255], [255, 255, 255]]]);
-      var colormap1 = segmented_colormap([[0, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.75, [255, 255, 0], [255, 50, 50]]]);
-      var colormap2 = segmented_colormap([[0, [0, 0, 255], [0, 0, 255]], [0.1, [0, 0, 255], [38, 195, 195]], [0.5, [0, 150, 0], [255, 255, 0]], [0.7, [255, 255, 0], [255, 50, 50]], [0.9, [255, 50, 50], [255, 50, 50]]]);
+      // see https://github.com/publiclab/image-sequencer/tree/main/src/modules/Colormap/
+      var colormapFunctionGenerator = require('./colormapFunctionGenerator.js');
+
+      var colormaps = require('./colormaps.json');
+
+      Object.keys(colormaps).forEach(function (key) {
+        // make a function from the colormap, which we can't easily do in JSON
+        colormaps[key].fn = colormapFunctionGenerator(colormaps[key].colormapRanges);
+      });
 
       var JsImage = require('../util/JsImage.js');
-
-      function segmented_colormap(segments) {
-        return function (x) {
-          var i, l, len, m, ref, result, x0, x1, xstart, y0, y1;
-          y0 = 0;
-          y1 = 0;
-          var _ref = [segments[0][0], 1];
-          x0 = _ref[0];
-          x1 = _ref[1];
-
-          if (x < x0) {
-            return y0;
-          }
-
-          for (i = l = 0, len = segments.length; l < len; i = ++l) {
-            var _segments$i = _slicedToArray(segments[i], 3);
-
-            xstart = _segments$i[0];
-            y0 = _segments$i[1];
-            y1 = _segments$i[2];
-            x0 = xstart;
-
-            if (i === segments.length - 1) {
-              x1 = 1;
-              break;
-            }
-
-            x1 = segments[i + 1][0];
-
-            if (xstart <= x && x < x1) {
-              break;
-            }
-          }
-
-          result = [];
-
-          for (i = m = 0, ref = y0.length; 0 <= ref ? m < ref : m > ref; i = 0 <= ref ? ++m : --m) {
-            result[i] = (x - x0) / (x1 - x0) * (y1[i] - y0[i]) + y0[i];
-          }
-
-          return result;
-        };
-      }
 
       function colorify(jsImage, colormap) {
         var b, data, g, i, j, l, n, r, ref;
@@ -241,16 +300,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       return {
         colorify: colorify,
-        colormap1: colormap1,
-        colormap2: colormap2,
-        greyscale_colormap: greyscale_colormap,
-        segmented_colormap: segmented_colormap
+        colormap1: colormaps['default'].fn,
+        colormap2: colormaps['stretched'].fn,
+        greyscale_colormap: colormaps['greyscale'].fn,
+        segmented_colormap: colormapFunctionGenerator
       };
     };
   }, {
-    "../util/JsImage.js": 17
+    "../util/JsImage.js": 19,
+    "./colormapFunctionGenerator.js": 3,
+    "./colormaps.json": 4
   }],
-  4: [function (require, module, exports) {
+  6: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = window.Converters = {
@@ -329,7 +390,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     };
   }, {}],
-  5: [function (require, module, exports) {
+  7: [function (require, module, exports) {
     // Generated by CoffeeScript 2.1.0
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
@@ -482,7 +543,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     };
   }, {}],
-  6: [function (require, module, exports) {
+  8: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function Camera(options) {
@@ -621,7 +682,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {}],
-  7: [function (require, module, exports) {
+  9: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function File(options, processor) {
@@ -723,7 +784,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {}],
-  8: [function (require, module, exports) {
+  10: [function (require, module, exports) {
     // refactor to access state, not dom
     module.exports = function Logger(options) {
       var log = []; // a record of previous commands run
@@ -774,7 +835,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {}],
-  9: [function (require, module, exports) {
+  11: [function (require, module, exports) {
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     // not currently being used -- will replace with Image Sequencer perhaps?
@@ -1070,11 +1131,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {
-    "../color/colormaps": 3,
-    "../color/converters": 4,
-    "../util/JsImage.js": 17
+    "../color/colormaps": 5,
+    "../color/converters": 6,
+    "../util/JsImage.js": 19
   }],
-  10: [function (require, module, exports) {
+  12: [function (require, module, exports) {
     // Generated by CoffeeScript 2.1.0
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
@@ -1087,7 +1148,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           waitForShadersToLoad = 0,
           webglUtils = require('../util/webgl-utils')(),
           colorized = false,
-          colormaps = {
+          // TODO: we should refactor this to use colormaps in /src/color/;
+      // we could build the dist/shader.frag file automatically around these
+      // using the function now at /src/color/colormapFunctionGenerator.js
+      // ... we need to either use integer indices for colormap, 
+      // OR switch the system to strings and use the colormap names
+      colormaps = {
         default: 0,
         stretched: 2,
         grey: 1
@@ -1380,13 +1446,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         setMode: setMode,
         updateImage: updateImage,
         decolorize: decolorize,
-        colorize: colorize
+        colorize: colorize,
+        context: imgContext
       };
     };
   }, {
-    "../util/webgl-utils": 18
+    "../util/webgl-utils": 20
   }],
-  11: [function (require, module, exports) {
+  13: [function (require, module, exports) {
     module.exports = function Analysis(options, save_infragrammar_inputs) {
       // buttons to run Analysis steps
       $("#infragrammar_hsv").submit(function () {
@@ -1418,7 +1485,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       });
     };
   }, {}],
-  12: [function (require, module, exports) {
+  14: [function (require, module, exports) {
     module.exports = function Colorize(options) {
       $(".btn-colorize").click(function () {
         if (options.colorized) {
@@ -1463,7 +1530,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     };
   }, {}],
-  13: [function (require, module, exports) {
+  15: [function (require, module, exports) {
     module.exports = function Fullscreen(options) {
       var fullscreen = false;
       $(".fullscreen").click(function () {
@@ -1492,7 +1559,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       });
     };
   }, {}],
-  14: [function (require, module, exports) {
+  16: [function (require, module, exports) {
     module.exports = function Interface(options) {
       options.imageSelector = options.imageSelector || "#image-container";
       options.fileSelector = options.fileSelector || "#file-sel";
@@ -1608,16 +1675,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       });
     };
   }, {
-    "../color/colormaps": 3,
-    "../file-upload": 5,
-    "../ui/analysis": 11,
-    "../ui/colorize": 12,
-    "../ui/presets": 15,
-    "../ui/saving": 16,
-    "./fullscreen": 13,
+    "../color/colormaps": 5,
+    "../file-upload": 7,
+    "../ui/analysis": 13,
+    "../ui/colorize": 14,
+    "../ui/presets": 17,
+    "../ui/saving": 18,
+    "./fullscreen": 15,
     "urlhash": 1
   }],
-  15: [function (require, module, exports) {
+  17: [function (require, module, exports) {
     module.exports = function Presets(options, save_infragrammar_inputs) {
       // preset button
       $("#preset_raw").click(function () {
@@ -1695,7 +1762,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     };
   }, {}],
-  16: [function (require, module, exports) {
+  18: [function (require, module, exports) {
     module.exports = function Saving(options) {
       // This is all unused...
       $("#download").click(function () {
@@ -1738,7 +1805,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       };
     };
   }, {}],
-  17: [function (require, module, exports) {
+  19: [function (require, module, exports) {
     module.exports = function () {
       function JsImage(data1, width1, height1, channels) {
         _classCallCheck(this, JsImage);
@@ -1805,7 +1872,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return JsImage;
     }();
   }, {}],
-  18: [function (require, module, exports) {
+  20: [function (require, module, exports) {
     /*
      * Copyright 2012, Gregg Tavares.
      * All rights reserved.

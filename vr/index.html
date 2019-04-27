@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <title>Infragram | by Public Lab - Home</title>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
+
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="../dist/infragram.css" rel="stylesheet">
+
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="../node_modules/webrtc-adapter/out/adapter.js"></script>
+    <script src="../node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
+    <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+
+    <script src="../dist/infragram.js"></script>
+
+    <script type="x-shader/x-vertex" id="shader-vs"></script>
+    <script type="x-shader/x-fragment" id="shader-fs-template"></script>
+    <script type="x-shader/x-fragment" id="shader-fs"></script>
+
+  </head>
+
+  <body>
+  
+    <div class="container page" style="padding-top:10px;">
+
+       <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
+         <div class="modal-dialog modal-lg" role="document">
+           <div class="modal-content">
+             <!--<div class="modal-header"></div>-->
+             <div class="modal-body">
+               <h3>Quick start</h3>
+               <p>Choose from these presets to get up and running quickly:</p>
+                 <table class="table">
+                   <tr>
+                     <td width="30%"><b>Raw</b></td>
+                     <td width="30%">Just what your camera sees.</td>
+                     <td><a class="btn btn-primary" id="preset_raw">Begin</a></td>
+                   </tr>
+                   <tr>
+                     <td><b>NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
+                     <td>basic plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
+                     <td><a class="btn btn-primary" id="preset_ndvi_blue">Basic</a>
+                         <a class="btn btn-success" id="preset_ndvi_blue_color">Colorized</a>
+                         <a class="btn btn-success" onClick="boost('blue')">Colorized + boosted (for Pi cameras)</a></td>
+                   </tr>
+                   <tr>
+                     <td><b>NDVI for <span style="color:red;">RED</span> filters</b></td>
+                     <td>basic plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
+                     <td><a class="btn btn-primary" id="preset_ndvi_red">Basic</a>
+                         <a class="btn btn-success" id="preset_ndvi_red_color">Colorized</a>
+                         <a class="btn btn-success" onClick="boost('red')">Colorized + boosted (for Pi cameras)</a></td>
+                   </tr>
+                 </table>
+                 <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
+
+	    </div>
+            <div class="modal-footer">
+              <a data-dismiss="modal" data-toggle="modal" class="btn">cancel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h1><img src="../assets/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:40px;" /> <a style="color:#444;padding-top:8px;" href="../">Infragram</a> <small>by <a href="http://publiclab.org" target="_blank">Public Lab</a></small></h1>
+
+
+      <div class="content">
+
+        <div id="toolbar">
+
+          <div class="zone">
+            <p>QUICK START</p>
+            <div class="btn-group">
+              <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" type="button" class="btn btn-lg btn-default"><i class="fa fa-question-circle"></i></a>
+              <button href="#preset-modal" data-toggle="modal" id="preset-modal-btn" type="button" class="btn btn-lg btn-primary"><i class="fa fa-magic"></i> Presets</button>
+              <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera"></i></button>
+            </div>
+          </div>
+
+          <div class="zone zone-analysis">
+            <p>ANALYSIS (<a target="_blank" href="http://publiclab.org/wiki/infragrammar">ABOUT INFRAGRAMMAR</a>)</p>
+            <select class="form-control" style="display:inline;width:80px;" id="modeSwitcher" onChange="if(this.value == 'infragrammar_mono'){$('.colorize').show()}else{$('.colorize').hide()}">
+              <option value='infragrammar_mono'>Grey</option>
+              <option value='infragrammar'>RGB</option>
+              <option value='infragrammar_hsv'>HSV</option>
+            </select>
+           
+            <form id="infragrammar_mono" class="form-inline" style="display:inline;" action="javascript:void(0);">
+              <input placeholder="monochrome" type="text" id="m_exp" class="form-control" style="width:100px;" value="(R-B)/(R+B)">
+              <button type="submit" class="btn btn-primary">Run</button>
+            </form>
+
+            <form id="infragrammar" class="form-inline" style="display:none;" action="javascript:void(0);">
+              <input placeholder="R" type="text" id="r_exp" class="form-control" value="R">
+              <input placeholder="G" type="text" id="g_exp" class="form-control" value="G">
+              <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
+              <button type="submit" class="btn btn-primary">Run</button>
+            </form>
+           
+            <form id="infragrammar_hsv" class="form-inline" style="display:none;" action="javascript:void(0);">
+              <input placeholder="H" type="text" id="h_exp" class="form-control" value="-(R-B)/(R+B)">
+              <input placeholder="S" type="text" id="s_exp" class="form-control" value="1">
+              <input placeholder="V" type="text" id="v_exp" class="form-control" value="1">
+              <button type="submit" class="btn btn-primary">Run</button>
+            </form>
+
+          </div>
+
+          <div class="zone colorize">
+            <p>COLORIZE</p>
+            <div class="btn-group">
+              <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button> 
+              <a class="btn btn-lg dropdown-toggle btn-default" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a id="default_colormap">Default colormap</a></li>
+                <li><a id="stretched_colormap">Stretched colormap</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="zone last" id="save-zone" style="">
+            <p>OUTPUT</p>
+            <button onClick="infragram.download();openInSequencer();" class="btn btn-primary btn-lg"><i class="fa fa-download"></i></button>
+            <button onClick="openInSequencer();" class="btn btn-primary btn-lg">Sequencer</button>
+          </div>
+
+          <br style="clear:both;" />
+
+        </div>
+
+        <div id="image-container">
+          <div style="display:none;"><div id="webcam"></div></div>
+          <a class="btn btn-link fullscreen" style="font-size:2em;color:white;opacity:0.3;position:absolute;z-index:3;margin:5px 10px;"><i class="fa fa-expand"></i></a>
+          <div onClick="$('.choose-prompt').hide();" class="choose-prompt" style="display:inline;color:white;position:absolute;z-index:3;padding-top:14px;text-align:left;padding-left:60px;">
+            <p>1. Live video should begin to stream from your Pi Camera.</p>
+            <p>2. Choose an analysis mode or click PRESETS.</p>
+            <p>3. Colorize your results (optional).</p>
+            <p></p>
+            <p>Click this message to hide it.</p>
+          </div>
+          <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
+
+          <canvas class="canvas" id="image"></canvas>
+          <canvas class="canvas" id="image2" style="left:50%;"></canvas>
+
+	  <div id="colorbar-container" style="display:none;">
+            <span id="colorbar-min">-1.00</span>
+            <canvas id="colorbar"></canvas>
+            <span id="colorbar-max">1.00</span>
+          </div>
+
+	</div>
+
+      </div>
+
+      <footer class="footer">
+          <hr>
+          <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/infragram" target="_blank">Infragram</a> <small>by <a href="http://publiclab.org" target="_blank">Public Lab</a> | This web app is <a href="https://github.com/publiclab/infragram/" target="_blank">open source software</a>; <a href="https://github.com/publiclab/infragram/issues" target="_blank">please report bugs</a></small></h4>
+          <p>Infragram was created by <a href="https://github.com/bgamari" target="_blank">Ben Gamari</a>, <a href="http://github.com/donblair" target="_blank">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn" target="_blank">Piotr Foltyn</a> and others from <a href="http://publiclab.org/contributors/infragram" target="_blank">Public Lab</a>.</p>
+
+      <hr />
+
+      <p>Analyze plant health with near-infrared imagery! <a href="http://publiclab.org/wiki/infragram">Learn more &amp; mod a camera</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a>.</p>
+      </footer>
+ 
+    </div>
+
+    <script>
+      var infragram, boost, openInSequencer;
+      (function() {
+
+        infragram = Infragram({
+          uploader: false,
+          processor: 'webgl',
+          shaderVertPath: "../dist/shader.vert",
+          shaderFragPath: "../dist/shader.frag"
+        });
+
+        var webcam = false;
+        $('#webcam-activate').click(function() { webcam = true; });
+
+        var piImage = new Image();
+        // copy canvas from left to right
+        var leftImage = new Image(), imgSrc, setSize = true;
+        var canvas = $('#image2')[0];
+        var ctx = canvas.getContext("2d");
+
+        piImage.onload = function() {
+
+          if (setSize) {
+            setSize = false;
+            canvas.width = $('#image2').width();
+            canvas.height = $('#image2').height();
+          }
+          infragram.options.processor.updateImage(piImage);
+        }
+        var fetchImageInterval = setInterval(function fetchImage() {
+          if (!webcam) piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
+
+          infragram.options.processor.context.canvas.width = $('#image').width();
+          infragram.options.processor.context.canvas.height = $('#image').height();
+
+          imgSrc = infragram.options.processor.getCurrentImage();
+          leftImage.src = imgSrc;
+
+          if (leftImage) ctx.drawImage(leftImage, 0, 0, canvas.width, canvas.height)
+
+        }, 50);
+
+        boost = function boost(filterColor) {
+          $('#modeSwitcher').val("infragrammar_mono").change();
+          if (filterColor == "blue") $('#m_exp').val("(R-B)/(R+B)+(1/3)");
+          if (filterColor == "red") $('#m_exp').val("(B-R)/(R+B)+(1/3)");
+          infragram.colorize();
+          infragram.options.processor.save_expressions($('#m_exp').val(),$('#m_exp').val(),$('#m_exp').val());
+          infragram.run();
+          $('#preset-modal').modal('hide');
+	}
+
+        openInSequencer = function openInSequencer() {
+          var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
+          window.location = "/image-sequencer/examples/#steps=ndvi{filter:" + color + "},brightness{brightness:133},colormap{colormap:default}&src=" + "/cam/cam_pic.php?time=" + new Date().getTime();
+        }
+	      
+      })()
+    </script>
+
+    <style>
+      #toolbar {
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        z-index:99;
+      }
+      .canvas {
+        width:50% !important;
+        height:100% !important;
+        left:0;
+        top:100px;
+        position:absolute;
+     }
+    </style>
+
+  </body>
+</html>

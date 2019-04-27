@@ -10,6 +10,12 @@ module.exports = function webglProcessor(options) {
       waitForShadersToLoad = 0,
       webglUtils = require('../util/webgl-utils')(),
       colorized = false,
+      // TODO: we should refactor this to use colormaps in /src/color/;
+      // we could build the dist/shader.frag file automatically around these
+      // using the function now at /src/color/colormapFunctionGenerator.js
+      // ... we need to either use integer indices for colormap, 
+      // OR switch the system to strings and use the colormap names
+
       colormaps = {
         default: 0,
         stretched: 2,
@@ -261,7 +267,8 @@ console.log(options, 'webgl');
     setMode: setMode,
     updateImage: updateImage,
     decolorize: decolorize,
-    colorize: colorize
+    colorize: colorize,
+    context: imgContext
   }
 
 }
