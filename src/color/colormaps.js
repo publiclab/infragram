@@ -4,8 +4,8 @@
 module.exports = function Colormaps(options) {
 
   // see https://github.com/publiclab/image-sequencer/tree/main/src/modules/Colormap/
-  var colormapFunctionGenerator = require('.colormapFunctionGenerator.js');
-  var colormaps = require('.colormaps.json');
+  var colormapFunctionGenerator = require('./colormapFunctionGenerator.js');
+  var colormaps = require('./colormaps.json');
   Object.keys(colormaps).forEach(function(key) {
     // make a function from the colormap, which we can't easily do in JSON
     colormaps[key].fn = colormapFunctionGenerator(colormaps[key].colormapRanges);

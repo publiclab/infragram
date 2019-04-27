@@ -15,6 +15,7 @@ module.exports = function webglProcessor(options) {
       // using the function now at /src/color/colormapFunctionGenerator.js
       // ... we need to either use integer indices for colormap, 
       // OR switch the system to strings and use the colormap names
+
       colormaps = {
         default: 0,
         stretched: 2,
@@ -266,7 +267,8 @@ console.log(options, 'webgl');
     setMode: setMode,
     updateImage: updateImage,
     decolorize: decolorize,
-    colorize: colorize
+    colorize: colorize,
+    context: imgContext
   }
 
 }
