@@ -206,8 +206,7 @@
           infragram.options.processor.updateImage(piImage);
         }
         var fetchImageInterval = setInterval(function fetchImage() {
-          //piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-          if (!webcam) piImage.src = "../assets/infragram-aerial.jpg";
+          if (!webcam) piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
 
           infragram.options.processor.context.canvas.width = $('#image').width();
           infragram.options.processor.context.canvas.height = $('#image').height();
