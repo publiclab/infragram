@@ -178,6 +178,9 @@
 
     <script>
       var infragram, boost, openInSequencer;
+      var canvas = document.getElementById('image2');
+      var ctx = canvas.getContext("2d");
+      var leftImage = new Image(), imgSrc, setSize = true;
       (function() {
 
         infragram = Infragram({
@@ -192,20 +195,29 @@
 
         var piImage = new Image();
         // copy canvas from left to right
-        var leftImage = new Image(), imgSrc, setSize = true;
-        var canvas = $('#image2')[0];
-        var ctx = canvas.getContext("2d");
 
         piImage.onload = function() {
+          infragram.options.processor.updateImage(piImage);
+        }
 
+        function timeout() {
+          setTimeout(function () {
+            fetchImage(); 
+            timeout();
+          }, 50);
+        }
+        timeout();
+
+        leftImage.onload = function() {
           if (setSize) {
             setSize = false;
             canvas.width = $('#image2').width();
             canvas.height = $('#image2').height();
           }
-          infragram.options.processor.updateImage(piImage);
+          ctx.drawImage(leftImage, 0, 0, canvas.width, canvas.height)
         }
-        var fetchImageInterval = setInterval(function fetchImage() {
+
+        function fetchImage() {
           if (!webcam) piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
 
           infragram.options.processor.context.canvas.width = $('#image').width();
@@ -213,10 +225,7 @@
 
           imgSrc = infragram.options.processor.getCurrentImage();
           leftImage.src = imgSrc;
-
-          if (leftImage) ctx.drawImage(leftImage, 0, 0, canvas.width, canvas.height)
-
-        }, 50);
+        }
 
         boost = function boost(filterColor) {
           $('#modeSwitcher').val("infragrammar_mono").change();
@@ -232,6 +241,12 @@
           var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
           window.location = "/image-sequencer/examples/#steps=ndvi{filter:" + color + "},brightness{brightness:133},colormap{colormap:default}&src=" + "/cam/cam_pic.php?time=" + new Date().getTime();
         }
+
+        $(".canvas").click(function() {   
+          $("#toolbar").toggle()
+          if ($(".canvas").css('top') == '0') $(".canvas").css('top','100px')
+          else $(".canvas").css('top','0')
+        });
 	      
       })()
     </script>
