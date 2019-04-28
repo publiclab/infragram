@@ -244,6 +244,7 @@
 
         $(".canvas").click(function() {   
           $("#toolbar").toggle()
+          if (!$("#toolbar").is(":visible")) document.body.requestFullscreen();
           if ($(".canvas").css('top') == '0') $(".canvas").css('top','100px')
           else $(".canvas").css('top','0')
         });
