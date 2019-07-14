@@ -30,6 +30,7 @@ console.log(options, 'webgl');
     options = options || {};
     options.shaderVertPath = options.shaderVertPath || "dist/shader.vert";
     options.shaderFragPath = options.shaderFragPath || "dist/shader.frag";
+    options.shadersLoadedCallback = options.shadersLoadedCallback || function() { console.log('shaders loaded') };
     imgContext = createContext("raw", 1, 0, 1.0, "image");
     mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
     decolorize();
@@ -200,6 +201,7 @@ console.log(options, 'webgl');
   function glShaderLoaded() {
     waitForShadersToLoad -= 1;
     if (!waitForShadersToLoad) {
+      options.shadersLoadedCallback();
       drawScene(imgContext);
       return drawScene(mapContext);
     }

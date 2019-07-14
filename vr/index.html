@@ -179,7 +179,7 @@
     <script>
       var infragram, boost, openInSequencer;
       var canvas = document.getElementById('image2');
-      var ctx = canvas.getContext("2d");
+      var ctx2 = canvas.getContext("2d");
       var leftImage = new Image(), imgSrc, setSize = true;
       (function() {
 
@@ -187,15 +187,16 @@
           uploader: false,
           processor: 'webgl',
           shaderVertPath: "../dist/shader.vert",
-          shaderFragPath: "../dist/shader.frag"
+          shaderFragPath: "../dist/shader.frag",
+          shadersLoadedCallback: function shadersLoadedCallback() {
+            timeout();
+          }
         });
 
         var webcam = false;
         $('#webcam-activate').click(function() { webcam = true; });
 
         var piImage = new Image();
-        // copy canvas from left to right
-
         piImage.onload = function() {
           infragram.options.processor.updateImage(piImage);
         }
@@ -206,7 +207,6 @@
             timeout();
           }, 50);
         }
-        timeout();
 
         leftImage.onload = function() {
           if (setSize) {
@@ -214,17 +214,15 @@
             canvas.width = $('#image2').width();
             canvas.height = $('#image2').height();
           }
-          ctx.drawImage(leftImage, 0, 0, canvas.width, canvas.height)
+          ctx2.drawImage(leftImage, 0, 0, canvas.width, canvas.height)
         }
 
         function fetchImage() {
           if (!webcam) piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-
           infragram.options.processor.context.canvas.width = $('#image').width();
           infragram.options.processor.context.canvas.height = $('#image').height();
 
-          imgSrc = infragram.options.processor.getCurrentImage();
-          leftImage.src = imgSrc;
+          leftImage.src = infragram.options.processor.getCurrentImage();
         }
 
         boost = function boost(filterColor) {
