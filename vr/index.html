@@ -214,7 +214,7 @@
         }
 
         function fetchImage() {
-          if (!webcam) piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
+          if (!webcam) piImage.src = "/cam/cam_pic.php?time=" + new Date().getTime(); // fetch image from the pi
           infragram.options.processor.context.canvas.width = $('#image').width();
           infragram.options.processor.context.canvas.height = $('#image').height();
 
