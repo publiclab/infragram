@@ -58,6 +58,8 @@ module.exports = function Interface(options) {
       };
  
       $("#overlay-slider").val(localStorage.getItem("overlaySize"));
+      console.log('grid ' + localStorage.getItem("overlaySize"));
+      setGrid($("#overlay-slider").val());
 
       // TODO: broken:  
       //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
@@ -106,11 +108,20 @@ module.exports = function Interface(options) {
     });
 
     $("#overlay-slider").on("input", function() {
-      $("#overlay-img").width($("#overlay-slider").val() * 8);
+      setGrid($("#overlay-slider").val());
     });
 
+    function setGrid(size) {
+      var scale = 80, // roughly, not smaller than the viewport
+          ratio = 1250/2000; // size of svg
+      $("#overlay-img").width(size * scale);
+      $("#overlay-img").height(size * scale * ratio);
+      $("#overlay-size").html(size);
+      console.log('saved grid ' + size);
+    }
+
     $("#overlay-save-btn").click(function() {
-      localStorage.setItem("overlaySize", $("#overlay-slider").val())
+      localStorage.setItem("overlaySize", $("#overlay-slider").val());
       $("#overlay-save-info").show().delay(2000).fadeOut();
     });
     
