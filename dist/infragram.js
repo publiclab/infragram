@@ -1627,7 +1627,9 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
             "#s_exp": "s",
             "#v_exp": "v"
           };
-          $("#overlay-slider").val(localStorage.getItem("overlaySize")); // TODO: broken:  
+          $("#overlay-slider").val(localStorage.getItem("overlaySize"));
+          console.log('grid ' + localStorage.getItem("overlaySize"));
+          setGrid($("#overlay-slider").val()); // TODO: broken:  
           //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
 
           src = urlHash.getUrlHashParameter('src');
@@ -1671,12 +1673,20 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $("#overlay-btn").toggleClass("btn-success");
         });
         $("#overlay-slider").on("input", function () {
-          var scale = 12,
-              ratio = 1250 / 4000; // size of svg
-
-          $("#overlay-img").width($("#overlay-slider").val() * scale);
-          $("#overlay-img").height($("#overlay-slider").val() * scale * ratio); // 3:4 ratio
+          setGrid($("#overlay-slider").val());
         });
+
+        function setGrid(size) {
+          var scale = 80,
+              // roughly, not smaller than the viewport
+          ratio = 1250 / 2000; // size of svg
+
+          $("#overlay-img").width(size * scale);
+          $("#overlay-img").height(size * scale * ratio);
+          $("#overlay-size").html(size);
+          console.log('saved grid ' + localStorage.getItem("overlaySize"));
+        }
+
         $("#overlay-save-btn").click(function () {
           localStorage.setItem("overlaySize", $("#overlay-slider").val());
           $("#overlay-save-info").show().delay(2000).fadeOut();
