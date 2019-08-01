@@ -11,39 +11,37 @@ function _sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; 
 function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return _sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
 
 (function () {
-  function e(t, n, r) {
-    function s(o, u) {
-      if (!n[o]) {
-        if (!t[o]) {
-          var a = typeof require == "function" && require;
-          if (!u && a) return a(o, !0);
-          if (i) return i(o, !0);
-          var f = new Error("Cannot find module '" + o + "'");
-          throw f.code = "MODULE_NOT_FOUND", f;
+  function r(e, n, t) {
+    function o(i, f) {
+      if (!n[i]) {
+        if (!e[i]) {
+          var c = "function" == typeof require && require;
+          if (!f && c) return c(i, !0);
+          if (u) return u(i, !0);
+          var a = new Error("Cannot find module '" + i + "'");
+          throw a.code = "MODULE_NOT_FOUND", a;
         }
 
-        var l = n[o] = {
+        var p = n[i] = {
           exports: {}
         };
-        t[o][0].call(l.exports, function (e) {
-          var n = t[o][1][e];
-          return s(n ? n : e);
-        }, l, l.exports, e, t, n, r);
+        e[i][0].call(p.exports, function (r) {
+          var n = e[i][1][r];
+          return o(n || r);
+        }, p, p.exports, r, e, n, t);
       }
 
-      return n[o].exports;
+      return n[i].exports;
     }
 
-    var i = typeof require == "function" && require;
-
-    for (var o = 0; o < r.length; o++) {
-      s(r[o]);
+    for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) {
+      o(t[i]);
     }
 
-    return s;
+    return o;
   }
 
-  return e;
+  return r;
 })()({
   1: [function (require, module, exports) {
     function urlHash() {
@@ -1629,7 +1627,9 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
             "#s_exp": "s",
             "#v_exp": "v"
           };
-          $("#overlay-slider").val(localStorage.getItem("overlaySize")); // TODO: broken:  
+          $("#overlay-slider").val(localStorage.getItem("overlaySize"));
+          console.log('grid ' + localStorage.getItem("overlaySize"));
+          setGrid($("#overlay-slider").val()); // TODO: broken:  
           //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
 
           src = urlHash.getUrlHashParameter('src');
@@ -1673,8 +1673,20 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $("#overlay-btn").toggleClass("btn-success");
         });
         $("#overlay-slider").on("input", function () {
-          $("#overlay-img").width($("#overlay-slider").val() * 8);
+          setGrid($("#overlay-slider").val());
         });
+
+        function setGrid(size) {
+          var scale = 80,
+              // roughly, not smaller than the viewport
+          ratio = 1250 / 2000; // size of svg
+
+          $("#overlay-img").width(size * scale);
+          $("#overlay-img").height(size * scale * ratio);
+          $("#overlay-size").html(size);
+          console.log('saved grid ' + localStorage.getItem("overlaySize"));
+        }
+
         $("#overlay-save-btn").click(function () {
           localStorage.setItem("overlaySize", $("#overlay-slider").val());
           $("#overlay-save-info").show().delay(2000).fadeOut();

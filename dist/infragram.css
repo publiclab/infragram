@@ -79,5 +79,21 @@ div#colorbar-container canvas#colorbar {
 }
 
 .container {
-  padding-left: unset;
+  padding-left:unset;
+}
+
+#overlay-container {
+  position:absolute;
+ display: inline-block;
+  overflow:hidden;
+  width:800px;
+  height:600px;
+}
+
+#overlay-save-btn {
+  margin-top:2px;
+}
+
+#overlay-img {
+  opacity:0.5;
 }
