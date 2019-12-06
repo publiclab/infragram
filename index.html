@@ -163,7 +163,8 @@
 
           <div class="zone last" id="save-zone" style="display:none;">
             <p>OUTPUT</p>
-            <button onClick="infragram.download()" type="button" class="btn btn-primary btn-lg">Save</button>
+            <button onClick="openInPl()" type="button" class="btn btn-primary btn-lg">Save</button>
+            <button onClick="infragram.download()" type="button" class="btn btn-primary btn-lg">Download</button>
             <button onClick="openInSequencer()" type="button" class="btn btn-primary btn-lg">Export</button>
           </div>
 
@@ -207,12 +208,25 @@
     </div>
 
     <script>
-      var infragram, openInSequencer;
+      var infragram, openInPl, openInSequencer;
       (function() {
         infragram = Infragram({
           uploader: false,
           processor: 'webgl'
         });
+
+        openInPl = function openInPl() {
+          var dataurl = infragram.options.processor.getInputImage();
+          function postToPL(imgSrc) {
+            var uniq = Date.now();
+            $('body').append('<form method="post" id="postToPL' + uniq + '" action="https://publiclab.org/post" target="postToPLWindow"><input type="hidden" name="datauri_main_image" /></form>');
+            f = $('#postToPL' + uniq)[0];
+            f.datauri_main_image.value = imgSrc;
+            window.open('', 'postToPLWindow');
+            f.submit();
+          }
+          postToPL(dataurl);
+        }
 
         openInSequencer = function openInSequencer() {
           var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
