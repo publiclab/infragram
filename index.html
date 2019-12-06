@@ -216,7 +216,7 @@
         });
 
         openInPl = function openInPl() {
-          var dataurl = infragram.options.processor.getInputImage();
+	  var dataurl = infragram.options.processor.getCurrentImage();
           function postToPL(imgSrc) {
             var uniq = Date.now();
             $('body').append('<form method="post" id="postToPL' + uniq + '" action="https://publiclab.org/post" target="postToPLWindow"><input type="hidden" name="datauri_main_image" /></form>');
