@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
+
     <title>Infragram | by Public Lab - Home</title>
 
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
@@ -29,7 +29,7 @@
   </head>
 
   <body>
-  
+
     <div class="container page" style="padding-top:10px;">
 
        <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
@@ -86,7 +86,7 @@
 
           <div class="zone">
             <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
-            <div class="btn-group" data-toggle="buttons-radio" id="imageselect">
+            <div class="btn-group" data-toggle="buttons" id="imageselect">
               <button id="btn-upload" type="button" class="btn btn-lg btn-primary"><i class="fa fa-upload"></i></button>
               <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
               <style>
@@ -108,7 +108,7 @@
               <option value='infragrammar'>RGB</option>
               <option value='infragrammar_hsv'>HSV</option>
             </select>
-           
+
             <form id="infragrammar_mono" class="form-inline" style="display:inline;" action="javascript:void(0);">
               <input placeholder="monochrome" type="text" id="m_exp" class="form-control" value="(R-B)/(R+B)">
               <button type="submit" class="btn btn-primary">Run</button>
@@ -120,7 +120,7 @@
               <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
               <button type="submit" class="btn btn-primary">Run</button>
             </form>
-           
+
             <form id="infragrammar_hsv" class="form-inline" style="display:none;" action="javascript:void(0);">
               <input placeholder="H" type="text" id="h_exp" class="form-control" value="-(R-B)/(R+B)">
               <input placeholder="S" type="text" id="s_exp" class="form-control" value="1">
@@ -133,7 +133,7 @@
           <div class="zone colorize">
             <p>3. COLORIZE</p>
             <div class="btn-group">
-              <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button> 
+              <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button>
               <a class="btn btn-lg dropdown-toggle btn-default" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
               </a>
@@ -204,7 +204,7 @@
           <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/infragram" target="_blank">Infragram</a> <small>by <a href="http://publiclab.org" target="_blank">Public Lab</a> | This web app is <a href="https://github.com/publiclab/infragram/" target="_blank">open source software</a>; <a href="https://github.com/publiclab/infragram/issues" target="_blank">please report bugs</a></small></h4>
           <p>Infragram was created by <a href="https://github.com/bgamari" target="_blank">Ben Gamari</a>, <a href="http://github.com/donblair" target="_blank">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn" target="_blank">Piotr Foltyn</a> and others from <a href="http://publiclab.org/contributors/infragram" target="_blank">Public Lab</a>.</p>
       </footer>
- 
+
     </div>
 
     <script>
