@@ -85,10 +85,12 @@
           </div>
 
           <div class="zone">
-            <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/wiki/infragram#cameras">CAMERAS</a>)</p>
-            <div class="btn-group" data-toggle="buttons" id="imageselect">
-              <button id="btn-upload" type="button" class="btn btn-lg btn-primary"><i class="fa fa-upload"></i></button>
-              <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
+            <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/infragram#cameras">CAMERAS</a>)</p>
+            <div class="btn-group" id="imageselect">
+              <label for="file-sel" class="btn btn-lg btn-primary">
+                <i class="fa fa-upload"></i>
+                <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
+              </label>
               <style>
                 #file-sel {
                   position:absolute; left:0;
@@ -219,7 +221,9 @@
 	  var dataurl = infragram.options.processor.getCurrentImage();
           function postToPL(imgSrc) {
             var uniq = Date.now();
-            $('body').append('<form method="post" id="postToPL' + uniq + '" action="https://publiclab.org/post?tags=infragram,infragram-upload" target="postToPLWindow"><input type="hidden" name="datauri_main_image" /></form>');
+            var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
+            var bodyText = "The lead image is a processed Infragram image from https://infragram.org. It is good practice to upload the original image as well. The sequence used to generate the above image was: https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},colormap{colormap:default}";
+            $('body').append('<form method="post" id="postToPL' + uniq + '" action="https://publiclab.org/post?tags=infragram,infragram-upload&body=' + bodyText + '" target="postToPLWindow"><input type="hidden" name="datauri_main_image" /></form>');
             f = $('#postToPL' + uniq)[0];
             f.datauri_main_image.value = imgSrc;
             window.open('', 'postToPLWindow');
