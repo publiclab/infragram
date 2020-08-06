@@ -7,6 +7,8 @@ This project is a minimal core of the Infragram project in JavaScript and was ma
 
 Check it here: https://publiclab.github.io/infragram/
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/publiclab/infragram)
+
 This is ported out of the Node server application at https://github.com/p-v-o-s/infragram-js
 
 Read more at https://publiclab.org/infragram
