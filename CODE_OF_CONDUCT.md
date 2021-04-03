@@ -6,4 +6,4 @@ This code of conduct applies to all spaces managed by the Public Lab community a
 
 To read the full Code of Conduct and learn how to contact the Conduct Committee or the Moderators group, see:
 
-https://publiclab.org/conduct
+https://publiclab.orgCODE_OF_CONDUCT
