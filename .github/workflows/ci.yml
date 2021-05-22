@@ -24,7 +24,7 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - name: Install Dependencies
-        run:  npm install -g grunt-cli
+        run:  npm install grunt-cli
       - name: "Build dist files"
         run: grunt build
       - name: "Run tests"
