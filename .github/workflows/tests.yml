@@ -23,7 +23,7 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
-      - name: Install Dependencies
+      - name: Install dependencies
         run:  npm install grunt-cli
       - name: "Build dist files"
         run: grunt build
