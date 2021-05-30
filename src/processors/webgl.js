@@ -10,6 +10,12 @@ module.exports = function webglProcessor(options) {
       waitForShadersToLoad = 0,
       webglUtils = require('../util/webgl-utils')(),
       colorized = false,
+      // TODO: we should refactor this to use colormaps in /src/color/;
+      // we could build the dist/shader.frag file automatically around these
+      // using the function now at /src/color/colormapFunctionGenerator.js
+      // ... we need to either use integer indices for colormap, 
+      // OR switch the system to strings and use the colormap names
+
       colormaps = {
         default: 0,
         stretched: 2,
@@ -24,6 +30,7 @@ console.log(options, 'webgl');
     options = options || {};
     options.shaderVertPath = options.shaderVertPath || "dist/shader.vert";
     options.shaderFragPath = options.shaderFragPath || "dist/shader.frag";
+    options.shadersLoadedCallback = options.shadersLoadedCallback || function() { console.log('shaders loaded') };
     imgContext = createContext("raw", 1, 0, 1.0, "image");
     mapContext = createContext("raw", 1, 1, 1.0, "colorbar");
     decolorize();
@@ -194,6 +201,7 @@ console.log(options, 'webgl');
   function glShaderLoaded() {
     waitForShadersToLoad -= 1;
     if (!waitForShadersToLoad) {
+      options.shadersLoadedCallback();
       drawScene(imgContext);
       return drawScene(mapContext);
     }
@@ -261,7 +269,8 @@ console.log(options, 'webgl');
     setMode: setMode,
     updateImage: updateImage,
     decolorize: decolorize,
-    colorize: colorize
+    colorize: colorize,
+    context: imgContext
   }
 
 }

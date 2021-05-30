@@ -1,6 +1,6 @@
 {
   "name": "infragram",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "A minimal core of the Infragram project in JavaScript.",
   "main": "dist/infragram.js",
   "scripts": {
@@ -31,13 +31,13 @@
     "jquery": "~3"
   },
   "devDependencies": {
-    "browserify": "13.0.0",
+    "browserify": "17.0.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-contrib-uglify": "^3.3.0",
-    "babel-core": "7.0.0-alpha.19",
+    "grunt-contrib-uglify": "^5.0.0",
+    "babel-core": "7.0.0-beta.3",
     "babel-preset-env": "2.0.0-alpha.19",
     "grunt-babel": "^7.0.0",
     "matchdep": "^2.0.0",
