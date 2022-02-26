@@ -104,6 +104,7 @@ module.exports = function Interface(options) {
 
     $("#overlay-btn").click(function() {
       $("#overlay-container").toggle();
+      $("#overlay-controls-container").toggle();
       $("#overlay-btn").toggleClass("btn-success");
     });
 
