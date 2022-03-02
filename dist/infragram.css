@@ -98,12 +98,7 @@ div#colorbar-container canvas#colorbar {
   opacity:0.5;
 }
 
-#default_colormap:hover {
-  cursor: pointer;
-  background-color: #e0e0e0;
-}
-
-#stretched_colormap:hover {
+ul li a:hover{
   cursor: pointer;
   background-color: #e0e0e0;
 }
