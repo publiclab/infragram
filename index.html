@@ -87,9 +87,9 @@
           <div class="zone">
             <p>1. SOURCE (<a target="_blank" href="http://publiclab.org/infragram#cameras">CAMERAS</a>)</p>
             <div class="btn-group" id="imageselect">
-              <label for="file-sel" class="btn btn-lg btn-primary">
+              <label for="file-sel" class="btn btn-lg btn-primary" rel="tooltip" title="Upload an image">
                 <i class="fa fa-upload"></i>
-                <input rel="tooltip" title="Upload an image" type="file" id="file-sel">
+                <input type="file" id="file-sel">
               </label>
               <style>
                 #file-sel {
@@ -218,6 +218,10 @@
     </div>
 
     <script>
+      //tooltip hides after one click
+      $('[rel="tooltip"]').tooltip({
+    trigger : 'hover'
+  })
       var infragram, openInPl, openInSequencer;
       (function() {
         infragram = Infragram({
