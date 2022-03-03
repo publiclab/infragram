@@ -77,11 +77,6 @@ div#colorbar-container canvas#colorbar {
     height:auto;
   }
 }
-
-.container {
-  padding-left:unset;
-}
-
 #overlay-container {
   position:absolute;
  display: inline-block;
