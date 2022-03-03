@@ -97,3 +97,8 @@ div#colorbar-container canvas#colorbar {
 #overlay-img {
   opacity:0.5;
 }
+
+ul.dropdown-menu li:hover{
+  cursor: pointer;
+  background-color: #e0e0e0;
+}
