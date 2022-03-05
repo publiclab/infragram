@@ -34,49 +34,48 @@
   <body>
 
     <div class="container page" style="padding-top:10px;">
-
-       <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
-         <div class="modal-dialog modal-lg" role="document">
-           <div class="modal-content">
-             <!--<div class="modal-header"></div>-->
-             <div class="modal-body">
-               <h3>Quick start</h3>
-               <p>Choose from these presets to get up and running quickly. These auto-load common 2. Analysis and 3. Colorize settings so you don't have to manually choose them.</p>
-                 <table class="table">
-                   <tr>
-                     <td width="30%"><b>Raw</b></td>
-                     <td width="30%">Just what your camera sees.</td>
-                     <td><a class="btn btn-primary" id="preset_raw">Begin</a></td>
-                   </tr>
-                   <tr>
-                     <td><b>NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
-                     <td>basic plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
-                     <td><a class="btn btn-primary" id="preset_ndvi_blue">Basic</a>
-                         <a class="btn btn-success" id="preset_ndvi_blue_color">Colorized</a></td>
-                   </tr>
-                   <tr>
-                     <td><b>NDVI for <span style="color:red;">RED</span> filters</b></td>
-                     <td>basic plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
-                     <td><a class="btn btn-primary" id="preset_ndvi_red">Basic</a>
-                         <a class="btn btn-success" id="preset_ndvi_red_color">Colorized</a></td>
-                   </tr>
-                 </table>
-                 <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
-
-	    </div>
+      <!-- Modal for 'Presets' Button -->
+      <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h3>Quick Start</h3>
+              <p>Choose from these presets to get up and running quickly. These auto-load common 2. Analysis and 3. Colorize settings so you don't have to manually choose them.</p>
+              <table class="table">
+                <tr>
+                  <td width="30%"><b>Raw</b></td>
+                  <td width="30%">Just what your camera sees.</td>
+                  <td><a class="btn btn-primary" id="preset_raw">Begin</a></td>
+                </tr>
+                <tr>
+                  <td><b>NDVI for <span style="color:blue;">BLUE</span> filters</b></td>
+                  <td>Basic plant analysis for <a href="http://store.publiclab.org/product/infragram-diy-filter-pack">Infragram filter packs</a> and <a href="http://store.publiclab.org/product/infragram-webcam">webcams</a></td>
+                  <td><a class="btn btn-primary" id="preset_ndvi_blue">Basic</a>
+                      <a class="btn btn-success" id="preset_ndvi_blue_color">Colorized</a></td>
+                </tr>
+                <tr>
+                  <td><b>NDVI for <span style="color:red;">RED</span> filters</b></td>
+                  <td>Basic plant analysis for <a href="http://store.publiclab.org/products/infragram-point-shoot-plant-cam">Infragram Point &amp; Shoot cameras</a></td>
+                  <td><a class="btn btn-primary" id="preset_ndvi_red">Basic</a>
+                      <a class="btn btn-success" id="preset_ndvi_red_color">Colorized</a></td>
+                </tr>
+              </table>
+              <p>Post a research note at <a href="http://publiclab.org">PublicLab.org</a> and email <a href="mailto:plots-dev@googlegroups.com">plots-dev@googlegroups.com</a> to suggest new presets.</p>
+            </div>
             <div class="modal-footer">
-              <a data-dismiss="modal" data-toggle="modal" class="btn">cancel</a>
+              <a data-dismiss="modal" data-toggle="modal" class="btn">Cancel</a>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Heading Content -->
       <h1><img src="assets/infragram-logo.png" alt="Infragram logo image." style="float:left;margin-right:14px;width:80px;"../> <a style="color:#444;padding-top:8px;" href="../">Infragram</a> <small>by <a href="http://publiclab.org" target="_blank">Public Lab</a></small></h1>
-
       <p>Analyze plant health with near-infrared imagery! <a href="http://publiclab.org/wiki/infragram">Learn more &amp; mod a camera</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a>.</p>
 
+      <!-- Main Content -->
       <div class="content">
-
+        <!-- 1) Toolbar Content -->
         <div id="toolbar">
 
           <div class="zone">
@@ -132,7 +131,6 @@
               <input placeholder="V" type="text" id="v_exp" class="form-control" value="1">
               <button type="submit" class="btn btn-primary">Run</button>
             </form>
-
           </div>
 
           <div class="zone colorize">
@@ -174,12 +172,14 @@
           </div>
 
           <br style="clear:both;" />
-
         </div>
 
+        <!-- 2) Image Container -->
         <div id="image-container">
           <div style="display:none;"><div id="webcam"></div></div>
           <a class="btn btn-default fullscreen" style="opacity:0.3;position:absolute;z-index:3;margin:6px;"><i class="fa fa-expand"></i></a>
+
+          <!-- Message on screen-->
           <div onClick="$('.choose-prompt').hide();" class="choose-prompt" style="display:inline;color:white;position:absolute;z-index:3;padding-top:14px;text-align:left;padding-left:60px;">
             <p>1. Choose an input above: select an image, or choose live video.</p>
             <p>2. Choose an analysis mode or click PRESETS.</p>
@@ -187,35 +187,38 @@
             <p></p>
             <p>Click this message to hide it.</p>
           </div>
+
           <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
+
           <div id="overlay-container" class="container" style="display:none;">
             <img id="overlay-img" src="assets/grid.svg">
           </div>
-          <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="fa fa-remove"></i> Exit full screen</a>
-          <canvas class="fullscreen" id="image" width="800" height="600"></canvas>
 
-	  <div id="colorbar-container" style="display:none;">
+          <a class="btn-inverse btn-small" style="display:none;position:absolute;top:6px;left:6px;z-index:3;" id="exit-fullscreen"><i class="fa fa-remove"></i> Exit full screen</a>
+          
+          <canvas class="fullscreen" id="image" width="800" height="600"></canvas>
+	        
+          <div id="colorbar-container" style="display:none;">
             <span id="colorbar-min">-1.00</span>
             <canvas id="colorbar"></canvas>
             <span id="colorbar-max">1.00</span>
           </div>
-
-	</div>
+	      </div>
 
         <hr style="clear:both;">
 
+        <!-- 3) Q&A Content-->
         <h2>Q&A</h2>
-
         <p>Ask and answer questions to peer-troubleshoot this system:</p>
-
         <iframe style="border:none;" width="100%" height="900px" src="//publiclab.org/embed/grid/question:infragram?"></iframe>
 
       </div>
 
+      <!-- Footer -->
       <footer class="footer">
-          <hr>
-          <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/infragram" target="_blank">Infragram</a> <small>by <a href="http://publiclab.org" target="_blank">Public Lab</a> | This web app is <a href="https://github.com/publiclab/infragram/" target="_blank">open source software</a>; <a href="https://github.com/publiclab/infragram/issues" target="_blank">please report bugs</a></small></h4>
-          <p>Infragram was created by <a href="https://github.com/bgamari" target="_blank">Ben Gamari</a>, <a href="http://github.com/donblair" target="_blank">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn" target="_blank">Piotr Foltyn</a> and others from <a href="http://publiclab.org/contributors/infragram" target="_blank">Public Lab</a>.</p>
+        <hr>
+        <h4 style="margin-bottom:40px;"><a style="color:#444;" href="http://publiclab.org/infragram" target="_blank">Infragram</a> <small>by <a href="http://publiclab.org" target="_blank">Public Lab</a> | This web app is <a href="https://github.com/publiclab/infragram/" target="_blank">open source software</a>; <a href="https://github.com/publiclab/infragram/issues" target="_blank">please report bugs</a></small></h4>
+        <p>Infragram was created by <a href="https://github.com/bgamari" target="_blank">Ben Gamari</a>, <a href="http://github.com/donblair" target="_blank">Don Blair</a>, <a href="http://publiclab.org/profile/warren">Jeff Warren</a> and <a href="http://github.com/pfoltyn" target="_blank">Piotr Foltyn</a> and others from <a href="http://publiclab.org/contributors/infragram" target="_blank">Public Lab</a>.</p>
       </footer>
 
     </div>
@@ -233,7 +236,7 @@
         });
 
         openInPl = function openInPl() {
-	  var dataurl = infragram.options.processor.getCurrentImage();
+	        var dataurl = infragram.options.processor.getCurrentImage();
           function postToPL(imgSrc) {
             var uniq = Date.now();
             var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";

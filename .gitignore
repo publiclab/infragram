@@ -35,3 +35,6 @@ node_modules
 *.swp
 *.swo
 todo.txt
+
+# Ignore Prettier
+.prettierignore
