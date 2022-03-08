@@ -54,6 +54,7 @@ New to open source/free software? Here is a selection of issues we've made **esp
 
 The purpose of this software is to convert a photo taken from an "Infragram" multispectral camera using NDVI or another technique, then to colorize that image. It can then be downloaded or forwarded to another web app.
 
+![split image showing a pre-converted blueish image on left and rainbow-colored image on right](https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png)
 
 ## Architecture
 
@@ -84,9 +85,11 @@ Depending on which processor is selected (see below), the image is read, then se
 If the user presses the Webcam button, we use the WebRTC webcam API to stream video from the selected webcam, and we perform conversion and colorizing on each frame in real-time. This works faster with `webgl` mode. _In upcoming versions we would like to try accepting uploaded videos, which would be dragged in just like images, but would play on loop just like webcam video streams._
 
 
+![diagram illustrating color channel mixing and 2-image combining](https://i.publiclab.org/system/images/photos/000/000/278/medium/infrared-combination.png)
+
 ## Converting
 
-Conversion is the step of changing the value of each pixel of the input image using a given mathematical expression. The default is NDVI, or Normalized Difference Vegetation Index, 
+Conversion is the step of changing the value of each pixel of the input image using a given mathematical expression. The default is NDVI, or Normalized Difference Vegetation Index. The above diagram shows how one channel of the input image is used for infrared light, instead of its original color. NDVI represents the (normalized) difference between infrared and visible (red, green or blue) light. 
 
 Learn more about NDVI and the broader project and techniques at:
 
