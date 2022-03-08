@@ -104,9 +104,9 @@ Help improve Public Lab software!
 
 * Join the chatroom at https://publiclab.org/chat
 * Look for open issues at https://github.com/publiclab/infragram/labels/help-wanted
-* We're specifically asking for help with issues labelled with [help-wanted](https://github.com/publiclab/infragram/labels/help-wanted) tag
-* Find lots of info on contributing at http://publiclab.org/wiki/developers
-* Review specific contributor guidelines at http://publiclab.org/wiki/contributing-to-public-lab-software
+* We're specifically asking for help with issues labelled with the https://github.com/publiclab/infragram/labels/help%20wanted tag
+* Find lots of info on contributing at http://publiclab.org/developers
+* Review specific contributor guidelines at http://publiclab.org/contributing-to-public-lab-software
 
 ## First Time?
 
