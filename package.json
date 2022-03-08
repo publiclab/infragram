@@ -28,7 +28,7 @@
     "http-server": "^14.1.0",
     "jquery": "~3",
     "webgl-utils": "~1.0.0",
-    "webrtc-adapter": "^1.1.0"
+    "webrtc-adapter": "^8.1.1"
   },
   "devDependencies": {
     "babel-core": "7.0.0-beta.3",
