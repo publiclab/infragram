@@ -4,7 +4,6 @@ module.exports = function Interface(options) {
   options.fileSelector = options.fileSelector || "#file-sel";
 
   var urlHash = require('urlhash')();
-  var FileUpload = require('../file-upload');
   var logger = options.logger;
   var Colormaps = require('../color/colormaps');
   var Fullscreen, Presets, Analysis, Colorize, Saving;
@@ -43,8 +42,6 @@ module.exports = function Interface(options) {
     Colorize = require('../ui/colorize')(options);
     Saving = require('../ui/saving')(options);
 
-    if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
-
     $(options.imageSelector).ready(function() {
 
       var src, idNameMap = {
@@ -76,7 +73,17 @@ module.exports = function Interface(options) {
       $('.choose-prompt').hide();
       $("#save-modal-btn").show();
       $("#save-zone").show();
-      FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
+      let reader = new FileReader();
+      reader.onload = function onReaderLoad(event) {
+        var img;
+        img = new Image();
+        img.onload = function onImageLoad() {
+          options.processor.updateImage(this);
+          console.log('NICE')
+        };
+        return img.src = event.target.result;
+      };
+      reader.readAsDataURL(this.files[0]);
       $('#preset-modal').modal('show');
       return true;
     });
