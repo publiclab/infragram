@@ -29,6 +29,27 @@ We welcome contributions, and are especially interested in welcoming [first time
 Please read and abide by our [Code of Conduct](https://publiclab.org/conduct); our community aspires to be a respectful place both during online and in-­person interactions.
 
 
+## Developers
+
+Help improve Public Lab software!
+
+* Join the chatroom at https://publiclab.org/chat
+* Look for open issues at https://github.com/publiclab/infragram/labels/help-wanted
+* We're specifically asking for help with issues labelled with the https://github.com/publiclab/infragram/labels/help%20wanted tag
+* Find lots of info on contributing at http://publiclab.org/developers
+* Review specific contributor guidelines at http://publiclab.org/contributing-to-public-lab-software
+
+## First Time?
+
+New to open source/free software? Here is a selection of issues we've made **especially for first-timers**. We're here to help, so just ask if one looks interesting : https://code.publiclab.org
+
+[Here](https://publiclab.org/notes/warren/11-22-2017/use-git-and-github-to-contribute-and-improve-public-lab-software) is a link to our Git workflow.
+
+## Let the code be with you. 
+### Happy opensourcing. :smile:
+
+****
+
 ## Purpose
 
 The purpose of this software is to convert a photo taken from an "Infragram" multispectral camera using NDVI or another technique, then to colorize that image. It can then be downloaded or forwarded to another web app.
@@ -137,21 +158,6 @@ Previous versions of Infragram had different workflows, technologies, and archit
 See the deprecation label for more on this code: https://github.com/publiclab/infragram/labels/deprecation
 
 
-## Developers
+## Pi and VR versions
 
-Help improve Public Lab software!
-
-* Join the chatroom at https://publiclab.org/chat
-* Look for open issues at https://github.com/publiclab/infragram/labels/help-wanted
-* We're specifically asking for help with issues labelled with the https://github.com/publiclab/infragram/labels/help%20wanted tag
-* Find lots of info on contributing at http://publiclab.org/developers
-* Review specific contributor guidelines at http://publiclab.org/contributing-to-public-lab-software
-
-## First Time?
-
-New to open source/free software? Here is a selection of issues we've made **especially for first-timers**. We're here to help, so just ask if one looks interesting : https://code.publiclab.org
-
-[Here](https://publiclab.org/notes/warren/11-22-2017/use-git-and-github-to-contribute-and-improve-public-lab-software) is a link to our Git workflow.
-
-## Let the code be with you. 
-### Happy opensourcing. :smile:
+Two extra folders `/pi/` and `/vr/` are for different variants of the project, designed to be run on a [Raspberry Pi-based camera](https://publiclab.org/infragram-pi) (live-streaming video through the converter from the Pi camera) and for use with a VR headset with a Pi camera attached to the front. These are experimental but if major breaking changes are implemented in the main `index.html` file, we would like them to be ported over to these files as well, especially the `/pi/` version, so the interfaces look and work the same.
