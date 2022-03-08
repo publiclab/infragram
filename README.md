@@ -13,6 +13,9 @@ This is ported out of the Node server application at https://github.com/p-v-o-s/
 
 Read more at https://publiclab.org/infragram
 
+![split image showing a pre-converted blueish image on left and rainbow-colored image on right](https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png)
+
+
 ## Quick Installation
 1. Fork our repo from https://github.com/publiclab/infragram.
 2. In the console, download a copy of your forked repo with `git clone https://github.com/your_username/infragram` where `your_username` is your GitHub username.
@@ -53,9 +56,6 @@ New to open source/free software? Here is a selection of issues we've made **esp
 ## Purpose
 
 The purpose of this software is to convert a photo taken from an "Infragram" multispectral camera using NDVI or another technique, then to colorize that image. It can then be downloaded or forwarded to another web app.
-
-![split image showing a pre-converted blueish image on left and rainbow-colored image on right](https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png)
-
 
 ![screenshot of tutorial](https://publiclab.org/public/system/images/photos/000/021/989/large/Screen_Shot_2017-10-20_at_11.22.58_AM.png)
 
@@ -109,7 +109,20 @@ Learn more about NDVI and the broader project and techniques at:
 
 This step is labelled "2. Analysis" in the UI (although we could change that to Convert).
 
-Conversion is handled by the Processor, described below.
+![step 2 controls screenshot](https://publiclab.org/system/images/photos/000/045/469/large/Screen_Shot_2022-03-08_at_2.28.46_PM.png)
+
+### Infragrammar
+
+The mathematical expression which is run on each pixel follows a syntax we've called "infragrammar" (corny pun, sorry!). Basically for each pixel of the input image, you get values of R, G, and B for the three color channels red, green, and blue. The expression (using any basic JavaScript math operations) uses these to calculate an "output" value for the pixel. The output in "Grey" or monochrome mode is just one value. 
+
+If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel. Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B.
+
+Read more about Infragrammar and modes here:
+
+* https://publiclab.org/infragrammar
+* https://publiclab.org/notes/warren/08-24-2013/infragrammar-with-hsv-color-model
+
+Conversion with Infragrammar is handled by the Processor, described below.
 
 
 ## Processors
