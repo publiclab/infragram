@@ -77,7 +77,8 @@ This gets a little more complex because the most common conversion, NDVI, output
 
 The way NDVI works also means that it's useful to visually see what pixels are greater or less than 0, so some color maps are not smooth - they have a sharp color transition at 0, so you can visually see parts of the photo that are >0. 
 
-Colorizing code for both processors can be found in https://github.com/publiclab/infragram/tree/main/src/color
+Colorizing code for both processors can be found in https://github.com/publiclab/infragram/tree/main/src/color. While `javascript` code for colormaps has been cleaned and consolidated there, `webgl` code is contained in the fragment shader file at https://github.com/publiclab/infragram/blob/f15add6ae6057bd99b4b1b930449f75ca974270e/dist/shader.frag and has not been reconciled with the longer list of colormaps available in JavaScript.
+
 
 ## Outputs
 
