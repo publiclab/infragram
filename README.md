@@ -56,6 +56,16 @@ The purpose of this software is to convert a photo taken from an "Infragram" mul
 
 ![split image showing a pre-converted blueish image on left and rainbow-colored image on right](https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png)
 
+
+![screenshot of tutorial](https://publiclab.org/public/system/images/photos/000/021/989/large/Screen_Shot_2017-10-20_at_11.22.58_AM.png)
+
+## Usage
+
+See this tutorial for how to use Infragram.org, step by step:
+
+https://publiclab.org/notes/warren/10-20-2017/getting-started-with-infrared-photography-on-infragram-org
+
+
 ## Architecture
 
 This edition of Infragram is slimmed down and simplified vs. previous versions. The whole project runs using just JavaScript (and WebGL) from a single index.html file, in the browser. 
@@ -142,11 +152,11 @@ Once the image is converted and (optionally) colorized, it can be downloaded. Bu
 
 ### Export to PublicLab.org
 
-The image is encoded as a data-url and a new tab is opened with the Public Lab Editor at https://publiclab.org/post, with the image "sent" to become the  main image. This is convoluted but easier than sending the image separately; see the [code for this here](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L235-L248)
+The image is encoded as a data-url and a new tab is opened with the Public Lab Editor at https://publiclab.org/post, with the image "sent" to become the  main image. This is convoluted but easier than sending the image separately; see the [code for this here](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L235-L248). Images then appear with the tag `infragram-upload` on this page: https://publiclab.org/tag/infragram-upload
 
 ### Export to Image Sequencer
 
-Similarly, we can "send" the image to https://sequencer.publiclab.org, as a data-url although it may fail for very large images since we must [send it in a GET request](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L250-L254). It is then ru through a similar (but not identical, unfortunately) set of steps of conversion and colorizing, in the step-by-step interface of Image Sequencer, for fine-tuning.
+Similarly, we can "send" the image to https://sequencer.publiclab.org, as a data-url although it may fail for very large images since we must [send it in a GET request](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L250-L254). It is then ru through a similar (but not identical, unfortunately) set of steps of conversion and colorizing, in the step-by-step interface of Image Sequencer, for fine-tuning. Learn more about this technique here: https://publiclab.org/notes/warren/08-02-2018/use-image-sequencer-for-ndvi-plant-analysis-with-a-modified-mini-sport-camera
 
 
 ## Interface
