@@ -60,14 +60,46 @@ Depending on which processor is selected (see below), the image is read, then se
 
 ### Video
 
-If the user presses the Webcam button, we use the WebRTC webcam API to stream video from the selected webcam, and we perform conversion and colorizing on each frame in real-time. This works faster with `webgl` mode.
+If the user presses the Webcam button, we use the WebRTC webcam API to stream video from the selected webcam, and we perform conversion and colorizing on each frame in real-time. This works faster with `webgl` mode. _In upcoming versions we would like to try accepting uploaded videos, which would be dragged in just like images, but would play on loop just like webcam video streams._
+
+
+## Converting
+
+Conversion is the step of changing the value of each pixel of the input image using a given mathematical expression. The default is NDVI, or Normalized Difference Vegetation Index, 
+
+Learn more about NDVI and the broader project and techniques at:
+
+* https://publiclab.org/infragram
+* https://publiclab.org/multispectral-imaging
+* https://publiclab.org/wiki/ndvi
+
+This step is labelled "2. Analysis" in the UI (although we could change that to Convert).
+
+Conversion is handled by the Processor, described below.
 
 
 ## Processors
 
 Two separate systems are available for converting and colorizing: `javascript` and `webgl`, both using the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API). The [javascript](https://github.com/publiclab/infragram/blob/main/src/processors/javascript.js) processor is simpler to read, write, and debug, but is slower. The [webgl](https://github.com/publiclab/infragram/blob/main/src/processors/webgl.js) processor is MUCH faster, but very hard to code/modify/change.
 
-### Colorizing
+The selected processor handles the Conversion and Colorizing steps.
+
+
+## Presets
+
+There are two types of input images, because there are two types of multispectral cameras people are making: red filtered (more common now) and blue filtered (older) cameras. You can read about the difference here:
+
+https://publiclab.org/wiki/infragram#Conversion+types
+
+As a result, we have a pop-up modal which guides users through the 2 most common workflows:
+
+1. NDVI conversion for red filters + colorizing
+2. NDVI conversion for blue filters + colorizing
+
+Once these are selected, the pop-up disappears and the image is shown with these settings. The presets will change step 2 (Conversion/Analysis) and step 3 (Colorize) accordingly, although this might not be very obvious to new users.
+
+
+## Colorizing
 
 The processors also handle colorizing, which is also confusing because the `webgl` colorizer has to work very differently than the `javascript` version. 
 
@@ -92,9 +124,10 @@ The image is encoded as a data-url and a new tab is opened with the Public Lab E
 
 Similarly, we can "send" the image to https://sequencer.publiclab.org, as a data-url although it may fail for very large images since we must [send it in a GET request](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L250-L254). It is then ru through a similar (but not identical, unfortunately) set of steps of conversion and colorizing, in the step-by-step interface of Image Sequencer, for fine-tuning.
 
+
 ## Interface
 
-The interface (UI design) for Infragram is built using Bootstrap 3, and makes use of jQuery event handling. Most of the code can be found in https://github.com/publiclab/infragram/tree/main/src/ui although some listeners are still mixed into the rest of the code.
+The interface (UI design) for Infragram is built using Bootstrap 3, and makes use of jQuery event handling. Most of the code can be found in https://github.com/publiclab/infragram/tree/main/src/ui although some listeners are still mixed into the rest of the code (we hope to improve this)
 
 
 ## Legacy code
