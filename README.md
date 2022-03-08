@@ -90,8 +90,12 @@ The image is encoded as a data-url and a new tab is opened with the Public Lab E
 
 Similarly, we can "send" the image to https://sequencer.publiclab.org, as a data-url although it may fail for very large images since we must [send it in a GET request](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L250-L254). It is then ru through a similar (but not identical, unfortunately) set of steps of conversion and colorizing, in the step-by-step interface of Image Sequencer, for fine-tuning.
 
+## Interface
 
-### Legacy code
+The interface (UI design) for Infragram is built using Bootstrap 3, and makes use of jQuery event handling. Most of the code can be found in https://github.com/publiclab/infragram/tree/main/src/ui although some listeners are still mixed into the rest of the code.
+
+
+## Legacy code
 
 Previous versions of Infragram had different workflows, technologies, and architectures. Some code remains which is no longer used.
 
