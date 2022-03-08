@@ -113,9 +113,11 @@ This step is labelled "2. Analysis" in the UI (although we could change that to 
 
 ### Infragrammar
 
-The mathematical expression which is run on each pixel follows a syntax we've called "infragrammar" (corny pun, sorry!). Basically for each pixel of the input image, you get values of R, G, and B for the three color channels red, green, and blue. The expression (using any basic JavaScript math operations) uses these to calculate an "output" value for the pixel. The output in "Grey" or monochrome mode is just one value. 
+The mathematical expression which is run on each pixel follows a syntax we've called "infragrammar" (corny pun, sorry!). Basically for each pixel of the input image, you get values of R, G, and B for the three color channels red, green, and blue. The expression (using any basic JavaScript math operations) uses these to calculate an "output" value for the pixel. The output in "Grey" or monochrome mode is just one value. That means the output of this step would be a monochrome image:
 
-If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel. Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B.
+![monochrome output image](https://publiclab.org/system/images/photos/000/045/471/medium/2022-03-08T19_59_24.997Z.jpg)
+
+If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel, and get a color image, but it's usually easier to just do that in the Colorize step (see below). Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B. This is useful for swapping channels, like displaying R as B.
 
 Read more about Infragrammar and modes here:
 
