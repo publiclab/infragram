@@ -34,7 +34,7 @@
     "babel-core": "7.0.0-beta.3",
     "babel-preset-env": "2.0.0-beta.2",
     "browserify": "17.0.0",
-    "grunt": "^0.4.5",
+    "grunt": "^1.4.1",
     "grunt-babel": "^7.0.0",
     "grunt-browserify": "^6.0.0",
     "grunt-contrib-concat": "^1.0.1",
