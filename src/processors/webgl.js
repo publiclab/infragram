@@ -13,7 +13,7 @@ module.exports = function webglProcessor(options) {
       // TODO: we should refactor this to use colormaps in /src/color/;
       // we could build the dist/shader.frag file automatically around these
       // using the function now at /src/color/colormapFunctionGenerator.js
-      // ... we need to either use integer indices for colormap, 
+      // ... we need to either use integer indices for colormap,
       // OR switch the system to strings and use the colormap names
 
       colormaps = {
@@ -26,7 +26,6 @@ module.exports = function webglProcessor(options) {
   vertices.itemSize = 2;
 
   function initialize(options) {
-console.log(options, 'webgl');
     options = options || {};
     options.shaderVertPath = options.shaderVertPath || "dist/shader.vert";
     options.shaderFragPath = options.shaderFragPath || "dist/shader.frag";
@@ -49,7 +48,6 @@ console.log(options, 'webgl');
     else {
       val = val || colormap;
       colormap = val;
-      console.log('colorize:' + val);
       if (typeof val === 'string') val = colormaps[val];
       imgContext.selColormap = mapContext.selColormap = val;
       colorized = true;

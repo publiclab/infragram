@@ -24,7 +24,6 @@ module.exports = function Interface(options) {
   }
 
   function save_infragrammar_expressions(args) {
-    console.log(args);
     if (options.mode === "infragrammar") {
       options.processor.save_expressions(args['r'], args['g'], args['b']);
     } else if (options.mode === "infragrammar_mono") {
@@ -53,12 +52,11 @@ module.exports = function Interface(options) {
         "#s_exp": "s",
         "#v_exp": "v"
       };
- 
+
       $("#overlay-slider").val(localStorage.getItem("overlaySize"));
-      console.log('grid ' + localStorage.getItem("overlaySize"));
       setGrid($("#overlay-slider").val());
 
-      // TODO: broken:  
+      // TODO: broken:
       //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
       src = urlHash.getUrlHashParameter('src');
       if (src) {
@@ -79,7 +77,6 @@ module.exports = function Interface(options) {
         img = new Image();
         img.onload = function onImageLoad() {
           options.processor.updateImage(this);
-          console.log('NICE')
         };
         return img.src = event.target.result;
       };
@@ -125,14 +122,13 @@ module.exports = function Interface(options) {
       $("#overlay-img").width(size * scale);
       $("#overlay-img").height(size * scale * ratio);
       $("#overlay-size").html(size);
-      console.log('saved grid ' + size);
     }
 
     $("#overlay-save-btn").click(function() {
       localStorage.setItem("overlaySize", $("#overlay-slider").val());
       $("#overlay-save-info").show().delay(2000).fadeOut();
     });
-    
+
     $("[rel=tooltip]").tooltip()
     $("[rel=popover]").popover()
     return true;

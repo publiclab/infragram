@@ -13,7 +13,6 @@ module.exports = function Colorize(options) {
   });
 
   $("#default_colormap").click(function() {
-    console.log('default colormap');
     colorize();
     options.colorize('default');
     options.run(options.mode);
@@ -21,7 +20,6 @@ module.exports = function Colorize(options) {
   });
 
   $("#stretched_colormap").click(function() {
-    console.log('stretched colormap');
     colorize();
     options.colorize('stretched');
     options.run(options.mode);
@@ -30,7 +28,6 @@ module.exports = function Colorize(options) {
 
   // duplicated in presets.js
   function colorize() {
-    console.log('colorized on');
     options.colorized = true;
     $("#btn-colorize").addClass("active");
     $("#colorbar-container").css('display', 'inline-block');
@@ -38,7 +35,6 @@ module.exports = function Colorize(options) {
   }
 
   function decolorize() {
-    console.log('colorized off');
     options.colorized = false;
     $("#btn-colorize").removeClass("active");
     $("#colorbar-container").css('display', 'none');

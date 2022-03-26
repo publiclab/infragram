@@ -64,7 +64,6 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
   });
 
   function colorize() {
-    console.log('colorized on');
     options.colorized = true;
     $("#btn-colorize").addClass("active");
     $("#colorbar-container").css('display', 'inline-block');
@@ -72,7 +71,6 @@ module.exports = function Presets(options, save_infragrammar_inputs) {
   }
 
   function decolorize() {
-    console.log('colorized off');
     options.colorized = false;
     $("#btn-colorize").removeClass("active");
     $("#colorbar-container").css('display', 'none');
