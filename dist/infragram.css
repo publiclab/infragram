@@ -18,7 +18,7 @@ span.group { display: inline-block; }
 
 footer.footer {
  clear: both;
- padding-top: 10px;
+ padding: 10px;
 }
 
 div#image-container {
@@ -71,9 +71,9 @@ div#colorbar-container canvas#colorbar {
   height:600px;
 }
 
-@media (max-width: 700px){
+@media (max-width: 850px){
   #image {
-    width:100%;
+    width:90%;
     height:auto;
   }
 }
