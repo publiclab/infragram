@@ -64,6 +64,15 @@ div#colorbar-container canvas#colorbar {
   font-size:10px;
   margin-bottom:0;
 }
+.fscreen{
+  text-decoration: none!important;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:20px;
+}
+.fscreen:hover{
+  color: #bfd6df!important;
+}
 
 #image {
   background:#ddd;
