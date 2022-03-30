@@ -12,9 +12,9 @@ Check it here: https://publiclab.github.io/infragram/
 This is ported out of the Node server application at https://github.com/p-v-o-s/infragram-js
 
 Read more at https://publiclab.org/infragram
-
-![split image showing a pre-converted blueish image on the left and rainbow-colored image on right](https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png)
-
+<div align="center">
+<img src='https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png'>
+</div>
 
 ## Quick Installation
 1. Fork our repo from [here](https://github.com/publiclab/infragram).
@@ -56,8 +56,9 @@ New to open source/free software? Here is a selection of issues we've made **esp
 ## Purpose
 
 The purpose of this software is to convert a photo taken from an "Infragram" multispectral camera using NDVI or another technique, then colorize that image. It can then be downloaded or forwarded to another web app.
-
-![screenshot of tutorial](https://publiclab.org/public/system/images/photos/000/021/989/large/Screen_Shot_2017-10-20_at_11.22.58_AM.png)
+<div align="center">
+<img src='https://publiclab.org/public/system/images/photos/000/021/989/large/Screen_Shot_2017-10-20_at_11.22.58_AM.png'>
+</div>
 
 ## Usage
 
@@ -93,9 +94,9 @@ Depending on which processor is selected (see below), the image is read, then se
 ### Video
 
 If the user presses the Webcam button, we use the WebRTC webcam API to stream video from the selected webcam, and we perform conversion and colorizing on each frame in real-time. This works faster with `webgl` mode. _In upcoming versions we would like to try accepting uploaded videos, which would be dragged in just like images, but would play on loop just like webcam video streams._
-
-
-![diagram illustrating color channel mixing and 2-image combining](https://i.publiclab.org/system/images/photos/000/000/278/medium/infrared-combination.png)
+<div align="center">
+<img src='https://i.publiclab.org/system/images/photos/000/000/278/medium/infrared-combination.png'>
+</div>
 
 ## Converting
 
@@ -108,14 +109,15 @@ Learn more about NDVI and the broader project and techniques at:
 * https://publiclab.org/wiki/ndvi
 
 This step is labeled "2. Analysis" in the UI (although we could change that to Convert).
-
-![step 2 controls screenshot](https://publiclab.org/system/images/photos/000/045/469/large/Screen_Shot_2022-03-08_at_2.28.46_PM.png)
-
+<div align="center">
+<img src='https://publiclab.org/system/images/photos/000/045/469/large/Screen_Shot_2022-03-08_at_2.28.46_PM.png'>
+</div>
 ### Infragrammar
 
 The mathematical expression which is run on each pixel follows a syntax we've called "infragrammar" (corny pun, sorry!). Basically, for each pixel of the input image, you get values of R, G, and B for the three color channels red, green, and blue. The expression (using any basic JavaScript math operations) uses these to calculate an "output" value for the pixel. The output in "Grey" or monochrome mode is just one value. That means the output of this step would be a monochrome image:
-
-![monochrome output image](https://publiclab.org/system/images/photos/000/045/471/medium/2022-03-08T19_59_24.997Z.jpg)
+<div align="center">
+<img src='https://publiclab.org/system/images/photos/000/045/471/medium/2022-03-08T19_59_24.997Z.jpg'>
+</div>
 
 If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel, and get a color image, but it's usually easier to just do that in the Colorize step (see below). Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B. This is useful for swapping channels, like displaying R as B.
 
@@ -153,9 +155,9 @@ Once these are selected, the pop-up disappears and the image is shown with these
 The processors also handle colorizing, which is also confusing because the `webgl` colorizer has to work very differently than the `javascript` version. 
 
 Colorizing is just converting a black and white (monochrome) image to a color one, where a given spectrum or "color map" is used to convert each pixel's brightness value to a color. The most familiar would be where "hot" colors like red represent higher values, and "cold" colors like blue represent lower values. The range of colors is shown in a key at the bottom of the image. 
-
-![screenshot of the color bar](https://publiclab.org/system/images/photos/000/045/470/medium/Screen_Shot_2022-03-08_at_2.56.38_PM.png)
-
+<div align="center">
+<img src='https://publiclab.org/system/images/photos/000/045/470/medium/Screen_Shot_2022-03-08_at_2.56.38_PM.png'>
+</div>
 This gets a little more complex because the most common conversion, NDVI, outputs a value from -1 to 1, rather than 0 to 1. So the color mapping may represent values in that range.
 
 The way NDVI works also means that it's useful to visually see what pixels are greater or less than 0, so some color maps are not smooth - they have a sharp color transition at 0, so you can visually see parts of the photo that are >0. 
