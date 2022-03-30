@@ -23,6 +23,27 @@ module.exports = window.FileUpload = {
     return FileUpload.serverFilename = name;
   },
 
+  uploadThumbnail: function(src, callback) {
+    var img;
+    img = new Image();
+    img.onload = function onImageLoad() {
+      var canvas, ctx, dataUrl;
+      canvas = document.createElement("canvas");
+      ctx = canvas.getContext("2d");
+      canvas.width = 260;
+      canvas.height = 195;
+      ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
+      callback = callback.toString();
+      dataUrl = canvas.toDataURL("image/jpeg");
+      return FileUpload.socket.emit("thumbnail_start", {
+        "name": FileUpload.serverFilename,
+        "data": dataUrl,
+        "callback": callback
+      });
+    };
+    return img.src = src;
+  },
+
   fromFile: function(files, callback, upload) {
     var reader;
     if (files && files[0]) {
