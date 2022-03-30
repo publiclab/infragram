@@ -98,7 +98,8 @@ ul.dropdown-menu li:hover{
   background-color: #e0e0e0;
 }
 #file-sel {
-  position:absolute; left:0;
+  position:absolute; 
+  left:0;
   width:55px;
   height:44px;
   opacity:0;
