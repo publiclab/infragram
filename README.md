@@ -112,6 +112,7 @@ This step is labeled "2. Analysis" in the UI (although we could change that to C
 <div align="center">
 <img src='https://publiclab.org/system/images/photos/000/045/469/large/Screen_Shot_2022-03-08_at_2.28.46_PM.png'>
 </div>
+
 ### Infragrammar
 
 The mathematical expression which is run on each pixel follows a syntax we've called "infragrammar" (corny pun, sorry!). Basically, for each pixel of the input image, you get values of R, G, and B for the three color channels red, green, and blue. The expression (using any basic JavaScript math operations) uses these to calculate an "output" value for the pixel. The output in "Grey" or monochrome mode is just one value. That means the output of this step would be a monochrome image:
