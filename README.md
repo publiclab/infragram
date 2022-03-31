@@ -13,7 +13,7 @@ This is ported out of the Node server application at https://github.com/p-v-o-s/
 
 Read more at https://publiclab.org/infragram
 <div align="center">
-<img src='https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png'>
+<img src='https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png' alt='rgn split'>
 </div>
 
 ## Quick Installation
@@ -57,7 +57,7 @@ New to open source/free software? Here is a selection of issues we've made **esp
 
 The purpose of this software is to convert a photo taken from an "Infragram" multispectral camera using NDVI or another technique, then colorize that image. It can then be downloaded or forwarded to another web app.
 <div align="center">
-<img src='https://publiclab.org/public/system/images/photos/000/021/989/large/Screen_Shot_2017-10-20_at_11.22.58_AM.png'>
+<img src='https://publiclab.org/public/system/images/photos/000/021/989/large/Screen_Shot_2017-10-20_at_11.22.58_AM.png' alt='example usage'>
 </div>
 
 ## Usage
@@ -95,7 +95,7 @@ Depending on which processor is selected (see below), the image is read, then se
 
 If the user presses the Webcam button, we use the WebRTC webcam API to stream video from the selected webcam, and we perform conversion and colorizing on each frame in real-time. This works faster with `webgl` mode. _In upcoming versions we would like to try accepting uploaded videos, which would be dragged in just like images, but would play on loop just like webcam video streams._
 <div align="center">
-<img src='https://i.publiclab.org/system/images/photos/000/000/278/medium/infrared-combination.png'>
+<img src='https://i.publiclab.org/system/images/photos/000/000/278/medium/infrared-combination.png' alt='infrared combination'>
 </div>
 
 ## Converting
@@ -110,14 +110,14 @@ Learn more about NDVI and the broader project and techniques at:
 
 This step is labeled "2. Analysis" in the UI (although we could change that to Convert).
 <div align="center">
-<img src='https://publiclab.org/system/images/photos/000/045/469/large/Screen_Shot_2022-03-08_at_2.28.46_PM.png'>
+<img src='https://publiclab.org/system/images/photos/000/045/469/large/Screen_Shot_2022-03-08_at_2.28.46_PM.png' alt='analysis'>
 </div>
 
 ### Infragrammar
 
 The mathematical expression which is run on each pixel follows a syntax we've called "infragrammar" (corny pun, sorry!). Basically, for each pixel of the input image, you get values of R, G, and B for the three color channels red, green, and blue. The expression (using any basic JavaScript math operations) uses these to calculate an "output" value for the pixel. The output in "Grey" or monochrome mode is just one value. That means the output of this step would be a monochrome image:
 <div align="center">
-<img src='https://publiclab.org/system/images/photos/000/045/471/medium/2022-03-08T19_59_24.997Z.jpg'>
+<img src='https://publiclab.org/system/images/photos/000/045/471/medium/2022-03-08T19_59_24.997Z.jpg' alt='monochrome image'>
 </div>
 
 If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel, and get a color image, but it's usually easier to just do that in the Colorize step (see below). Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B. This is useful for swapping channels, like displaying R as B.
@@ -157,7 +157,7 @@ The processors also handle colorizing, which is also confusing because the `webg
 
 Colorizing is just converting a black and white (monochrome) image to a color one, where a given spectrum or "color map" is used to convert each pixel's brightness value to a color. The most familiar would be where "hot" colors like red represent higher values, and "cold" colors like blue represent lower values. The range of colors is shown in a key at the bottom of the image. 
 <div align="center">
-<img src='https://publiclab.org/system/images/photos/000/045/470/medium/Screen_Shot_2022-03-08_at_2.56.38_PM.png'>
+<img src='https://publiclab.org/system/images/photos/000/045/470/medium/Screen_Shot_2022-03-08_at_2.56.38_PM.png' alt='colorizing example'>
 </div>
 This gets a little more complex because the most common conversion, NDVI, outputs a value from -1 to 1, rather than 0 to 1. So the color mapping may represent values in that range.
 
