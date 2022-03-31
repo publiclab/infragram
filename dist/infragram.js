@@ -484,7 +484,6 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
           if (navigator.mozGetUserMedia) {
             video.mozSrcObject = stream;
-            console.log("mozilla???");
           } else {
             video.srcObject = stream;
           }
@@ -1494,7 +1493,6 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
             img.onload = function onImageLoad() {
               options.processor.updateImage(this);
-              console.log('NICE');
             };
 
             return img.src = event.target.result;

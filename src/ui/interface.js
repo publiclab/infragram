@@ -79,7 +79,6 @@ module.exports = function Interface(options) {
         img = new Image();
         img.onload = function onImageLoad() {
           options.processor.updateImage(this);
-          console.log('NICE')
         };
         return img.src = event.target.result;
       };

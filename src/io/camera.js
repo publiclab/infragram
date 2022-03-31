@@ -82,7 +82,6 @@ module.exports = function Camera(options) {
       video = webRtcOptions.videoEl;
       if (navigator.mozGetUserMedia) {
         video.mozSrcObject = stream;
-        console.log("mozilla???");
       } else {
         video.srcObject = stream;
       }
