@@ -157,7 +157,7 @@ The processors also handle colorizing, which is also confusing because the `webg
 
 Colorizing is just converting a black and white (monochrome) image to a color one, where a given spectrum or "color map" is used to convert each pixel's brightness value to a color. The most familiar would be where "hot" colors like red represent higher values, and "cold" colors like blue represent lower values. The range of colors is shown in a key at the bottom of the image. 
 <div align="center">
-<img src='https://publiclab.org/system/images/photos/000/045/470/medium/Screen_Shot_2022-03-08_at_2.56.38_PM.png' alt='colorizing example'>
+<img src='https://publiclab.org/system/images/photos/000/045/470/medium/Screen_Shot_2022-03-08_at_2.56.38_PM.png' alt='screenshot of the color bar'>
 </div>
 This gets a little more complex because the most common conversion, NDVI, outputs a value from -1 to 1, rather than 0 to 1. So the color mapping may represent values in that range.
 
