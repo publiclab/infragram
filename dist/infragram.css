@@ -104,3 +104,17 @@ ul.dropdown-menu li:hover{
   height:44px;
   opacity:0;
 }
+.vr #toolbar {
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  z-index:99;
+}
+.vr .canvas {
+  width:50% !important;
+  height:100% !important;
+  left:0;
+  top:100px;
+  position:absolute;
+}
