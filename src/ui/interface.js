@@ -40,7 +40,6 @@ module.exports = function Interface(options) {
     Presets = require('../ui/presets')(options, save_infragrammar_inputs);
     Analysis = require('../ui/analysis')(options, save_infragrammar_inputs);
     Colorize = require('../ui/colorize')(options);
-    Saving = require('../ui/saving')(options);
 
     $(options.imageSelector).ready(function() {
 
