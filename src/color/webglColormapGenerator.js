@@ -66,29 +66,31 @@ vec4 ' + colormapName + '(float n) {\
   vec3 y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
   vec3 y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
 
-      } else {
-
-        fn += '\
+  fn += '\
   if ((n >= ' + inMin + ') && (n < ' + inMax + ')) {             // input value min and max\
     x = vec2('+inMin+', '+inMax+');                    // input value min and max in vec2\
     y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
-    y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
-  }';
-
-      }
-    });
-  }
-
+    y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val\
+  } else if(n >= ' + inMax + ') {\
+    x = vec2(' + inMax + ', ' +inMax+ ');\
+    y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0;\
+    y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0;\
+      }'
+  
   // in the original, we used if/else so we do only one range comparison, 
   // but it's harder to concisely write, so here we're just doing a repeated if statement.
 
   // provide outputs; this is always the same for all colormaps\
   fn += 'vec4(\
-      (n - x[0]) / (x[1] - x[0]) * (y1[0] - y0[0]) + y0[0],\
-      (n - x[0]) / (x[1] - x[0]) * (y1[1] - y0[1]) + y0[1],\
-      (n - x[0]) / (x[1] - x[0]) * (y1[2] - y0[2]) + y0[2],\
-      1.0);\
-}'
+    (n - x[0]) / (x[1] - x[0]) * (y1[0] - y0[0]) + y0[0],\
+    (n - x[0]) / (x[1] - x[0]) * (y1[1] - y0[1]) + y0[1],\
+    (n - x[0]) / (x[1] - x[0]) * (y1[2] - y0[2]) + y0[2],\
+    1.0);\
+    )'
+'}'
 
-  return fn;
+     return fn;
+      }
+    });
+  }
 }
