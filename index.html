@@ -76,9 +76,9 @@
 
       <div class="content">
 
-        <div id="toolbar">
+        <div id="toolbar" style="display: flex;justify-content: space-evenly;">
 
-          <div class="zone">
+          <div class="zone" >
             <p>QUICK START</p>
             <div class="btn-group">
               <a target="_blank" href="http://publiclab.org/wiki/infragram-sandbox" id="btn-webcam" type="button" class="btn btn-lg btn-default"><i class="fa fa-question-circle"></i></a>
@@ -165,11 +165,13 @@
             </div>
           </div>
 
-          <div class="zone last" id="save-zone" style="display:none;">
+          <div class="zone last" id="save-zone">
             <p>OUTPUT</p>
-            <button onClick="openInPl()" type="button" class="btn btn-primary btn-lg">Save</button>
-            <button onClick="infragram.download()" type="button" class="btn btn-primary btn-lg">Download</button>
-            <button onClick="openInSequencer()" type="button" class="btn btn-primary btn-lg">Export</button>
+            <div class="lastzone" style="display: flex; justify-content: space-evenly;">
+              <button onClick="openInPl()" type="button" class="btn btn-primary btn-sm">Save</button>
+              <button onClick="infragram.download()" type="button" class="btn btn-primary btn-sm">Download</button>
+              <button onClick="openInSequencer()" type="button" class="btn btn-primary btn-sm">Export</button>
+            </div>
           </div>
 
           <br style="clear:both;" />
