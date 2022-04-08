@@ -41,6 +41,7 @@ Help improve Public Lab software!
 * We're specifically asking for help with issues labeled with the https://github.com/publiclab/infragram/labels/help%20wanted tag
 * Find lots of info on contributing at http://publiclab.org/developers
 * Review specific contributor guidelines at http://publiclab.org/contributing-to-public-lab-software
+* Find the steps on how to make a Pull Request at https://github.com/publiclab/infragram/issues/300
 
 ## First Time?
 
