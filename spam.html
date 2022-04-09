@@ -11,23 +11,27 @@
     />
 
     <link
-      href="../node_modules/bootstrap/dist/css/bootstrap.min.css"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link
-      href="../node_modules/font-awesome/css/font-awesome.min.css"
+      href="node_modules/font-awesome/css/font-awesome.min.css"
       rel="stylesheet"
     />
 
-    <link href="../dist/infragram.css" rel="stylesheet" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <!-- CSS Link -->
+    <link href="dist/infragram.css" rel="stylesheet" />
 
-    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./dragndrop.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <script src="../node_modules/webrtc-adapter/out/adapter.js"></script>
-    <script src="../node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
+    <script src="node_modules/webrtc-adapter/out/adapter.js"></script>
+    <script src="node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
 
-    <script src="../dist/infragram.js"></script>
+    <script src="dist/infragram.js"></script>
 
     <script type="x-shader/x-vertex" id="shader-vs"></script>
     <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -42,7 +46,11 @@
             <!--<div class="modal-header"></div>-->
             <div class="modal-body">
               <h3>Quick start</h3>
-              <p>Choose from these presets to get up and running quickly:</p>
+              <p>
+                Choose from these presets to get up and running quickly. These
+                auto-load common 2. Analysis and 3. Colorize settings so you
+                don't have to manually choose them.
+              </p>
               <table class="table">
                 <tr>
                   <td width="30%"><b>Raw</b></td>
@@ -72,9 +80,6 @@
                     <a class="btn btn-success" id="preset_ndvi_blue_color"
                       >Colorized</a
                     >
-                    <a class="btn btn-success" onClick="boost('blue')"
-                      >Colorized + boosted (for Pi cameras)</a
-                    >
                   </td>
                 </tr>
                 <tr>
@@ -92,9 +97,6 @@
                     <a class="btn btn-primary" id="preset_ndvi_red">Basic</a>
                     <a class="btn btn-success" id="preset_ndvi_red_color"
                       >Colorized</a
-                    >
-                    <a class="btn btn-success" onClick="boost('red')"
-                      >Colorized + boosted (for Pi cameras)</a
                     >
                   </td>
                 </tr>
@@ -117,7 +119,7 @@
 
       <h1>
         <img
-          src="../assets/infragram-logo.png"
+          src="assets/infragram-logo.png"
           alt="Infragram logo image."
           style="float: left; margin-right: 14px; width: 80px"
           ..
@@ -164,11 +166,41 @@
             </div>
           </div>
 
+          <div class="zone">
+            <p>
+              1. SOURCE (<a
+                target="_blank"
+                href="http://publiclab.org/infragram#cameras"
+                >CAMERAS</a
+              >)
+            </p>
+            <div class="btn-group" id="imageselect">
+              <label
+                for="file-sel"
+                class="btn btn-lg btn-primary"
+                rel="tooltip"
+                title="Upload an image"
+              >
+                <i class="fa fa-upload"></i>
+                <input type="file" id="file-sel" />
+              </label>
+              <button
+                rel="tooltip"
+                title="Connect to an Infragram webcam"
+                id="webcam-activate"
+                type="button"
+                class="btn btn-lg btn-primary"
+              >
+                <i class="fa fa-camera"></i>
+              </button>
+            </div>
+          </div>
+
           <div class="zone zone-analysis">
             <p>
-              ANALYSIS (<a
+              2. CONVERT/ANALYZE (<a
                 target="_blank"
-                href="http://publiclab.org/wiki/infragrammar"
+                href="http://publiclab.org/infragrammar"
                 >ABOUT INFRAGRAMMAR</a
               >)
             </p>
@@ -180,7 +212,7 @@
             >
               <option value="infragrammar_mono">Grey</option>
               <option value="infragrammar">RGB</option>
-              <option value="infragrammar_hsv">HSV</option>
+              <!--               <option value='infragrammar_hsv'>HSV</option> -->
             </select>
 
             <form
@@ -261,7 +293,7 @@
           </div>
 
           <div class="zone colorize">
-            <p>COLORIZE</p>
+            <p>3. <a href="https://publiclab.org/tag/colormap">COLORIZE</a></p>
             <div class="btn-group">
               <button type="submit" class="btn btn-lg btn-default btn-colorize">
                 <i class="fa fa-adjust"></i>
@@ -280,34 +312,74 @@
             </div>
           </div>
 
-          <div class="zone last" id="save-zone">
+          <div class="zone">
+            <p>4. OVERLAY</p>
+            <div class="row">
+              <div class="col-md-4">
+                <button id="overlay-btn" class="btn btn-lg btn-default">
+                  <i class="fa fa-th" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div
+                class="col-md-8"
+                id="overlay-controls-container"
+                style="display: none"
+              >
+                <input
+                  id="overlay-slider"
+                  type="range"
+                  min="10"
+                  max="50"
+                  value="100"
+                />
+                <span id="overlay-size" style="color: #ccc"></span>
+                <button id="overlay-save-btn" class="btn btn-primary">
+                  Save
+                </button>
+                <span id="overlay-save-info" style="color: green; display: none"
+                  >Size saved!</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="zone last" id="save-zone" style="display: none">
             <p>OUTPUT</p>
             <button
-              onClick="infragram.download();openInSequencer();"
+              onClick="openInPl()"
+              type="button"
+              class="btn btn-primary btn-lg"
+            >
+              Save
+            </button>
+            <button
+              onClick="infragram.download()"
+              type="button"
               class="btn btn-primary btn-lg"
             >
               Download
             </button>
-            <button onClick="openInSequencer();" class="btn btn-primary btn-lg">
-              Sequencer
+            <button
+              onClick="openInSequencer()"
+              type="button"
+              class="btn btn-primary btn-lg"
+            >
+              Export
             </button>
           </div>
 
           <br style="clear: both" />
         </div>
 
-        <div id="image-container">
+        <div class="drop-zone" id="image-container">
+          <span class="drop-zone__prompt"
+            >Drop file here or click to upload</span
+          >
+          <input type="file" name="myFile" class="drop-zone__input" />
           <div style="display: none"><div id="webcam"></div></div>
           <a
-            class="btn btn-link fullscreen"
-            style="
-              font-size: 2em;
-              color: white;
-              opacity: 0.3;
-              position: absolute;
-              z-index: 3;
-              margin: 5px 10px;
-            "
+            class="btn btn-default fullscreen"
+            style="opacity: 0.3; position: absolute; z-index: 3; margin: 6px"
             ><i class="fa fa-expand"></i
           ></a>
           <div
@@ -323,7 +395,9 @@
               padding-left: 60px;
             "
           >
-            <p>1. Live video should begin to stream from your Pi Camera.</p>
+            <p>
+              1. Choose an input above: select an image, or choose live video.
+            </p>
             <p>2. Choose an analysis mode or click PRESETS.</p>
             <p>3. Colorize your results (optional).</p>
             <p></p>
@@ -342,7 +416,21 @@
             "
             id="backdrop"
           ></div>
-
+          <div id="overlay-container" class="container" style="display: none">
+            <img id="overlay-img" src="assets/grid.svg" />
+          </div>
+          <a
+            class="btn-inverse btn-small"
+            style="
+              display: none;
+              position: absolute;
+              top: 6px;
+              left: 6px;
+              z-index: 3;
+            "
+            id="exit-fullscreen"
+            ><i class="fa fa-remove"></i> Exit full screen</a
+          >
           <canvas
             class="fullscreen"
             id="image"
@@ -356,6 +444,19 @@
             <span id="colorbar-max">1.00</span>
           </div>
         </div>
+
+        <hr style="clear: both" />
+
+        <h2>Q&A</h2>
+
+        <p>Ask and answer questions to peer-troubleshoot this system:</p>
+
+        <iframe
+          style="border: none"
+          width="100%"
+          height="900px"
+          src="//publiclab.org/embed/grid/question:infragram?"
+        ></iframe>
       </div>
 
       <footer class="footer">
@@ -395,46 +496,50 @@
     </div>
 
     <script>
-      var infragram, boost, openInSequencer;
+      //tooltip hides after one click
+      $('[rel="tooltip"]').tooltip({
+        trigger: "hover",
+      });
+      var infragram, openInPl, openInSequencer;
       (function () {
         infragram = Infragram({
           uploader: false,
           processor: "webgl",
-          shaderVertPath: "../dist/shader.vert",
-          shaderFragPath: "../dist/shader.frag",
         });
 
-        var piImage = new Image();
-        piImage.onload = function () {
-          infragram.options.processor.updateImage(piImage);
-        };
-        var fetchImageInterval = setInterval(function fetchImage() {
-          piImage.src =
-            "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-        }, 50);
-
-        boost = function boost(filterColor) {
-          $("#modeSwitcher").val("infragrammar_mono").change();
-          if (filterColor == "blue") $("#m_exp").val("(R-B)/(R+B)+(1/3)");
-          if (filterColor == "red") $("#m_exp").val("(B-R)/(R+B)+(1/3)");
-          infragram.colorize();
-          infragram.options.processor.save_expressions(
-            $("#m_exp").val(),
-            $("#m_exp").val(),
-            $("#m_exp").val()
-          );
-          infragram.run();
-          $("#preset-modal").modal("hide");
+        openInPl = function openInPl() {
+          var dataurl = infragram.options.processor.getCurrentImage();
+          function postToPL(imgSrc) {
+            var uniq = Date.now();
+            var color =
+              $("#m_exp").val().substr(1, 3) == "R-B" ? "blue" : "red";
+            var bodyText =
+              "The lead image is a processed Infragram image from https://infragram.org. It is good practice to upload the original image as well. The sequence used to generate the above image was: https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" +
+              color +
+              "},colormap{colormap:default}";
+            $("body").append(
+              '<form method="post" id="postToPL' +
+                uniq +
+                '" action="https://publiclab.org/post?tags=infragram,infragram-upload&body=' +
+                bodyText +
+                '" target="postToPLWindow"><input type="hidden" name="datauri_main_image" /></form>'
+            );
+            f = $("#postToPL" + uniq)[0];
+            f.datauri_main_image.value = imgSrc;
+            window.open("", "postToPLWindow");
+            f.submit();
+          }
+          postToPL(dataurl);
         };
 
         openInSequencer = function openInSequencer() {
           var color = $("#m_exp").val().substr(1, 3) == "R-B" ? "blue" : "red";
+          var dataurl = infragram.options.processor.getInputImage();
           window.location =
-            "/image-sequencer/examples/#steps=ndvi{filter:" +
+            "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" +
             color +
-            "},brightness{brightness:133},colormap{colormap:default}&src=" +
-            "/cam/cam_pic.php?time=" +
-            new Date().getTime();
+            "},colormap{colormap:default}&src=" +
+            dataurl;
         };
       })();
     </script>
