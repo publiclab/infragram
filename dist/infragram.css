@@ -1,108 +1,130 @@
 /* https://github.com/theleagueof/junction */
 @font-face {
-  font-family:'junctionregular';
-  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
-  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot?#iefix") format("embedded-opentype"),
-      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff") format("woff"),
-      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf") format("truetype"),
-      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular") format("svg");
+  font-family: "junctionregular";
+  src: url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
+  src: url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff")
+      format("woff"),
+    url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf")
+      format("truetype"),
+    url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular")
+      format("svg");
 }
 
-h1,h2,h3,h4,h5,h6{
-  font-family: junctionregular, "lucida grande", "lucida sans console", sans-serif;
-  font-weight:normal
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: junctionregular, "lucida grande", "lucida sans console",
+    sans-serif;
+  font-weight: normal;
 }
 
-body { padding-top: 20px; }
-span.group { display: inline-block; }
+body {
+  padding-top: 20px;
+}
+span.group {
+  display: inline-block;
+}
 
 footer.footer {
- clear: both;
- padding-top: 10px;
+  clear: both;
+  padding-top: 10px;
 }
 
 div#image-container {
- text-align: center;
+  text-align: center;
 }
 
 div#image-container canvas#image {
- margin: 0px auto;
+  margin: 0px auto;
 }
 
 div#colorbar-container {
- display: inline-block;
- width: 70%;
+  display: inline-block;
+  width: 70%;
 }
 
 div#colorbar-container canvas#colorbar {
- width: 80%;
- height: 2em;
- vertical-align: middle;
+  width: 80%;
+  height: 2em;
+  vertical-align: middle;
 }
 
 #toolbar {
-  clear:both;
-  background:#eee;
-  margin-bottom:10px;
+  clear: both;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+}
 
-}
 #toolbar .zone {
-  margin:6px 0 6px 6px;
-  padding:0 12px 0 6px;
-  border-right:1px solid #ddd;
-  float:left;
+  margin: 6px 0 6px 6px;
+  padding: 0 12px 0 6px;
+  border-right: 1px solid #ddd;
+  float: left;
 }
-#toolbar .zone.last {
-  border:none;
-}
+
 #toolbar .zone p {
-  color:#bbb;
-  font-weight:bold;
-  font-size:10px;
-  margin-bottom:0;
+  color: #bbb;
+  font-weight: bold;
+  font-size: 10px;
+  margin-bottom: 0;
+}
+
+span#overlay-save-info {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #image {
-  background:#ddd;
-  width:800px;
-  height:600px;
+  background: #ddd;
+  width: 800px;
+  height: 600px;
 }
 
-@media (max-width: 700px){
+@media (max-width: 700px) {
   #image {
-    width:100%;
-    height:auto;
+    width: 100%;
+    height: auto;
   }
 }
 #overlay-container {
-  position:absolute;
- display: inline-block;
-  overflow:hidden;
-  width:800px;
-  height:600px;
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  width: 800px;
+  height: 600px;
 }
 
 #overlay-save-btn {
-  margin-top:2px;
+  margin-top: 2px;
 }
 
 #overlay-img {
-  opacity:0.5;
+  opacity: 0.5;
 }
 
-ul.dropdown-menu li:hover{
+ul.dropdown-menu li:hover {
   cursor: pointer;
   background-color: #e0e0e0;
 }
 #file-sel {
-  position:absolute; 
-  left:0;
-  width:55px;
-  height:44px;
-  opacity:0;
+  position: absolute;
+  left: 0;
+  width: 55px;
+  height: 44px;
+  opacity: 0;
 }
 .vr #toolbar {
   position:absolute;
