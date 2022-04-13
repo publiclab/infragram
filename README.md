@@ -21,7 +21,13 @@ Read more at https://publiclab.org/infragram
 2. In the console, download a copy of your forked repo with `git clone https://github.com/your_username/infragram` where `your_username` is your GitHub username.
 3. Enter the new infagram directory with `cd infragram`.
 4. `npm install` - this will install all the node packages into your local machine.
-5. `npm install http-server -g && http-server` (this installs http-server globally and then runs it, next time you just need to do `http-server` to run it locally)
+
+6. For Windows users, you may get this error when trying to run `http-server` :     "File C:\Users\USER_NAME\AppData\Roaming\npm\http-server.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170."
+7. To fix this, you would have to let Windows run scripts by changing the Execution Policies from "Restricted" to either "Unrestricted" or "RemoteSigned".
+8. Open Windows Powershell as Administrator.
+9. You can verify the current Execution Policies by running the command `Get-ExecutionPolicy`, if you get "Restricted", then run `Set-ExecutionPolicy RemoteSigned` or `Set-ExecutionPolicy Unrestricted`
+10. To scope the execution policy to the current user only, use `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` or `Set-ExecutionPolicy Unrestricted -Scope CurrentUser`
+11. We recommend beginners use `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`, this will let Infragram run, while not completely allowing your PC unrestricted to run all scripts.
 
 ## Contributing
 
