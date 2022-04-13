@@ -19,7 +19,6 @@ window.Infragram = function Infragram(options) {
 
   var Interface = require('./ui/interface')(options); // this can change processor based on URL hash
   //options.processor.initialize(options); // double initialize after end of processor code?
-  console.log('processor:', options.processor.type)
 
   options.colorize = function colorize(map) {
     options.processor.colorize(map);
@@ -44,7 +43,7 @@ window.Infragram = function Infragram(options) {
     }, interval);
   }
 
-  // TODO: this doesn't work; it just downloads the unmodified image. 
+  // TODO: this doesn't work; it just downloads the unmodified image.
   // probably a timing issue?
   function download() {
     //options.run(options.mode);

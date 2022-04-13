@@ -1,7 +1,7 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 module.exports = function Camera(options) {
-  var canvas, 
+  var canvas,
       ctx;
 
   // Initialize getUserMedia with options
@@ -30,7 +30,7 @@ module.exports = function Camera(options) {
   var webRtcOptions = options.webRtcOptions || {
     "audio": false,
     "video": true,
-    // the element (by id) you wish to use for 
+    // the element (by id) you wish to use for
     // displaying the stream from a camera
     el: "webcam",
     extern: null,
@@ -39,8 +39,8 @@ module.exports = function Camera(options) {
     // container
     width: 640,
     height: 480,
-    // the recommended mode to be used is 
-    // "callback " where a callback is executed 
+    // the recommended mode to be used is
+    // "callback " where a callback is executed
     // once data is available
     mode: "callback",
     // a debugger callback is available if needed
@@ -95,7 +95,6 @@ module.exports = function Camera(options) {
 
   function deviceError(error) {
     alert("No camera available.");
-    console.log(error);
     return console.error("An error occurred: [CODE " + error.code + "]");
   }
 
@@ -104,7 +103,7 @@ module.exports = function Camera(options) {
     var video;
     // If the current context is WebRTC/getUserMedia (something
     // passed back from the shim to avoid doing further feature
-    // detection), we handle getting video/images for our canvas 
+    // detection), we handle getting video/images for our canvas
     // from our HTML5 <video> element.
     if (webRtcOptions.context === "webrtc") {
       video = document.getElementsByTagName("video")[0];
