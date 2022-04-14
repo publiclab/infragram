@@ -24,12 +24,7 @@ Consider providing any applicable: code, screenshots, or gifs.
 
 ### Please show us where to look
 
-https://publiclab.org/ ...
-
-
-### What's your PublicLab.org username?
-
-> This can help us diagnose the issue: 
+https://infragram.org/sandbox/ ...
 
 
 
@@ -42,7 +37,7 @@ https://publiclab.org/ ...
 
 ## Thank you!
 
-Your help makes Public Lab better! We *deeply* appreciate your helping refine and improve this site. 
+Your help makes Infragram better! We *deeply* appreciate your helping refine and improve this site. 
 
 To learn how to write really great issues, which increases the chances they'll be resolved, see:
 
