@@ -23,33 +23,6 @@ Read more at https://publiclab.org/infragram
 4. `npm install` - this will install all the node packages into your local machine.
 5. `npm install http-server -g && http-server` (this installs http-server globally and then runs it, next time you just need to do `http-server` to run it locally)
 
-## Contributing
-
-We welcome contributions and are especially interested in welcoming [first-time contributors](#first-time). Read more about [how to contribute](#developers) below! We especially welcome contributions from people belonging to groups under-represented in free and open-source software!
-
-### Code of Conduct
-
-Please read and abide by our [Code of Conduct](https://publiclab.org/conduct); our community aspires to be a respectful place both during online and in-­person interactions.
-
-
-## Developers
-
-Help improve Public Lab software!
-
-* Join the chatroom at https://publiclab.org/chat
-* Look for open issues at https://github.com/publiclab/infragram/labels/help-wanted
-* We're specifically asking for help with issues labeled with the https://github.com/publiclab/infragram/labels/help%20wanted tag
-* Find lots of info on contributing at http://publiclab.org/developers
-* Review specific contributor guidelines at http://publiclab.org/contributing-to-public-lab-software
-* Find the steps on how to make a Pull Request at https://github.com/publiclab/infragram/issues/300
-
-## First Time?
-
-New to open source/free software? Here is a selection of issues we've made **especially for first-timers**. We're here to help, so just ask if one looks interesting : https://code.publiclab.org
-
-[Here](https://publiclab.org/notes/warren/11-22-2017/use-git-and-github-to-contribute-and-improve-public-lab-software) is a link to our Git workflow.
-
-## Let the code be with you, happy open-sourcing :smile:
 
 ## Purpose
 
@@ -201,3 +174,32 @@ See the deprecation label for more on this code: https://github.com/publiclab/in
 ## Pi and VR versions
 
 Two extra folders `/pi/` and `/vr/` are for different variants of the project, designed to be run on a [Raspberry Pi-based camera](https://publiclab.org/infragram-pi) (live-streaming video through the converter from the Pi camera) and for use with a VR headset with a Pi camera attached to the front. These are experimental but if major breaking changes are implemented in the main `index.html` file, we would like them to be ported over to these files as well, especially the `/pi/` version, so the interfaces look and work the same.
+
+
+## Contributing
+
+We welcome contributions and are especially interested in welcoming [first-time contributors](#first-time). Read more about [how to contribute](#developers) below! We especially welcome contributions from people belonging to groups under-represented in free and open-source software!
+
+### Code of Conduct
+
+Please read and abide by our [Code of Conduct](https://publiclab.org/conduct); our community aspires to be a respectful place both during online and in-­personinteractions.
+
+
+## Developers
+
+Help improve Public Lab software!
+
+* Join the chatroom at https://publiclab.org/chat
+* Look for open issues at https://github.com/publiclab/infragram/labels/help-wanted
+* We're specifically asking for help with issues labeled with the https://github.com/publiclab/infragram/labels/help%20wanted tag
+* Find lots of info on contributing at http://publiclab.org/developers
+* Review specific contributor guidelines at http://publiclab.org/contributing-to-public-lab-software
+* Find the steps on how to make a Pull Request at https://github.com/publiclab/infragram/issues/300
+
+## First Time?
+
+New to open source/free software? Here is a selection of issues we've made **especially for first-timers**. We're here to help, so just ask if one looks interesting : https://code.publiclab.org
+
+[Here](https://publiclab.org/notes/warren/11-22-2017/use-git-and-github-to-contribute-and-improve-public-lab-software) is a link to our Git workflow.
+
+Let the code be with you, happy open-sourcing :smile:
