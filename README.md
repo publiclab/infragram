@@ -16,6 +16,38 @@ Read more at https://publiclab.org/infragram
 <img src='https://publiclab.org/system/images/photos/000/045/468/large/rgn-split.png' alt='split image showing a pre-converted blueish image on the left and rainbow-colored image on right'>
 </div>
 
+
+## Table of Contents
+
+1. [Quick Installation](#quick-installation)
+2. [Contributing](#contributing)
+    - [Code of Conduct](#code-of-conduct)
+3. [Developers](#developers)
+4. [First Time?](#first-time)
+5. [Purpose](#purpose)
+6. [Usage](#usage)
+7. [Architecture](#architecture)
+8. [Inputs](#inputs)
+   - [File Upload](#file-upload)
+   - [Video](#video)
+9. [Converting](#converting)
+   - [Infragrammar](#infragrammar)
+10. [Processors](#processors)
+11. [Presets](#presets)
+12. [Colorizing](#colorizing)
+13. [Outputs](#outputs)
+      - [Export To Publiclab.org](#export-to-publiclaborg)
+      - [Export to Image Sequencer](#export-to-image-sequencer)
+14. [Interface](#interface)
+15. [Legacy Code](#legacy-code)
+16. [Pi and VR versions](#pi-and-vr-versions)
+
+
+
+
+
+
+
 ## Quick Installation
 1. Fork our repo from [here](https://github.com/publiclab/infragram).
 2. In the console, download a copy of your forked repo with `git clone https://github.com/your_username/infragram` where `your_username` is your GitHub username.
