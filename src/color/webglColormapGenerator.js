@@ -73,11 +73,11 @@ vec4 ' + colormapName + '(float n) {\
     x = vec2('+inMin+', '+inMax+');                    // input value min and max in vec2\
     y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
     y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
-  }';
+  };
 
-      }
     });
-  }
+   
+  };
 
   // in the original, we used if/else so we do only one range comparison, 
   // but it's harder to concisely write, so here we're just doing a repeated if statement.
@@ -91,4 +91,4 @@ vec4 ' + colormapName + '(float n) {\
 }'
 
   return fn;
-}
+};
