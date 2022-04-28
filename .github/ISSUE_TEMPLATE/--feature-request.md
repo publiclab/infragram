@@ -23,7 +23,7 @@ Feel free to include any applicable: code, screenshots, or gifs.
 <!-- End. -->
 
 <!--
-Thank you! Your help makes Public Lab better. We *deeply* appreciate you helping refine and improve plots2.
+Thank you! Your help makes Infragram better. We *deeply* appreciate you helping refine and improve the site.
 
 To learn how to write really great issues, which increases the chances they'll be resolved, see:
 https://publiclab.org/wiki/developers#Contributing+for+non-coders
