@@ -48,12 +48,12 @@ module.exports = function generateWebglColormapFunction(colormapName, colormapOb
   if (colormapObject.colormapRanges.length > 2) {
     colormapObject.colormapRanges.forEach(function(range, i) {
       var inMin = range[0],
-          outMinR = range[1][0],
-          outMinG = range[1][1],
-          outMinB = range[1][2],
-          outMaxR = range[2][0],
-          outMaxG = range[2][1],
-          outMaxB = range[2][2];
+      outMinR = range[1][0],
+      outMinG = range[1][1],
+      outMinB = range[1][2],
+      outMaxR = range[2][0],
+      outMaxG = range[2][1],
+      outMaxB = range[2][2];
       if (i < colormapObject.colormapRanges.length - 1) inMax = colormapObject.colormapRanges[i + 1][0];
       else inMax = 1;
 
@@ -61,23 +61,22 @@ module.exports = function generateWebglColormapFunction(colormapName, colormapOb
 
         // TODO: scale from 0-1 to 0-255 with 0.0 precision
         var fn = '\
-vec4 ' + colormapName + '(float n) {\
-  vec2 x = vec2('+inMin+', '+inMax+');                    // input value min and max\
-  vec3 y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
-  vec3 y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
+        vec4 ' + colormapName + '(float n) {\
+        vec2 x = vec2('+inMin+', '+inMax+');                    // input value min and max\
+        vec3 y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
+        vec3 y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
 
-      } else {
+      } 
+      else {
 
         fn += '\
-  if ((n >= ' + inMin + ') && (n < ' + inMax + ')) {             // input value min and max\
-    x = vec2('+inMin+', '+inMax+');                    // input value min and max in vec2\
-    y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
-    y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
-  }';
-
-      }
-    });
-  }
+        if ((n >= ' + inMin + ') && (n < ' + inMax + ')) {             // input value min and max\
+          x = vec2('+inMin+', '+inMax+');                    // input value min and max in vec2\
+          y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
+          y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val'
+      };
+    });   
+  };
 
   // in the original, we used if/else so we do only one range comparison, 
   // but it's harder to concisely write, so here we're just doing a repeated if statement.
