@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
+
     <title>Infragram | by Public Lab - Home</title>
 
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
@@ -28,7 +28,7 @@
   </head>
 
   <body>
-  
+
     <div class="container page vr" style="padding-top:10px;">
 
        <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
@@ -89,7 +89,7 @@
               <option value='infragrammar'>RGB</option>
               <option value='infragrammar_hsv'>HSV</option>
             </select>
-           
+
             <form id="infragrammar_mono" class="form-inline" style="display:inline;" action="javascript:void(0);">
               <input placeholder="monochrome" type="text" id="m_exp" class="form-control" style="width:100px;" value="(R-B)/(R+B)">
               <button type="submit" class="btn btn-primary">Run</button>
@@ -101,7 +101,7 @@
               <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
               <button type="submit" class="btn btn-primary">Run</button>
             </form>
-           
+
             <form id="infragrammar_hsv" class="form-inline" style="display:none;" action="javascript:void(0);">
               <input placeholder="H" type="text" id="h_exp" class="form-control" value="-(R-B)/(R+B)">
               <input placeholder="S" type="text" id="s_exp" class="form-control" value="1">
@@ -114,7 +114,7 @@
           <div class="zone colorize">
             <p>COLORIZE</p>
             <div class="btn-group">
-              <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button> 
+              <button type="submit" class="btn btn-lg btn-default btn-colorize"><i class="fa fa-adjust"></i></button>
               <a class="btn btn-lg dropdown-toggle btn-default" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
               </a>
@@ -137,12 +137,22 @@
 
         <div id="image-container">
           <div style="display:none;"><div id="webcam"></div></div>
-          <div onClick="$('.choose-prompt').hide();" class="choose-prompt" style="display:inline;color:white;position:absolute;z-index:3;padding-top:14px;text-align:left;padding-left:60px;">
-            <p>1. Live video should begin to stream from your Pi Camera.</p>
-            <p>2. Choose an analysis mode or click PRESETS.</p>
-            <p>3. Colorize your results (optional).</p>
-            <p></p>
-            <p>Click this message to hide it.</p>
+          <div class="modal choose-prompt" style="display:inline;color:black;position:absolute;z-index:3; top: 50%; transform: translateY(-50%);text-align:left;padding-left:60px;">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">How To</h4>
+                </div>
+                <div class="modal-body">
+                    <p>1. Choose an input above: select an image, or choose live video.</p>
+                    <p>2. Choose an analysis mode or click PRESETS.</p>
+                    <p>3. Colorize your results (optional).</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" onClick = "$('.choose-prompt').hide();" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
 
@@ -168,7 +178,7 @@
 
       <p>Analyze plant health with near-infrared imagery! <a href="http://publiclab.org/wiki/infragram">Learn more &amp; mod a camera</a>, or <a href="http://store.publiclab.org/products/infragram-diy-filter-pack">buy a modded camera</a>.</p>
       </footer>
- 
+
     </div>
 
     <script>
@@ -198,7 +208,7 @@
 
         function timeout() {
           setTimeout(function () {
-            fetchImage(); 
+            fetchImage();
             timeout();
           }, 50);
         }
@@ -235,13 +245,13 @@
           window.location = "/image-sequencer/examples/#steps=ndvi{filter:" + color + "},brightness{brightness:133},colormap{colormap:default}&src=" + "/cam/cam_pic.php?time=" + new Date().getTime();
         }
 
-        $(".canvas").click(function() {   
+        $(".canvas").click(function() {
           $("#toolbar").toggle()
           if (!$("#toolbar").is(":visible")) document.body.requestFullscreen();
           if ($(".canvas").css('top') == '0') $(".canvas").css('top','100px')
           else $(".canvas").css('top','0')
         });
-	      
+
       })()
     </script>
   </body>
