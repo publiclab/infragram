@@ -48,12 +48,12 @@ module.exports = function generateWebglColormapFunction(colormapName, colormapOb
   if (colormapObject.colormapRanges.length > 2) {
     colormapObject.colormapRanges.forEach(function(range, i) {
       var inMin = range[0],
-      outMinR = range[1][0],
-      outMinG = range[1][1],
-      outMinB = range[1][2],
-      outMaxR = range[2][0],
-      outMaxG = range[2][1],
-      outMaxB = range[2][2];
+          outMinR = range[1][0],
+          outMinG = range[1][1],
+          outMinB = range[1][2],
+          outMaxR = range[2][0],
+          outMaxG = range[2][1],
+          outMaxB = range[2][2];
       if (i < colormapObject.colormapRanges.length - 1) inMax = colormapObject.colormapRanges[i + 1][0];
       else inMax = 1;
 
