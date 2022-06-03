@@ -74,7 +74,8 @@ module.exports = function generateWebglColormapFunction(colormapName, colormapOb
           x = vec2('+inMin+', '+inMax+');                    // input value min and max in vec2\
           y0 = vec3('+outMinR+', '+outMinG+', '+outMinB+') / 255.0; // min output val\
           y1 = vec3('+outMaxR+', '+outMaxG+', '+outMaxB+') / 255.0; // max output val
-      }';
+        }';
+      } 
     });   
   };
 
