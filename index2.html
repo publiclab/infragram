@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Infragram | by Public Lab - Home</title>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+  <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+
+</head>
+<style>
+
+  body{
+    color: #d5d5d5;
+  }
+  .main-container {
+    height:100vh;
+    background-color:#252525;
+    /* background-color: #474747; */
+  }
+  .image-container {
+    height:92vh;
+    background-color:#474747;
+    /* background-color:#252525; */
+    border-radius: 9px 9px 0 0;
+  }
+  .btn {
+    color: #d5d5d5;
+  }
+
+  .btn-block, .btn-link {
+    font-size: .75rem;
+  }
+
+  p {
+    font-size: .7rem;
+    margin-bottom: 5px;
+  }
+
+  .tool-panel .btn-toolbar a {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobile-icons a {
+    color: rgb(197, 195, 195);
+    font-size: 1.75rem;
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+  .main-container {
+    /* background-color:#252525; */
+    background-color:#474747;
+  }
+  .image-container {
+    height: 80vh;
+    margin-right:0 !important;
+    border-radius: 0 0 0 0;
+    background-color:#252525;
+    /* background-color:#474747; */
+  }
+}
+</style>
+<body>
+  <div class="container-fluid d-flex flex-column flex-md-column-reverse main-container">
+
+    <!-- This is the container for the entire page - it currently has 2 rows. The second row was created for "extra space" for future modal additions and current stretch goals. As I continue to code I am finding that it is most likely not needed. -->
+
+    <div class="row">
+
+      <!-- This single row has 3 "columns," each full width for the mobile layout. The third column is not displayed on desktop (the content has been "duplicated" in the first) and the second is for the image container/canvas/screen/upload... -->
+
+      <div class="col-12 col-md-2 mobile-row d-flex flex-md-column justify-content-md-around align-items-md-start tool-panel pl-4" style="margin-left:-10px;">
+
+        <!-- Top "header-row" of mobile layout -->
+        <div class="d-md-none w-100 d-flex justify-content-between align-items-center py-1">
+          <div class="mobile-icons">
+            <img src="assets/favicon.ico" alt="logo">
+            <a type="button" href="https://infragram.org/"><i class="fa fa-home"></i></a>
+          </div>
+          <div class="mobile-icons">
+            <a type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will open to the quick start modal - the welcome message will include this and further info."><i class="fa fa-cog"></i></a>
+            <a type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will be a dropdown for what was the 4th row on mobile devices...links to Tutorials, help, tips and kits!">&#x3f;</a>
+            <a type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will Include Save, Download and Export links."><i class="fa fa-save pr-1"></i></a>
+          </div>
+        </div>
+
+        <!-- Desktop "side-bar" Quick-Start -->
+        <div class="d-none d-md-block">
+          <p>QUICK START<a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Discover our techniques!"><i class="fa fa-info-circle pl-2"></i></a></p>
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group pr-1">
+              <a type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Raw image, just what your camera sees."><i class="fa fa-magic"></i></a>
+            </div>
+            <div class="btn-group pr-1">
+              <a type="button" href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI BLUE FILTER plant  analysis for filter packs and webcams." style="color:#347ab7;"><i class="fa fa-magic"></i></a>
+              <a type="button" href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="color:#347ab7;"><i class="fa fa-adjust"></i></a>
+            </div>
+            <div class="btn-group">
+              <a href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI RED FILTER plant analysis for Infragram Point & Shoot cameras." style="color:rgb(163, 24, 24);"><i class="fa fa-magic"></i></a>
+              <a href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI RED FILTER plant analysis for Infragram Point & Shoot cameras." style="color:rgb(163, 24, 24);"><i class="fa fa-adjust"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Analyze/Colorize/Overlay/Run -->
+        <div class="d-none d-md-block">
+          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Learn about our processing algorithms and more..."><i class="fa fa-info-circle pl-2"></i></a></p>
+          <div class="btn-toolbar mb-2" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group">
+              <a href="#" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Greyscale" style="font-size:.75em;color:white;"><i class="fa fa-paint-brush"></i></a>
+              <a type="button" class="btn btn-outline-secondary ml-1" data-toggle="tooltip" data-placement="bottom" title="RGB" style="font-size:.75em;"><i class="fa fa-cubes"></i></a>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-block mb-3" style="width:65%;">Convert/Run</button>
+
+          <p>COLORMAP</p>
+
+          <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group">
+              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Default"><i class="fa fa-adjust"></i></a>
+              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Stretch">&#8748;</a>
+              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export"><i class="fa fa-thumbs-up"></i></a>
+            </div>
+          </div>
+
+          <p>OVERLAY</p>
+          <div class="row justify-content-md-around align-items-md-center mb-3" style="margin-top:-.7rem;">
+            <button id="overlay-btn" class="btn btn-outline-secondary d-flex justify-content-center align-items-center ml-2" style="width:1.25rem;height:1.25rem;">
+              <i class="fa fa-th" aria-hidden="true"></i>
+            </button>
+            <div class="col-md-8 d-md-flex flex-md-column justify-content-md-center align-items-md-center invisible" id="overlay-controls-container">
+              <input id="overlay-slider" data-slider-id="data-slider"class="custom-range" type="range" min="10" max="50" value="100" style="max-width:80%;" />
+              <span id="overlay-size" style="color:#ccc;"></span>
+              <button id="overlay-save-btn" class="btn btn-sm btn-outline-secondary d-flex justify-content-center align-items-center" style="height:1.25rem;width:2.75rem;font-size:.75rem;">Save</button>
+              <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
+            </div>
+          </div>
+
+          <p>ADJUSTMENTS</p>
+
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group">
+              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="zoom???">&infin;</a>
+              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="flip imag???">&#8800;</a>
+              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="???">&#8721;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Save/Download/Export -->
+        <div class="d-none d-md-block">
+          <p>OUTPUT</p>
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Save"><i class="fa fa-white fa-save pr-1"></i></a>
+            <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Download"><i class="fa fa-white fa-download pr-1"></i></a>
+            <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export">&#8599;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image/Screen/Canvas/Camera.. for Mobile and Desktop -->
+      <!-- TODO - fix margin-right on mobile -->
+      <div class="col-12 col-md-10 image-container" style="margin-right:10px;"></div>
+
+      <!-- Mobile Analyze/Colorize/Overlay/Run -->
+
+      <div class="col-12 d-md-none d-flex justify-content-between align-items-baseline mt-2 mobile-row">
+        <div class="d-flex flex-column">
+          <p>OVERLAY</p>
+          <div class="">
+            <button id="overlay-btn" class="btn btn-outline-secondary btn-large d-flex justify-content-center align-items-start" >
+              <i class="fa fa-th" aria-hidden="true"></i>
+            </button>
+            <div class="d-none" id="overlay-controls-container">
+              <input id="overlay-slider" data-slider-id="data-slider"class="custom-range" type="range" min="10" max="50" value="100" style="max-width:80%;" />
+              <span id="overlay-size" style="color:#ccc;"></span>
+              <button id="overlay-save-btn" class="btn btn-sm outline-secondary d-flex justify-content-center align-items-center" style="height:1.25rem;width:2.75rem;font-size:.75rem;">Save</button>
+              <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="d-flex flex-column">
+          <p>COLORMAP</p>
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group ">
+              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Default"><i class="fa fa-adjust"></i></a>
+              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Stretch">&#8748;</a>
+              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export"><i class="fa fa-thumbs-up"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column">
+          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Learn about our processing algorithms and more..."><i class="fa fa-info-circle pl-2"></i></a></p>
+          <div class="btn-toolbar " role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group">
+              <a href="#" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Greyscale" style="font-size:.75em;color:white;"><i class="fa fa-paint-brush"></i></a>
+              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="RGB" style="font-size:.75em;"><i class="fa fa-cubes"></i></a>
+            </div>
+          </div>
+
+        </div>
+        <div class="d-flex flex-column">
+          <p>CONVERT</p>
+          <button type="button" class="btn btn-outline-secondary btn-sm">Run</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- "header row" on Desktop, "4th row" on Mobile... MOVE THIS TO COLLAPSED MENU IN HEADER ON MOBILE???-->
+
+  <div class="row">
+    <div class="col-12 col-md-12 d-none d-md-flex justify-content-center justify-content-md-end pr-md-5 mobile-row desktop-row-1 ">
+      <button type="button" class="btn btn-link">Tutorial</button>
+      <button type="button" class="btn btn-link">Help</button>
+      <button type="button" class="btn btn-link">Tips</button>
+      <button type="button" class="btn btn-link">Obtain a Kit</button>
+    </div>
+</div>
+
+  <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
+
+</body>
+</html>
