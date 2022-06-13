@@ -161,11 +161,42 @@
     margin-top:-10vh;
   }
 
-  @media (max-width: 1050px){
+  @media (max-width: 1100px){
+    .steps{
+    height: 2.3rem;
+    width: 2.7rem;
+
+    }
+    .step2{
+      margin-top: 1.5rem;
+    }
+    .step3{
+      margin-top: -2rem;
+    }
     .filters{
       flex-direction:column;
       align-items:start;
+      margin-top: -.5rem;
+      margin-bottom: 0;
     }
+    .grey-scale input{
+    max-width:50%;
+    height: 1rem;
+
+    }
+    .nir input{
+      max-width:15%;
+      height:1rem;
+
+    }
+    .run{
+      max-width: 3rem;
+    }
+    .welcome-msg {
+    max-width:70%;
+    margin: 3rem auto;
+    color: #acb6bf;
+  }
   }
 
   @media (max-width: 768px) {
@@ -184,12 +215,21 @@
     height: 75vh;
     margin-right:0 !important;
   }
+  .welcome-msg {
+    max-width:90%;
+
+  }
   .mobile-analysis-tools {
     height:10vh;
   }
   .tool-panel {
     height: 7vh;
     margin-top: 0;
+  }
+}
+@media (max-width: 600px){
+  .phone-d-none{
+    display:none;
   }
 }
 </style>
@@ -203,13 +243,13 @@
     <div class="row" style="border-bottom: 1px solid #353948;">
       <div class="col-12 header d-flex justify-content-between align-items-center">
         <div d-flex>
-          <h1 style="font-size:1.25rem;margin-bottom:0;"><img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." style="width:2.2rem;height:auto;padding-right:.5rem" /><a class="d-inline-block" style="color:#d5d5d5;padding-right:.3rem" href="../">Infragram</a><small style="font-size:.655rem;color:#777777;">by <a href="http://publiclab.org" target="_blank" style="font-size:.9rem;color:#04aee7;padding-left:.22rem">Public Lab</a></small></h1>
+          <h1 style="font-size:1.25rem;margin-bottom:0;"><img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." style="width:2.2rem;height:auto;padding-right:.5rem" /><a class="phone-d-none" style="color:#d5d5d5;padding-right:.3rem" href="../">Infragram</a><small class="phone-d-none" style="font-size:.655rem;color:#777777;">by <a href="http://publiclab.org" target="_blank" class="phone-d-none" style="font-size:.9rem;color:#04aee7;padding-left:.22rem">Public Lab</a></small></h1>
         </div>
 
           <!-- =================== camera/image selection ======================== -->
 
         <div class="d-flex align-items-center">
-          <a tabindex="0" class="btn steps step1" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="Drop and Image/Video below or upload one from your computer.">Step 1</a>
+          <a tabindex="0" class="btn steps step1 phone-d-none" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="Drop an Image/Video below or upload one from your computer.">Step 1</a>
           <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mx-3" style="width:2.2rem;height:1.8rem;"><i class="fa fa-camera-retro" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Dropdown for image upload options"></i>&nbsp;&#10549;</a>
           <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" style="width:2.2rem;height:1.8rem;"><i class="fa fa-video-camera" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Dropdown menu webcam resolutions"></i></i>&nbsp;&#10549;</a>
         </div>
@@ -220,19 +260,10 @@
           <a class="nav-item" type="button" href="https://infragram.org/"><i class="fa fa-home"></i></a>
           <div class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Dropdown menu for Tutorials, Help, Tips, Obtain a kit...">
             <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" data-toggle="dropdown" role="button" href="#"aria-expanded="false" style="width:2.2rem;height:1.8rem;"><i class="fa fa-question-circle-o"></i>&nbsp;&#10549;</a>
-            <!-- <div class="dropdown-menu nav-link" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item nav-link" href="#">Tutorial</a>
-              <a class="dropdown-item nav-link" href="#">Help</a>
-              <a class="dropdown-item nav-link" href="#">Tips</a>
-              <a class="dropdown-item nav-link" href="#">Obtain a kit</a>
-              <a class="dropdown-item nav-link" href="#">Troubleshooting</a>
-            </div> -->
+
           </div>
           <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This dropdown will Include Save, Download and Export links." style="width:2.2rem;height:1.8rem;"><i class="fa fa-save pr-1"></i>&nbsp;&#10549;</a>
-          <!-- ================= SAVE/DOWNLOAD/EXPORT ICONS ================== -->
-          <!-- <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Save"><i class="fa fa-white fa-save pr-1"></i></a>
-          <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Download"><i class="fa fa-white fa-download pr-1"></i></a>
-          <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export">&#8599;</a> -->
+
         </nav>
       </div>
     </div>
@@ -246,7 +277,7 @@
 
       <div class="col-12 d-none col-md-2 d-md-flex flex-md-column justify-content-md-around align-items-md-start sidebar pl-4">
 
-        <a tabindex="0" class="btn steps sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>
+        <a tabindex="0" class="btn steps step2 sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>
 
         <div class="steps-spacing">
           <p class="divider">ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a></p>
@@ -287,13 +318,13 @@
             <div class="nir">
               <input type="text"><input type="text"><input type="text">
             </div>
-            <button type="button" class="btn btn-outline-secondary btn-block" style="width:65%;">Run</button>
+            <button type="button" class="btn btn-outline-secondary btn-block run" style="width:65%;">Run</button>
 
 
           </div>
         </div>
 
-        <a tabindex="0" class="btn steps sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>
+        <a tabindex="0" class="btn steps step3 sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>
 
         <div class="steps-spacing">
           <p class="divider">COLORIZE (optional)</p>
@@ -347,7 +378,7 @@
         </div>
 
         <p>
-          &#8592;&nbsp;<a tabindex="0" class="btn steps sidebar-step" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>&nbsp;&#8594;
+          &#8592;&nbsp;<a tabindex="0" class="btn steps sidebar-step phone-d-none" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>&nbsp;&#8594;
         </p>
 
         <div class="d-flex flex-column">
@@ -357,7 +388,7 @@
           <p>CONVERT</p>
           <button type="button" class="btn btn-outline-secondary btn-sm">Run</button>
         </div> -->
-        <p><a tabindex="0" class="btn steps sidebar-step" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>&nbsp;&#8594;</p>
+        <p><a tabindex="0" class="btn steps sidebar-step phone-d-none" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>&nbsp;&#8594;</p>
 
         <div class="d-flex flex-column">
           <p>COLORIZE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Create Collapable menu, modal or drop-up for these settings"><i class="fa fa-info-circle pl-2"></i></a></p>
