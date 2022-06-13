@@ -34,8 +34,13 @@
       url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff") format("woff"),
       url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf") format("truetype"),
       url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular") format("svg");
-}
+  }
 
+  body{
+    color: #d5d5d5;
+    font-weight: 300;
+    max-height: 100vh;
+  }
   h1,h2,h3,h4,h5,h6{
     font-family: junctionregular, "lucida grande", "lucida sans console", sans-serif;
     font-weight:normal;
@@ -48,26 +53,23 @@
     font-weight: 100;
 
   }
-  body{
+  .btn {
     color: #d5d5d5;
-    font-weight: 300;
+    background-color: transparent;
+    border: none;
   }
+
+  .btn-block, .btn-link {
+    font-size: .75rem;
+  }
+
   .main-container {
     height: 100vh;
     border: 1px solid #353948;
     background-color:#151b22;
-    /* background-color:#242631; */
-    /* background-color:#252525; */
-    /* background-color: #474747; */
-  }
-  .image-container {
-    height: 80vh;
-    background-color:#0d1118;
-    /* background-color:#1c1d26; */
-    /* background-color:#474747; */
-    /* background-color:#252525; */
 
   }
+
   .logo{
     height: auto;
     width: 2.2rem;
@@ -82,47 +84,79 @@
     font-size: 1rem;
     margin-left: 1.25rem;
   }
-  .btn {
-    color: #d5d5d5;
+
+
+  .image-container {
+    height: 80vh;
+    background-color:#0d1118;
+    position:relative;
+  }
+  .steps{
+    height: 2.5rem;
+    width: 3.2rem;
+    font-size: .6rem;
     background-color: transparent;
-    border: none;
+    border: 1px solid #353948;
+    border-radius: 50%;
   }
 
-  .btn-block, .btn-link {
-    font-size: .75rem;
+  .welcome-msg {
+    max-width:50%;
+    margin: 3rem auto;
+    color: #acb6bf;
   }
+  .welcome-msg h2 {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  .welcome-msg h2::after {
+    background-color: #04aee7;
+    content: " ";
+    display: block;
+    height: 2px;
+    margin: 1rem auto;
+    width: 2rem;
+  }
+  .welcome-msg p {
+    text-align:left;
+    font-size: 0.8rem;
 
-
+  }
 
   .sidebar{
     height: 90vh;
     border-right: 1px solid #353948;
   }
 
+
   .tool-panel{
     height: 10vh;
     margin-top:-10vh;
   }
-  /* .too-panel a{
-    font-weight: 100;
-  } */
+
+
   @media (max-width: 768px) {
   body {
       overflow-x: hidden !important;
   }
   .main-container {
-    /* background-color:#252525; */
-    background-color:#474747;
+    height: 100vh;
     max-width: 100% !important;
     overflow-x: hidden !important;
   }
+  .header{
+    height: 7vh;
+  }
   .image-container {
-    height: 80vh;
+    height: 75vh;
     margin-right:0 !important;
-    border-radius: 0 0 0 0;
-    background-color:#333333;
-    /* background-color:#252525; */
-    /* background-color:#474747; */
+  }
+  .mobile-analysis-tools {
+    height:10vh;
+  }
+  .tool-panel {
+    height: 7vh;
+    margin-top: 0;
   }
 }
 </style>
@@ -139,6 +173,16 @@
           <h1 style="font-size:1.25rem;margin-bottom:0;"><img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." style="width:2.2rem;height:auto;padding-right:.5rem" /><a class="d-inline-block" style="color:#d5d5d5;padding-right:.3rem" href="../">Infragram</a><small style="font-size:.655rem;color:#777777;">by <a href="http://publiclab.org" target="_blank" style="font-size:.9rem;color:#04aee7;padding-left:.22rem">Public Lab</a></small></h1>
         </div>
 
+          <!-- =================== camera/image selection ======================== -->
+
+        <div class="d-flex align-items-center">
+          <a tabindex="0" class="btn steps step1" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="Drop and Image/Video below or upload one from your computer.">Step 1</a>
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mx-3" style="width:2.2rem;height:1.8rem;"><i class="fa fa-camera-retro" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Dropdown for image upload options"></i>&nbsp;&#10549;</a>
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" style="width:2.2rem;height:1.8rem;"><i class="fa fa-video-camera" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Dropdown menu webcam resolutions"></i></i>&nbsp;&#10549;</a>
+        </div>
+
+          <!-- =================== nav links/help menus ======================== -->
+
         <nav class="header-icons d-flex justify-content-between align-items-center">
           <a class="nav-item" type="button" href="https://infragram.org/"><i class="fa fa-home"></i></a>
           <div class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Dropdown menu for Tutorials, Help, Tips, Obtain a kit...">
@@ -151,7 +195,7 @@
               <a class="dropdown-item nav-link" href="#">Troubleshooting</a>
             </div> -->
           </div>
-          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will Include Save, Download and Export links." style="width:2.2rem;height:1.8rem;"><i class="fa fa-save pr-1"></i>&nbsp;&#10549;</a>
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This dropdown will Include Save, Download and Export links." style="width:2.2rem;height:1.8rem;"><i class="fa fa-save pr-1"></i>&nbsp;&#10549;</a>
           <!-- ================= SAVE/DOWNLOAD/EXPORT ICONS ================== -->
           <!-- <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Save"><i class="fa fa-white fa-save pr-1"></i></a>
           <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Download"><i class="fa fa-white fa-download pr-1"></i></a>
@@ -167,113 +211,97 @@
 
       <!-- ================ SIDEBAR ====================== -->
 
-      <div class="col-12 col-md-2 mobile-row d-flex flex-md-column justify-content-md-around align-items-md-start sidebar pl-4">
+      <div class="col-12 d-none col-md-2 d-md-flex flex-md-column justify-content-md-around align-items-md-start sidebar pl-4">
 
-        <!-- Desktop "side-bar" Quick-Start -->
-        <div class="d-none d-md-block">
-          <p>QUICK START<a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Discover our techniques!"><i class="fa fa-info-circle pl-2"></i></a></p>
-          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group pr-1">
-              <a type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Raw image, just what your camera sees."><i class="fa fa-magic"></i></a>
+        <a tabindex="0" class="btn steps sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>
+
+        <div style="margin-top:-3.5rem;">
+          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a></p>
+          <!-- Desktop "side-bar" Quick-Start -->
+          <div class="d-none d-md-block">
+            <p><code>QUICK START</code><a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Discover our techniques!"><i class="fa fa-info-circle pl-2"></i></a></p>
+
+            <div class="">
+              <a type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Raw image, just what your camera sees.">&empty;</a>
             </div>
-            <div class="btn-group pr-1">
-              <a type="button" href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI BLUE FILTER plant  analysis for filter packs and webcams." style="color:#347ab7;"><i class="fa fa-magic"></i></a>
-              <a type="button" href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="color:#347ab7;"><i class="fa fa-adjust"></i></a>
+
+            <!-- -------------------- blue filters --------------------- -->
+
+            <div class="">
+              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI BLUE FILTER plant  analysis for filter packs and webcams." style="color:#347ab7;"><i class="fa fa-filter" aria-hidden="true"></i></a>
+              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;">NDVI</a>
+              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;border-left: 1px solid #353948;">Colorize</a>
             </div>
-            <div class="btn-group">
-              <a href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI RED FILTER plant analysis for Infragram Point & Shoot cameras." style="color:rgb(163, 24, 24);"><i class="fa fa-magic"></i></a>
-              <a href="#" class="btn btn-dark"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI RED FILTER plant analysis for Infragram Point & Shoot cameras." style="color:rgb(163, 24, 24);"><i class="fa fa-adjust"></i></a>
+
+            <!-- -------------------- red filters --------------------- -->
+            <div class="">
+              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI BLUE FILTER plant  analysis for filter packs and webcams." style="color:rgb(163, 24, 24);"><i class="fa fa-filter" aria-hidden="true"></i></a>
+              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;">NDVI</a>
+              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;border-left: 1px solid #353948;">Colorize</a>
             </div>
+
+          </div>
+          <!-- Desktop Analyze/Colorize/Overlay/Run -->
+          <div class="d-none d-md-block">
+            <div class="btn-toolbar mb-2" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group">
+                <a href="#" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Greyscale" style="font-size:.75em;color:white;"><i class="fa fa-paint-brush"></i></a>
+                <a type="button" class="btn btn-outline-secondary ml-1" data-toggle="tooltip" data-placement="bottom" title="RGB" style="font-size:.75em;"><i class="fa fa-cubes"></i></a>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-block mb-3" style="width:65%;">Convert/Run</button>
           </div>
         </div>
 
-        <!-- Desktop Analyze/Colorize/Overlay/Run -->
-        <div class="d-none d-md-block">
-          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Learn about our processing algorithms and more..."><i class="fa fa-info-circle pl-2"></i></a></p>
-          <div class="btn-toolbar mb-2" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group">
-              <a href="#" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Greyscale" style="font-size:.75em;color:white;"><i class="fa fa-paint-brush"></i></a>
-              <a type="button" class="btn btn-outline-secondary ml-1" data-toggle="tooltip" data-placement="bottom" title="RGB" style="font-size:.75em;"><i class="fa fa-cubes"></i></a>
+        <a tabindex="0" class="btn steps sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>
+
+        <div style="margin-top:-3.5rem;">
+          <p>COLORIZE (optional)</p>
+            <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group">
+                <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Default map"><i class="fa fa-adjust"></i></a>
+                <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Stretch map">&#8748;</a>
+              </div>
             </div>
-          </div>
-          <button type="button" class="btn btn-outline-secondary btn-block mb-3" style="width:65%;">Convert/Run</button>
-
-          <p>COLORMAP</p>
-
-          <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group">
-              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Default"><i class="fa fa-adjust"></i></a>
-              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Stretch">&#8748;</a>
-              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export"><i class="fa fa-thumbs-up"></i></a>
-            </div>
-          </div>
-
         </div>
-
-
-
       </div>
 
-      <!-- Image/Screen/Canvas/Camera.. for Mobile and Desktop -->
-      <!-- TODO - fix margin-right on mobile -->
-      <div class="col-12 col-md-10 image-container"></div>
+      <!--================== IMAGE-SCREEN-CANVAS ================= -->
+
+      <div class="col-12 col-md-10 image-container">
+        <div style="display:none;"><div id="webcam"></div></div>
 
 
-        <!-- -----------BOTTOM ROW TOOL PANEL ------------------------ -->
-
-      <div class="col-12 col-md-10 offset-md-2 tool-panel d-md-flex justify-content-md-between align-items-md-center" style='border-top: 1px solid #353948;border-left: 1px solid #353948;height:2.7em;'>
-
-        <!-- -----------ADJUSTMENT TS: REVERT, FLIP, OVERLAY ------------------------ -->
-
-        <div class="d-flex justify-content-start align-items-center" style="width:33%">
-          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mr-3" type="button" href="#" style="width:2.2rem;height:1.8rem;"><i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" title="Revert to Basic Analysis"></i></a>
-
-          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mr-3" type="button" href="#" style="width:2.2rem;height:1.8rem;"><i class="fa fa-chevron-left pr-2" data-toggle="tooltip" data-placement="bottom" title="Flip Left"></i> &nbsp; | &nbsp;<i class="fa fa-chevron-right pl-2" data-toggle="tooltip" data-placement="bottom" title="Flip Right"></i></a>
-
-          <!-- <p>OVERLAY</p> -->
-          <div class="d-flex justify-content-md-around align-items-md-center">
-            <a id="overlay-btn" class="btn btn-outline-secondary d-flex justify-content-center align-items-center ml-2" style="width:1.25rem;height:1.25rem;" data-toggle="tooltip" data-placement="bottom" title="Overlay">
-              <i class="fa fa-th" aria-hidden="true"></i>
-            </a>
-            <!-- <div class="col-md-8 d-md-flex flex-md-column justify-content-md-center align-items-md-center d-none" id="overlay-controls-container"> -->
-
-            <!-- </div> -->
-          </div>
-        </div>
 
 
-        <!-- -----------ZOOM ------------------------ -->
-        <div class="d-flex justify-content-md-center align-items-md-center" style="width:33%">
-          <i class="fa fa-minus-circle pr-2" data-toggle="tooltip" data-placement="bottom" title="Zoom Out"></i>
-          <form>
-            <div class="form-group mb-0">
-              <input type="range" class="form-control-range" id="formControlRange">
-            </div>
-          </form>
-          <i class="fa fa-plus-circle pl-2" data-toggle="tooltip" data-placement="bottom" title="Zoom In"></i>
-        </div>
+        <div onClick="$('.choose-prompt').hide();" class="choose-prompt welcome-msg">
 
-        <!-- -----------VIDEO CONTROLS------------------------ -->
-
-        <div class="d-flex justify-content-md-end align-items-md-center" style="width:33%">
-          <div class="btn-group">
-            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-play" data-toggle="tooltip" data-placement="bottom" title="Play"></i></a>
-            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-pause" data-toggle="tooltip" data-placement="bottom" title="Plause"></i></a>
-            <a type="button" class="btn disabled data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
-            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-expand" data-toggle="tooltip" data-placement="bottom" title="Expand"></i></a>
-          </div>
-
+          <h2>Analyze plant health <br> & visualize photosynthesis.</h2>
+          <p>Every pixel of your infragram media is converted to display the amount of infrared light reflected in vegetation. The default setting generates grey-scale <code> NDVI </code>or Normalized Difference Vegetation Index.</p>
+          <p class="mt-4 px-4"><span class="font-weight-bold"> Get up and running in seconds with the default <code>Quick Start settings:</code></span><br> <span class="d-inline-block px-4"> Under your filter type select:<br><code>NDVI</code> - auto-loads your converted image OR <br><code>Colorize</code> - empahsizes infrared differentiation.</span></p>
 
         </div>
 
+        <!-- <i class="fa fa-bolt" aria-hidden="true"></i><p>Use the Quick Start option to get up and running quickly</p> -->
 
+        <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
+        <div id="overlay-container" class="container" style="display:none;">
+          <img id="overlay-img" src="assets/grid.svg">
+        </div>
+        <!-- <canvas class="fullscreen" id="image" width="800" height="600"></canvas> -->
+
+        <div id="colorbar-container" style="display:none;">
+          <span id="colorbar-min">-1.00</span>
+          <canvas id="colorbar"></canvas>
+          <span id="colorbar-max">1.00</span>
+        </div>
       </div>
 
 
 
       <!-- Mobile Analyze/Colorize/Overlay/Run -->
 
-      <div class="col-12 d-md-none d-flex justify-content-between align-items-baseline mt-2 mobile-row">
+      <div class="col-12 d-md-none d-flex justify-content-between align-items-baseline mobile-analysis-tools">
         <div class="d-flex flex-column">
           <p>OVERLAY</p>
           <div class="">
@@ -319,6 +347,60 @@
       </div>
 
 
+      <!-- -----------BOTTOM ROW TOOL PANEL ------------------------ -->
+
+      <div class="tool-panel col-12 col-md-10 offset-md-2 d-flex justify-content-between align-items-center" style='border-top: 1px solid #353948;border-left: 1px solid #353948;'>
+
+        <!-- -----------ADJUSTMENT TS: REVERT, FLIP, OVERLAY ------------------------ -->
+
+        <div class="d-flex justify-content-start align-items-center" style="width:33%">
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mr-3" type="button" href="#" style="width:2.2rem;height:1.8rem;"><i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" title="Revert to Basic Analysis"></i></a>
+
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mr-3" type="button" href="#" style="width:2.2rem;height:1.8rem;"><i class="fa fa-chevron-left pr-2" data-toggle="tooltip" data-placement="bottom" title="Flip Left"></i> &nbsp; | &nbsp;<i class="fa fa-chevron-right pl-2" data-toggle="tooltip" data-placement="bottom" title="Flip Right"></i></a>
+
+          <!-- <p>OVERLAY</p> -->
+          <div class="d-flex justify-content-md-around align-items-md-center">
+            <a id="overlay-btn" class="btn btn-outline-secondary d-flex justify-content-center align-items-center ml-2" style="width:1.25rem;height:1.25rem;" data-toggle="tooltip" data-placement="bottom" title="Overlay">
+              <i class="fa fa-th" aria-hidden="true"></i>
+            </a>
+            <!-- <div class="col-md-8 d-md-flex flex-md-column justify-content-md-center align-items-md-center d-none" id="overlay-controls-container"> -->
+
+            <!-- </div> -->
+          </div>
+        </div>
+
+
+        <!-- -----------ZOOM ------------------------ -->
+        <div class="d-flex justify-content-center align-items-center" style="width:33%">
+          <i class="fa fa-minus-circle pr-2" data-toggle="tooltip" data-placement="bottom" title="Zoom Out"></i>
+          <form>
+            <div class="form-group mb-0">
+              <input type="range" class="form-control-range" id="formControlRange">
+            </div>
+          </form>
+          <i class="fa fa-plus-circle pl-2" data-toggle="tooltip" data-placement="bottom" title="Zoom In"></i>
+        </div>
+
+        <!-- -----------VIDEO CONTROLS------------------------ -->
+
+        <div class="d-flex justify-content-end align-items-center" style="width:33%">
+          <div class="btn-group">
+            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-play" data-toggle="tooltip" data-placement="bottom" title="Play"></i></a>
+            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-pause" data-toggle="tooltip" data-placement="bottom" title="Plause"></i></a>
+            <a type="button" class="btn disabled data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
+            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-expand" data-toggle="tooltip" data-placement="bottom" title="Expand -- TODO: we need to add a full-scrren close button..."></i></a>
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+
 
     </div>
 
@@ -330,10 +412,14 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-    // $(document).ready(function(){
-    //     $('.dropdown-toggle').dropdown()
-    // });
-    // $('.in,.open').removeClass('in open');
+
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+
+    $('.popover-dismiss').popover({
+      trigger: 'focus'
+    })
   </script>
 
 </body>
