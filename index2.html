@@ -6,100 +6,168 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
 
   <!-- <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet"> -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+
 
 </head>
 <style>
+  *{
+    border:1px solid red;
+  }
+  @font-face {
+  font-family:'junctionregular';
+  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
+  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot?#iefix") format("embedded-opentype"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff") format("woff"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf") format("truetype"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular") format("svg");
+}
 
+  h1,h2,h3,h4,h5,h6{
+    font-family: junctionregular, "lucida grande", "lucida sans console", sans-serif;
+    font-weight:normal;
+  }
+  p {
+      font-size: .7rem;
+      margin-bottom: 5px;
+    }
+  i {
+    font-weight: 100;
+
+  }
   body{
     color: #d5d5d5;
+    font-weight: 300;
   }
   .main-container {
-    height:100vh;
-    background-color:#252525;
+    height: 100vh;
+    border: 1px solid #353948;
+    background-color:#151b22;
+    /* background-color:#242631; */
+    /* background-color:#252525; */
     /* background-color: #474747; */
   }
   .image-container {
-    height:92vh;
-    background-color:#474747;
+    height: 80vh;
+    background-color:#0d1118;
+    /* background-color:#1c1d26; */
+    /* background-color:#474747; */
     /* background-color:#252525; */
-    border-radius: 9px 9px 0 0;
+
+  }
+  .logo{
+    height: auto;
+    width: 2.2rem;
+  }
+  .header{
+    height:10vh;
+    padding: 0 2rem;
+  }
+
+  .header-icons a{
+    color: rgb(197, 195, 195);
+    font-size: 1rem;
+    margin-left: 1.25rem;
   }
   .btn {
     color: #d5d5d5;
+    background-color: transparent;
+    border: none;
   }
 
   .btn-block, .btn-link {
     font-size: .75rem;
   }
 
-  p {
-    font-size: .7rem;
-    margin-bottom: 5px;
+
+
+  .sidebar{
+    height: 90vh;
+    border-right: 1px solid #353948;
   }
 
-  .tool-panel .btn-toolbar a {
-    width: 1.25rem;
-    height: 1.25rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .tool-panel{
+    height: 10vh;
+    margin-top:-10vh;
   }
-
-  .mobile-icons a {
-    color: rgb(197, 195, 195);
-    font-size: 1.75rem;
-    padding-left: 1.25rem;
-  }
-
+  /* .too-panel a{
+    font-weight: 100;
+  } */
   @media (max-width: 768px) {
+  body {
+      overflow-x: hidden !important;
+  }
   .main-container {
     /* background-color:#252525; */
     background-color:#474747;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
   .image-container {
     height: 80vh;
     margin-right:0 !important;
     border-radius: 0 0 0 0;
-    background-color:#252525;
+    background-color:#333333;
+    /* background-color:#252525; */
     /* background-color:#474747; */
   }
 }
 </style>
 <body>
-  <div class="container-fluid d-flex flex-column flex-md-column-reverse main-container">
-
+  <div class="container-fluid d-flex flex-column main-container">
+    <!-- TODO: change this: -->
     <!-- This is the container for the entire page - it currently has 2 rows. The second row was created for "extra space" for future modal additions and current stretch goals. As I continue to code I am finding that it is most likely not needed. -->
+
+    <!-- ================= HEADER ========================= -->
+
+    <div class="row" style="border-bottom: 1px solid #353948;">
+      <div class="col-12 header d-flex justify-content-between align-items-center">
+        <div d-flex>
+          <h1 style="font-size:1.25rem;margin-bottom:0;"><img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." style="width:2.2rem;height:auto;padding-right:.5rem" /><a class="d-inline-block" style="color:#d5d5d5;padding-right:.3rem" href="../">Infragram</a><small style="font-size:.655rem;color:#777777;">by <a href="http://publiclab.org" target="_blank" style="font-size:.9rem;color:#04aee7;padding-left:.22rem">Public Lab</a></small></h1>
+        </div>
+
+        <nav class="header-icons d-flex justify-content-between align-items-center">
+          <a class="nav-item" type="button" href="https://infragram.org/"><i class="fa fa-home"></i></a>
+          <div class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Dropdown menu for Tutorials, Help, Tips, Obtain a kit...">
+            <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" data-toggle="dropdown" role="button" href="#"aria-expanded="false" style="width:2.2rem;height:1.8rem;"><i class="fa fa-question-circle-o"></i>&nbsp;&#10549;</a>
+            <!-- <div class="dropdown-menu nav-link" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item nav-link" href="#">Tutorial</a>
+              <a class="dropdown-item nav-link" href="#">Help</a>
+              <a class="dropdown-item nav-link" href="#">Tips</a>
+              <a class="dropdown-item nav-link" href="#">Obtain a kit</a>
+              <a class="dropdown-item nav-link" href="#">Troubleshooting</a>
+            </div> -->
+          </div>
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center" type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will Include Save, Download and Export links." style="width:2.2rem;height:1.8rem;"><i class="fa fa-save pr-1"></i>&nbsp;&#10549;</a>
+          <!-- ================= SAVE/DOWNLOAD/EXPORT ICONS ================== -->
+          <!-- <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Save"><i class="fa fa-white fa-save pr-1"></i></a>
+          <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Download"><i class="fa fa-white fa-download pr-1"></i></a>
+          <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export">&#8599;</a> -->
+        </nav>
+      </div>
+    </div>
+
+      <!-- ================ MAIN CONTENT "ROW" =====================
+      ========SIDEBAR, IMAGE CONTAINER, LOWER TOOL PANEL ====== -->
 
     <div class="row">
 
-      <!-- This single row has 3 "columns," each full width for the mobile layout. The third column is not displayed on desktop (the content has been "duplicated" in the first) and the second is for the image container/canvas/screen/upload... -->
+      <!-- ================ SIDEBAR ====================== -->
 
-      <div class="col-12 col-md-2 mobile-row d-flex flex-md-column justify-content-md-around align-items-md-start tool-panel pl-4" style="margin-left:-10px;">
-
-        <!-- Top "header-row" of mobile layout -->
-        <div class="d-md-none w-100 d-flex justify-content-between align-items-center py-1">
-          <div class="mobile-icons">
-            <img src="assets/favicon.ico" alt="logo">
-            <a type="button" href="https://infragram.org/"><i class="fa fa-home"></i></a>
-          </div>
-          <div class="mobile-icons">
-            <a type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will open to the quick start modal - the welcome message will include this and further info."><i class="fa fa-cog"></i></a>
-            <a type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will be a dropdown for what was the 4th row on mobile devices...links to Tutorials, help, tips and kits!">&#x3f;</a>
-            <a type="button" href="#" data-toggle="tooltip" data-placement="bottom" title="This will Include Save, Download and Export links."><i class="fa fa-save pr-1"></i></a>
-          </div>
-        </div>
+      <div class="col-12 col-md-2 mobile-row d-flex flex-md-column justify-content-md-around align-items-md-start sidebar pl-4">
 
         <!-- Desktop "side-bar" Quick-Start -->
         <div class="d-none d-md-block">
@@ -140,44 +208,68 @@
             </div>
           </div>
 
-          <p>OVERLAY</p>
-          <div class="row justify-content-md-around align-items-md-center mb-3" style="margin-top:-.7rem;">
-            <button id="overlay-btn" class="btn btn-outline-secondary d-flex justify-content-center align-items-center ml-2" style="width:1.25rem;height:1.25rem;">
-              <i class="fa fa-th" aria-hidden="true"></i>
-            </button>
-            <div class="col-md-8 d-md-flex flex-md-column justify-content-md-center align-items-md-center invisible" id="overlay-controls-container">
-              <input id="overlay-slider" data-slider-id="data-slider"class="custom-range" type="range" min="10" max="50" value="100" style="max-width:80%;" />
-              <span id="overlay-size" style="color:#ccc;"></span>
-              <button id="overlay-save-btn" class="btn btn-sm btn-outline-secondary d-flex justify-content-center align-items-center" style="height:1.25rem;width:2.75rem;font-size:.75rem;">Save</button>
-              <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
-            </div>
-          </div>
-
-          <p>ADJUSTMENTS</p>
-
-          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group">
-              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="zoom???">&infin;</a>
-              <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="flip imag???">&#8800;</a>
-              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="???">&#8721;</a>
-            </div>
-          </div>
         </div>
 
-        <!-- Desktop Save/Download/Export -->
-        <div class="d-none d-md-block">
-          <p>OUTPUT</p>
-          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Save"><i class="fa fa-white fa-save pr-1"></i></a>
-            <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Download"><i class="fa fa-white fa-download pr-1"></i></a>
-            <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export">&#8599;</a>
-          </div>
-        </div>
+
+
       </div>
 
       <!-- Image/Screen/Canvas/Camera.. for Mobile and Desktop -->
       <!-- TODO - fix margin-right on mobile -->
-      <div class="col-12 col-md-10 image-container" style="margin-right:10px;"></div>
+      <div class="col-12 col-md-10 image-container"></div>
+
+
+        <!-- -----------BOTTOM ROW TOOL PANEL ------------------------ -->
+
+      <div class="col-12 col-md-10 offset-md-2 tool-panel d-md-flex justify-content-md-between align-items-md-center" style='border-top: 1px solid #353948;border-left: 1px solid #353948;height:2.7em;'>
+
+        <!-- -----------ADJUSTMENT TS: REVERT, FLIP, OVERLAY ------------------------ -->
+
+        <div class="d-flex justify-content-start align-items-center" style="width:33%">
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mr-3" type="button" href="#" style="width:2.2rem;height:1.8rem;"><i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" title="Revert to Basic Analysis"></i></a>
+
+          <a class="nav-link btn btn-dark d-flex justify-content-center align-items-center mr-3" type="button" href="#" style="width:2.2rem;height:1.8rem;"><i class="fa fa-chevron-left pr-2" data-toggle="tooltip" data-placement="bottom" title="Flip Left"></i> &nbsp; | &nbsp;<i class="fa fa-chevron-right pl-2" data-toggle="tooltip" data-placement="bottom" title="Flip Right"></i></a>
+
+          <!-- <p>OVERLAY</p> -->
+          <div class="d-flex justify-content-md-around align-items-md-center">
+            <a id="overlay-btn" class="btn btn-outline-secondary d-flex justify-content-center align-items-center ml-2" style="width:1.25rem;height:1.25rem;" data-toggle="tooltip" data-placement="bottom" title="Overlay">
+              <i class="fa fa-th" aria-hidden="true"></i>
+            </a>
+            <!-- <div class="col-md-8 d-md-flex flex-md-column justify-content-md-center align-items-md-center d-none" id="overlay-controls-container"> -->
+
+            <!-- </div> -->
+          </div>
+        </div>
+
+
+        <!-- -----------ZOOM ------------------------ -->
+        <div class="d-flex justify-content-md-center align-items-md-center" style="width:33%">
+          <i class="fa fa-minus-circle pr-2" data-toggle="tooltip" data-placement="bottom" title="Zoom Out"></i>
+          <form>
+            <div class="form-group mb-0">
+              <input type="range" class="form-control-range" id="formControlRange">
+            </div>
+          </form>
+          <i class="fa fa-plus-circle pl-2" data-toggle="tooltip" data-placement="bottom" title="Zoom In"></i>
+        </div>
+
+        <!-- -----------VIDEO CONTROLS------------------------ -->
+
+        <div class="d-flex justify-content-md-end align-items-md-center" style="width:33%">
+          <div class="btn-group">
+            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-play" data-toggle="tooltip" data-placement="bottom" title="Play"></i></a>
+            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-pause" data-toggle="tooltip" data-placement="bottom" title="Plause"></i></a>
+            <a type="button" class="btn disabled data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
+            <a type="button" class="btn disabled" data-toggle="tooltip" data-placement="bottom" title="zoom???"><i class="fa fa-expand" data-toggle="tooltip" data-placement="bottom" title="Expand"></i></a>
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
 
       <!-- Mobile Analyze/Colorize/Overlay/Run -->
 
@@ -226,24 +318,23 @@
 
       </div>
 
+
+
     </div>
 
-    <!-- "header row" on Desktop, "4th row" on Mobile... MOVE THIS TO COLLAPSED MENU IN HEADER ON MOBILE???-->
+    <!-- 4th row - tools: zoom, video....-->
 
-  <div class="row">
-    <div class="col-12 col-md-12 d-none d-md-flex justify-content-center justify-content-md-end pr-md-5 mobile-row desktop-row-1 ">
-      <button type="button" class="btn btn-link">Tutorial</button>
-      <button type="button" class="btn btn-link">Help</button>
-      <button type="button" class="btn btn-link">Tips</button>
-      <button type="button" class="btn btn-link">Obtain a Kit</button>
-    </div>
-</div>
+  </div>
 
   <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
-    </script>
+    // $(document).ready(function(){
+    //     $('.dropdown-toggle').dropdown()
+    // });
+    // $('.in,.open').removeClass('in open');
+  </script>
 
 </body>
 </html>
