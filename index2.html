@@ -24,9 +24,9 @@
 
 </head>
 <style>
-  *{
-    border:1px solid red;
-  }
+  /* *{
+    border: 1px solid red;
+  } */
   @font-face {
   font-family:'junctionregular';
   src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
@@ -99,6 +99,9 @@
     border: 1px solid #353948;
     border-radius: 50%;
   }
+  .steps-spaceing{
+    margin-top: -3.5rem;
+  }
 
   .welcome-msg {
     max-width:50%;
@@ -127,13 +130,43 @@
     height: 90vh;
     border-right: 1px solid #353948;
   }
-
-
+  .divider::after {
+    background-color: #353948;
+    content: " ";
+    display: block;
+    height: 1px;
+    margin: 5px 0;
+    width: 30%;
+  }
+  .grey-scale::before{
+    background-color: #353948;
+    content: " ";
+    display: block;
+    height: 1px;
+    margin: .3rem 0;
+    width: 30%;
+  }
+  .grey-scale input{
+    max-width:66%;
+    height:1.5rem;
+    margin-bottom: .3rem;
+    background-color: #acb6bf;
+  }
+  .nir input{
+    max-width:22%;
+    background-color: #acb6bf;
+  }
   .tool-panel{
     height: 10vh;
     margin-top:-10vh;
   }
 
+  @media (max-width: 1050px){
+    .filters{
+      flex-direction:column;
+      align-items:start;
+    }
+  }
 
   @media (max-width: 768px) {
   body {
@@ -215,48 +248,55 @@
 
         <a tabindex="0" class="btn steps sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>
 
-        <div style="margin-top:-3.5rem;">
-          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a></p>
-          <!-- Desktop "side-bar" Quick-Start -->
+        <div class="steps-spacing">
+          <p class="divider">ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a></p>
+          <!--------------------------- Quick-Start ------------>
           <div class="d-none d-md-block">
-            <p><code>QUICK START</code><a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Discover our techniques!"><i class="fa fa-info-circle pl-2"></i></a></p>
+            <p><code>QUICK START</code><a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="thoughts on a modal for this ???"><i class="fa fa-info-circle pl-2"></i></a></p>
 
             <div class="">
-              <a type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Raw image, just what your camera sees.">&empty;</a>
+              <a type="button" class="btn py-0" data-toggle="tooltip" data-placement="bottom" title="Raw image, just what your camera sees." style="margin-left:-4px;">&empty;</a>
+              <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-toggle="tooltip" data-placement="bottom" title="Raw image, just what your camera sees." style="font-size:.7rem;margin-left:-5px;">Begin</a>
             </div>
 
             <!-- -------------------- blue filters --------------------- -->
 
-            <div class="">
+            <div class="d-flex filters">
               <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI BLUE FILTER plant  analysis for filter packs and webcams." style="color:#347ab7;"><i class="fa fa-filter" aria-hidden="true"></i></a>
-              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;">NDVI</a>
-              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;border-left: 1px solid #353948;">Colorize</a>
+              <div>
+                <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;">NDVI</a>
+                <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;border-left: 1px solid #353948;">Colorize</a>
+              </div>
             </div>
 
             <!-- -------------------- red filters --------------------- -->
-            <div class="">
+            <div class="d-flex filters">
               <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Basic NDVI BLUE FILTER plant  analysis for filter packs and webcams." style="color:rgb(163, 24, 24);"><i class="fa fa-filter" aria-hidden="true"></i></a>
-              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;">NDVI</a>
-              <a type="button" href="#" class="btn btn-sm"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;border-left: 1px solid #353948;">Colorize</a>
+              <div>
+                <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;">NDVI</a>
+                <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-toggle="tooltip" data-placement="bottom" title="Colorized NDVI BLUE FILTER plant analysis for filter packs and webcams." style="font-size:.7rem;border-left: 1px solid #353948;">Colorize</a>
+              </div>
             </div>
 
           </div>
-          <!-- Desktop Analyze/Colorize/Overlay/Run -->
-          <div class="d-none d-md-block">
-            <div class="btn-toolbar mb-2" role="toolbar" aria-label="Toolbar with button groups">
-              <div class="btn-group">
-                <a href="#" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Greyscale" style="font-size:.75em;color:white;"><i class="fa fa-paint-brush"></i></a>
-                <a type="button" class="btn btn-outline-secondary ml-1" data-toggle="tooltip" data-placement="bottom" title="RGB" style="font-size:.75em;"><i class="fa fa-cubes"></i></a>
-              </div>
+          <!-------------------- grey-scale  -  rgb ----------- -->
+          <div class="d-none d-md-block grey-scale">
+            <p><code style="color:#d5d5d5;">GREY-SCALE</code><a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Formulate your own mathematical expression for pixel conversion (i.e. input ((R+G)-(2*B))/((R+G)+(2*B)) for ENDVI, Enhanced Normalized Difference Vegetation Index). Create your own!"><i class="fa fa-info-circle pl-2"></i></a></p>
+            <input type="text" class="gray-scale-input">
+            <p><code style="color:#d5d5d5;">NIR (near-infrared) <br>channel mixer</code><a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Modify the value of the individual Red, Green or Blue channels. This is useful for swapping channels or altering pixel intensity (i.e. R/2 or B*5)."><i class="fa fa-info-circle pl-2"></i></a></p>
+            <div class="nir">
+              <input type="text"><input type="text"><input type="text">
             </div>
-            <button type="button" class="btn btn-outline-secondary btn-block mb-3" style="width:65%;">Convert/Run</button>
+            <button type="button" class="btn btn-outline-secondary btn-block" style="width:65%;">Run</button>
+
+
           </div>
         </div>
 
         <a tabindex="0" class="btn steps sidebar-step align-self-end" role="button" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>
 
-        <div style="margin-top:-3.5rem;">
-          <p>COLORIZE (optional)</p>
+        <div class="steps-spacing">
+          <p class="divider">COLORIZE (optional)</p>
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
               <div class="btn-group">
                 <a type="button" class="btn btn-outline-secondary mr-1" data-toggle="tooltip" data-placement="bottom" title="Default map"><i class="fa fa-adjust"></i></a>
@@ -276,7 +316,7 @@
 
         <div onClick="$('.choose-prompt').hide();" class="choose-prompt welcome-msg">
 
-          <h2>Analyze plant health <br> & visualize photosynthesis.</h2>
+          <h2>Analyze plant health. <br> Visualize photosynthesis.</h2>
           <p>Every pixel of your infragram media is converted to display the amount of infrared light reflected in vegetation. The default setting generates grey-scale <code> NDVI </code>or Normalized Difference Vegetation Index.</p>
           <p class="mt-4 px-4"><span class="font-weight-bold"> Get up and running in seconds with the default <code>Quick Start settings:</code></span><br> <span class="d-inline-block px-4"> Under your filter type select:<br><code>NDVI</code> - auto-loads your converted image OR <br><code>Colorize</code> - empahsizes infrared differentiation.</span></p>
 
@@ -298,51 +338,34 @@
       </div>
 
 
-
       <!-- Mobile Analyze/Colorize/Overlay/Run -->
 
-      <div class="col-12 d-md-none d-flex justify-content-between align-items-baseline mobile-analysis-tools">
-        <div class="d-flex flex-column">
-          <p>OVERLAY</p>
-          <div class="">
-            <button id="overlay-btn" class="btn btn-outline-secondary btn-large d-flex justify-content-center align-items-start" >
-              <i class="fa fa-th" aria-hidden="true"></i>
-            </button>
-            <div class="d-none" id="overlay-controls-container">
-              <input id="overlay-slider" data-slider-id="data-slider"class="custom-range" type="range" min="10" max="50" value="100" style="max-width:80%;" />
-              <span id="overlay-size" style="color:#ccc;"></span>
-              <button id="overlay-save-btn" class="btn btn-sm outline-secondary d-flex justify-content-center align-items-center" style="height:1.25rem;width:2.75rem;font-size:.75rem;">Save</button>
-              <span id="overlay-save-info" style="color:green; display: none;">Size saved!</span>
-            </div>
-          </div>
+      <div class="col-12 d-md-none d-flex justify-content-around align-items-center mobile-analysis-tools">
+
+        <div class="d-md-none">
+          <p><code>QUICK START</code><a role="button" target="_blank" href="#" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Create Collapable menu, modal or drop-up for these settings"><i class="fa fa-info-circle pl-2"></i></a></p>
         </div>
 
+        <p>
+          &#8592;&nbsp;<a tabindex="0" class="btn steps sidebar-step" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>&nbsp;&#8594;
+        </p>
 
         <div class="d-flex flex-column">
-          <p>COLORMAP</p>
-          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group ">
-              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Default"><i class="fa fa-adjust"></i></a>
-              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Stretch">&#8748;</a>
-              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Export"><i class="fa fa-thumbs-up"></i></a>
-            </div>
-          </div>
+          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Create Collapable menu, modal or drop-up for these settings"><i class="fa fa-info-circle pl-2"></i></a></p>
         </div>
-
-        <div class="d-flex flex-column">
-          <p>ANALYSIS MODE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Learn about our processing algorithms and more..."><i class="fa fa-info-circle pl-2"></i></a></p>
-          <div class="btn-toolbar " role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group">
-              <a href="#" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="Greyscale" style="font-size:.75em;color:white;"><i class="fa fa-paint-brush"></i></a>
-              <a type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="bottom" title="RGB" style="font-size:.75em;"><i class="fa fa-cubes"></i></a>
-            </div>
-          </div>
-
-        </div>
-        <div class="d-flex flex-column">
+        <!-- <div class="d-flex flex-column">
           <p>CONVERT</p>
           <button type="button" class="btn btn-outline-secondary btn-sm">Run</button>
+        </div> -->
+        <p><a tabindex="0" class="btn steps sidebar-step" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a>&nbsp;&#8594;</p>
+
+        <div class="d-flex flex-column">
+          <p>COLORIZE <a role="button" target="_blank" href="http://publiclab.org/infragrammar" style="color:#d5d5d5;font-size:.8rem;" data-toggle="tooltip" data-placement="bottom" title="Create Collapable menu, modal or drop-up for these settings"><i class="fa fa-info-circle pl-2"></i></a></p>
+
         </div>
+
+
+
 
       </div>
 
