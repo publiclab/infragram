@@ -2,7 +2,41 @@
 // http://github.com/p-v-o-s/infragram-js.
 
 module.exports = function File(options, processor) {
-
+  let getMouseEvent = () => {
+    const getParams = () => ({
+      bubbles: false, cancelable: false, screenX: 0, screenY: 0, clientX: 0, clientY: 0
+    });
+  
+    try {
+      // eslint-disable-next-line no-new
+      new MouseEvent("t");
+      getMouseEvent = () => (eventType, params = getParams()) => new MouseEvent(eventType, params);
+    } catch (e) {
+      // Polyfills DOM4 MouseEvent
+      getMouseEvent = () => (
+        eventType,
+        params = getParams()
+      ) => {
+        const mouseEvent = document.createEvent("MouseEvent");
+  
+        // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/initMouseEvent
+        mouseEvent.initMouseEvent(
+          eventType,
+          params.bubbles,
+          params.cancelable,
+          window,
+          0, // the event's mouse click count
+          params.screenX, params.screenY,
+          params.clientX, params.clientY,
+          false, false, false, false, 0, null
+        );
+  
+        return mouseEvent;
+      };
+    }
+  
+    return getMouseEvent();
+  };
   function downloadImage() {
     var event, format, lnk;
     // create an "off-screen" anchor tag
@@ -17,9 +51,13 @@ module.exports = function File(options, processor) {
     lnk.download = (new Date()).toISOString().replace(/:/g, "_") + "." + format;
     // create a "fake" click-event to trigger the download
     if (document.createEvent) {
-      event = document.createEvent("MouseEvents");
-      event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-      lnk.dispatchEvent(event);
+      const mouseEvent = getMouseEvent();
+          lnk.dispatchEvent(mouseEvent("click", {
+            screenX: 0,
+            screenY: 0,
+            clientX: 0,
+            clientY: 0
+          }))
     } else if (lnk.fireEvent) {
       lnk.fireEvent("onclick");
     }
