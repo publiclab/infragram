@@ -119,6 +119,8 @@ The mathematical expression which is run on each pixel follows a syntax we've ca
 
 If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel, and get a color image, but it's usually easier to just do that in the Colorize step (see below). Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B. This is useful for swapping channels, like displaying R as B.
 
+
+
 Read more about Infragrammar and modes here:
 
 * https://publiclab.org/infragrammar
@@ -165,13 +167,23 @@ Colorizing code for both processors can be found at https://github.com/publiclab
 
 ## Outputs
 
+The output of the above is dependent on the quality of the input. When using an "Infragram" multispectral camera, careful white balancing is essential for good NDVI images. The following are two examples of well-white-balanced images.
+
+| ![](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) | ![](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) |
+|:--:| :--:| 
+| *by [@mathew](https://publiclab.org/profile/mathew) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) on [Infragram](https://infragram.org/sandbox/index.html)* | *by [@warren](https://publiclab.org/profile/warren) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) on [Infragram](https://infragram.org/sandbox/index.html).*|
+
+Read more about white-balancing at [https://publiclab.org/wiki/infrablue-white-balance](https://publiclab.org/wiki/infrablue-white-balance).
+
+### Final Results
+
 Once the image is converted and (optionally) colorized, it can be downloaded. But there are two other options:
 
-### Export to PublicLab.org
+#### Export to PublicLab.org
 
 The image is encoded as a data-url and a new tab is opened with the Public Lab Editor at https://publiclab.org/post, with the image "sent" to become the main image. This is convoluted but easier than sending the image separately; see the [code for this here](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L235-L248). Images then appear with the tag `infragram-upload` on this page: https://publiclab.org/tag/infragram-upload
 
-### Export to Image Sequencer
+#### Export to Image Sequencer
 
 Similarly, we can "send" the image to https://sequencer.publiclab.org, as a data-url although it may fail for very large images since we must [send it in a GET request](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L250-L254). It is then run through a similar (but not identical, unfortunately) set of steps of conversion and colorizing, in the step-by-step interface of Image Sequencer, for fine-tuning. Learn more about this technique here: https://publiclab.org/notes/warren/08-02-2018/use-image-sequencer-for-ndvi-plant-analysis-with-a-modified-mini-sport-camera
 
@@ -191,3 +203,10 @@ See the deprecation label for more on this code: https://github.com/publiclab/in
 ## Pi and VR versions
 
 Two extra folders `/pi/` and `/vr/` are for different variants of the project, designed to be run on a [Raspberry Pi-based camera](https://publiclab.org/infragram-pi) (live-streaming video through the converter from the Pi camera) and for use with a VR headset with a Pi camera attached to the front. These are experimental but if major breaking changes are implemented in the main `index.html` file, we would like them to be ported over to these files as well, especially the `/pi/` version, so the interfaces look and work the same.
+
+
+
+
+
+
+
