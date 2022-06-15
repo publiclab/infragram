@@ -119,15 +119,12 @@ The mathematical expression which is run on each pixel follows a syntax we've ca
 
 If you change to HSV mode, you can set a different expression for Hue, Saturation, and Value of the resulting pixel, and get a color image, but it's usually easier to just do that in the Colorize step (see below). Finally, in RGB mode, you can set a different expression for each channel of the resulting pixel, R, G, or B. This is useful for swapping channels, like displaying R as B.
 
-
-
 Read more about Infragrammar and modes here:
 
 * https://publiclab.org/infragrammar
 * https://publiclab.org/notes/warren/08-24-2013/infragrammar-with-hsv-color-model
 
 Conversion with Infragrammar is handled by the Processor, described below.
-
 
 ## Processors
 
@@ -203,10 +200,3 @@ See the deprecation label for more on this code: https://github.com/publiclab/in
 ## Pi and VR versions
 
 Two extra folders `/pi/` and `/vr/` are for different variants of the project, designed to be run on a [Raspberry Pi-based camera](https://publiclab.org/infragram-pi) (live-streaming video through the converter from the Pi camera) and for use with a VR headset with a Pi camera attached to the front. These are experimental but if major breaking changes are implemented in the main `index.html` file, we would like them to be ported over to these files as well, especially the `/pi/` version, so the interfaces look and work the same.
-
-
-
-
-
-
-
