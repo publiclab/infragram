@@ -168,7 +168,7 @@ The output of the above is dependent on the quality of the input. When using an 
 
 | ![](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) | ![](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) |
 |:--:| :--:| 
-| *by [@mathew](https://publiclab.org/profile/mathew) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) on [Infragram](https://infragram.org/sandbox/index.html)* | *by [@warren](https://publiclab.org/profile/warren) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) on [Infragram](https://infragram.org/sandbox/index.html).*|
+| *A red-filtered image by [@mathew](https://publiclab.org/profile/mathew) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) on [Infragram](https://infragram.org/sandbox/index.html).* | *A blue-filtered image by [@warren](https://publiclab.org/profile/warren) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) on [Infragram](https://infragram.org/sandbox/index.html).*|
 
 Read more about white-balancing at [https://publiclab.org/wiki/infrablue-white-balance](https://publiclab.org/wiki/infrablue-white-balance).
 
