@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Infragram | by Public Lab - Home</title>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="description" content="Public Lab's online, open source service for generating plant health analyses from near-infrared imagery.">
+
+  <link rel="stylesheet" href="node_modules/bootstrap5/dist/css/bootstrap.min.css">
+  <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <!-- CSS Link -->
+  <link href="dist/infragram2.css" rel="stylesheet">
+
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/bootstrap5/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <script src="dist/infragram2.js"></script>
+
+
+</head>
+
+
+
+<body>
+  <div class="container-fluid d-flex flex-column main-container">
+    <!-- TODO: change this: -->
+    <!-- This is the container for the entire page - it currently has 2 rows: HEADER & MAIN-CONTENT. they are preceded by the STEPS -->
+
+      <!-- ====================== get started steps ========================== -->
+
+    <!-- <a tabindex="0" class="btn steps step1 phone-d-none" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-placement="bottom" data-bs-content="Drop an Image/Video below or upload one from your computer.">Step 1</a>
+    <a tabindex="0" class="btn steps step2 sidebar-step align-self-end" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-placement="right" data-bs-content="Choose an Analysis Mode for pixel conversion. ">Step 2</a>
+    <a tabindex="0" class="btn steps step3 sidebar-step align-self-end" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-placement="right" data-bs-content="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.">Step 3</a> -->
+
+    <!-- ====================================== HEADER ================================== -->
+    <!-- TODO: FIX RESPONSIVE @MAX-WIDTH:450PX -->
+
+    <div class="row" style="border-bottom: var(--border)">
+      <div class="col-12 header d-flex justify-content-between align-items-center">
+        <div class="d-flex">
+          <img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." class="logo" />
+          <h1 style="font-size:1.5rem;line-height:3.1rem;letter-spacing:0.09rem;margin-bottom:0;"><a class="phone-d-none" style="color:var(--white);padding-right:.3rem" href="../">Infragram</a><small class="phone-d-none" style="font-size:.875rem;color:var(--light-grey);">by <a href="http://publiclab.org" target="_blank" class="phone-d-none" style="font-size:1rem;color:var(--blue);">Public Lab</a></small></h1>
+        </div>
+
+          <!-- ========================= camera/image selection ======================== -->
+        <div class="btn-toolbar media-tools" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group" role="group" aria-label="First group">
+            <div class="btn-group" role="group">
+              <a id="btnGroupDrop1" role="button" type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-camera-retro"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="#">Upload</a></li>
+                <li><a class="dropdown-item" href="#"></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="btn-group" role="group" aria-label="Second group">
+            <div class="btn-group" role="group">
+              <a id="btnGroupDrop2" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-video-camera"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="#">Resolution 1</a></li>
+                <li><a class="dropdown-item" href="#">Resolution 2</a></li>
+                <li><a class="dropdown-item" href="#">Resolution 3</a></li>
+                <li><a class="dropdown-item" href="#">Resolution 4</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+          <!-- ============================ nav links/help menus ======================== -->
+        <nav class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group" role="group" aria-label="First group">
+            <a role="button" type="button" class="nav-item btn" href="https://infragram.org/">
+              <i class="fa fa-home"></i>
+            </a>
+          </div>
+          <div class="btn-group" role="group" aria-label="Second group">
+            <div class="btn-group" role="group">
+              <a id="btnGroupDrop3" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-question-circle-o"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="#">Tutorials</a></li>
+                <li><a class="dropdown-item" href="#">Help</a></li>
+                <li><a class="dropdown-item" href="#">Tips</a></li>
+                <li><a class="dropdown-item" href="#">Obtain a kit</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="btn-group" role="group" aria-label="Third group">
+            <div class="btn-group" role="group">
+              <a id="btnGroupDrop4" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-save"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="#">Save</a></li>
+                <li><a class="dropdown-item" href="#">Download</a></li>
+                <li><a class="dropdown-item" href="#">Export</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ============================== MAIN CONTENT "ROW" ==============================
+      ========SIDEBAR, IMAGE CONTAINER, LOWER TOOL PANEL ====== -->
+
+    <div class="row">
+
+      <!-- ================ SIDEBAR (Tool Panel)- not displayed on mobile================ -->
+
+      <div class="col-12 d-none col-md-2 d-md-flex flex-md-column justify-content-md-around align-items-md-start sidebar pl-4">
+        <div class="analysis-tools" style="height:100%;">
+
+          <!--------------------------- Quick-Start --------------------------------------->
+
+          <div class="pt-5">
+            <a class="btn btn-outline-secondary" data-bs-toggle="offcanvas" href="#quickStartGuide" role="button" aria-controls="quickStartGuide">QUICK START</a>
+            <p>Get up and running in seconds with our default settings. These will auto-load your raw or converted NDVI or Colorized media.</p>
+
+            <!-- ------------------ quick-start offcanvas panel ------------------------ -->
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="quickStartGuide" aria-labelledby="quickStartGuide">
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Quick start</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <div class="offcanvas-body">
+                <div class="mb-4">
+                  <h6>Raw</h6>
+                  <p>Just what your camera sees, no filters.</p>
+                  <div style="padding-left:1em;"><a type="button" href="#" class="btn btn-sm btn-outline-dark" style="font-size:.7rem;margin-left:-5px;">Begin</a></div>
+                </div>
+
+                <!-- -------------------- red filters --------------------- -->
+                <div class="mb-4">
+                  <h6>Red filters <i class="fa fa-filter" aria-hidden="true" style="color:rgb(163, 24, 24);"></i></h6>
+                  <p>Basic plant analysis for <a href="" style="color:var(--link-color);">Infragram Point & Shoot cameras</a>.</p>
+                  <div style="padding-left:1em;">
+                    <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Normalized Difference Vegetation Index." style="font-size:.7rem;">NDVI</a>
+                    <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges." style="font-size:.7rem;border-left: var(--border)">Colorize</a>
+                  </div>
+                </div>
+                <!-- -------------------- blue filters --------------------- -->
+                <div>
+                  <h6>BLUE filters <i class="fa fa-filter" aria-hidden="true" style="color:#347ab7;"></i></h6>
+                  <p>Basic plant analysis for <a href="" style="color:var(--link-color);">filter packs and webcams</a>.</p>
+                  <div style="padding-left:1em;">
+                    <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Normalized Difference Vegetation Index." style="font-size:.7rem;">NDVI</a>
+                    <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges." style="font-size:.7rem;border-left: var(--border)">Colorize</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- -------------------- CONVERT/ANALYZE --------------------------- -->
+
+          <div class="tool-divider">
+            <div id="analyze-dropdown" class="dropdown dropend">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton7" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                ANALYZE
+              </button>
+              <div class="dropdown-menu dropdown-menu-dark accordion .accordion-flush" id="analyzeDesktopAccordian" aria-labelledby="dropdownMenuButton7" style="background-color:var(--main-background-color);font-size:.625rem;">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Grey-scale (monochrome)
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#analyzeDesktopAccordian">
+                    <div class="accordion-body">
+                      <input placeholder="monochrome" type="text" id="m_exp" class="form-control" value="(R-B)/(R+B)">
+                      <button type="submit" class="btn btn-primary">Run</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      NIR (near-infrared) channel mixer
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#analyzeDesktopAccordian">
+                    <div class="accordion-body">
+                      <input placeholder="R" type="text" id="r_exp" class="form-control" value="R">
+                      <input placeholder="G" type="text" id="g_exp" class="form-control" value="G">
+                      <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
+                      <button type="submit" class="btn btn-primary">Run</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p>Formulate simple epressions or modify the individual color channels to generate your own pixel conversions!</p>
+              <a class="col-1 offset-8 info-icon d-block" style="margin-top:-1.5rem;" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a>
+            </div>
+          </div>
+
+          <!-- -------------------- COLORIZE --------------------------- -->
+          <div class="tool-divider">
+            <div class="btn-group" role="group">
+              <a id="btnGroupDrop6" type="submit" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                COLORIZE
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a id="default_colormap" class="dropdown-item" href="#">Default colormap</a></li>
+                <li><a id="stretched_colormap" class="dropdown-item" href="#">Stretched colormap</a></li>
+              </ul>
+            </div>
+            <p>(optional)</p>
+            <div>
+              <p>Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges.</p>
+              <a class="col-1 offset-8 d-block info-icon" style="margin-top:-1.5rem;" role="button" target="_blank" href="#" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things colormap"><i class="fa fa-info-circle pl-2"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!--============================ IMAGE-SCREEN-CANVAS ============================== -->
+
+      <div class="col-12 col-md-10 image-container">
+        <div style="display:none;"><div id="webcam"></div></div>
+
+        <!-- ========================= intro/welcome msg =============================== -->
+        <!-- onClick="$('.choose-prompt').hide();" -->
+        <div class="choose-prompt welcome-msg">
+          <div class="welcome-msg-text">
+            <h2 style="font-size:1.25rem;">Analyze plant health. <br> Visualize photosynthesis.</h2>
+            <p>Every pixel of your infragram media is converted to display the amount of infrared light reflected when used <a href="" style="color:var(--link-color);">with an Infragram camera or filter kit</a>. The default setting generates grey-scale NDVI, the Normalized Difference Vegetation Index, and has a built in colorize function to intensify individual pixel channels.</p>
+          </div>
+
+          <!-- ======================= get started upload/select ======================= -->
+          <div class="card text-center sample-images" style="max-width:15rem;">
+            <div class="card-body">
+              <p class="card-text" style="font-size:.625rem;"><small>Drop your media here, connect through your computer above <br class="sample-text-effect"> or <br> explore with our ready-to-use images</small></p>
+              <div class="d-flex justify-content-around">
+                <div class="d-flex flex-column justify-content-center align-items-baseline">
+                  <img src="assets/red-filtered-trees-thumbnail.jpeg" alt="Red filtered image - select to explore the tool." style="width:5rem;height:auto;border:.5rem solild var(--image-container-bg);">
+                  <p class="card-text" style="font-size:.625rem;padding-top:.5rem;"><small>Red filtered trees</small></p>
+                </div>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <img src="assets/blue-filtered-plant-thumbnail.jpeg" alt="Blue filtered image - select to explore the tool." style="width:5rem;height:auto;">
+                  <p class="card-text" style="font-size:.625rem;padding-top:.5rem;"><small>Blue filtered plant</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
+        <div id="overlay-container" class="container" style="display:none;">
+          <img id="overlay-img" src="assets/grid.svg" alt="grid overlay image">
+        </div>
+        <!-- <canvas class="fullscreen" id="image" width="800" height="600"></canvas> -->
+        <div id="colorbar-container" style="display:none;">
+          <span id="colorbar-min">-1.00</span>
+          <canvas id="colorbar"></canvas>
+          <span id="colorbar-max">1.00</span>
+        </div>
+      </div>
+
+      <!-------- MOBILE TOOL PANEL (3rd row on mobile - not displayed on desktop------------>
+
+      <div class="col-12 d-md-none d-flex justify-content-between align-items-center py-2 mobile-analysis-tools">
+
+        <!-- ==================== mobile - QUICK START ================================== -->
+        <div>
+          <div class="d-flex flex-column justif-content-center align-items-center">
+            <a class="btn btn-sm d-block" data-bs-toggle="offcanvas" href="#quickStartGuideMobile" role="button" aria-controls="quickStartGuide">QUICK START</a>
+            <p class="text-center">Default settings</p>
+          </div>
+
+          <!-- ------------------ quick-start offcanvas panel -------------------------- -->
+          <div class="offcanvas offcanvas-bottom" tabindex="-1" id="quickStartGuideMobile" aria-labelledby="quickStartGuideMobile">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title">Quick start</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body d-flex justify-content-center">
+
+              <!-- -------------------- red filters --------------------- -->
+              <div class="" style="width:35%;margin:0 1.5rem;">
+                <h6 style="text-decoration:underline;">Red filters <i class="fa fa-filter" aria-hidden="true" style="color:rgb(163, 24, 24);"></i></h6>
+                <p>Basic plant analysis for <a href="" style="color:var(--link-color);">Infragram Point & Shoot cameras</a>.</p>
+                <div style="padding-left:1em;">
+                  <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Normalized Difference Vegetation Index." style="font-size:.7rem;">NDVI</a>
+                  <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges." style="font-size:.7rem;border-left: var(--border)">Colorize</a>
+                </div>
+              </div>
+              <!-- -------------------- raw, no filters --------------------- -->
+              <div style="width:30%;margin:0 1.5rem;">
+                <h6 style="text-decoration:underline;">Raw</h6>
+                <p>Just what your camera sees, no filters.</p>
+                <div style="padding-left:1em;"><a type="button" href="#" class="btn btn-sm btn-outline-dark" style="font-size:.7rem;margin-left:-5px;">Begin</a></div>
+              </div>
+              <!-- -------------------- blue filters --------------------- -->
+              <div style="width:35%">
+                <h6 style="text-decoration:underline;">BLUE filters <i class="fa fa-filter" aria-hidden="true" style="color:#347ab7;"></i></h6>
+                <p>Basic plant analysis for <a href="" style="color:var(--link-color);">filter packs and webcams</a>.</p>
+                <div style="padding-left:1em;margin:0 1.5rem;">
+                  <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Normalized Difference Vegetation Index." style="font-size:.7rem;">NDVI</a>
+                  <a type="button" href="#" class="btn btn-sm btn-outline-secondary"  data-bs-toggle="tooltip" data-placement="bottom" title="Emphasizes high-photosynthesis areas by mapping grey-scale NDVI outputs to wide and intense color ranges." style="font-size:.7rem;border-left: var(--border)">Colorize</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================== mobile - ANALYSIS INPUTS ============================= -->
+        <div>
+          <div id="analyze-dropdown" class="dropdown dropup">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton7" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                ANALYSIS<br>INPUTS
+              </button>
+
+              <p class="text-center">Modify the equations<a class="info-icon" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a></p>
+
+            </div>
+            <div class="dropdown-menu dropdown-menu-dark accordion .accordion-flush" id="analyzeDesktopAccordian" aria-labelledby="dropdownMenuButton7" style="background-color:var(--main-background-color);font-size:.625rem;">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Grey-scale (monochrome)
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#analyzeDesktopAccordian">
+                  <div class="accordion-body">
+                    <input placeholder="monochrome" type="text" id="m_exp" class="form-control" value="(R-B)/(R+B)">
+                    <button type="submit" class="btn btn-primary">Run</button>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    NIR (near-infrared) channel mixer
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#analyzeDesktopAccordian">
+                  <div class="accordion-body">
+                    <input placeholder="R" type="text" id="r_exp" class="form-control" value="R">
+                    <input placeholder="G" type="text" id="g_exp" class="form-control" value="G">
+                    <input placeholder="B" type="text" id="b_exp" class="form-control" value="B">
+                    <button type="submit" class="btn btn-primary">Run</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ====================== mobile - COLORIZE =================================== -->
+        <div>
+          <div class="btn-group dropup d-flex flex-column justify-content-center align-items-center" role="group">
+            <div>
+              <a id="btnGroupDrop6" type="submit" class="btn btn-sm dropdown-toggle disabled" data-bs-toggle="dropdown" aria-expanded="false">
+                COLORIZE
+              </a>
+              <p class="text-center"> (optional)</p>
+              <p class="text-center">Emphasize outputs.<a class="info-icon" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things colormap"><i class="fa fa-info-circle pl-2"></i></a></p>
+
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+              <li><a id="default_colormap" class="dropdown-item" href="#">Default colormap</a></li>
+              <li><a id="stretched_colormap" class="dropdown-item" href="#">Stretched colormap</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- -------BOTTOM ROW TOOL PANEL (displayed on mobile & desktop) ----------------- -->
+      <!-- TODO: FIX RESPONSIVE @MAX-WIDTH:450PX -->
+
+      <div class="tool-panel col-12 col-md-10 offset-md-2 d-flex justify-content-around align-items-center" style='border-top: var(--border);border-left: var(--border);'>
+
+        <!-- -----------ADJUSTMENT TS: REVERT, FLIP, OVERLAY ---------------------------- -->
+
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group labeled" role="group" aria-label="First group">
+            <label for="revert">REVERT</label>
+            <a id="revert" role="button" type="button" class="btn btn-dark">
+              <i class="fa fa-refresh" data-bs-toggle="tooltip"="tooltip" data-placement="bottom" title="Revert to Basic Analysis"></i>
+            </a>
+          </div>
+          <div class="btn-group labeled" role="group" aria-label="Second group">
+            <label for="flip">FLIP</label>
+            <div id="flip" class="btn-group" role="group" aria-label="Second group">
+              <a role="button" type="button" class="btn btn-dark">
+                <i class="fa fa-chevron-left pr-2" data-bs-toggle="tooltip" data-placement="bottom" title="Flip Left"></i> |
+                <i class="fa fa-chevron-right pl-2" data-bs-toggle="tooltip" data-placement="bottom" title="Flip Right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="btn-group" role="group" aria-label="Third group">
+            <div class="btn-group labeled dropup" role="group">
+              <label for="btnGroupDrop5">OVERLAY</label>
+              <a id="btnGroupDrop5" role="button" type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-th" aria-hidden="true"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><input class="dropdown-item" id="overlay-slider" type="range" min="10" max="50" value="100" style="width:70%;"/></li>
+                <li><span class="dropdown-item" id="overlay-size" style="color:#ccc;"></span></li>
+                <li><button class="dropdown-item" id="overlay-save-btn" class="btn btn-primary">Save</button></li>
+                <li><span class="dropdown-item" id="overlay-save-info" style="color:green; display: none;">Size saved!</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ------------------------ ZOOM ---------------------------------------------- -->
+        <div class="btn-toolbar btn-group labeled" role="toolbar" aria-label="Toolbar with button groups">
+          <label for="zoom">ZOOM</label>
+          <div id="zoom" class="btn-group">
+            <div class="btn-group" role="group" aria-label="First group">
+              <a id="revert" role="button" type="button" class="btn btn-dark">
+                <i class="fa fa-minus-circle pr-2" data-bs-toggle="tooltip" data-placement="bottom" title="Zoom Out"></i>
+              </a>
+            </div>
+            <div class="btn-group labeled" role="group" aria-label="Second group">
+
+              <input type="range" class="form-control-range" id="formControlRange">
+            </div>
+            <div class="btn-group" role="group" aria-label="Third group">
+              <a id="revert" role="button" type="button" class="btn btn-dark">
+                <i class="fa fa-plus-circle pl-2" data-bs-toggle="tooltip" data-placement="bottom" title="Zoom In"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- -----------VIDEO CONTROLS------------------------ -->
+        <!-- ============ tools to be moved to canvas upon video upload ?????? ====== -->
+
+        <!-- <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group" role="group" aria-label="First group">
+            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-play" data-bs-toggle="tooltip" data-placement="bottom" title="Play"></i></a>
+          </div>
+          <div class="btn-group" role="group" aria-label="Second group">
+            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-pause" data-bs-toggle="tooltip" data-placement="bottom" title="Plause"></i></a>
+          </div>
+          <div class="btn-group" role="group" aria-label="Third group">
+            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-stop data-bs-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
+          </div>
+          <div class="btn-group" role="group" aria-label="Third group">
+            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-expand" data-bs-toggle="tooltip" data-placement="bottom" title="Expand -- TODO: we need to add a full-scrren close button..."></i></a>
+          </div>
+        </div> -->
+
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
