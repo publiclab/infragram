@@ -125,7 +125,6 @@ Read more about Infragrammar and modes here:
 
 Conversion with Infragrammar is handled by the Processor, described below.
 
-
 ## Processors
 
 Two separate systems are available for converting and colorizing: `javascript` and `webgl`, both using the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API). The [javascript](https://github.com/publiclab/infragram/blob/main/src/processors/javascript.js) processor is simpler to read, write, and debug but is slower. The [webgl](https://github.com/publiclab/infragram/blob/main/src/processors/webgl.js) processor is MUCH faster but very hard to code/modify/change.
@@ -164,13 +163,23 @@ Colorizing code for both processors can be found at https://github.com/publiclab
 
 ## Outputs
 
+The output of the above is dependent on the quality of the input. When using an "Infragram" multispectral camera, careful white balancing is essential for good NDVI images. The following are two examples of well-white-balanced images.
+
+| ![](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) | ![](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) |
+|:--:| :--:| 
+| *A red-filtered image by [@mathew](https://publiclab.org/profile/mathew) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/018/533/thumb/Rosco_26_filtered.JPG) on [Infragram](https://infragram.org/sandbox/index.html).* | *A blue-filtered image by [@warren](https://publiclab.org/profile/warren) - try processing [this image](https://storage.googleapis.com/publiclab-production/public/system/images/photos/000/001/647/thumb/IMG_0025.JPG) on [Infragram](https://infragram.org/sandbox/index.html).*|
+
+Read more about white-balancing at [https://publiclab.org/wiki/infrablue-white-balance](https://publiclab.org/wiki/infrablue-white-balance).
+
+### Final Results
+
 Once the image is converted and (optionally) colorized, it can be downloaded. But there are two other options:
 
-### Export to PublicLab.org
+#### Export to PublicLab.org
 
 The image is encoded as a data-url and a new tab is opened with the Public Lab Editor at https://publiclab.org/post, with the image "sent" to become the main image. This is convoluted but easier than sending the image separately; see the [code for this here](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L235-L248). Images then appear with the tag `infragram-upload` on this page: https://publiclab.org/tag/infragram-upload
 
-### Export to Image Sequencer
+#### Export to Image Sequencer
 
 Similarly, we can "send" the image to https://sequencer.publiclab.org, as a data-url although it may fail for very large images since we must [send it in a GET request](https://github.com/publiclab/infragram/blob/34d330001e3869da9caf34cb79d6dc7650c1db83/index.html#L250-L254). It is then run through a similar (but not identical, unfortunately) set of steps of conversion and colorizing, in the step-by-step interface of Image Sequencer, for fine-tuning. Learn more about this technique here: https://publiclab.org/notes/warren/08-02-2018/use-image-sequencer-for-ndvi-plant-analysis-with-a-modified-mini-sport-camera
 
