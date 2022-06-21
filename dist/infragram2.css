@@ -11,9 +11,6 @@
   --border: 1px solid #353948;
   }
 
-  *{
-    border: 1px solid red;
-  }
   @font-face {
   font-family:'junctionregular';
   src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
