@@ -1,0 +1,349 @@
+
+:root {
+  --blue: #04aee7;
+  --white: #d5d5d5;
+  --off-white: #acb6bf;
+  --light-grey: #777777;
+  --main-container-bg: #151b22;
+  --image-container-bg: #0d1118;
+  --link-color:  #00b7ff;
+  --border-grey: #353948;
+  --border: 1px solid #353948;
+  }
+
+  @font-face {
+  font-family:'junctionregular';
+  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
+  src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot?#iefix") format("embedded-opentype"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff") format("woff"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf") format("truetype"),
+      url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular") format("svg");
+  }
+
+  body {
+    max-height: 100vh;
+    color: var(--white);
+    font: normal 300 1rem "Lucida Grande", Helvetica, Arial, sans-serif;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    font-family: "junctionregular", "lucida grande", "lucida sans console", sans-serif;
+  }
+
+  p {
+    font-size: .875rem;
+  }
+
+  a {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  i {
+    font-weight: 100;
+  }
+
+  .btn {
+    color: var(--off-white);
+    background-color: transparent;
+    border: none;
+  }
+
+  .btn:hover {
+    color: var(--white);
+    background-color: var(--image-container-bg);
+    border: var(--border);
+  }
+
+  .btn-group label {
+    font-size: .625rem;
+  }
+
+  .labeled {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .main-container {
+    height: 100vh;
+    border: var(--border);
+    border-bottom: none;
+    background-color: var(--main-container-bg);
+    position: relative;
+  }
+
+  .steps {
+    height: 3rem;
+    width: 3rem;
+    font-size: .75rem;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color: transparent;
+    border: var(--border);
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .steps:hover {
+    color: var(--blue);
+    border: 1px solid var(--blue);
+  }
+
+  .step1 {
+    top:.3rem;
+    left:34rem;
+  }
+
+  .step2 {
+    top:7rem;
+    left:9rem;
+  }
+
+  .step3 {
+    top:25rem;
+    left:9rem;
+  }
+
+  .header {
+    height:11vh;
+    padding: 0 2rem;
+  }
+
+  .logo {
+    display:block;
+    height:2.75rem;
+    width:auto;
+    padding-right:.5rem;
+    padding-top:.5rem;
+  }
+
+  /* ---------------------------------------------   image container ----------------------- */
+  .image-container {
+    height: 78vh;
+    background-color:var(--image-container-bg);
+  }
+
+  .welcome-msg {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    color: var(--off-white);
+  }
+
+  .welcome-msg-text {
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  .welcome-msg-text h2 {
+    line-height: 1.875rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .welcome-msg-text h2::after {
+    background-color: var(--blue);
+    content: " ";
+    display: block;
+    height: 2px;
+    margin: 1rem auto;
+    width: 2.5rem;
+  }
+
+  .welcome-msg-text p {
+    text-align:left;
+    margin-bottom:3rem;
+  }
+
+  .sample-images {
+    margin: 0 auto;
+    background-color:var(--main-container-bg);
+  }
+
+    /* ---------------------------------------------   side-bar  --------------------------- */
+  .sidebar {
+    height: 89vh;
+    border-right: var(--border);
+  }
+
+  .info-icon {
+    font-size: .875rem;
+  }
+
+  .analysis-tools .btn {
+    font-size:.75rem;
+    margin-bottom: .3rem;
+    border: 1px solid var(--blue);
+  }
+
+  .analysis-tools p {
+    font-size:.625rem;
+    padding-left:.75rem;
+  }
+
+  #quickStartGuide {
+    width: 15rem;
+    background-color: var(--main-container-bg);
+  }
+
+  .tool-divider::before {
+    background-color: #353948;
+    content: " ";
+    display: block;
+    height: 1px;
+    margin-bottom: 1rem;
+    width: 4rem;
+  }
+
+  .accordion-item, .accordion-header, .accordion-body {
+    background-color: var(--main-container-bg) !important;
+    color: var(--white) !important;
+    font-size: .625rem !important;
+  }
+
+  .tool-panel {
+    height: 11vh;
+    margin-top:-11vh;
+  }
+
+  /* --------------------------------------------------   @media --------------------------- */
+  /* --------------------------------------------------   1100px --------------------------- */
+  @media (max-width: 1100px){
+    /* .steps{
+    height: 2.3rem;
+    width: 2.7rem;
+
+    } */
+    /* .step2{
+      right:-1.5rem;
+      z-index: 3;
+    } */
+    /* .step3{
+      margin-top: -2rem;
+    } */
+
+    .analysis-tools .btn{
+      font-size: .625rem;
+    }
+
+    .analysis-tools p {
+      padding-left: 0;
+    }
+    .welcome-msg-text {
+    max-width:80%;
+    }
+
+    .welcome-msg-text p {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  /* --------------------------------------------------   @media --------------------------- */
+  /* ---------------------------------------------------   768px --------------------------- */
+  @media (max-width: 768px) {
+  body {
+      overflow-x: hidden !important;
+  }
+
+  p {
+    font-size: .625rem;
+    margin-bottom: 0;
+  }
+
+  .btn-sm {
+    font-size: .625rem;
+  }
+
+  .main-container {
+    height: 100vh;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .header {
+    height: 7vh;
+    padding: 1rem;
+  }
+
+  .logo
+  {
+    padding-top: 0.5rem;
+    height:2.5rem;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  .media-tools {
+    margin-left: 7rem;
+  }
+
+  .image-container {
+    height: 73vh;
+    margin-right:0 !important;
+  }
+
+  .welcome-msg {
+    max-width:100%;
+  }
+
+  .mobile-analysis-tools {
+    height:10vh;
+  }
+
+  .tool-panel {
+    height: 10vh;
+    margin-top: 0;
+  }
+
+  #quickStartGuideMobile {
+    background-color: var(--main-container-bg);
+  }
+  }
+
+  /* --------------------------------------------------   @media --------------------------- */
+  /* ---------------------------------------------------   500px --------------------------- */
+  @media (max-width: 550px) {
+  .header {
+    justify-content: center;
+  }
+  .header .media-tools {
+    margin-left: 0;
+  }
+  .image-container {
+    height: 68vh;
+    margin-right:0 !important;
+  }
+
+  .mobile-analysis-tools {
+    height:15vh;
+  }
+
+  /* .mobile-analysis-tools-p{
+    font-size: .625rem;
+  } */
+
+  .welcome-msg {
+    margin: 1.5rem auto;
+  }
+  .welcome-msg-text {
+    width:90%;
+    margin: 0 auto;
+  }
+
+  .welcome-msg-text h2 {
+    line-height: 1.5rem;
+  }
+
+  .welcome-msg-text p {
+    margin-bottom:1.5rem;
+  }
+
+  #analyze-dropdown {
+    margin-left: 2rem;
+  }
+  }
