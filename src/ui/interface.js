@@ -1,4 +1,6 @@
-module.exports = function Interface(options) {
+module.exports = function Interface(options) {  
+  
+var isVideo = false, isCamera=false;
 
   options.imageSelector = options.imageSelector || "#image-container";
   options.fileSelector = options.fileSelector || "#file-sel";
@@ -86,7 +88,12 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    $("#webcam-activate").click(function() {
+    $("#webcam-activate").click(function () {
+      if(isVideo){
+        $("#localVideo").remove();      
+      }
+      isVideo  = false;
+      isCamera = true;
       $('.choose-prompt').hide();
       $("#save-modal-btn").show();
       $("#save-zone").show();
@@ -95,6 +102,61 @@ module.exports = function Interface(options) {
       $('#preset-modal').modal('show');
       return true;
     });
+
+    $("#local-video-activate").click(function () {
+      if(isCamera){ 
+        localStream.getVideoTracks()[0].stop();  
+      }             
+      isCamera = false;
+      if(!isVideo){ //Prevent Creation of Duplicate video Elements
+        localVideo = document.createElement('video');
+        localVideo.setAttribute("src", "../video.mp4");
+        localVideo.setAttribute("id", "localVideo");
+        localVideo.style.display = "none"               
+        localVideo.style.width = "100px";   
+        localVideo.style.height = "50px";    
+        document.getElementById("video-container").appendChild(localVideo);
+        localVideo.play();
+        localVideo.muted = true;
+        localVideo.loop = true;
+        document.getElementById("localVideoControls").style.display="block";
+        //Attach video Element tocustom Sleek Bar
+        localVideo.ontimeupdate = function(){
+          var percentage = ( localVideo.currentTime / localVideo.duration ) * 100;
+          $("#custom-seekbar span").css("width", percentage+"%");
+        };
+      }
+      isVideo  = true;
+      $('.choose-prompt').hide();
+      $("#save-modal-btn").show();
+      $("#save-zone").show();
+      save_infragrammar_inputs();
+      $('#preset-modal').modal('show');
+      return true;
+    });
+
+    //Start video controls
+    $("#custom-seekbar").on("click", function(e){
+      localVideo = document.getElementById('localVideo');
+      var offset = $(this).offset();
+      var left = (e.pageX - offset.left);
+      var totalWidth = $("#custom-seekbar").width();
+      var percentage = ( left / totalWidth );
+      var vidTime = localVideo.duration * percentage;
+      localVideo.currentTime = vidTime;
+    }); 
+
+    $("#localVideoPlayPause").on("click", function(e){
+      localVideo = document.getElementById('localVideo');
+      if (localVideo.paused){
+         localVideo.play();
+         document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-pause"></i>';             
+      }else {
+         localVideo.pause();
+         document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-play"></i>'; 
+        }
+    }); 
+    //End video controls
 
     $("#snapshot").click(function() {
       options.camera.getSnapshot();
