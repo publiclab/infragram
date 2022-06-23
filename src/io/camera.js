@@ -1,16 +1,18 @@
 // This file was adapted from infragram-js:
 // http://github.com/p-v-o-s/infragram-js.
 module.exports = function Camera(options) {
-  var canvas, 
-      ctx;
+  var canvas,
+  ctx;
 
   // Initialize getUserMedia with options
   function initialize() {
     getUserMedia(webRtcOptions, success, deviceError);
 
     // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685
-    webRtcOptions.videoEl.setAttribute('autoplay', 'autoplay');
-    webRtcOptions.videoEl.setAttribute('playsinline', 'playsinline');
+    webRtcOptions.videoEl.setAttribute('id', 'webCamVideoEl');
+    var webCamVideoEl = document.getElementById('webCamVideoEl')
+    webCamVideoEl.setAttribute('autoplay', 'autoplay');
+    webCamVideoEl.setAttribute('playsinline', 'playsinline');
 
     window.webcam = webRtcOptions; // this is weird but maybe used for flash fallback?
     canvas = options.canvas || document.getElementById("image");
@@ -78,26 +80,28 @@ module.exports = function Camera(options) {
 
   function success(stream) {
     var video;
+    window.localStream = stream;
+    isCamera = true;
     if (webRtcOptions.context === "webrtc") {
-      video = webRtcOptions.videoEl;
+      video = document.getElementById("webCamVideoEl");
       if (navigator.mozGetUserMedia) {
         video.mozSrcObject = stream;
       } else {
         video.srcObject = stream;
       }
-      return video.onerror = function(e) {
+      return video.onerror = function (e) {
         return stream.stop();
-      }
-    } else {
+      };
+      } else {
 
+      }    
     }
-  }
 
-  function deviceError(error) {
-    alert("No camera available.");
-    console.log(error);
-    return console.error("An error occurred: [CODE " + error.code + "]");
-  }
+      function deviceError(error) {
+        alert("No camera available.");
+        console.log(error);
+        return console.error("An error occurred: [CODE " + error.code + "]");
+      }
 
   // not doing anything now... for copying to a 2nd canvas
   function getSnapshot() {
@@ -113,17 +117,17 @@ module.exports = function Camera(options) {
     // Otherwise, if the context is Flash, we ask the shim to
     // directly call window.webcam, where our shim is located
     // and ask it to capture for us.
-    } else if (webRtcOptions.context === "flash") {
-      return window.webcam.capture();
-    } else {
-      console.log("No context was supplied to getSnapshot()");
-    }
+  } else if (webRtcOptions.context === "flash") {
+    return window.webcam.capture();
+  } else {
+    console.log("No context was supplied to getSnapshot()");
   }
+}
 
-  return {
-    getSnapshot: getSnapshot,
-    initialize: initialize,
-    onSaveGetUserMedia: onSaveGetUserMedia,
-    webRtcOptions: webRtcOptions
-  }
+return {
+  getSnapshot: getSnapshot,
+  initialize: initialize,
+  onSaveGetUserMedia: onSaveGetUserMedia,
+  webRtcOptions: webRtcOptions
+}
 }
