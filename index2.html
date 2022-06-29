@@ -20,31 +20,46 @@
   <script src="node_modules/jquery/dist/jquery.min.js"></script>
   <script src="node_modules/bootstrap5/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script src="dist/infragram.js"></script>
 
-  <script src="dist/infragram2.js"></script>
+  <script type="x-shader/x-vertex" id="shader-vs"></script>
+  <script type="x-shader/x-fragment" id="shader-fs-template"></script>
+  <script type="x-shader/x-fragment" id="shader-fs"></script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TC8EC01HKK"></script>
+
   <script>
+    window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TC8EC01HKK');
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+    // var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    // var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    //   return new bootstrap.Popover(popoverTriggerEl)
+    // });
+    // var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
+    //   trigger: 'focus'
+    // });
+
     document.addEventListener("DOMContentLoaded", function (event) {
     (function () {
       $('[data-bs-toggle="tooltip"]').tooltip()
     })();
     });
-    document.addEventListener("DOMContentLoaded", function (event) {
-      $(function () {
-          $('[data-bs-toggle="popover"]').popover()
-        })();
-    });
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
 
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-      return new bootstrap.Popover(popoverTriggerEl)
-    });
-    var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
-      trigger: 'focus'
-    });
+    // document.addEventListener("DOMContentLoaded", function (event) {
+    //   $(function () {
+    //       $('[data-bs-toggle="popover"]').popover()
+    //     })();
+    // });
+
+
   </script>
 
 </head>
@@ -80,8 +95,12 @@
                 <i class="fa fa-camera-retro"></i>
               </a>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href="#">Upload</a></li>
-                <li><a class="dropdown-item" href="#"></a></li>
+                <li>
+                  <label for="file-sel" class="dropdown-item btn btn-lg btn-primary" rel="tooltip" title="Upload an image">
+                    <i class="fa fa-upload"></i> &nbsp; Upload
+                    <input type="file" id="file-sel" class="d-none">
+                  </label>
+                </li>
               </ul>
             </div>
           </div>

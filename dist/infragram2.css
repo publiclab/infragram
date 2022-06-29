@@ -59,6 +59,11 @@
     font-size: .625rem;
   }
 
+  .dropdown-menu {
+    background-color: var(--main-container-bg);
+    color: var(--off-white);
+  }
+
   .labeled {
     display: flex;
     flex-direction: column;
