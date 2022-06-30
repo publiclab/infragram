@@ -11,14 +11,14 @@
   --border: 1px solid #353948;
   }
 
-  @font-face {
+  /* @font-face {
   font-family:'junctionregular';
   src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
   src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot?#iefix") format("embedded-opentype"),
       url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.woff") format("woff"),
       url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.ttf") format("truetype"),
       url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.svg#junctionregular") format("svg");
-  }
+  } */
 
   body {
     max-height: 100vh;
@@ -61,6 +61,10 @@
 
   .dropdown-menu {
     background-color: var(--main-container-bg);
+    color: var(--off-white);
+  }
+
+  .dropdown-item {
     color: var(--off-white);
   }
 
@@ -136,6 +140,10 @@
     height: 100%;
     margin: 0 auto;
     color: var(--off-white);
+    position:absolute;
+    left: 0;
+    top: 0;
+
   }
 
   .welcome-msg-text {

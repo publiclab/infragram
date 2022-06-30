@@ -131,7 +131,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           if (image) options.run(options.mode);
           options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
         }, interval);
-      }; // TODO: this doesn't work; it just downloads the unmodified image. 
+      }; // TODO: this doesn't work; it just downloads the unmodified image.
       // probably a timing issue?
 
 
@@ -420,7 +420,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       var webRtcOptions = options.webRtcOptions || {
         "audio": false,
         "video": true,
-        // the element (by id) you wish to use for 
+        // the element (by id) you wish to use for
         // displaying the stream from a camera
         el: "webcam",
         extern: null,
@@ -429,8 +429,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         // container
         width: 640,
         height: 480,
-        // the recommended mode to be used is 
-        // "callback " where a callback is executed 
+        // the recommended mode to be used is
+        // "callback " where a callback is executed
         // once data is available
         mode: "callback",
         // a debugger callback is available if needed
@@ -504,7 +504,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       function getSnapshot() {
         var video; // If the current context is WebRTC/getUserMedia (something
         // passed back from the shim to avoid doing further feature
-        // detection), we handle getting video/images for our canvas 
+        // detection), we handle getting video/images for our canvas
         // from our HTML5 <video> element.
 
         if (webRtcOptions.context === "webrtc") {
@@ -655,7 +655,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
             run_infragrammar(mode); // this sets colorized to false!
 
             if (params['color'] === "true" || params['c'] === "true") {
-              options.colorized = true; // again, so it gets run 
+              options.colorized = true; // again, so it gets run
             }
 
             if (options.colorized) {
@@ -1041,7 +1041,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           // TODO: we should refactor this to use colormaps in /src/color/;
       // we could build the dist/shader.frag file automatically around these
       // using the function now at /src/color/colormapFunctionGenerator.js
-      // ... we need to either use integer indices for colormap, 
+      // ... we need to either use integer indices for colormap,
       // OR switch the system to strings and use the colormap names
       colormaps = {
         default: 0,
@@ -1511,7 +1511,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           };
           $("#overlay-slider").val(localStorage.getItem("overlaySize"));
           console.log('grid ' + localStorage.getItem("overlaySize"));
-          setGrid($("#overlay-slider").val()); // TODO: broken:  
+          setGrid($("#overlay-slider").val()); // TODO: broken:
           //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
 
           src = urlHash.getUrlHashParameter('src');
