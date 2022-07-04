@@ -42,6 +42,10 @@
   i {
     font-weight: 100;
   }
+  .row>* {
+    padding-right: 0;
+    padding-left: 0;
+  }
 
   .btn {
     color: var(--off-white);
@@ -50,7 +54,7 @@
   }
 
   .btn:hover {
-    color: var(--white);
+    color: var(--blue);
     background-color: var(--image-container-bg);
     border: var(--border);
   }
@@ -62,6 +66,16 @@
   .dropdown-menu {
     background-color: var(--main-container-bg);
     color: var(--off-white);
+  }
+
+  .dropdown-item {
+    color: var(--off-white);
+  }
+
+  .form-control {
+    background-color: var(--image-container-bg);
+    color: var(--off-white);
+    border: var(--border);
   }
 
   .labeled {
@@ -76,7 +90,7 @@
     border: var(--border);
     border-bottom: none;
     background-color: var(--main-container-bg);
-    position: relative;
+    /* position: relative; */
   }
 
   .steps {
@@ -129,13 +143,13 @@
   .image-container {
     height: 78vh;
     background-color:var(--image-container-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .welcome-msg {
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-    background-color: var(--image-container-bg);
+    max-height: 78vh;
     color: var(--off-white);
     position: absolute;
     z-index: 3;
@@ -163,7 +177,7 @@
 
   .welcome-msg-text p {
     text-align:left;
-    margin-bottom:3rem;
+    /* margin-bottom:3rem; */
   }
 
   .sample-images {
@@ -172,12 +186,22 @@
   }
 
 
-  div#image-container {
-    text-align: center;
+  #overlay-container {
+    position:absolute;
+    display: inline-block;
+    overflow:hidden;
+    width:800px;
+    max-width: 100%;
+    height:600px;
+    max-height: 78vh;
   }
 
-  div#image-container canvas#image {
-    margin: 0px auto;
+  #overlay-save-btn {
+    margin-top:2px;
+  }
+
+  #overlay-img {
+    opacity:0.5;
   }
 
   div#colorbar-container {
@@ -192,14 +216,17 @@
   }
 
   #image {
-    background:#ddd;
+    background-color: #ddd;
     width:800px;
+    /* max-width: 100%; */
     height:600px;
+    max-height: 78vh;
   }
 
     /* ---------------------------------------------   side-bar  --------------------------- */
   .sidebar {
     height: 89vh;
+    padding: 0 .875rem;
     border-right: var(--border);
   }
 
@@ -259,6 +286,10 @@
       margin-top: -2rem;
     } */
 
+    #overlay-container {
+      /* max-width: calc(960px); */
+    }
+
     .analysis-tools .btn{
       font-size: .625rem;
     }
@@ -276,8 +307,8 @@
   }
 
   /* --------------------------------------------------   @media --------------------------- */
-  /* ---------------------------------------------------   768px --------------------------- */
-  @media (max-width: 768px) {
+  /* ---------------------------------------------------   800px (for canvas integrity) --------------------------- */
+  @media (max-width: 800px) {
   body {
       overflow-x: hidden !important;
   }
@@ -316,8 +347,14 @@
     margin-left: 7rem;
   }
 
-  .image-container {
-    height: 73vh;
+  #overlay-container {
+    max-width: calc(100vh - 960px);
+    max-height: 73vh;
+  }
+
+  #image {
+    max-width: 100%;
+    max-height: 73vh;
     margin-right:0 !important;
   }
 
@@ -328,22 +365,6 @@
   #image {
     width:100%;
     height:auto;
-  }
-
-  #overlay-container {
-    position:absolute;
-    display: inline-block;
-    overflow:hidden;
-    width:800px;
-    height:600px;
-  }
-
-  #overlay-save-btn {
-    margin-top:2px;
-  }
-
-  #overlay-img {
-    opacity:0.5;
   }
 
   .mobile-analysis-tools {
@@ -357,6 +378,8 @@
 
   #preset-modalMobile {
     background-color: var(--main-container-bg);
+    margin-bottom: 20vh;
+    height: 20vh;
   }
   }
 
