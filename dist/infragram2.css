@@ -425,3 +425,36 @@
     margin-left: 2rem;
   }
   }
+
+/*Video and Resolution controls*/
+#custom-seekbar
+{  
+  cursor: pointer;
+  height: 10px;
+  margin-bottom: 10px;
+  outline: thin solid orange;
+  overflow: hidden;
+  position: relative;
+  width: 200%;
+}
+#custom-seekbar span
+{
+  background-color: orange;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+  width: 0px;
+}
+#image {
+  background:#ddd;
+  width:800px;
+  height:600px;
+}
+#file-sel {
+  position:absolute; 
+  left:0;
+  width:55px;
+  height:44px;
+  opacity:0;
+}  
