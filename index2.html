@@ -39,7 +39,7 @@
 </head>
 
 <body>
-
+  <div id="video-container" style="display:none"></div> 
   <div class="container-fluid d-flex flex-column main-container">
     <!-- TODO: change this: -->
     <!-- This is the container for the entire page - it currently has 2 rows: HEADER & MAIN-CONTENT. they are preceded by the STEPS -->
@@ -66,13 +66,13 @@
           <div class="btn-group" id="imageselect"type="button" role="group" aria-label="First group">
             <label for="file-sel" data-bs-toggle="tooltip" data-bs-placement="left" title="Upload an image">
               <a class="btn-lg btn">
-                <i class="fa fa-camera-retro"></i>
+              <i class="fa fa-upload"></i>
               </a>
-              <input type="file" id="file-sel" class="d-none">
+              <input type="file" id="file-sel" class="d-none" accept="image/*,video/*">
             </label>
           </div>
           <div class="btn-group labeled" role="group" aria-label="First group">
-            <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-video-camera"></i></button>
+            <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
           </div>
 
           <div class="d-none">
@@ -86,16 +86,16 @@
         </div>
 
           <!-- ============================ nav links/help menus ======================== -->
-        <nav class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <nav class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">        
           <div class="btn-group" role="group" aria-label="First group">
             <a role="button" type="button" class="nav-item btn" href="https://infragram.org/">
-              <i class="fa fa-home" data-bs-toggle="tooltip"="tooltip" data-placement="bottom" title="Create FTO issue to add in link to homepage here"></i>
+              <i class="fa fa-home" data-bs-toggle="tooltip" data-placement="bottom" title="Create FTO issue to add in link to homepage here"></i>
             </a>
           </div>
           <div class="btn-group" role="group" aria-label="Second group">
             <div class="btn-group" role="group">
               <a id="btnGroupDrop3" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-question-circle-o" data-bs-toggle="tooltip"="tooltip" data-placement="bottom" title="Links to be added in..."></i>
+                <i class="fa fa-question-circle-o" data-bs-toggle="tooltip" data-placement="bottom" title="Links to be added in..."></i>
               </a>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                 <li><a class="dropdown-item" href="#">Tutorials</a></li>
@@ -444,21 +444,33 @@
 
         <!-- -----------VIDEO CONTROLS------------------------ -->
         <!-- ============ tools to be moved to canvas upon video upload ?????? ====== -->
-
-        <!-- <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          <div class="btn-group" role="group" aria-label="First group">
-            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-play" data-bs-toggle="tooltip" data-placement="bottom" title="Play"></i></a>
-          </div>
-          <div class="btn-group" role="group" aria-label="Second group">
-            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-pause" data-bs-toggle="tooltip" data-placement="bottom" title="Plause"></i></a>
-          </div>
-          <div class="btn-group" role="group" aria-label="Third group">
-            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-stop data-bs-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
-          </div>
-          <div class="btn-group" role="group" aria-label="Third group">
-            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-expand" data-bs-toggle="tooltip" data-placement="bottom" title="Expand -- TODO: we need to add a full-scrren close button..."></i></a>
-          </div>
-        </div> -->
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div id="localVideoControls" style="display:none;">
+              <button id="localVideoPlayPause" type="button" class="btn btn-dark"><i class="fa fa-pause"></i></button> 
+              <div id="custom-seekbar">
+                <span></span>
+              </div>
+            </div>            
+            <div class="btn-group dropup" role="group" aria-label="Third group">
+              <div class="btn-group" role="group">
+                <a id="btnGroupDrop2" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-video-camera"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                  <li><a id="qvga" class="dropdown-item" href="javascript:void(0);">QVGA</a></li>
+                  <li><a id="vga" class="dropdown-item" href="javascript:void(0);">VGA</a></li>
+                  <li><a id="hd" class="dropdown-item" href="javascript:void(0);">HD</a></li>
+                  <li><a id="full-hd" class="dropdown-item" href="javascript:void(0);">FULL HD</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="btn-group" role="group" aria-label="Third group" id="startRecord" style="display:block">
+              <a role="button" type="button" class="btn btn-dark" ><i class="fa fa-circle" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
+            </div>
+            <div class="btn-group" role="group" aria-label="Third group" id="stopRecord" id="startRecord" style="display:none">
+              <a role="button" type="button" class="btn btn-dark"><i class="fa fa-pause" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
+            </div>            
+          </div> 
 
       </div>
 
