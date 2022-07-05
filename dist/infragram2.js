@@ -131,7 +131,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           if (image) options.run(options.mode);
           options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
         }, interval);
-      }; // TODO: this doesn't work; it just downloads the unmodified image.
+      }; // TODO: this doesn't work; it just downloads the unmodified image. 
       // probably a timing issue?
 
 
@@ -399,8 +399,10 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       function initialize() {
         getUserMedia(webRtcOptions, success, deviceError); // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685
 
-        webRtcOptions.videoEl.setAttribute('autoplay', 'autoplay');
-        webRtcOptions.videoEl.setAttribute('playsinline', 'playsinline');
+        webRtcOptions.videoEl.setAttribute('id', 'webCamVideoEl');
+        var webCamVideoEl = document.getElementById('webCamVideoEl');
+        webCamVideoEl.setAttribute('autoplay', 'autoplay');
+        webCamVideoEl.setAttribute('playsinline', 'playsinline');
         window.webcam = webRtcOptions; // this is weird but maybe used for flash fallback?
 
         canvas = options.canvas || document.getElementById("image");
@@ -420,7 +422,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       var webRtcOptions = options.webRtcOptions || {
         "audio": false,
         "video": true,
-        // the element (by id) you wish to use for
+        // the element (by id) you wish to use for 
         // displaying the stream from a camera
         el: "webcam",
         extern: null,
@@ -429,8 +431,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         // container
         width: 640,
         height: 480,
-        // the recommended mode to be used is
-        // "callback " where a callback is executed
+        // the recommended mode to be used is 
+        // "callback " where a callback is executed 
         // once data is available
         mode: "callback",
         // a debugger callback is available if needed
@@ -478,9 +480,11 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
       function success(stream) {
         var video;
+        window.localStream = stream;
+        isCamera = true;
 
         if (webRtcOptions.context === "webrtc") {
-          video = webRtcOptions.videoEl;
+          video = document.getElementById("webCamVideoEl");
 
           if (navigator.mozGetUserMedia) {
             video.mozSrcObject = stream;
@@ -504,7 +508,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       function getSnapshot() {
         var video; // If the current context is WebRTC/getUserMedia (something
         // passed back from the shim to avoid doing further feature
-        // detection), we handle getting video/images for our canvas
+        // detection), we handle getting video/images for our canvas 
         // from our HTML5 <video> element.
 
         if (webRtcOptions.context === "webrtc") {
@@ -532,45 +536,6 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function File(options, processor) {
-      var _getMouseEvent = function getMouseEvent() {
-        var getParams = function getParams() {
-          return {
-            bubbles: false,
-            cancelable: false,
-            screenX: 0,
-            screenY: 0,
-            clientX: 0,
-            clientY: 0
-          };
-        };
-
-        try {
-          // eslint-disable-next-line no-new
-          new MouseEvent("t");
-
-          _getMouseEvent = function getMouseEvent() {
-            return function (eventType) {
-              var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : getParams();
-              return new MouseEvent(eventType, params);
-            };
-          };
-        } catch (e) {
-          // Polyfills DOM4 MouseEvent
-          _getMouseEvent = function getMouseEvent() {
-            return function (eventType) {
-              var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : getParams();
-              var mouseEvent = document.createEvent("MouseEvent"); // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/initMouseEvent
-
-              mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, // the event's mouse click count
-              params.screenX, params.screenY, params.clientX, params.clientY, false, false, false, false, 0, null);
-              return mouseEvent;
-            };
-          };
-        }
-
-        return _getMouseEvent();
-      };
-
       function downloadImage() {
         var event, format, lnk; // create an "off-screen" anchor tag
 
@@ -587,14 +552,9 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         lnk.download = new Date().toISOString().replace(/:/g, "_") + "." + format; // create a "fake" click-event to trigger the download
 
         if (document.createEvent) {
-          var mouseEvent = _getMouseEvent();
-
-          lnk.dispatchEvent(mouseEvent("click", {
-            screenX: 0,
-            screenY: 0,
-            clientX: 0,
-            clientY: 0
-          }));
+          event = document.createEvent("MouseEvents");
+          event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+          lnk.dispatchEvent(event);
         } else if (lnk.fireEvent) {
           lnk.fireEvent("onclick");
         }
@@ -655,7 +615,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
             run_infragrammar(mode); // this sets colorized to false!
 
             if (params['color'] === "true" || params['c'] === "true") {
-              options.colorized = true; // again, so it gets run
+              options.colorized = true; // again, so it gets run 
             }
 
             if (options.colorized) {
@@ -1041,7 +1001,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           // TODO: we should refactor this to use colormaps in /src/color/;
       // we could build the dist/shader.frag file automatically around these
       // using the function now at /src/color/colormapFunctionGenerator.js
-      // ... we need to either use integer indices for colormap,
+      // ... we need to either use integer indices for colormap, 
       // OR switch the system to strings and use the colormap names
       colormaps = {
         default: 0,
@@ -1457,6 +1417,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
   }, {}],
   15: [function (require, module, exports) {
     module.exports = function Interface(options) {
+      var isVideo = false,
+          isCamera = false;
       options.imageSelector = options.imageSelector || "#image-container";
       options.fileSelector = options.fileSelector || "#file-sel";
 
@@ -1511,7 +1473,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           };
           $("#overlay-slider").val(localStorage.getItem("overlaySize"));
           console.log('grid ' + localStorage.getItem("overlaySize"));
-          setGrid($("#overlay-slider").val()); // TODO: broken:
+          setGrid($("#overlay-slider").val()); // TODO: broken:  
           //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
 
           src = urlHash.getUrlHashParameter('src');
@@ -1528,25 +1490,38 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
-          var reader = new FileReader();
 
-          reader.onload = function onReaderLoad(event) {
-            var img;
-            img = new Image();
+          if (this.files[0].type == 'image/jpeg' || this.files[0].type == 'image/png') {
+            var reader = new FileReader();
 
-            img.onload = function onImageLoad() {
-              options.processor.updateImage(this);
+            reader.onload = function onReaderLoad(event) {
+              var img;
+              img = new Image();
+
+              img.onload = function onImageLoad() {
+                options.processor.updateImage(this);
+              };
+
+              return img.src = event.target.result;
             };
 
-            return img.src = event.target.result;
-          };
+            reader.readAsDataURL(this.files[0]);
+          } else {
+            videoURL = URL.createObjectURL(this.files[0]);
+            activateVideo(videoURL);
+          }
 
-          reader.readAsDataURL(this.files[0]);
           $('#preset-modal').offcanvas('show');
           $('#preset-modalMobile').offcanvas('show');
           return true;
         });
         $("#webcam-activate").click(function () {
+          if (isVideo) {
+            $("#localVideo").remove();
+          }
+
+          isVideo = false;
+          isCamera = true;
           $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
@@ -1556,6 +1531,68 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $('#preset-modalMobile').offcanvas('show');
           return true;
         });
+
+        function activateVideo(videoURL) {
+          if (isCamera) {
+            localStream.getVideoTracks()[0].stop();
+          }
+
+          $("#localVideo").remove();
+          isCamera = false;
+
+          if (!isVideo) {
+            //Prevent Creation of Duplicate video Elements
+            localVideo = document.createElement('video');
+            localVideo.setAttribute("id", "localVideo");
+            localVideo.setAttribute("src", videoURL);
+            localVideo.load();
+            localVideo.style.display = "none";
+            localVideo.style.width = "50px";
+            localVideo.style.height = "50px";
+            document.getElementById("video-container").appendChild(localVideo);
+            localVideo.play();
+            localVideo.muted = true;
+            localVideo.loop = true;
+            document.getElementById("localVideoControls").style.display = "block"; //Attach video Element tocustom Sleek Bar
+
+            localVideo.ontimeupdate = function () {
+              var percentage = localVideo.currentTime / localVideo.duration * 100;
+              $("#custom-seekbar span").css("width", percentage + "%");
+            };
+          }
+
+          isVideo = true;
+          $('.choose-prompt').hide();
+          $("#save-modal-btn").show();
+          $("#save-zone").show();
+          save_infragrammar_inputs();
+          $('#preset-modal').offcanvas('show');
+          $('#preset-modalMobile').offcanvas('show');
+          return true;
+        } //Start video controls
+
+
+        $("#custom-seekbar").on("click", function (e) {
+          localVideo = document.getElementById('localVideo');
+          var offset = $(this).offset();
+          var left = e.pageX - offset.left;
+          var totalWidth = $("#custom-seekbar").width();
+          var percentage = left / totalWidth;
+          var vidTime = localVideo.duration * percentage;
+          localVideo.currentTime = vidTime;
+        });
+        $("#localVideoPlayPause").on("click", function (e) {
+          localVideo = document.getElementById('localVideo');
+
+          if (localVideo.paused) {
+            localVideo.play();
+            document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-pause"></i>';
+          } else {
+            localVideo.pause();
+            document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-play"></i>';
+          }
+        }); //End video controls
+
         $("#snapshot").click(function () {
           options.camera.getSnapshot();
           return true;
@@ -1592,7 +1629,75 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         $("[rel=tooltip]").tooltip();
         $("[rel=popover]").popover();
         return true;
+      }); //Start Handle multiple webcam resolutions
+
+      function changeResolution(w, h) {
+        document.getElementById('image').setAttribute("width", w);
+        document.getElementById('image').setAttribute("height", h);
+      }
+
+      $('#qvga').click(function (e) {
+        changeResolution('100px', '100px');
       });
+      $('#vga').click(function (e) {
+        changeResolution('800px', '600px');
+      });
+      $('#hd').click(function (e) {
+        changeResolution('2400px', '1800px');
+      });
+      $('#full-hd').click(function (e) {
+        changeResolution('6000px', '4000px');
+      }); //End Handling of Multiple webcam resolutions
+      //Start Canvas Recording and Download
+
+      var canvas = document.getElementById('image');
+      var ctx = canvas.getContext('2d');
+      var x = 0;
+      var stream = canvas.captureStream(); // grab our canvas MediaStream
+
+      var rec = new MediaRecorder(stream);
+
+      function exportVid(blob) {
+        var vid = document.createElement('video');
+        vid.src = URL.createObjectURL(blob);
+        vid.controls = true;
+        vid.style.display = 'none';
+        document.body.appendChild(vid);
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = vid.src;
+        a.download = 'infragramVideo.mp4';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(vid.src);
+        }, 100);
+      }
+
+      $('#startRecord').click(function (e) {
+        var chunks = [];
+
+        rec.ondataavailable = function (e) {
+          return chunks.push(e.data);
+        };
+
+        rec.onstop = function (e) {
+          return exportVid(new Blob(chunks, {
+            type: 'video/h264'
+          }));
+        };
+
+        rec.start();
+        document.getElementById('startRecord').style.display = 'none';
+        document.getElementById('stopRecord').style.display = 'block';
+      });
+      $('#stopRecord').click(function (e) {
+        rec.stop();
+        document.getElementById('stopRecord').style.display = 'none';
+        document.getElementById('startRecord').style.display = 'block';
+        document.getElementById('downloadButton').style.display = 'block';
+      }); //End Canvas Recording and Download
     };
   }, {
     "../color/colormaps": 5,
