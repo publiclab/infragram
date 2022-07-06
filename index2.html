@@ -39,7 +39,7 @@
 </head>
 
 <body>
-  <div id="video-container" style="display:none"></div> 
+  <div id="video-container" style="display:none"></div>
   <div class="container-fluid d-flex flex-column main-container">
     <!-- TODO: change this: -->
     <!-- This is the container for the entire page - it currently has 2 rows: HEADER & MAIN-CONTENT. they are preceded by the STEPS -->
@@ -56,13 +56,13 @@
 
     <div class="row" style="border-bottom: var(--border)">
       <div class="col-12 header d-flex justify-content-between align-items-center">
-        <div class="d-flex">
+        <div class="header-title d-flex">
           <img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." class="logo" />
-          <h1 style="font-size:1.5rem;line-height:3.1rem;letter-spacing:0.09rem;margin-bottom:0;"><a class="phone-d-none" style="color:var(--white);padding-right:.3rem" href="../">Infragram</a><small class="phone-d-none" style="font-size:.875rem;color:var(--light-grey);">by <a href="http://publiclab.org" target="_blank" class="phone-d-none" style="font-size:1rem;color:var(--blue);">Public Lab</a></small></h1>
+          <h1 style="font-size:1.5rem;line-height:3.1rem;letter-spacing:0.09rem;margin-bottom:0;"><a style="color:var(--white);padding-right:.3rem" href="../">Infragram</a><small style="font-size:.875rem;color:var(--light-grey);">by <a href="http://publiclab.org" target="_blank" style="font-size:1rem;color:var(--blue);">Public Lab</a></small></h1>
         </div>
 
-          <!-- ========================= camera/image selection ======================== -->
-        <div class="btn-toolbar media-tools" role="toolbar" aria-label="Toolbar with button groups">
+          <!-- ========================= camera/image/video-controls  ======================== -->
+        <div class="btn-toolbar mediaSelect media-tools" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group" id="imageselect"type="button" role="group" aria-label="First group">
             <label for="file-sel" data-bs-toggle="tooltip" data-bs-placement="left" title="Upload an image">
               <a class="btn-lg btn">
@@ -72,30 +72,57 @@
             </label>
           </div>
           <div class="btn-group labeled" role="group" aria-label="First group">
-            <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
+            <button onClick="toggleToolbar()" rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
           </div>
 
-          <div class="d-none">
-            <ul class="dropdown-menu" aria-labelledby="webcam-activate">
-              <li><a class="dropdown-item" href="#">Resolution 1</a></li>
-              <li><a class="dropdown-item" href="#">Resolution 2</a></li>
-              <li><a class="dropdown-item" href="#">Resolution 3</a></li>
-              <li><a class="dropdown-item" href="#">Resolution 4</a></li>
-            </ul>
+        </div>
+
+
+        <!-- -----------VIDEO CONTROLS------------------------ -->
+        <!-- ============ tools to be moved to canvas upon video upload ?????? ====== -->
+        <div class="videoControls btn-toolbar" role="toolbar" style="display: none;" aria-label="Toolbar with button groups">
+          <div id="localVideoControls" class="d-flex justify-content-center align-items-center">
+            <button id="localVideoPlayPause" type="button" class="btn btn-dark"><i class="fa fa-pause"></i></button>
+            <div id="custom-seekbar">
+              <span></span>
+            </div>
+          </div>
+          <div class="btn-group dropdown" role="group" aria-label="Third group">
+            <div class="btn-group" role="group">
+              <a id="btnGroupDrop2" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-video-camera"></i>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a id="qvga" class="dropdown-item" href="javascript:void(0);">QVGA</a></li>
+                <li><a id="vga" class="dropdown-item" href="javascript:void(0);">VGA</a></li>
+                <li><a id="hd" class="dropdown-item" href="javascript:void(0);">HD</a></li>
+                <li><a id="full-hd" class="dropdown-item" href="javascript:void(0);">FULL HD</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="btn-group" role="group" aria-label="Third group" id="startRecord" style="display:block">
+            <a role="button" type="button" class="btn btn-dark" ><i class="fa fa-circle" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
+          </div>
+          <div class="btn-group" role="group" aria-label="Third group" id="stopRecord" id="startRecord" style="display:none">
+            <a role="button" type="button" class="btn btn-dark"><i class="fa fa-pause" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
+          </div>
+          <div class="btn-group" role="group">
+            <a onClick="toggleToolbar()" role="button" type="button" class="btn btn-dark"><i class="fa fa-window-close" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
           </div>
         </div>
 
+
           <!-- ============================ nav links/help menus ======================== -->
-        <nav class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">        
+        <nav class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group" role="group" aria-label="First group">
             <a role="button" type="button" class="nav-item btn" href="https://infragram.org/">
-              <i class="fa fa-home" data-bs-toggle="tooltip" data-placement="bottom" title="Create FTO issue to add in link to homepage here"></i>
+              <i class="fa fa-home" data-bs-toggle="tooltip" ddata-bs-placement="left" title="Create FTO issue to add in link to homepage here"></i>
             </a>
           </div>
           <div class="btn-group" role="group" aria-label="Second group">
             <div class="btn-group" role="group">
               <a id="btnGroupDrop3" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-question-circle-o" data-bs-toggle="tooltip" data-placement="bottom" title="Links to be added in..."></i>
+                <i class="fa fa-question-circle-o" data-bs-toggle="tooltip" data-bs-placement="left" title="Links to be added in..."></i>
               </a>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                 <li><a class="dropdown-item" href="#">Tutorials</a></li>
@@ -108,7 +135,7 @@
           <div class="btn-group" role="group" aria-label="Third group">
             <div class="btn-group" role="group">
               <a id="save-zone" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-save" data-bs-toggle="tooltip"="tooltip" data-placement="bottom" title="Functional, but 'Export' is sketchy"></i>
+                <i class="fa fa-save" data-bs-toggle="tooltip"="tooltip" data-bs-placement="left" title="Functional, but 'Export' is sketchy"></i>
               </a>
               <ul class="dropdown-menu" aria-labelledby="save-zone">
                 <li><a onClick="openInPl()" type="button" class="dropdown-item" href="#">Save</a></li>
@@ -236,7 +263,7 @@
 
       <div id="image-container" class="col-12 col-md-10 image-container">
         <div style="display:none;" id="webcam"></div>
-        <a class="btn btn-default fullscreen" style="opacity:0.5;position:absolute;right:2vw;top:12vh;z-index:3;"><i class="fa fa-expand"></i></a>
+        <a id="fullscreen" class="btn btn-default"><i class="fa fa-expand"></i></a>
 
         <!-- ========================= intro/welcome msg =============================== -->
         <!-- onClick="$('.choose-prompt').hide();" -->
@@ -264,14 +291,14 @@
           </div>
         </div>
 
-        <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:2;width:100%;height:100%;" id="backdrop"></div>
-        <div id="overlay-container" class="d-none">
+        <div style="background:#111;display:none;position:absolute;top:0;left:0;z-index:1;width:100%;height:100%;" id="backdrop"></div>
+        <div id="overlay-container" style="display:none;">
           <img id="overlay-img" src="assets/grid.svg" alt="grid overlay image">
         </div>
         <a class="btn-inverse btn-small" style="display:none;position:absolute;right:2vw;top:12vh;z-index:3;" id="exit-fullscreen"><i class="fa fa-remove"></i> Exit full screen</a>
-        <canvas class="fullscreen" id="image" width="800" height="600">
+        <canvas class="fullscreen" id="image">
         </canvas>
-        <div id="colorbar-container" style="display:none;position:absolute;bottom:0;left:0;width:100%;height:100%;border:1px solid green;">
+        <div id="colorbar-container" style="display:none;">
           <span id="colorbar-min">-1.00</span>
           <canvas id="colorbar"></canvas>
           <span id="colorbar-max">1.00</span>
@@ -280,7 +307,7 @@
 
       <!-------- MOBILE TOOL PANEL (3rd row on mobile - not displayed on desktop------------>
 
-      <div class="col-12 d-md-none d-flex justify-content-between align-items-center py-2 mobile-analysis-tools">
+      <div class="col-12 d-md-none d-flex justify-content-between align-items-center mobile-analysis-tools">
 
         <!-- ==================== mobile - QUICK START ================================== -->
         <div>
@@ -326,7 +353,7 @@
         </div>
 
         <!-- ===================== mobile - ANALYSIS INPUTS ============================= -->
-        <div>
+        <div class="analyze">
           <div class="btn-group dropup d-flex flex-column justify-content-center align-items-center" role="group">
             <a id="btnGroupDrop8" class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 ANALYZE
@@ -359,7 +386,7 @@
             </div>
           </div>
           <p class="text-center">Modify the equations
-            <a class="col-1 offset-8 info-icon d-block" style="margin-top:-1.5rem;" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2"></i></a>
+            <a class="col-1 offset-8 info-icon d-block" style="margin-top:-1.5rem;" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2 analyze-info"></i></a>
           </p>
         </div>
 
@@ -368,12 +395,12 @@
 
         <div class="colorize">
           <div class="btn-group dropup d-flex flex-column justify-content-center align-items-center" role="group">
-            <a id="btnGroupDrop6" type="submit" role="button"class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <a id="btnGroupDrop6" type="submit" role="button"class="btn btn-sm btn-colorize dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               COLORIZE
             </a>
             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-              <li><a id="default_colormap" class="dropdown-item" href="#">Default colormap</a></li>
-              <li><a id="stretched_colormap" class="dropdown-item" href="#">Stretched colormap</a></li>
+              <li><a id="default_colormapMobile" class="dropdown-item" href="#">Default colormap</a></li>
+              <li><a id="stretched_colormapMobile" class="dropdown-item" href="#">Stretched colormap</a></li>
             </ul>
           </div>
           <p class="text-center"> (optional)</p>
@@ -405,18 +432,23 @@
               </a>
             </div>
           </div>
+
           <div class="btn-group" role="group" aria-label="Third group">
             <div class="btn-group labeled dropup" role="group">
               <label for="overlay-btn">OVERLAY</label>
-              <a id="overlay-btn" role="button" type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <a id="overlay-btn" role="button" type="button" class="btn btn-dark">
                 <i class="fa fa-th" aria-hidden="true"></i>
               </a>
-              <div id="overlay-controls-container" class="dropdown-menu">
-                <input id="overlay-slider" class="dropdown-item" type="range" min="10" max="50" value="100"/>
-                <span id="overlay-size" class="dropdown-item" style="color:#ccc;"></span>
-                <button id="overlay-save-btn" class="btn btn-primary dropdown-item">Save</button>
-                <span id="overlay-save-info" class="dropdown-item" style="color:green; display: none;">Size saved!</span>
+            </div>
+          </div>
+          <div id="overlay-controls-container" class="btn-group" style="display:none;"role="group" aria-label="Third group">
+            <div class="d-flex align-items-center">
+              <div class="d-flex flex-column justify-content-between align-items-center px-2 h-100">
+                <label id="overlay-size" for="overlay-slider" style="color:#d5d5d5;"></label>
+                <input id="overlay-slider" type="range"  class="mb-2" min="10" max="50" value="100"/>
               </div>
+              <button id="overlay-save-btn" class="btn btn-dark" style="border:1px solid #353948;">Save</button>
+              <span id="overlay-save-info" style="color:green;  display: none; padding-left:.5rem;">Size saved!</span>
             </div>
           </div>
         </div>
@@ -441,37 +473,6 @@
             </div>
           </div>
         </div>
-
-        <!-- -----------VIDEO CONTROLS------------------------ -->
-        <!-- ============ tools to be moved to canvas upon video upload ?????? ====== -->
-          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div id="localVideoControls" style="display:none;">
-              <button id="localVideoPlayPause" type="button" class="btn btn-dark"><i class="fa fa-pause"></i></button> 
-              <div id="custom-seekbar">
-                <span></span>
-              </div>
-            </div>            
-            <div class="btn-group dropup" role="group" aria-label="Third group">
-              <div class="btn-group" role="group">
-                <a id="btnGroupDrop2" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fa fa-video-camera"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                  <li><a id="qvga" class="dropdown-item" href="javascript:void(0);">QVGA</a></li>
-                  <li><a id="vga" class="dropdown-item" href="javascript:void(0);">VGA</a></li>
-                  <li><a id="hd" class="dropdown-item" href="javascript:void(0);">HD</a></li>
-                  <li><a id="full-hd" class="dropdown-item" href="javascript:void(0);">FULL HD</a></li>
-                </ul>
-              </div>
-            </div>
-            <div class="btn-group" role="group" aria-label="Third group" id="startRecord" style="display:block">
-              <a role="button" type="button" class="btn btn-dark" ><i class="fa fa-circle" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
-            </div>
-            <div class="btn-group" role="group" aria-label="Third group" id="stopRecord" id="startRecord" style="display:none">
-              <a role="button" type="button" class="btn btn-dark"><i class="fa fa-pause" data-bs-toggle="tooltip" data-placement="bottom"></i></a>
-            </div>            
-          </div> 
-
       </div>
 
     </div>
@@ -501,6 +502,11 @@
     //       $('[data-bs-toggle="popover"]').popover()
     //     })();
     // });
+
+    function toggleToolbar() {
+      $('.mediaSelect').toggle();
+      $('.videoControls').toggle();
+    }
 
     var infragram, openInPl, openInSequencer;
       (function() {

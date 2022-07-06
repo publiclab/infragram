@@ -11,6 +11,9 @@
   --border: 1px solid #353948;
   }
 
+  /* *{
+    border:1px solid red;
+  } */
   /* @font-face {
   font-family:'junctionregular';
   src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
@@ -90,7 +93,6 @@
     border: var(--border);
     border-bottom: none;
     background-color: var(--main-container-bg);
-    /* position: relative; */
   }
 
   .steps {
@@ -139,6 +141,36 @@
     padding-top:.5rem;
   }
 
+  /*Video and Resolution controls*/
+#custom-seekbar {
+  cursor: pointer;
+  height: 10px;
+  /* margin-bottom: 10px; */
+  margin-right: 1rem;
+  outline: thin solid orange;
+  overflow: hidden;
+  /* position: relative; */
+  width: 5rem;
+}
+
+#custom-seekbar span {
+  display: inline-block;
+  background-color: orange;
+  /* position: absolute; */
+  /* top: 0; */
+  /* left: 0; */
+  height: 10px;
+  width: 0px;
+}
+
+/* #file-sel {
+  position:absolute;
+  left:0;
+  width:55px;
+  height:44px;
+  opacity:0;
+} */
+
   /* ---------------------------------------------   image container ----------------------- */
   .image-container {
     height: 78vh;
@@ -146,6 +178,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  #fullscreen{
+    opacity:0.5;
+    position:absolute;
+    right:2vw;
+    top:12vh;
+    z-index:3;
   }
 
   .welcome-msg {
@@ -185,13 +225,12 @@
     background-color:var(--main-container-bg);
   }
 
-
   #overlay-container {
     position:absolute;
     display: inline-block;
     overflow:hidden;
     width:800px;
-    max-width: 100%;
+    max-width:83.3333vw;
     height:600px;
     max-height: 78vh;
   }
@@ -207,6 +246,12 @@
   div#colorbar-container {
     display: inline-block;
     width: 70%;
+    position:absolute;
+    bottom:11vh;
+    left:16.66vw;
+    width:83.33vw;
+    /* height:100%; */
+    border:1px solid green;
   }
 
   div#colorbar-container canvas#colorbar {
@@ -216,9 +261,9 @@
   }
 
   #image {
-    background-color: #ddd;
+    /* background-color: #ddd; */
     width:800px;
-    /* max-width: 100%; */
+    max-width:83.3333vw;
     height:600px;
     max-height: 78vh;
   }
@@ -259,37 +304,166 @@
     width: 4rem;
   }
 
-  .accordion-item, .accordion-header, .accordion-body {
-    background-color: var(--main-container-bg) !important;
-    color: var(--white) !important;
-    font-size: .625rem !important;
-  }
-
   .tool-panel {
     height: 11vh;
     margin-top:-11vh;
   }
 
-  /* --------------------------------------------------   @media --------------------------- */
-  /* --------------------------------------------------   1100px --------------------------- */
-  @media (max-width: 1100px){
-    /* .steps{
-    height: 2.3rem;
-    width: 2.7rem;
-
-    } */
-    /* .step2{
-      right:-1.5rem;
-      z-index: 3;
-    } */
-    /* .step3{
-      margin-top: -2rem;
-    } */
-
-    #overlay-container {
-      /* max-width: calc(960px); */
+    /* --------------------------------------------------   @media --------------------------- */
+  /* ---------------------------------------------------   500px --------------------------- */
+   /* total height:
+  header: 15vh
+  image-container: 55vh
+  mobile-analysis-tools: 15vh
+  tool-panel: 15vh */
+  @media only screen and (max-width: 550px) and (max-width: 767px) {
+    .header {
+      height: 15vh;
+      flex-wrap: wrap;
+      padding:.5rem;
+    }
+    .header-title {
+      width: 100vh;
+    }
+    .header h1 {
+      display:inline-block;
+    }
+    .header .media-tools {
+      margin-left: 0;
+    }
+    .image-container {
+      height: 55vh;
+    }
+    #fullscreen{
+      top:17vh;
+    }
+    .welcome-msg {
+      margin-top:1.5rem;
+      height:55vh;
+      max-height:55vh;
+      display:flex;
+      flex-direction:column;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .welcome-msg-text p{
+      display:none;
+    }
+    .mobile-analysis-tools {
+      height:15vh;
+      align-items: start;
+    }
+    #image{
+      width:100vw;
+      height:auto;
     }
 
+    .analyze-info{
+      padding-top:2rem;
+    }
+
+    .tool-panel {
+      height: 15vh;
+      margin-top: 0;
+      flex-direction: column;
+    }
+
+    #analyze-dropdown {
+      margin-left: 2rem;
+    }
+    }
+
+
+  /* --------------------------------------------------   @media --------------------------- */
+  /* ---------------------------------------------------   768px (for canvas integrity) --------------------------- */
+  /* total height:
+  header: 7vh
+  image-container: 73vh
+  mobile-analysis-tools: 10vh
+  tool-panel: 10vh */
+
+  @media only screen and (min-width: 551px) and (max-width: 768px){
+  /* body {
+    overflow-x: hidden !important;
+  } */
+
+  p {
+    font-size: .625rem;
+    margin-bottom: 0;
+  }
+
+  .btn-sm {
+    font-size: .625rem;
+  }
+
+  .header {
+    height: 7vh;
+    padding: 1rem;
+  }
+
+  .header h1 {
+    display:none;
+  }
+
+  .logo {
+    padding-top: 0.5rem;
+    height:2.5rem;
+  }
+
+  #image-container {
+    height: 73vh;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  .mediaSelect {
+    margin-left: 7rem;
+  }
+
+  #overlay-container {
+    max-width: 100vw;
+    max-height: 73vh;
+  }
+
+  #image {
+    max-width: 100vw;
+    max-height: 73vh;
+    margin-right:0 !important;
+  }
+
+  div#colorbar-container {
+    bottom:20vh;
+    left:0;
+    width:100vh;
+  }
+
+  div#colorbar-container canvas#colorbar {
+    width: 80%;
+    height: 2em;
+    vertical-align: middle;
+  }
+
+  .mobile-analysis-tools {
+    height:10vh;
+    padding: 0 1rem;
+  }
+
+  .tool-panel {
+    height: 10vh;
+    margin-top: 0;
+  }
+
+  #preset-modalMobile {
+    background-color: var(--main-container-bg);
+    height: 20vh;
+  }
+  }
+
+  /* --------------------------------------------------   @media --------------------------- */
+  /* --------------------------------------------------   1100px --------------------------- */
+  @media only screen and (min-width: 769px) and (min-width: 1100px){
     .analysis-tools .btn{
       font-size: .625rem;
     }
@@ -305,156 +479,3 @@
       margin-bottom: 1.5rem;
     }
   }
-
-  /* --------------------------------------------------   @media --------------------------- */
-  /* ---------------------------------------------------   800px (for canvas integrity) --------------------------- */
-  @media (max-width: 800px) {
-  body {
-      overflow-x: hidden !important;
-  }
-
-  p {
-    font-size: .625rem;
-    margin-bottom: 0;
-  }
-
-  .btn-sm {
-    font-size: .625rem;
-  }
-
-  .main-container {
-    height: 100vh;
-    max-width: 100% !important;
-    overflow-x: hidden !important;
-  }
-
-  .header {
-    height: 7vh;
-    padding: 1rem;
-  }
-
-  .logo
-  {
-    padding-top: 0.5rem;
-    height:2.5rem;
-  }
-
-  h1 {
-    display: none;
-  }
-
-  .media-tools {
-    margin-left: 7rem;
-  }
-
-  #overlay-container {
-    max-width: calc(100vh - 960px);
-    max-height: 73vh;
-  }
-
-  #image {
-    max-width: 100%;
-    max-height: 73vh;
-    margin-right:0 !important;
-  }
-
-  .welcome-msg {
-    max-width:100%;
-  }
-
-  #image {
-    width:100%;
-    height:auto;
-  }
-
-  .mobile-analysis-tools {
-    height:10vh;
-  }
-
-  .tool-panel {
-    height: 10vh;
-    margin-top: 0;
-  }
-
-  #preset-modalMobile {
-    background-color: var(--main-container-bg);
-    margin-bottom: 20vh;
-    height: 20vh;
-  }
-  }
-
-  /* --------------------------------------------------   @media --------------------------- */
-  /* ---------------------------------------------------   500px --------------------------- */
-  @media (max-width: 550px) {
-  .header {
-    justify-content: center;
-  }
-  .header .media-tools {
-    margin-left: 0;
-  }
-  .image-container {
-    height: 68vh;
-    margin-right:0 !important;
-  }
-
-  .mobile-analysis-tools {
-    height:15vh;
-  }
-
-  /* .mobile-analysis-tools-p{
-    font-size: .625rem;
-  } */
-
-  .welcome-msg {
-    margin: 1.5rem auto;
-  }
-  .welcome-msg-text {
-    width:90%;
-    margin: 0 auto;
-  }
-
-  .welcome-msg-text h2 {
-    line-height: 1.5rem;
-  }
-
-  .welcome-msg-text p {
-    margin-bottom:1.5rem;
-  }
-
-  #analyze-dropdown {
-    margin-left: 2rem;
-  }
-  }
-
-/*Video and Resolution controls*/
-#custom-seekbar
-{  
-  cursor: pointer;
-  height: 10px;
-  margin-bottom: 10px;
-  outline: thin solid orange;
-  overflow: hidden;
-  position: relative;
-  width: 200%;
-}
-#custom-seekbar span
-{
-  background-color: orange;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 10px;
-  width: 0px;
-}
-#image {
-  background:#ddd;
-  width:800px;
-  height:600px;
-}
-#file-sel {
-  position:absolute; 
-  left:0;
-  width:55px;
-  height:44px;
-  opacity:0;
-}  
