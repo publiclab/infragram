@@ -1541,8 +1541,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $("#save-zone").show();
           save_infragrammar_inputs();
           options.video();
-          // $('#preset-modal').offcanvas('show');
-          // $('#preset-modalMobile').offcanvas('show');
+          $('#preset-modal').offcanvas('show');
+          $('#preset-modalMobile').offcanvas('show');
           return true;
         });
 

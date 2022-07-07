@@ -55,8 +55,8 @@
     <!-- TODO: FIX RESPONSIVE @Min-WIDTH:1400PX(??) -->
 
     <div class="row" style="border-bottom: var(--border)">
-      <div class="col-12 header d-flex justify-content-between align-items-center">
-        <div class="header-title d-flex">
+      <div class="col-12 header">
+        <div class="header-title">
           <img src="assets/infragram-mini-leaf-transparent-bg.png" alt="Infragram logo image." class="logo" />
           <h1 style="font-size:1.5rem;line-height:3.1rem;letter-spacing:0.09rem;margin-bottom:0;"><a style="color:var(--white);padding-right:.3rem" href="../">Infragram</a><small style="font-size:.875rem;color:var(--light-grey);">by <a href="http://publiclab.org" target="_blank" style="font-size:1rem;color:var(--blue);">Public Lab</a></small></h1>
         </div>
@@ -65,14 +65,14 @@
         <div class="btn-toolbar mediaSelect media-tools" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group" id="imageselect"type="button" role="group" aria-label="First group">
             <label for="file-sel" data-bs-toggle="tooltip" data-bs-placement="left" title="Upload an image">
-              <a class="btn-lg btn">
+              <a onClick="toggleToolbar()" class="btn-lg btn">
               <i class="fa fa-upload"></i>
               </a>
               <input type="file" id="file-sel" class="d-none" accept="image/*,video/*">
             </label>
           </div>
           <div class="btn-group labeled" role="group" aria-label="First group">
-            <button onClick="toggleToolbar()" rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
+            <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
           </div>
 
         </div>
@@ -115,26 +115,26 @@
           <!-- ============================ nav links/help menus ======================== -->
         <nav class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group" role="group" aria-label="First group">
-            <a role="button" type="button" class="nav-item btn" href="https://infragram.org/">
+            <a role="button" type="button" class="nav-item btn btn-lg" href="https://infragram.org/">
               <i class="fa fa-home" data-bs-toggle="tooltip" ddata-bs-placement="left" title="Create FTO issue to add in link to homepage here"></i>
             </a>
           </div>
           <div class="btn-group" role="group" aria-label="Second group">
             <div class="btn-group" role="group">
-              <a id="btnGroupDrop3" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <a id="btnGroupDrop3" role="button" type="button" class="nav-item btn btn-lg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-question-circle-o" data-bs-toggle="tooltip" data-bs-placement="left" title="Links to be added in..."></i>
               </a>
               <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li><a class="dropdown-item" href="#">Tutorials</a></li>
-                <li><a class="dropdown-item" href="#">Help</a></li>
-                <li><a class="dropdown-item" href="#">Tips</a></li>
-                <li><a class="dropdown-item" href="#">Obtain a kit</a></li>
+                <li><a class="nav-item dropdown-item" href="#">Tutorials</a></li>
+                <li><a class="nav-item dropdown-item" href="#">Help</a></li>
+                <li><a class="nav-item dropdown-item" href="#">Tips</a></li>
+                <li><a class="nav-item dropdown-item" href="#">Obtain a kit</a></li>
               </ul>
             </div>
           </div>
           <div class="btn-group" role="group" aria-label="Third group">
             <div class="btn-group" role="group">
-              <a id="save-zone" role="button" type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <a id="save-zone" role="button" type="button" class="btn btn-lg dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-save" data-bs-toggle="tooltip"="tooltip" data-bs-placement="left" title="Functional, but 'Export' is sketchy"></i>
               </a>
               <ul class="dropdown-menu" aria-labelledby="save-zone">
@@ -162,7 +162,7 @@
 
           <div class="pt-5">
             <a class="btn btn-outline-secondary" data-bs-toggle="offcanvas" href="#preset-modal" role="button" aria-controls="preset-modal">QUICK START</a>
-            <p>Get up and running in seconds with our default settings. These will auto-load your raw or converted NDVI or Colorized media.</p>
+            <p>Get up and running in seconds with our default settings. These will auto-load your raw or converted media.</p>
 
             <!-- ------------------ quick-start offcanvas panel ------------------------ -->
             <div class="offcanvas offcanvas-start" tabindex="-1" id="preset-modal" aria-labelledby="preset-modal">
@@ -274,7 +274,7 @@
           </div>
 
           <!-- ======================= get started upload/select ======================= -->
-          <div class="card text-center sample-images" style="max-width:15rem;">
+          <div class="card text-center sample-images">
             <div class="card-body">
               <p class="card-text" style="font-size:.625rem;"><small>Drop your media here, connect through your computer above <br class="sample-text-effect"> or <br> explore with our ready-to-use images</small></p>
               <div class="d-flex justify-content-around">
@@ -307,13 +307,13 @@
 
       <!-------- MOBILE TOOL PANEL (3rd row on mobile - not displayed on desktop------------>
 
-      <div class="col-12 d-md-none d-flex justify-content-between align-items-center mobile-analysis-tools">
+      <div class="btn-group col-12 d-md-none d-flex justify-content-around align-items-center mobile-analysis-tools">
 
         <!-- ==================== mobile - QUICK START ================================== -->
         <div>
           <div class="d-flex flex-column justif-content-center align-items-center">
-            <a class="btn btn-sm d-block" data-bs-toggle="offcanvas" href="#preset-modalMobile" role="button" aria-controls="preset-modal">QUICK START</a>
-            <p class="text-center">Default settings</p>
+            <a id="qsMobile" class="btn btn-lg d-block" data-bs-toggle="offcanvas" href="#preset-modalMobile" role="button" aria-controls="preset-modal"><i class="fa fa-fighter-jet"></i></a>
+            <label for="qsMobile">QUICK START</label>
           </div>
 
           <!-- ------------------ quick-start offcanvas panel -------------------------- -->
@@ -354,10 +354,9 @@
 
         <!-- ===================== mobile - ANALYSIS INPUTS ============================= -->
         <div class="analyze">
-          <div class="btn-group dropup d-flex flex-column justify-content-center align-items-center" role="group">
-            <a id="btnGroupDrop8" class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                ANALYZE
-            </a>
+          <div class="btn-group labeled dropup d-flex flex-column justify-content-center align-items-center" role="group">
+            <a id="btnGroupDrop8" class="btn btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-pencil-square-o"></i></a>
+            <label for="btnGroupDrop8">ANALYZE</label>
             <div class="dropdown-menu" aria-labelledby="analysis-mobile">
               <select style="display:inline;width:80px;" id="modeSwitcher" onChange="if(this.value == 'infragrammar_mono'){$('.colorize').show()}else{$('.colorize').hide()}">
                 <option value='infragrammar_mono'>Grey</option>
@@ -385,26 +384,25 @@
               </form>
             </div>
           </div>
-          <p class="text-center">Modify the equations
+          <!-- <p class="text-center">Modify the equations
             <a class="col-1 offset-8 info-icon d-block" style="margin-top:-1.5rem;" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things analysis"><i class="fa fa-info-circle pl-2 analyze-info"></i></a>
-          </p>
+          </p> -->
         </div>
 
 
         <!-- ====================== mobile - COLORIZE =================================== -->
 
         <div class="colorize">
-          <div class="btn-group dropup d-flex flex-column justify-content-center align-items-center" role="group">
-            <a id="btnGroupDrop6" type="submit" role="button"class="btn btn-sm btn-colorize dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              COLORIZE
-            </a>
+          <div class="btn-group labeled dropup d-flex flex-column justify-content-center align-items-center" role="group">
+            <a id="btnGroupDrop6" type="submit" role="button"class="btn btn-lg btn-colorize dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-diamond"></i></a>
+            <label for="btnGroupDrop6">COLORIZE</label>
             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
               <li><a id="default_colormapMobile" class="dropdown-item" href="#">Default colormap</a></li>
               <li><a id="stretched_colormapMobile" class="dropdown-item" href="#">Stretched colormap</a></li>
             </ul>
           </div>
-          <p class="text-center"> (optional)</p>
-          <p class="text-center">Emphasize outputs.<a class="info-icon" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things colormap"><i class="fa fa-info-circle pl-2"></i></a></p>
+          <!-- <p class="text-center"> (optional)</p>
+          <p class="text-center">Emphasize outputs.<a class="info-icon" role="button" target="_blank" href="http://publiclab.org/infragrammar" data-bs-toggle="tooltip" data-placement="bottom" title="To include links to all things colormap"><i class="fa fa-info-circle pl-2"></i></a></p> -->
         </div>
 
       </div>
@@ -462,8 +460,7 @@
                 <i class="fa fa-minus-circle pr-2" data-bs-toggle="tooltip" data-placement="bottom" title="Zoom Out"></i>
               </a>
             </div>
-            <div class="btn-group labeled" role="group" aria-label="Second group">
-
+            <div class="zoom btn-group labeled" role="group" aria-label="Second group">
               <input type="range" class="form-control-range" id="formControlRange">
             </div>
             <div class="btn-group" role="group" aria-label="Third group">

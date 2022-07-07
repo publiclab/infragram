@@ -5,15 +5,13 @@
   --off-white: #acb6bf;
   --light-grey: #777777;
   --main-container-bg: #151b22;
-  --image-container-bg: #0d1118;
+  /* --image-container-bg: #0d1118; */
+  --image-container-bg: #010409;
   --link-color:  #00b7ff;
   --border-grey: #353948;
   --border: 1px solid #353948;
   }
 
-  /* *{
-    border:1px solid red;
-  } */
   /* @font-face {
   font-family:'junctionregular';
   src:url("https://raw.githubusercontent.com/theleagueof/junction/master/_webfonts/junction-webfont.eot");
@@ -60,6 +58,8 @@
     color: var(--blue);
     background-color: var(--image-container-bg);
     border: var(--border);
+    transform: scale(1.1);
+    transition: all 0.4s;
   }
 
   .btn-group label {
@@ -131,6 +131,13 @@
   .header {
     height:11vh;
     padding: 0 2rem;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+  }
+  .header-title {
+    display:flex;
+    justify-content:center;
   }
 
   .logo {
@@ -189,6 +196,8 @@
   }
 
   .welcome-msg {
+    width: clamp(20vw, 50vw, 83.33vw);
+    height: 78vh;
     max-height: 78vh;
     color: var(--off-white);
     position: absolute;
@@ -196,7 +205,7 @@
   }
 
   .welcome-msg-text {
-    width: 60%;
+    width: clamp(20vw, 50vw, 80vw);
     margin: 0 auto;
   }
 
@@ -223,6 +232,7 @@
   .sample-images {
     margin: 0 auto;
     background-color:var(--main-container-bg);
+    min-width:15rem;
   }
 
   #overlay-container {
@@ -308,22 +318,28 @@
     height: 11vh;
     margin-top:-11vh;
   }
+  #preset-modalMobile {
+    background-color: var(--main-container-bg);
+    height: 20vh;
+  }
 
     /* --------------------------------------------------   @media --------------------------- */
   /* ---------------------------------------------------   500px --------------------------- */
    /* total height:
   header: 15vh
-  image-container: 55vh
-  mobile-analysis-tools: 15vh
+  image-container: 60vh
+  mobile-analysis-tools: 10vh
   tool-panel: 15vh */
-  @media only screen and (max-width: 550px) and (max-width: 767px) {
+  @media only screen and (max-width: 550px) {
     .header {
       height: 15vh;
       flex-wrap: wrap;
-      padding:.5rem;
+      padding:0;
     }
     .header-title {
       width: 100vh;
+      display:flex;
+      justify-content:center;
     }
     .header h1 {
       display:inline-block;
@@ -332,42 +348,56 @@
       margin-left: 0;
     }
     .image-container {
-      height: 55vh;
+      height: 60vh;
     }
     #fullscreen{
       top:17vh;
     }
     .welcome-msg {
-      margin-top:1.5rem;
-      height:55vh;
-      max-height:55vh;
+      width: clamp(20vw, 80vw, 100vw);
+      height: 60vh;
+      max-height:60vh;
       display:flex;
       flex-direction:column;
       justify-content: space-around;
       align-items: center;
     }
+    .welcome-msg-text {
+      width:80%;
+    }
     .welcome-msg-text p{
       display:none;
     }
     .mobile-analysis-tools {
-      height:15vh;
+      height:10vh;
       align-items: start;
     }
     #image{
       width:100vw;
       height:auto;
     }
+    div#colorbar-container {
+      bottom:25vh;
+      left:0;
+      width:100vh;
+    }
 
     .analyze-info{
       padding-top:2rem;
+    }
+    #preset-modalMobile {
+      height: 40vh;
     }
 
     .tool-panel {
       height: 15vh;
       margin-top: 0;
-      flex-direction: column;
+      flex-wrap: wrap;
     }
 
+    .zoom{
+      max-width: 8rem;
+    }
     #analyze-dropdown {
       margin-left: 2rem;
     }
@@ -377,8 +407,8 @@
   /* --------------------------------------------------   @media --------------------------- */
   /* ---------------------------------------------------   768px (for canvas integrity) --------------------------- */
   /* total height:
-  header: 7vh
-  image-container: 73vh
+  header: 15vh
+  image-container: 65vh
   mobile-analysis-tools: 10vh
   tool-panel: 10vh */
 
@@ -397,12 +427,9 @@
   }
 
   .header {
-    height: 7vh;
-    padding: 1rem;
-  }
-
-  .header h1 {
-    display:none;
+    height: 15vh;
+    flex-wrap: wrap;
+    justify-content:space-around;
   }
 
   .logo {
@@ -410,18 +437,35 @@
     height:2.5rem;
   }
 
-  #image-container {
-    height: 73vh;
-  }
-
-  h1 {
-    display: none;
+  .header-title {
+    width: 100%;
+    display:flex;
+    justify-content:center;
   }
 
   .mediaSelect {
-    margin-left: 7rem;
+    margin-left: 0;
+    margin-right: auto;
   }
 
+  #image-container {
+    height: 65vh;
+  }
+  #fullscreen{
+    top:17vh;
+  }
+  .welcome-msg {
+    width: clamp(20vw, 80vw, 100vw);
+    height: 65vh;
+    max-height:65vh;
+    display:flex;
+    flex-direction:column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .welcome-msg-text {
+    width:80%;
+  }
   #overlay-container {
     max-width: 100vw;
     max-height: 73vh;
@@ -429,7 +473,8 @@
 
   #image {
     max-width: 100vw;
-    max-height: 73vh;
+    height: 65vh;
+    max-height: 65vh;
     margin-right:0 !important;
   }
 
@@ -445,6 +490,10 @@
     vertical-align: middle;
   }
 
+  #preset-modalMobile {
+    height: 30vh;
+  }
+
   .mobile-analysis-tools {
     height:10vh;
     padding: 0 1rem;
@@ -455,10 +504,7 @@
     margin-top: 0;
   }
 
-  #preset-modalMobile {
-    background-color: var(--main-container-bg);
-    height: 20vh;
-  }
+
   }
 
   /* --------------------------------------------------   @media --------------------------- */
