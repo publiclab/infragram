@@ -1,14 +1,15 @@
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+ isVideo = false,isCamera=false; // Turns off camera feed
+ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+ function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+ function _sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return _sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
+ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return _sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
 
-(function () {
+ (function () {
   function r(e, n, t) {
     function o(i, f) {
       if (!n[i]) {
@@ -307,7 +308,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       };
     };
   }, {
-    "../util/JsImage.js": 17,
+    "../util/JsImage.js": 18,
     "./colormapFunctionGenerator.js": 3,
     "./colormaps.json": 4
   }],
@@ -333,27 +334,27 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
           switch (i) {
             case 0:
-              rgb = [v, t, p];
-              break;
+            rgb = [v, t, p];
+            break;
 
             case 1:
-              rgb = [q, v, p];
-              break;
+            rgb = [q, v, p];
+            break;
 
             case 2:
-              rgb = [p, v, t];
-              break;
+            rgb = [p, v, t];
+            break;
 
             case 3:
-              rgb = [p, q, v];
-              break;
+            rgb = [p, q, v];
+            break;
 
             case 4:
-              rgb = [t, p, v];
-              break;
+            rgb = [t, p, v];
+            break;
 
             default:
-              rgb = [v, p, q];
+            rgb = [v, p, q];
           }
         }
 
@@ -372,15 +373,15 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         } else {
           switch (max) {
             case r:
-              h = (g - b) / d + (g < b ? 6 : 0);
-              break;
+            h = (g - b) / d + (g < b ? 6 : 0);
+            break;
 
             case g:
-              h = (b - r) / d + 2;
-              break;
+            h = (b - r) / d + 2;
+            break;
 
             case b:
-              h = (r - g) / d + 4;
+            h = (r - g) / d + 4;
           }
 
           h /= 6;
@@ -395,12 +396,12 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function Camera(options) {
       var canvas, ctx; // Initialize getUserMedia with options
-
       function initialize() {
-        getUserMedia(webRtcOptions, success, deviceError); // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685
-
-        webRtcOptions.videoEl.setAttribute('autoplay', 'autoplay');
-        webRtcOptions.videoEl.setAttribute('playsinline', 'playsinline');
+        getUserMedia(webRtcOptions, success, deviceError); // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685         
+        webRtcOptions.videoEl.setAttribute('id', 'webCamVideoEl');
+        var webCamVideoEl = document.getElementById('webCamVideoEl')
+        webCamVideoEl.setAttribute('autoplay', 'autoplay');
+        webCamVideoEl.setAttribute('playsinline', 'playsinline');
         window.webcam = webRtcOptions; // this is weird but maybe used for flash fallback?
 
         canvas = options.canvas || document.getElementById("image");
@@ -415,7 +416,6 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       // output we"re working with, the location of the fallback swf,
       // events that are triggered onCapture and onSave (for the fallback)
       // and so on.
-
 
       var webRtcOptions = options.webRtcOptions || {
         "audio": false,
@@ -447,14 +447,14 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
       function onSaveGetUserMedia(data) {
         var col,
-            h,
-            i,
-            img,
-            j,
-            ref,
-            tmp,
-            w,
-            pos = 0;
+        h,
+        i,
+        img,
+        j,
+        ref,
+        tmp,
+        w,
+        pos = 0;
         col = data.split("");
         img = camera.image;
         tmp = null;
@@ -475,19 +475,19 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           return pos = 0;
         }
       }
-
       function success(stream) {
         var video;
+        //localStream = this.stream;
+        window.localStream = stream;
 
+        isCamera = true;
         if (webRtcOptions.context === "webrtc") {
-          video = webRtcOptions.videoEl;
-
+          video = document.getElementById("webCamVideoEl");
           if (navigator.mozGetUserMedia) {
             video.mozSrcObject = stream;
           } else {
             video.srcObject = stream;
           }
-
           return video.onerror = function (e) {
             return stream.stop();
           };
@@ -522,9 +522,9 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
       return {
         getSnapshot: getSnapshot,
-        initialize: initialize,
+        initialize: initialize,        
         onSaveGetUserMedia: onSaveGetUserMedia,
-        webRtcOptions: webRtcOptions
+        webRtcOptions: webRtcOptions,
       };
     };
   }, {}],
@@ -532,45 +532,6 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     // This file was adapted from infragram-js:
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function File(options, processor) {
-      var _getMouseEvent = function getMouseEvent() {
-        var getParams = function getParams() {
-          return {
-            bubbles: false,
-            cancelable: false,
-            screenX: 0,
-            screenY: 0,
-            clientX: 0,
-            clientY: 0
-          };
-        };
-
-        try {
-          // eslint-disable-next-line no-new
-          new MouseEvent("t");
-
-          _getMouseEvent = function getMouseEvent() {
-            return function (eventType) {
-              var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : getParams();
-              return new MouseEvent(eventType, params);
-            };
-          };
-        } catch (e) {
-          // Polyfills DOM4 MouseEvent
-          _getMouseEvent = function getMouseEvent() {
-            return function (eventType) {
-              var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : getParams();
-              var mouseEvent = document.createEvent("MouseEvent"); // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/initMouseEvent
-
-              mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, // the event's mouse click count
-              params.screenX, params.screenY, params.clientX, params.clientY, false, false, false, false, 0, null);
-              return mouseEvent;
-            };
-          };
-        }
-
-        return _getMouseEvent();
-      };
-
       function downloadImage() {
         var event, format, lnk; // create an "off-screen" anchor tag
 
@@ -587,14 +548,9 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         lnk.download = new Date().toISOString().replace(/:/g, "_") + "." + format; // create a "fake" click-event to trigger the download
 
         if (document.createEvent) {
-          var mouseEvent = _getMouseEvent();
-
-          lnk.dispatchEvent(mouseEvent("click", {
-            screenX: 0,
-            screenY: 0,
-            clientX: 0,
-            clientY: 0
-          }));
+          event = document.createEvent("MouseEvents");
+          event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+          lnk.dispatchEvent(event);
         } else if (lnk.fireEvent) {
           lnk.fireEvent("onclick");
         }
@@ -732,17 +688,17 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     // https://github.com/publiclab/image-sequencer
     module.exports = function javascriptProcessor() {
       var b_exp = "",
-          g_exp = "",
-          get_channels,
-          Colormaps = require('../color/colormaps')(JsImage),
-          colormap = Colormaps.colormap1,
-          converters = require('../color/converters'),
-          image = null,
-          mode = "raw",
-          ndvi,
-          r_exp = "",
-          set_mode,
-          update_colorbar;
+      g_exp = "",
+      get_channels,
+      Colormaps = require('../color/colormaps')(JsImage),
+      colormap = Colormaps.colormap1,
+      converters = require('../color/converters'),
+      image = null,
+      mode = "raw",
+      ndvi,
+      r_exp = "",
+      set_mode,
+      update_colorbar;
 
       var JsImage = require('../util/JsImage.js');
 
@@ -1023,7 +979,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
   }, {
     "../color/colormaps": 5,
     "../color/converters": 6,
-    "../util/JsImage.js": 17
+    "../util/JsImage.js": 18
   }],
   11: [function (require, module, exports) {
     // Generated by CoffeeScript 2.1.0
@@ -1031,10 +987,10 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     // http://github.com/p-v-o-s/infragram-js.
     module.exports = function webglProcessor(options) {
       var imgContext = null,
-          mapContext = null,
-          inputImage,
+      mapContext = null,
+      inputImage,
           // the pre-processed image
-      vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
+          vertices = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0],
           waitForShadersToLoad = 0,
           webglUtils = require('../util/webgl-utils')(),
           colorized = false,
@@ -1048,7 +1004,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         stretched: 2,
         grey: 1
       },
-          colormap = colormaps.default;
+      colormap = colormaps.default;
 
       vertices.itemSize = 2;
 
@@ -1347,7 +1303,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       };
     };
   }, {
-    "../util/webgl-utils": 18
+    "../util/webgl-utils": 19
   }],
   12: [function (require, module, exports) {
     module.exports = function Analysis(options, save_infragrammar_inputs) {
@@ -1498,9 +1454,10 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         Presets = require('../ui/presets')(options, save_infragrammar_inputs);
         Analysis = require('../ui/analysis')(options, save_infragrammar_inputs);
         Colorize = require('../ui/colorize')(options);
+        Saving = require('../ui/saving')(options);
         $(options.imageSelector).ready(function () {
           var src,
-              idNameMap = {
+          idNameMap = {
             "#m_exp": "m",
             "#r_exp": "r",
             "#g_exp": "g",
@@ -1546,6 +1503,11 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           return true;
         });
         $("#webcam-activate").click(function () {
+          if(isVideo){
+            $("#localVideo").remove();      
+          }
+          isVideo  = false;
+          isCamera = true;
           $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
@@ -1554,6 +1516,40 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $('#preset-modal').modal('show');
           return true;
         });
+
+        $("#local-video-activate").click(function () {
+          if(isCamera){ 
+            localStream.getVideoTracks()[0].stop();  
+          }             
+          isCamera = false;
+          if(!isVideo){ //Prevent Creation of Duplicate video Elements
+            localVideo = document.createElement('video');
+            localVideo.setAttribute("src", "../video.mp4");
+            localVideo.setAttribute("id", "localVideo");
+            localVideo.style.display = "none"               
+            localVideo.style.width = "100px";   
+            localVideo.style.height = "50px";    
+            document.getElementById("video-container").appendChild(localVideo);
+            localVideo.play();
+            localVideo.muted = true;
+            localVideo.loop = true;
+            document.getElementById("localVideoControls").style.display="block";
+            //Attach video Element tocustom Sleek Bar
+            localVideo.ontimeupdate = function(){
+              var percentage = ( localVideo.currentTime / localVideo.duration ) * 100;
+              $("#custom-seekbar span").css("width", percentage+"%");
+            };
+            //Create video controls
+            //document.getElementById("localVideoControls").innerHTML='<button id="localVideoPlayPause" type="button" class="btn btn-primary btn-lg"><i class="fa fa-pause"></i></button><div id="custom-seekbar"><span></span></div>';
+          }
+          isVideo  = true;
+          $('.choose-prompt').hide();
+          $("#save-modal-btn").show();
+          $("#save-zone").show();
+          save_infragrammar_inputs();
+          $('#preset-modal').modal('show');
+          return true;
+        });        
         $("#snapshot").click(function () {
           options.camera.getSnapshot();
           return true;
@@ -1571,6 +1567,29 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         $("#overlay-slider").on("input", function () {
           setGrid($("#overlay-slider").val());
         });
+
+        //Start video controls
+        $("#custom-seekbar").on("click", function(e){
+          localVideo = document.getElementById('localVideo');
+          var offset = $(this).offset();
+          var left = (e.pageX - offset.left);
+          var totalWidth = $("#custom-seekbar").width();
+          var percentage = ( left / totalWidth );
+          var vidTime = localVideo.duration * percentage;
+          localVideo.currentTime = vidTime;
+        }); 
+        $("#localVideoPlayPause").on("click", function(e){
+          localVideo = document.getElementById('localVideo');
+          if (localVideo.paused){
+           localVideo.play();
+           document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-pause"></i>';             
+          }else {
+           localVideo.pause();
+           document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-play"></i>'; 
+         }
+        }); 
+        //End video controls
+
 
         function setGrid(size) {
           var scale = 80,
@@ -1591,17 +1610,18 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         $("[rel=popover]").popover();
         return true;
       });
-    };
-  }, {
-    "../color/colormaps": 5,
-    "../ui/analysis": 12,
-    "../ui/colorize": 13,
-    "../ui/presets": 16,
-    "./fullscreen": 14,
-    "urlhash": 1
-  }],
-  16: [function (require, module, exports) {
-    module.exports = function Presets(options, save_infragrammar_inputs) {
+};
+}, {
+  "../color/colormaps": 5,
+  "../ui/analysis": 12,
+  "../ui/colorize": 13,
+  "../ui/presets": 16,
+  "../ui/saving": 17,
+  "./fullscreen": 14,
+  "urlhash": 1
+}],
+16: [function (require, module, exports) {
+  module.exports = function Presets(options, save_infragrammar_inputs) {
       // preset button
       $("#preset_raw").click(function () {
         $('#modeSwitcher').val("infragrammar").change();
@@ -1679,6 +1699,49 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     };
   }, {}],
   17: [function (require, module, exports) {
+    module.exports = function Saving(options) {
+      // This is all unused...
+      $("#download").click(function () {
+        downloadImage();
+        return true;
+      }); // refactor this, it's a mess:
+
+      $("#save").click(saveImage);
+
+      function saveImage() {
+        var img;
+
+        function sendThumbnail() {
+          img = options.processor.getCurrentImage();
+          return FileUpload.uploadThumbnail(img, function () {
+            $("#form-filename").val(FileUpload.getFilename());
+            $("#form-log").val(JSON.stringify(logger.log));
+            return $("#save-form").submit();
+          });
+        }
+
+        ;
+        $("#save").prop("disabled", true);
+        $("#save").html("Saving...");
+
+        if (FileUpload.getFilename() === "") {
+          img = options.processor.getCurrentImage();
+          FileUpload.fromBase64("camera", img, sendThumbnail);
+        } else if (FileUpload.isLoadedFromFile() === false) {
+          FileUpload.duplicate(sendThumbnail);
+        } else {
+          sendThumbnail();
+        }
+
+        return img;
+      }
+
+      return {
+        saveImage: saveImage
+      };
+    };
+  }, {}],
+  18: [function (require, module, exports) {
     module.exports =
     /*#__PURE__*/
     function () {
@@ -1747,7 +1810,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       return JsImage;
     }();
   }, {}],
-  18: [function (require, module, exports) {
+  19: [function (require, module, exports) {
     /*
      * Copyright 2012, Gregg Tavares.
      * All rights reserved.
@@ -1788,7 +1851,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        * @param {string} msg The message to log.
        */
 
-      var log = function log(msg) {
+       var log = function log(msg) {
         if (window.console && window.console.log) {
           window.console.log(msg);
         }
@@ -1799,7 +1862,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var error = function error(msg) {
+       var error = function error(msg) {
         if (window.console) {
           if (window.console.error) {
             window.console.error(msg);
@@ -1813,7 +1876,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var loggingOff = function loggingOff() {
+       var loggingOff = function loggingOff() {
         log = function log() {};
 
         error = function error() {};
@@ -1824,7 +1887,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var isInIFrame = function isInIFrame() {
+       var isInIFrame = function isInIFrame() {
         return window != window.top;
       };
       /**
@@ -1835,7 +1898,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var glEnumToString = function glEnumToString(gl, value) {
+       var glEnumToString = function glEnumToString(gl, value) {
         for (var p in gl) {
           if (gl[p] == value) {
             return p;
@@ -1852,7 +1915,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var makeFailHTML = function makeFailHTML(msg) {
+       var makeFailHTML = function makeFailHTML(msg) {
         return '' + '<table style="background-color: #8CE; width: 100%; height: 100%;"><tr>' + '<td align="center">' + '<div style="display: table-cell; vertical-align: middle;">' + '<div style="">' + msg + '</div>' + '</div>' + '</td></tr></table>';
       };
       /**
@@ -1861,13 +1924,13 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var GET_A_WEBGL_BROWSER = '' + 'This page requires a browser that supports WebGL.<br/>' + '<a href="http://get.webgl.org">Click here to upgrade your browser.</a>';
+       var GET_A_WEBGL_BROWSER = '' + 'This page requires a browser that supports WebGL.<br/>' + '<a href="http://get.webgl.org">Click here to upgrade your browser.</a>';
       /**
        * Mesasge for need better hardware
        * @type {string}
        */
 
-      var OTHER_PROBLEM = '' + "It doesn't appear your computer can support WebGL.<br/>" + '<a href="http://get.webgl.org/troubleshooting/">Click here for more information.</a>';
+       var OTHER_PROBLEM = '' + "It doesn't appear your computer can support WebGL.<br/>" + '<a href="http://get.webgl.org/troubleshooting/">Click here for more information.</a>';
       /**
        * Creates a webgl context. If creation fails it will
        * change the contents of the container of the <canvas>
@@ -1879,7 +1942,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        * @return {WebGLRenderingContext} The created context.
        */
 
-      var setupWebGL = function setupWebGL(canvas, opt_attribs) {
+       var setupWebGL = function setupWebGL(canvas, opt_attribs) {
         function showLink(str) {
           var container = canvas.parentNode;
 
@@ -1910,7 +1973,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var create3DContext = function create3DContext(canvas, opt_attribs) {
+       var create3DContext = function create3DContext(canvas, opt_attribs) {
         var names = ["webgl", "experimental-webgl"];
         var context = null;
 
@@ -1938,7 +2001,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var getWebGLContext = function getWebGLContext(canvas, opt_attribs) {
+       var getWebGLContext = function getWebGLContext(canvas, opt_attribs) {
         if (isInIFrame()) {
           updateCSSIfInIFrame(); // make the canvas backing store the size it's displayed.
 
@@ -1959,7 +2022,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var loadShader = function loadShader(gl, shaderSource, shaderType, opt_errorCallback) {
+       var loadShader = function loadShader(gl, shaderSource, shaderType, opt_errorCallback) {
         var errFn = opt_errorCallback || error; // Create the shader object
 
         var shader = gl.createShader(shaderType); // Load the shader source
@@ -1987,22 +2050,22 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        * @param {!Array.<string>} opt_attribs The attribs names.
        * @param {!Array.<number>} opt_locations The locations for the attribs.
        * @param {function(string): void) opt_errorCallback callback for errors.
-       */
+         */
 
 
-      var loadProgram = function loadProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
-        var errFn = opt_errorCallback || error;
-        var program = gl.createProgram();
+         var loadProgram = function loadProgram(gl, shaders, opt_attribs, opt_locations, opt_errorCallback) {
+          var errFn = opt_errorCallback || error;
+          var program = gl.createProgram();
 
-        for (var ii = 0; ii < shaders.length; ++ii) {
-          gl.attachShader(program, shaders[ii]);
-        }
-
-        if (opt_attribs) {
-          for (var ii = 0; ii < opt_attribs.length; ++ii) {
-            gl.bindAttribLocation(program, opt_locations ? opt_locations[ii] : ii, opt_attribs[ii]);
+          for (var ii = 0; ii < shaders.length; ++ii) {
+            gl.attachShader(program, shaders[ii]);
           }
-        }
+
+          if (opt_attribs) {
+            for (var ii = 0; ii < opt_attribs.length; ++ii) {
+              gl.bindAttribLocation(program, opt_locations ? opt_locations[ii] : ii, opt_attribs[ii]);
+            }
+          }
 
         gl.linkProgram(program); // Check the link status
 
@@ -2029,7 +2092,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var createShaderFromScript = function createShaderFromScript(gl, scriptId, opt_shaderType, opt_errorCallback) {
+       var createShaderFromScript = function createShaderFromScript(gl, scriptId, opt_shaderType, opt_errorCallback) {
         var shaderSource = "";
         var shaderType;
         var shaderScript = document.getElementById(scriptId);
@@ -2068,7 +2131,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        * @return {!WebGLProgram} The created program.
        */
 
-      var createProgramFromScripts = function createProgramFromScripts(gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {
+       var createProgramFromScripts = function createProgramFromScripts(gl, shaderScriptIds, opt_attribs, opt_locations, opt_errorCallback) {
         var shaders = [];
 
         for (var ii = 0; ii < shaderScriptIds.length; ++ii) {
@@ -2089,7 +2152,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        *     found.
        */
 
-      var getExtensionWithKnownPrefixes = function getExtensionWithKnownPrefixes(gl, name) {
+       var getExtensionWithKnownPrefixes = function getExtensionWithKnownPrefixes(gl, name) {
         for (var ii = 0; ii < browserPrefixes.length; ++ii) {
           var prefixedName = browserPrefixes[ii] + name;
           var ext = gl.getExtension(prefixedName);
@@ -2105,7 +2168,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var resizeCanvasToDisplaySize = function resizeCanvasToDisplaySize(canvas) {
+       var resizeCanvasToDisplaySize = function resizeCanvasToDisplaySize(canvas) {
         if (canvas.width != canvas.clientWidth || canvas.height != canvas.clientHeight) {
           canvas.width = canvas.clientWidth;
           canvas.height = canvas.clientHeight;
@@ -2116,12 +2179,12 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var requestAnimFrame = function () {
+       var requestAnimFrame = function () {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (
-        /* function FrameRequestCallback */
-        callback,
-        /* DOMElement Element */
-        element) {
+          /* function FrameRequestCallback */
+          callback,
+          /* DOMElement Element */
+          element) {
           return window.setTimeout(callback, 1000 / 60);
         };
       }();
@@ -2130,7 +2193,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
        */
 
 
-      var cancelRequestAnimFrame = function () {
+       var cancelRequestAnimFrame = function () {
         return window.cancelCancelRequestAnimationFrame || window.webkitCancelRequestAnimationFrame || window.mozCancelRequestAnimationFrame || window.oCancelRequestAnimationFrame || window.msCancelRequestAnimationFrame || window.clearTimeout;
       }();
 
@@ -2142,7 +2205,6 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         updateCSSIfInIFrame: updateCSSIfInIFrame,
         getExtensionWithKnownPrefixes: getExtensionWithKnownPrefixes,
         resizeCanvasToDisplaySize: resizeCanvasToDisplaySize,
-        requestAnimFrame: requestAnimFrame,
         cancelRequestAnimFrame: cancelRequestAnimFrame
       };
     };
