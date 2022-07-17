@@ -22,6 +22,10 @@ module.exports = function Camera(options) {
     $("#snapshot").show();
     $("#live-video").show();
     $("#webcam").show();
+  }  
+
+  function unInitialize() { //Initialize Webrtc without webcam
+    getUserMedia(webRtcOptions, falseSuccess, deviceError);       
   }
 
   // webRtcOptions contains the configuration information for the shim
@@ -81,6 +85,7 @@ module.exports = function Camera(options) {
   function success(stream) {
     var video;
     window.localStream = stream;
+    isOnCam = stream;
     isCamera = true;
     if (webRtcOptions.context === "webrtc") {
       video = document.getElementById("webCamVideoEl");
@@ -92,16 +97,21 @@ module.exports = function Camera(options) {
       return video.onerror = function (e) {
         return stream.stop();
       };
-      } else {
+    } else {
 
-      }    
-    }
+    } 
+  }
 
-      function deviceError(error) {
-        alert("No camera available.");
-        console.log(error);
-        return console.error("An error occurred: [CODE " + error.code + "]");
+  function deviceError(error) {
+    alert("No camera available.");
+    console.log(error);
+    return console.error("An error occurred: [CODE " + error.code + "]");
+  }
+  function falseSuccess(stream) {
+        //Prevent Webcam stream during video processing
+        stream.getVideoTracks()[0].stop();
       }
+
 
   // not doing anything now... for copying to a 2nd canvas
   function getSnapshot() {
@@ -128,6 +138,7 @@ return {
   getSnapshot: getSnapshot,
   initialize: initialize,
   onSaveGetUserMedia: onSaveGetUserMedia,
-  webRtcOptions: webRtcOptions
+  webRtcOptions: webRtcOptions,
+  unInitialize: unInitialize,
 }
 }
