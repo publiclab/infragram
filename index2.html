@@ -62,21 +62,19 @@
         </div>
 
           <!-- ========================= camera/image/video-controls  ======================== -->
-        <div class="btn-toolbar mediaSelect media-tools" role="toolbar" aria-label="Toolbar with button groups">
-          <div class="btn-group" id="imageselect"type="button" role="group" aria-label="First group">
-            <label for="file-sel" data-bs-toggle="tooltip" data-bs-placement="left" title="Upload an image">
-              <a onClick="toggleToolbar()" class="btn-lg btn">
-              <i class="fa fa-upload"></i>
-              </a>
-              <input type="file" id="file-sel" class="d-none" accept="image/*,video/*">
-            </label>
+          <div class="btn-toolbar mediaSelect media-tools" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" id="imageselect">
+              <label for="file-sel" tabindex="0">
+                <button onClick="toggleToolbar()"  rel="tooltip" data-bs-placement="left" title="Upload an image" type="button" class="btn-lg btn">
+                  <i class="fa fa-upload"></i>
+                </button>
+                <input type="file" id="file-sel" accept="image/*,video/*" class="visually-hidden" aria-hidden="true" />
+              </label>
+            </div>
+            <div class="btn-group">
+              <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
+            </div>
           </div>
-          <div class="btn-group labeled" role="group" aria-label="First group">
-            <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
-          </div>
-
-        </div>
-
 
         <!-- -----------VIDEO CONTROLS------------------------ -->
         <!-- ============ tools to be moved to canvas upon video upload ?????? ====== -->
@@ -277,13 +275,15 @@
           <div class="card text-center sample-images">
             <div class="card-body">
               <p class="card-text" style="font-size:.625rem;"><small>Drop your media here, connect through your computer above <br class="sample-text-effect"> or <br> explore with our ready-to-use images</small></p>
-              <div class="d-flex justify-content-around">
-                <div class="d-flex flex-column justify-content-center align-items-baseline">
-                  <img src="assets/red-filtered-trees-thumbnail.jpeg" alt="Red filtered image - select to explore the tool." style="width:5rem;height:auto;border:.5rem solild var(--image-container-bg);">
-                  <p class="card-text" style="font-size:.625rem;padding-top:.5rem;"><small>Red filtered trees</small></p>
+              <div id="sample-image__select" class="d-flex justify-content-around">
+                <div id="red-filtered-img" class="rfi d-flex flex-column justify-content-center align-items-baseline">
+                  <img class="rfi" src="assets/red-filtered-trees-thumbnail.jpeg" alt="Red filtered image - select to explore the tool." style="width:5rem;height:auto;border:.5rem solild var(--image-container-bg);">
+                  <img id="rfi" class='d-none' src="assets/red-filtered-trees.jpeg" alt="Red filtered image - select to explore the tool."">
+                  <p class="rfi card-text" style="font-size:.625rem;padding-top:.5rem;"><small>Red filtered trees</small></p>
                 </div>
-                <div class="d-flex flex-column justify-content-center align-items-center">
+                <div id="blue-filtered-img" class="d-flex flex-column justify-content-center align-items-center">
                   <img src="assets/blue-filtered-plant-thumbnail.jpeg" alt="Blue filtered image - select to explore the tool." style="width:5rem;height:auto;">
+                  <img id="bfi" class='d-none' src="assets/blue-filtered-plant.jpeg" alt="Blue filtered image - select to explore the tool.">
                   <p class="card-text" style="font-size:.625rem;padding-top:.5rem;"><small>Blue filtered plant</small></p>
                 </div>
               </div>
