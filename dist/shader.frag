@@ -8,6 +8,8 @@ uniform int uColorized;
 uniform int uSelectColormap;
 uniform int uHsv;
 uniform int uColormap;
+uniform vec2 uScale;
+
 
 vec4 greyscale_colormap(float n) {
   vec2 x  = vec2(0.0, 1.0);
