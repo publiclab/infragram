@@ -131,7 +131,17 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           if (image) options.run(options.mode);
           options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
         }, interval);
-      }; // TODO: this doesn't work; it just downloads the unmodified image.
+      };
+
+      options.processLocalVideo = function processLocalVideo() {
+        options.camera.unInitialize();
+        var interval;
+        if (options.processor.type == "webgl") interval = 15;else interval = 150;
+        setInterval(function () {
+          if (image) options.run(options.mode);
+          options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
+        }, interval);
+      }; // TODO: this doesn't work; it just downloads the unmodified image. 
       // probably a timing issue?
 
 
@@ -412,6 +422,11 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         $("#snapshot").show();
         $("#live-video").show();
         $("#webcam").show();
+      }
+
+      function unInitialize() {
+        //Initialize Webrtc without webcam
+        getUserMedia(webRtcOptions, falseSuccess, deviceError);
       } // webRtcOptions contains the configuration information for the shim
       // it allows us to specify the width and height of the video
       // output we"re working with, the location of the fallback swf,
@@ -422,7 +437,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       var webRtcOptions = options.webRtcOptions || {
         "audio": false,
         "video": true,
-        // the element (by id) you wish to use for
+        // the element (by id) you wish to use for 
         // displaying the stream from a camera
         el: "webcam",
         extern: null,
@@ -431,8 +446,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         // container
         width: 640,
         height: 480,
-        // the recommended mode to be used is
-        // "callback " where a callback is executed
+        // the recommended mode to be used is 
+        // "callback " where a callback is executed 
         // once data is available
         mode: "callback",
         // a debugger callback is available if needed
@@ -481,6 +496,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       function success(stream) {
         var video;
         window.localStream = stream;
+        isOnCam = stream;
         isCamera = true;
 
         if (webRtcOptions.context === "webrtc") {
@@ -502,13 +518,18 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         alert("No camera available.");
         console.log(error);
         return console.error("An error occurred: [CODE " + error.code + "]");
+      }
+
+      function falseSuccess(stream) {
+        //Prevent Webcam stream during video processing
+        stream.getVideoTracks()[0].stop();
       } // not doing anything now... for copying to a 2nd canvas
 
 
       function getSnapshot() {
         var video; // If the current context is WebRTC/getUserMedia (something
         // passed back from the shim to avoid doing further feature
-        // detection), we handle getting video/images for our canvas
+        // detection), we handle getting video/images for our canvas 
         // from our HTML5 <video> element.
 
         if (webRtcOptions.context === "webrtc") {
@@ -528,7 +549,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         getSnapshot: getSnapshot,
         initialize: initialize,
         onSaveGetUserMedia: onSaveGetUserMedia,
-        webRtcOptions: webRtcOptions
+        webRtcOptions: webRtcOptions,
+        unInitialize: unInitialize
       };
     };
   }, {}],
@@ -615,7 +637,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
             run_infragrammar(mode); // this sets colorized to false!
 
             if (params['color'] === "true" || params['c'] === "true") {
-              options.colorized = true; // again, so it gets run
+              options.colorized = true; // again, so it gets run 
             }
 
             if (options.colorized) {
@@ -1001,7 +1023,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           // TODO: we should refactor this to use colormaps in /src/color/;
       // we could build the dist/shader.frag file automatically around these
       // using the function now at /src/color/colormapFunctionGenerator.js
-      // ... we need to either use integer indices for colormap,
+      // ... we need to either use integer indices for colormap, 
       // OR switch the system to strings and use the colormap names
       colormaps = {
         default: 0,
@@ -1110,9 +1132,31 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       }
 
       ;
+      /*Start Zomming Logic*/
+
+      var scale = 1;
+      var slider = document.getElementById("formControlRange");
+
+      slider.oninput = function () {
+        scale = this.value;
+      };
+      /*End  Zomming Logic*/
+
+
+      var myMousex = 0;
+      var myMousey = 0;
+      document.addEventListener("mousemove", function () {
+        var mousex = event.clientX; // Gets Mouse X
+
+        var mousey = event.clientY; // Gets Mouse Y
+        //console.log([mousex, mousey]); // Prints data
+
+        myMousex = mousex / 5000;
+        myMousey = mousey / 5000;
+      });
 
       function drawScene(ctx, returnImage) {
-        var gl, pColormap, pHsvUniform, pColorizedUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition;
+        var gl, pColormap, pHsvUniform, pColorizedUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition, pScale, pTranslation;
 
         if (!returnImage) {
           window.requestAnimationFrame(function () {
@@ -1136,6 +1180,10 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         gl.uniform1i(pSampler, 0);
         pSliderUniform = gl.getUniformLocation(ctx.shaderProgram, "uSlider");
         gl.uniform1f(pSliderUniform, ctx.slider);
+        pScale = gl.getUniformLocation(ctx.shaderProgram, "uScale");
+        gl.uniform2fv(pScale, [scale, scale]);
+        pTranslation = gl.getUniformLocation(ctx.shaderProgram, "uTranslation");
+        gl.uniform2fv(pTranslation, [myMousex, myMousey]);
         pColorizedUniform = gl.getUniformLocation(ctx.shaderProgram, "uColorized");
         gl.uniform1i(pColorizedUniform, colorized || ctx.colormap ? 1 : 0);
         pSelColormapUniform = gl.getUniformLocation(ctx.shaderProgram, "uSelectColormap");
@@ -1361,21 +1409,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         options.run(options.mode);
         return $("#btn-colorize").addClass("active");
       });
-      $("#default_colormapMobile").click(function () {
-        console.log('default colormap');
-        colorize();
-        options.colorize('default');
-        options.run(options.mode);
-        return $("#btn-colorize").addClass("active");
-      });
       $("#stretched_colormap").click(function () {
-        console.log('stretched colormap');
-        colorize();
-        options.colorize('stretched');
-        options.run(options.mode);
-        return $("#btn-colorize").addClass("active");
-      }); // duplicated in presets.js
-      $("#stretched_colormapMobile").click(function () {
         console.log('stretched colormap');
         colorize();
         options.colorize('stretched');
@@ -1433,6 +1467,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
     module.exports = function Interface(options) {
       var isVideo = false,
           isCamera = false;
+      var isOnCam;
       options.imageSelector = options.imageSelector || "#image-container";
       options.fileSelector = options.fileSelector || "#file-sel";
 
@@ -1487,7 +1522,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           };
           $("#overlay-slider").val(localStorage.getItem("overlaySize"));
           console.log('grid ' + localStorage.getItem("overlaySize"));
-          setGrid($("#overlay-slider").val()); // TODO: broken:
+          setGrid($("#overlay-slider").val()); // TODO: broken:  
           //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
 
           src = urlHash.getUrlHashParameter('src');
@@ -1531,7 +1566,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         });
         $("#webcam-activate").click(function () {
           if (isVideo) {
-            $("#localVideo").remove();
+            $("video").remove(); //$("#localVideo").remove();      
           }
 
           isVideo = false;
@@ -1547,33 +1582,31 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         });
 
         function activateVideo(videoURL) {
+          options.processLocalVideo();
+
           if (isCamera) {
             localStream.getVideoTracks()[0].stop();
           }
 
-          $("#localVideo").remove();
           isCamera = false;
+          $("#localVideo").remove();
+          localVideo = document.createElement('video');
+          localVideo.setAttribute("id", "localVideo");
+          localVideo.setAttribute("src", videoURL);
+          localVideo.load();
+          localVideo.style.display = "none";
+          localVideo.style.width = "50px";
+          localVideo.style.height = "50px";
+          document.getElementById("video-container").appendChild(localVideo);
+          localVideo.play();
+          localVideo.muted = true;
+          localVideo.loop = true;
+          document.getElementById("localVideoControls").style.display = "block"; //Attach video Element tocustom Sleek Bar
 
-          if (!isVideo) {
-            //Prevent Creation of Duplicate video Elements
-            localVideo = document.createElement('video');
-            localVideo.setAttribute("id", "localVideo");
-            localVideo.setAttribute("src", videoURL);
-            localVideo.load();
-            localVideo.style.display = "none";
-            localVideo.style.width = "50px";
-            localVideo.style.height = "50px";
-            document.getElementById("video-container").appendChild(localVideo);
-            localVideo.play();
-            localVideo.muted = true;
-            localVideo.loop = true;
-            document.getElementById("localVideoControls").style.display = "block"; //Attach video Element tocustom Sleek Bar
-
-            localVideo.ontimeupdate = function () {
-              var percentage = localVideo.currentTime / localVideo.duration * 100;
-              $("#custom-seekbar span").css("width", percentage + "%");
-            };
-          }
+          localVideo.ontimeupdate = function () {
+            var percentage = localVideo.currentTime / localVideo.duration * 100;
+            $("#custom-seekbar span").css("width", percentage + "%");
+          };
 
           isVideo = true;
           $('.choose-prompt').hide();
