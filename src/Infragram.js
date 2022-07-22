@@ -1,5 +1,6 @@
 window.Infragram = function Infragram(options) {
   options = options || {};
+  options.version = options.version || 1; // for old instances where it hasn't been explicitly set
   options.uploader = options.uploader || false;
   options.processor = options.processor || 'javascript';
   options.camera = require('./io/camera')(options);
