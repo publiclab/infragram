@@ -111,8 +111,30 @@ console.log(options, 'webgl');
     }
   };
 
+  /*Start Zomming Logic*/
+  var scale = 1;
+  var slider = document.getElementById("formControlRange");
+
+  slider.oninput = function() {
+    scale = this.value;
+  }
+  /*End  Zomming Logic*/
+
+  /*Start Panning Logic*/
+  var myMousex = 0; 
+  var myMousey = 0; 
+
+  document.addEventListener("mousemove", () => {
+    let mousex = event.clientX; // Gets Mouse X
+    let mousey = event.clientY; // Gets Mouse Y
+    myMousex = mousex/5000;
+    myMousey = mousey/5000;
+  });
+  /*End Panning Logic*/
+
   function drawScene(ctx, returnImage) {
-    var gl, pColormap, pHsvUniform, pColorizedUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition;
+
+    var gl, pColormap, pHsvUniform, pColorizedUniform, pSampler, pSelColormapUniform, pSliderUniform, pVertexPosition,pScale,pTranslation;
     if (!returnImage) {
       window.requestAnimationFrame(function() {
         return drawScene(ctx, false);
@@ -133,6 +155,12 @@ console.log(options, 'webgl');
     gl.uniform1i(pSampler, 0);
     pSliderUniform = gl.getUniformLocation(ctx.shaderProgram, "uSlider");
     gl.uniform1f(pSliderUniform, ctx.slider);
+    pScale = gl.getUniformLocation(ctx.shaderProgram, "uScale");
+    gl.uniform2fv(pScale, [scale,scale]);
+    pTranslation = gl.getUniformLocation(ctx.shaderProgram, "uTranslation");
+    gl.uniform2fv(pTranslation, [myMousex,myMousey]);
+
+
 
     pColorizedUniform = gl.getUniformLocation(ctx.shaderProgram, "uColorized");
     gl.uniform1i(pColorizedUniform, (colorized || ctx.colormap ? 1 : 0));

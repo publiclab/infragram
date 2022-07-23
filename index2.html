@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
   <script src="node_modules/webrtc-adapter/out/adapter.js"></script>
   <script src="node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
 
-  <script src="dist/infragram2.js"></script>
+  <script src="dist/infragram.js"></script>
 
   <script type="x-shader/x-vertex" id="shader-vs"></script>
   <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -460,7 +461,7 @@
               </a>
             </div>
             <div class="zoom btn-group labeled" role="group" aria-label="Second group">
-              <input type="range" class="form-control-range" id="formControlRange">
+              <input type="range" min="0.1" max="5" value="1" step=".01" class="form-control-range" id="formControlRange">
             </div>
             <div class="btn-group" role="group" aria-label="Third group">
               <a id="revert" role="button" type="button" class="btn btn-dark">
@@ -512,7 +513,7 @@
         });
 
         openInPl = function openInPl() {
-	        var dataurl = infragram.options.processor.getCurrentImage();
+          var dataurl = infragram.options.processor.getCurrentImage();
           function postToPL(imgSrc) {
             var uniq = Date.now();
             var color = $('#m_exp').val().substr(1,3) == "R-B" ? "blue" : "red";
