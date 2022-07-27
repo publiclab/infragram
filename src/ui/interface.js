@@ -52,12 +52,12 @@ module.exports = function Interface(options) {
         "#s_exp": "s",
         "#v_exp": "v"
       };
- 
+
       $("#overlay-slider").val(localStorage.getItem("overlaySize"));
       console.log('grid ' + localStorage.getItem("overlaySize"));
       setGrid($("#overlay-slider").val());
 
-      // TODO: broken:  
+      // TODO: broken:
       //urlHash.setUrlHashParameter(JSON.stringify(idNameMap));
       src = urlHash.getUrlHashParameter('src');
       if (src) {
@@ -66,6 +66,21 @@ module.exports = function Interface(options) {
         fetch_image(src);
       }
       return true;
+    });
+
+    $("#sample-image__select").click(function(e){
+      e.stopPropagation();
+      const img = (e.target.classList.contains('rfi')) ? document.getElementById('rfi') : document.getElementById('bfi');
+      fetch(img.src)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], img.src, blob)
+          const fileInput = document.querySelector('input[type="file"]');
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          fileInput.files = dataTransfer.files;
+          $(options.fileSelector).trigger("change");
+        })
     });
 
     $(options.fileSelector).change(function() {
@@ -130,7 +145,7 @@ module.exports = function Interface(options) {
       localStorage.setItem("overlaySize", $("#overlay-slider").val());
       $("#overlay-save-info").show().delay(2000).fadeOut();
     });
-    
+
     $("[rel=tooltip]").tooltip()
     $("[rel=popover]").popover()
     return true;

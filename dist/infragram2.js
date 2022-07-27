@@ -1503,9 +1503,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
         $("#sample-image__select").click(function(e){
           e.stopPropagation();
-          console.dir(e.target.classList)
           const img = (e.target.classList.contains('rfi')) ? document.getElementById('rfi') : document.getElementById('bfi');
-          console.log(img)
           fetch(img.src)
             .then(res => res.blob())
             .then(blob => {

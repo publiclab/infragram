@@ -1524,6 +1524,20 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
           return true;
         });
+        $("#sample-image__select").click(function(e){
+          e.stopPropagation();
+          const img = (e.target.classList.contains('rfi')) ? document.getElementById('rfi') : document.getElementById('bfi');
+          fetch(img.src)
+            .then(res => res.blob())
+            .then(blob => {
+              const file = new File([blob], img.src, blob)
+              const fileInput = document.querySelector('input[type="file"]');
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(file);
+              fileInput.files = dataTransfer.files;
+              $(options.fileSelector).trigger("change");
+            })
+        });
         $(options.fileSelector).change(function () {
           $('.choose-prompt').hide();
           $("#save-modal-btn").show();
