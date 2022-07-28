@@ -29,6 +29,7 @@
   <script type="x-shader/x-fragment" id="shader-fs"></script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TC8EC01HKK"></script>
+
   <script>
     window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -38,7 +39,8 @@
   </script>
 </head>
 
-<body>
+<body id="drop-zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+
   <div id="video-container" style="display:none"></div>
   <div class="container-fluid d-flex flex-column main-container">
     <!-- TODO: change this: -->
@@ -266,7 +268,7 @@
 
         <!-- ========================= intro/welcome msg =============================== -->
         <!-- onClick="$('.choose-prompt').hide();" -->
-        <div class="choose-prompt welcome-msg">
+        <div id="dropZone" class="choose-prompt welcome-msg">
           <div class="welcome-msg-text">
             <h2 style="font-size:1.25rem;">Analyze plant health. <br> Visualize photosynthesis.</h2>
             <p>Every pixel of your infragram media is converted to display the amount of infrared light reflected when used <a href="" style="color:var(--link-color);">with an Infragram camera or filter kit</a>. The default setting generates grey-scale NDVI, the Normalized Difference Vegetation Index, and has a built in colorize function to intensify individual pixel channels.</p>
@@ -532,6 +534,28 @@
           window.location = "https://sequencer.publiclab.org/examples/#steps=ndvi{filter:" + color + "},colormap{colormap:default}&src=" + dataurl;
         }
       })()
+
+      function dropHandler(ev) {
+        ev.preventDefault();
+        if (ev.dataTransfer.items && ev.dataTransfer.items[0].kind === 'file') {
+          // Use DataTransferItemList interface to access the file(s)
+          const file = ev.dataTransfer.items[0].getAsFile();
+          const dataTransfer = new DataTransfer();
+          const fileInput = document.querySelector('input[type="file"]');
+          const fileSelect = document.getElementById('file-sel');
+          var event = new Event('change');
+          dataTransfer.items.add(file);
+          fileInput.files = dataTransfer.files;
+          fileSelect.dispatchEvent(event);
+        }
+      }
+
+      function dragOverHandler(ev) {
+        console.log('File(s) in drop zone');
+
+        // Prevent default behavior (Prevent file from being opened)
+        ev.preventDefault();
+      }
 
   </script>
 </body>
