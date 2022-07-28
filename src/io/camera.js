@@ -88,7 +88,7 @@ module.exports = function Camera(options) {
     isOnCam = stream;
     isCamera = true;
     if (webRtcOptions.context === "webrtc") {
-      video = document.getElementById("webCamVideoEl");
+      video = webRtcOptions.videoEl;
       if (navigator.mozGetUserMedia) {
         video.mozSrcObject = stream;
       } else {
