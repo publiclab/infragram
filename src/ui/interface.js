@@ -68,9 +68,10 @@ module.exports = function Interface(options) {
       return true;
     });
 
-    $("#sample-image__select").click(function(e){
+    //Version 2 - load pre-selected sample image:
+    $(".sample-image").click(function(e){
       e.stopPropagation();
-      const img = (e.target.classList.contains('rfi')) ? document.getElementById('rfi') : document.getElementById('bfi');
+      const img = (e.target);
       fetch(img.src)
         .then(res => res.blob())
         .then(blob => {
