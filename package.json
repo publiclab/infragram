@@ -27,7 +27,7 @@
     "font-awesome": "~4.7.0",
     "http-server": "^14.1.0",
     "jquery": "~3",
-    "webgl-utils": "~1.0.0",
+    "webgl-utils": "~1.0.0"
   },
   "devDependencies": {
     "babel-core": "7.0.0-beta.3",
