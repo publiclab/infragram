@@ -19,6 +19,10 @@ module.exports = function Camera(options) {
     $("#live-video").show();
     $("#webcam").show();
   }
+  
+  function unInitialize() { //Initialize stream without webcam
+    navigator.mediaDevices.getUserMedia(webRtcOptions).then(falseSuccess).catch(deviceError);
+  }  
 
   // webRtcOptions contains the configuration information for the shim
   // it allows us to specify the width and height of the video
@@ -92,6 +96,11 @@ module.exports = function Camera(options) {
     return console.error("An error occurred: [CODE " + error.code + "]");
   }
 
+  function falseSuccess(stream) {
+        //Stream for video processing
+        stream.getVideoTracks()[0].stop();
+  }  
+  
   // not doing anything now... for copying to a 2nd canvas
   function getSnapshot() {
     var video;
@@ -104,6 +113,7 @@ module.exports = function Camera(options) {
     getSnapshot: getSnapshot,
     initialize: initialize,
     onSaveGetUserMedia: onSaveGetUserMedia,
-    webRtcOptions: webRtcOptions
+    webRtcOptions: webRtcOptions,
+    unInitialize: unInitialize,
   }
 }
