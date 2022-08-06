@@ -92,6 +92,7 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
   2: [function (require, module, exports) {
     window.Infragram = function Infragram(options) {
       options = options || {};
+      options.version = options.version || 1; // for old instances where it hasn't been explicitly set
 
       options.uploader = options.uploader || false;
       options.processor = options.processor || 'javascript';
@@ -400,7 +401,14 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       options.webcamVideoEl = document.getElementById(options.webcamVideoSelector); // Initialize getUserMedia with options
 
       function initialize() {
-        navigator.mediaDevices.getUserMedia(webRtcOptions).then(success).catch(deviceError); // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685     
+        if (options.version == 1) {
+          getUserMedia(webRtcOptions, success, deviceError); // iOS Safari 11 compatibility: https://github.com/webrtc/adapter/issues/685
+
+          webRtcOptions.videoEl.setAttribute('autoplay', 'autoplay');
+          webRtcOptions.videoEl.setAttribute('playsinline', 'playsinline');
+        } else {
+          navigator.mediaDevices.getUserMedia(webRtcOptions).then(success).catch(deviceError);
+        }
 
         window.webcam = webRtcOptions; // this is weird but maybe used for flash fallback?
 
@@ -483,14 +491,32 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
       }
 
       function success(stream) {
-        window.localStream = stream;
-        isOnCam = stream;
-        isCamera = true;
-        track = stream.getTracks()[0];
-        webCamVideoEl.srcObject = stream;
-        return webCamVideoEl.onerror = function (e) {
-          return stream.stop();
-        };
+        if (options.version == 1) {
+          var video;
+
+          if (webRtcOptions.context === "webrtc") {
+            video = webRtcOptions.videoEl;
+
+            if (navigator.mozGetUserMedia) {
+              video.mozSrcObject = stream;
+            } else {
+              video.srcObject = stream;
+            }
+
+            return video.onerror = function (e) {
+              return stream.stop();
+            };
+          } else {}
+        } else {
+          window.localStream = stream;
+          isOnCam = stream;
+          isCamera = true;
+          track = stream.getTracks()[0];
+          webCamVideoEl.srcObject = stream;
+          return webCamVideoEl.onerror = function (e) {
+            return stream.stop();
+          };
+        }
       }
 
       function deviceError(error) {
@@ -506,14 +532,29 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
 
       function getSnapshot() {
-        var video; // If the current context is getUserMedia (something
-        // passed back from the shim to avoid doing further feature
-        // detection), we handle getting video/images for our canvas 
-        // from our HTML5 <video> element.
+        if (options.version == 1) {
+          var video; // If the current context is WebRTC/getUserMedia (something
+          // passed back from the shim to avoid doing further feature
+          // detection), we handle getting video/images for our canvas 
+          // from our HTML5 <video> element.
 
-        video = document.getElementsByTagName("video")[0];
-        options.processor.updateImage(video);
-        return $("#webcam").hide();
+          if (webRtcOptions.context === "webrtc") {
+            video = document.getElementsByTagName("video")[0];
+            options.processor.updateImage(video);
+            return $("#webcam").hide(); // Otherwise, if the context is Flash, we ask the shim to
+            // directly call window.webcam, where our shim is located
+            // and ask it to capture for us.
+          } else if (webRtcOptions.context === "flash") {
+            return window.webcam.capture();
+          } else {
+            console.log("No context was supplied to getSnapshot()");
+          }
+        } else {
+          var video;
+          video = document.getElementsByTagName("video")[0];
+          options.processor.updateImage(video);
+          return $("#webcam").hide();
+        }
       }
 
       return {
