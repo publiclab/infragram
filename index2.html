@@ -21,7 +21,7 @@
 
   <script src="node_modules/webrtc-adapter/out/adapter.js"></script>
   <script src="node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
-
+	
   <script src="dist/infragram2.js"></script>
 
   <script type="x-shader/x-vertex" id="shader-vs"></script>
@@ -261,7 +261,9 @@
       <!--============================ IMAGE-SCREEN-CANVAS ============================== -->
 
       <div id="image-container" class="col-12 col-md-10 image-container">
-        <div style="display:none;" id="webcam"></div>
+        <div style="display:none;" id="webcam">
+            <video width="640" height="480" autoplay="autoplay" id="webCamVideoEl" playsinline="playsinline"></video>		
+	</div>
         <a id="fullscreen" class="btn btn-default"><i class="fa fa-expand"></i></a>
 
         <!-- ========================= intro/welcome msg =============================== -->
