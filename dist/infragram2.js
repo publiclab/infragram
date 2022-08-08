@@ -133,6 +133,17 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           if (image) options.run(options.mode);
           options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
         }, interval);
+      }; // Procces Uploaded Video File Locally
+
+
+      options.processLocalVideo = function processLocalVideo() {
+        options.camera.unInitialize();
+        var interval;
+        if (options.processor.type == "webgl") interval = 15;else interval = 150;
+        setInterval(function () {
+          if (image) options.run(options.mode);
+          options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
+        }, interval);
       }; // TODO: this doesn't work; it just downloads the unmodified image. 
       // probably a timing issue?
 
@@ -1495,6 +1506,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
   }, {}],
   15: [function (require, module, exports) {
     module.exports = function Interface(options) {
+      var isVideo = false,
+          isCamera = false;
       options.imageSelector = options.imageSelector || "#image-container";
       options.fileSelector = options.fileSelector || "#file-sel";
 
@@ -1566,21 +1579,51 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $('.choose-prompt').hide();
           $("#save-modal-btn").show();
           $("#save-zone").show();
-          var reader = new FileReader();
 
-          reader.onload = function onReaderLoad(event) {
-            var img;
-            img = new Image();
+          if (options.version == 1) {
+            var reader = new FileReader();
 
-            img.onload = function onImageLoad() {
-              options.processor.updateImage(this);
+            reader.onload = function onReaderLoad(event) {
+              var img;
+              img = new Image();
+
+              img.onload = function onImageLoad() {
+                options.processor.updateImage(this);
+              };
+
+              return img.src = event.target.result;
             };
 
-            return img.src = event.target.result;
-          };
+            reader.readAsDataURL(this.files[0]);
+            $('#preset-modal').modal('show');
+          } else {
+            $('.mediaSelect').toggle();
+            $('.videoControls').toggle();
 
-          reader.readAsDataURL(this.files[0]);
-          $('#preset-modal').modal('show');
+            if (this.files[0].type == 'image/jpeg' || this.files[0].type == 'image/png') {
+              var _reader = new FileReader();
+
+              _reader.onload = function onReaderLoad(event) {
+                var img;
+                img = new Image();
+
+                img.onload = function onImageLoad() {
+                  options.processor.updateImage(this);
+                };
+
+                return img.src = event.target.result;
+              };
+
+              _reader.readAsDataURL(this.files[0]);
+            } else {
+              videoURL = URL.createObjectURL(this.files[0]);
+              activateVideo(videoURL);
+            }
+
+            $('#preset-modal').offcanvas('show');
+            $('#preset-modalMobile').offcanvas('show');
+          }
+
           return true;
         });
         $("#webcam-activate").click(function () {
@@ -1589,9 +1632,82 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
           $("#save-zone").show();
           save_infragrammar_inputs();
           options.video();
-          $('#preset-modal').modal('show');
+
+          if (options.version == 1) {
+            $('#preset-modal').modal('show');
+          } else {
+            if (isVideo) {
+              $("#localVideo").remove();
+            }
+
+            isVideo = false;
+            isCamera = true;
+            $('#preset-modal').offcanvas('show');
+            $('#preset-modalMobile').offcanvas('show');
+          }
+
           return true;
+        }); // Procces Uploaded Video File Locally
+
+        function activateVideo(videoURL) {
+          options.processLocalVideo();
+
+          if (isCamera) {
+            localStream.getVideoTracks()[0].stop();
+          }
+
+          isCamera = false;
+          $("#localVideo").remove();
+          localVideo = document.createElement('video');
+          localVideo.setAttribute("id", "localVideo");
+          localVideo.setAttribute("src", videoURL);
+          localVideo.load();
+          localVideo.style.display = "none";
+          localVideo.style.width = "50px";
+          localVideo.style.height = "50px";
+          document.getElementById("video-container").appendChild(localVideo);
+          localVideo.play();
+          localVideo.muted = true;
+          localVideo.loop = true;
+          document.getElementById("localVideoControls").style.display = "block"; //Attach video Element tocustom Sleek Bar
+
+          localVideo.ontimeupdate = function () {
+            var percentage = localVideo.currentTime / localVideo.duration * 100;
+            $("#custom-seekbar span").css("width", percentage + "%");
+          };
+
+          isVideo = true;
+          $('.choose-prompt').hide();
+          $("#save-modal-btn").show();
+          $("#save-zone").show();
+          save_infragrammar_inputs();
+          $('#preset-modal').offcanvas('show');
+          $('#preset-modalMobile').offcanvas('show');
+          return true;
+        } //Start video controls
+
+
+        $("#custom-seekbar").on("click", function (e) {
+          localVideo = document.getElementById('localVideo');
+          var offset = $(this).offset();
+          var left = e.pageX - offset.left;
+          var totalWidth = $("#custom-seekbar").width();
+          var percentage = left / totalWidth;
+          var vidTime = localVideo.duration * percentage;
+          localVideo.currentTime = vidTime;
         });
+        $("#localVideoPlayPause").on("click", function (e) {
+          localVideo = document.getElementById('localVideo');
+
+          if (localVideo.paused) {
+            localVideo.play();
+            document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-pause"></i>';
+          } else {
+            localVideo.pause();
+            document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-play"></i>';
+          }
+        }); //End video controls
+
         $("#snapshot").click(function () {
           options.camera.getSnapshot();
           return true;
