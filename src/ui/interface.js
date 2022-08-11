@@ -69,6 +69,9 @@ module.exports = function Interface(options) {
     });
 
     $(options.fileSelector).change(function() {
+      if(isVideo || isCamera){
+          $("#localVideo").remove();
+      }      
       $('.choose-prompt').hide();
       $("#save-modal-btn").show();
       $("#save-zone").show();      
