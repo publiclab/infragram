@@ -22,7 +22,7 @@
   <script src="node_modules/webrtc-adapter/out/adapter.js"></script>
   <script src="node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
 	
-  <script src="dist/infragram2.js"></script>
+  <script src="dist/infragram.js"></script>
 
   <script type="x-shader/x-vertex" id="shader-vs"></script>
   <script type="x-shader/x-fragment" id="shader-fs-template"></script>
@@ -64,15 +64,13 @@
           <!-- ========================= camera/image/video-controls  ======================== -->
         <div class="btn-toolbar mediaSelect media-tools" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group" id="imageselect">
-            <label for="file-sel" tabindex="0">
-              <button onClick="toggleToolbar()"  rel="tooltip" data-bs-placement="left" title="Upload an image" type="button" class="btn-lg btn">
-                <i class="fa fa-upload"></i>
-              </button>
-              <input type="file" id="file-sel" accept="image/*,video/*" class="visually-hidden" aria-hidden="true" />
-            </label>
+              <label for="file-sel" class="btn btn-dark btn-lg" rel="tooltip" title="" data-original-title="Upload an image">
+                <i class="fa fa-upload" style="font-size:18px"></i> 
+                <input type="file" id="file-sel" accept="image/*,video/*" class="visually-hidden">
+              </label>
           </div>
           <div class="btn-group">
-            <button rel="tooltip" title="Connect to an Infragram webcam" id="webcam-activate" type="button" class="btn btn-lg btn-primary"><i class="fa fa-camera-retro"></i></button>
+              <button rel="tooltip" class="btn btn-dark" title="Connect to an Infragram webcam" id="webcam-activate" type="button"><i class="fa fa-camera"></i></button> 
           </div>
         </div>
 
