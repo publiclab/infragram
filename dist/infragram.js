@@ -1646,6 +1646,8 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
 
             isVideo = false;
             isCamera = true;
+            $('.mediaSelect').toggle();
+            $('.videoControls').toggle();
             $('#preset-modal').offcanvas('show');
             $('#preset-modalMobile').offcanvas('show');
           }
@@ -1748,7 +1750,75 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         $("[rel=tooltip]").tooltip();
         $("[rel=popover]").popover();
         return true;
+      }); //Start Handle multiple webcam resolutions
+
+      function changeResolution(w, h) {
+        document.getElementById('image').setAttribute("width", w);
+        document.getElementById('image').setAttribute("height", h);
+      }
+
+      $('#qvga').click(function (e) {
+        changeResolution('100px', '100px');
       });
+      $('#vga').click(function (e) {
+        changeResolution('800px', '600px');
+      });
+      $('#hd').click(function (e) {
+        changeResolution('2400px', '1800px');
+      });
+      $('#full-hd').click(function (e) {
+        changeResolution('6000px', '4000px');
+      }); //End Handling of Multiple webcam resolutions
+      //Start Canvas Recording and Download
+
+      var canvas = document.getElementById('image');
+      var ctx = canvas.getContext('2d');
+      var x = 0;
+      var stream = canvas.captureStream(); // grab our canvas MediaStream
+
+      var rec = new MediaRecorder(stream);
+
+      function exportVid(blob) {
+        var vid = document.createElement('video');
+        vid.src = URL.createObjectURL(blob);
+        vid.controls = true;
+        vid.style.display = 'none';
+        document.body.appendChild(vid);
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = vid.src;
+        a.download = 'infragramVideo.mp4';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(vid.src);
+        }, 100);
+      }
+
+      $('#startRecord').click(function (e) {
+        var chunks = [];
+
+        rec.ondataavailable = function (e) {
+          return chunks.push(e.data);
+        };
+
+        rec.onstop = function (e) {
+          return exportVid(new Blob(chunks, {
+            type: 'video/h264'
+          }));
+        };
+
+        rec.start();
+        document.getElementById('startRecord').style.display = 'none';
+        document.getElementById('stopRecord').style.display = 'block';
+      });
+      $('#stopRecord').click(function (e) {
+        rec.stop();
+        document.getElementById('stopRecord').style.display = 'none';
+        document.getElementById('startRecord').style.display = 'block';
+        document.getElementById('downloadButton').style.display = 'block';
+      }); //End Canvas Recording and Download
     };
   }, {
     "../color/colormaps": 5,
