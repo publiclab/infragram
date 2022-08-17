@@ -1,6 +1,7 @@
 module.exports = function Interface(options) {
 
-  var isVideo = false, isCamera=false; var isOnCam;
+  var isVideo = false,
+      isCamera=false;
   
   options.imageSelector = options.imageSelector || "#image-container";
   options.fileSelector = options.fileSelector || "#file-sel";
