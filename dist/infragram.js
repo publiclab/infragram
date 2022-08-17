@@ -1764,10 +1764,10 @@ function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else i
         changeResolution('800px', '600px');
       });
       $('#hd').click(function (e) {
-        changeResolution('2400px', '1800px');
+        changeResolution('1920px', '1080px');
       });
       $('#full-hd').click(function (e) {
-        changeResolution('6000px', '4000px');
+        changeResolution('7680px', '4320px');
       }); //End Handling of Multiple webcam resolutions
       //Start Canvas Recording and Download
 
