@@ -252,7 +252,7 @@ module.exports = function Interface(options) {
   });
   //End Handling of Multiple webcam resolutions
 
-  //Start Canvas Recording and Download
+  //Start Handle multiple Canvas Texure(Video/Image/Webcam) resolutions and Downloads
 
   const canvas = document.getElementById('image');
   const ctx = canvas.getContext('2d');
@@ -293,6 +293,5 @@ module.exports = function Interface(options) {
     document.getElementById('downloadButton').style.display='block'; 
   })
 
-  //End Canvas Recording and Download  
-
+  //Start Handle multiple Canvas Texure(Video/Image/Webcam) resolutions and Downloads
 }
