@@ -233,7 +233,7 @@ module.exports = function Interface(options) {
     return true;
   });
 
-  //Start Handle multiple webcam resolutions
+  //Start Handle  multiple Canvas Texure(Video/Image/Webcam) resolutions 
   function changeResolution(w, h){
     document.getElementById('image').setAttribute("width",w);
     document.getElementById('image').setAttribute("height",h);
@@ -250,9 +250,9 @@ module.exports = function Interface(options) {
   $('#full-hd').click(function(e){
     changeResolution('7680px','4320px')
   });
-  //End Handling of Multiple webcam resolutions
+  //End Handling of  multiple Canvas Texure(Video/Image/Webcam) resolutions 
 
-  //Start Handle multiple Canvas Texure(Video/Image/Webcam) resolutions and Downloads
+  //Start Handle Downloads
 
   const canvas = document.getElementById('image');
   const ctx = canvas.getContext('2d');
@@ -293,5 +293,5 @@ module.exports = function Interface(options) {
     document.getElementById('downloadButton').style.display='block'; 
   })
 
-  //Start Handle multiple Canvas Texure(Video/Image/Webcam) resolutions and Downloads
+  //End Handling Downloads
 }
