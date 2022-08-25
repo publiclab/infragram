@@ -4,7 +4,8 @@
   "description": "A minimal core of the Infragram project in JavaScript.",
   "main": "dist/infragram.js",
   "scripts": {
-    "build": "grunt build"
+    "build": "grunt build",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
