@@ -1,4 +1,5 @@
 const timeout = process.env.SLOWMO ? 30000 : 100000;
+const fs = require('fs');
 beforeAll(async () => {
     path = fs.realpathSync('file://../index.html');
     await page.goto('file://' + path, {waitUntil: 'domcontentloaded'});
