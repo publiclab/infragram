@@ -1,6 +1,7 @@
 const timeout = process.env.SLOWMO ? 30000 : 100000;
 beforeAll(async () => {
-  await page.goto('index.html', {waitUntil: 'domcontentloaded'});
+    path = fs.realpathSync('file://../index.html');
+    await page.goto('file://' + path, {waitUntil: 'domcontentloaded'});
 });
 
 describe('Presets Raw ', () => {
