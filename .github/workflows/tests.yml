@@ -23,7 +23,8 @@ jobs:
         run: npm install http-server -g                
       - name: "Build dist files"
         run: grunt build
-      - name: "Start test server"   
-        run: http-server . &        
-      - name: "Run tests"
-        run: npm test
+      - name: "Start test server and test conccurently"   
+        run: |
+          http-server . &   
+          sleep 10
+          npm test
