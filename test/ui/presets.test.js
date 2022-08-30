@@ -8,7 +8,7 @@ describe('Presets Raw ', () => {
     // Wait for #preset_raw  to load
     await page.waitForSelector('#preset_raw');
     // Wait for #modeSwitcher  to load
-   // await page.waitForSelector('#modeSwitcher');    
+    await page.waitForSelector('#modeSwitcher');    
     // Wait for #r_exp  to load    
     await page.waitForSelector('#r_exp');
     // Wait for #g_exp  to load    
@@ -24,7 +24,7 @@ describe('Presets Raw ', () => {
     // Click  Presets_raw Button
     await page.evaluate(()=>document.querySelector('#preset_raw').click());
     // Get value of #modeSwitcher
-   // const modeSwitcherInput = await page.evaluate(() => document.querySelector('#modeSwitcher').value);
+    const modeSwitcherInput = await page.evaluate(() => document.querySelector('#modeSwitcher').value);
     // Get value of #r_exp
     const r_expInput = await page.evaluate(() => document.querySelector('#r_exp').value);
     // Get value of #g_exp
@@ -42,7 +42,7 @@ describe('Presets Raw ', () => {
     // Check if #preset_modal appears
    // expect(preset_modalInput).toEqual('none');
     // Confirm #modeSwitcher Value 
-   // expect(modeSwitcherInput).toEqual('infragrammar');
+    expect(modeSwitcherInput).toEqual('infragrammar');
     // Confirm #r_exp value
     expect(r_expInput).toEqual('R');
     // Confirm #g_exp value
