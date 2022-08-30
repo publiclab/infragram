@@ -12,9 +12,9 @@ describe('Presets Raw ', () => {
     // Wait for #r_exp  to load    
     await page.waitForSelector('#r_exp');
     // Wait for #g_exp  to load    
-   // await page.waitForSelector('#g_exp');
+    await page.waitForSelector('#g_exp');
     // Wait for #b_exp to load    
-   // await page.waitForSelector('#b_exp');
+    await page.waitForSelector('#b_exp');
     // Wait for #preset-modal  to load  
    // await page.waitForSelector('#preset-modal');
     // Wait for #colorbar-container  to load
@@ -28,9 +28,9 @@ describe('Presets Raw ', () => {
     // Get value of #r_exp
     const r_expInput = await page.evaluate(() => document.querySelector('#r_exp').value);
     // Get value of #g_exp
-  //  const g_expInput = await page.evaluate(() => document.querySelector('#g_exp').value);
+    const g_expInput = await page.evaluate(() => document.querySelector('#g_exp').value);
     // Get value of #b_exp
-  //  const b_expInput = await page.evaluate(() => document.querySelector('#b_exp').value);
+    const b_expInput = await page.evaluate(() => document.querySelector('#b_exp').value);
     // Get value Css display of Preset-modal
   //  const preset_modalInput = await page.evaluate(() => getComputedStyle(document.querySelector('#preset-modal')).display);
     // Get Css display of #colorbar_container
@@ -46,9 +46,9 @@ describe('Presets Raw ', () => {
     // Confirm #r_exp value
     expect(r_expInput).toEqual('R');
     // Confirm #g_exp value
-   // expect(g_expInput).toEqual('G');
+    expect(g_expInput).toEqual('G');
     // Confirm #b_exp value
-   // expect(b_expInput).toEqual('B');
+    expect(b_expInput).toEqual('B');
 
   }, timeout);
 });
