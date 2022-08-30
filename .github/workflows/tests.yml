@@ -26,5 +26,5 @@ jobs:
       - name: "Start test server and test conccurently"   
         run: |
           http-server . &   
-          sleep 10
+          sleep 5000
           npm test
