@@ -204,3 +204,4 @@ describe('Presets Ndvi Red color', () => {
   }, timeout);
 });
 */
+
