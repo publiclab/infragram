@@ -53,7 +53,7 @@ describe('Presets Raw ', () => {
   }, timeout);
 });
 
-
+/*
 describe('Presets Ndvi Blue ', () => {
   test('Test values of Presets Ndvi Blue and related feilds', async () => {
     // Wait for #preset_ndvi_blue  to load
@@ -203,3 +203,4 @@ describe('Presets Ndvi Red color', () => {
 
   }, timeout);
 });
+*/
