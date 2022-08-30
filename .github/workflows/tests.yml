@@ -24,6 +24,6 @@ jobs:
       - name: "Build dist files"
         run: grunt build
       - name: "Start test server"   
-        run: http-server
+        run: http-server &
       - name: "Run tests"
         run: npm test
