@@ -18,7 +18,7 @@ describe('Presets Raw ', () => {
     // Wait for #preset-modal  to load  
    // await page.waitForSelector('#preset-modal');
     // Wait for #colorbar-container  to load
-   // await page.waitForSelector('#colorbar-container');
+    await page.waitForSelector('#colorbar-container');
    
 
     // Click  Presets_raw Button
@@ -34,11 +34,11 @@ describe('Presets Raw ', () => {
     // Get value Css display of Preset-modal
   //  const preset_modalInput = await page.evaluate(() => getComputedStyle(document.querySelector('#preset-modal')).display);
     // Get Css display of #colorbar_container
-  //  const colorbar_containerInput = await page.evaluate(() => getComputedStyle(document.querySelector('#colorbar-container')).display);
+    const colorbar_containerInput = await page.evaluate(() => getComputedStyle(document.querySelector('#colorbar-container')).display);
 
 
     // Check if #colorbar_Container appears
-   // expect(colorbar_containerInput).toEqual('none');
+    expect(colorbar_containerInput).toEqual('none');
     // Check if #preset_modal appears
    // expect(preset_modalInput).toEqual('none');
     // Confirm #modeSwitcher Value 
