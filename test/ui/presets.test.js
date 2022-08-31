@@ -36,12 +36,13 @@ describe('Presets Raw ', () => {
     // Get Css display of #colorbar_container
     const colorbar_containerInput = await page.evaluate(() => getComputedStyle(document.querySelector('#colorbar-container')).display);
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ colorbar_containerInput );
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ preset_modalInput );
 
 
     // Check if #colorbar_Container appears
     expect(colorbar_containerInput).toEqual('none');
     // Check if #preset_modal appears
-   // expect(preset_modalInput).toEqual('none');
+    expect(preset_modalInput).toEqual('none');
     // Confirm #modeSwitcher Value 
     expect(modeSwitcherInput).toEqual('infragrammar');
     // Confirm #r_exp value
@@ -54,7 +55,7 @@ describe('Presets Raw ', () => {
   }, timeout);
 });
 
-/*
+
 describe('Presets Ndvi Blue ', () => {
   test('Test values of Presets Ndvi Blue and related feilds', async () => {
     // Wait for #preset_ndvi_blue  to load
@@ -92,7 +93,7 @@ describe('Presets Ndvi Blue ', () => {
 
   }, timeout);
 });
-
+/*
 describe('Presets Ndvi Blue color ', () => {
   test('Test values of Presets Ndvi Blue color and related feilds', async () => {
     // Wait for #preset_ndvi_blue_color to load
