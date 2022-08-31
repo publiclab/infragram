@@ -32,7 +32,7 @@ describe('Presets Raw ', () => {
     // Get value of #b_exp
     const b_expInput = await page.evaluate(() => document.querySelector('#b_exp').value);
     // Get value Css display of Preset-modal
-  //  const preset_modalInput = await page.evaluate(() => getComputedStyle(document.querySelector('#preset-modal')).display);
+    const preset_modalInput = await page.evaluate(() => getComputedStyle(document.querySelector('#preset-modal')).display);
     // Get Css display of #colorbar_container
     const colorbar_containerInput = await page.evaluate(() => getComputedStyle(document.querySelector('#colorbar-container')).display);
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ colorbar_containerInput );
