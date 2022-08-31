@@ -35,7 +35,7 @@ describe('Presets Raw ', () => {
   //  const preset_modalInput = await page.evaluate(() => getComputedStyle(document.querySelector('#preset-modal')).display);
     // Get Css display of #colorbar_container
     const colorbar_containerInput = await page.evaluate(() => getComputedStyle(document.querySelector('#colorbar-container')).display);
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ colorbar_containerInput ):
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ colorbar_containerInput );
 
 
     // Check if #colorbar_Container appears
