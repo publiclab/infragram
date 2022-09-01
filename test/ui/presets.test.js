@@ -40,9 +40,9 @@ describe('Presets Raw ', () => {
     //console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ preset_modalInput );
     
     // Check if #colorbar_Container appears
-    expect(colorbar_containerInput).toEqual('none');
+    expect(colorbar_containerInput).toBe('none');
     // Check if #preset_modal appears
-    expect(preset_modalInput).toEqual('none');
+    expect(preset_modalInput).toBe('none');
     // Confirm #modeSwitcher Value 
     expect(modeSwitcherInput).toEqual('infragrammar');
     // Confirm #r_exp value
