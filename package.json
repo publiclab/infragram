@@ -4,8 +4,7 @@
   "description": "A minimal core of the Infragram project in JavaScript.",
   "main": "dist/infragram.js",
   "scripts": {
-    "build": "grunt build",
-    "test": "jest"
+    "build": "grunt build"
   },
   "repository": {
     "type": "git",
@@ -29,9 +28,6 @@
     "getusermedia-js": "~1.0.0",
     "http-server": "^14.1.0",
     "jquery": "~3",
-    "puppeteer": "^16.2.0",
-    "jest": "^28.1.3",
-    "jest-puppeteer": "^6.1.1",    
     "webgl-utils": "~1.0.0",
     "webrtc-adapter": "^1.1.0"
   },
@@ -45,8 +41,6 @@
     "grunt-contrib-concat": "^2.1.0",
     "grunt-contrib-uglify": "^5.0.0",
     "grunt-contrib-watch": "^1.1.0",
-    "jest": "^28.0.0",
-    "jest-puppeteer": "^6.1.1",
     "matchdep": "^2.0.0",
     "urlhash": "~0.1.3"
   },

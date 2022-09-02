@@ -8,7 +8,7 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: '10.x'
       - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
@@ -19,11 +19,7 @@ jobs:
             ${{ runner.OS }}-
       - name: Install dependencies
         run:  npm install grunt-cli
-      - name: "Install http-server"
-        run: npm install http-server -g                
       - name: "Build dist files"
         run: grunt build
-      - name: "Start test server"   
-        run: http-server . &        
       - name: "Run tests"
         run: npm test
