@@ -36,7 +36,7 @@
     "webrtc-adapter": "^1.1.0"
   },
   "devDependencies": {
-    "babel-core": "7.0.0-beta.3",
+    "babel-core": "7.0.0-bridge.0",
     "babel-preset-env": "2.0.0-beta.2",
     "browserify": "17.0.0",
     "grunt": "^1.4.1",
