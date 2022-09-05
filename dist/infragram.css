@@ -9,8 +9,8 @@
 }
 
 h1,h2,h3,h4,h5,h6{
-  font-family:junctionregular, lucida grande,lucida sans console,sans-serif;
-  font-weight:normal
+  font-family: junctionregular, "lucida grande", "lucida sans console", sans-serif;
+  font-weight:normal;
 }
 
 body { padding-top: 20px; }
@@ -77,11 +77,6 @@ div#colorbar-container canvas#colorbar {
     height:auto;
   }
 }
-
-.container {
-  padding-left:unset;
-}
-
 #overlay-container {
   position:absolute;
  display: inline-block;
@@ -96,4 +91,30 @@ div#colorbar-container canvas#colorbar {
 
 #overlay-img {
   opacity:0.5;
+}
+
+ul.dropdown-menu li:hover{
+  cursor: pointer;
+  background-color: #e0e0e0;
+}
+#file-sel {
+  position:absolute; 
+  left:0;
+  width:55px;
+  height:44px;
+  opacity:0;
+}
+.vr #toolbar {
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  z-index:99;
+}
+.vr .canvas {
+  width:50% !important;
+  height:100% !important;
+  left:0;
+  top:100px;
+  position:absolute;
 }

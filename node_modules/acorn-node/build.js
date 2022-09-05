@@ -23,10 +23,14 @@ function privateClassElements (str) {
 }
 
 compile('acorn-bigint', './lib/bigint/index.js')
+compile('acorn-numeric-separator', './lib/numeric-separator/index.js')
+compile('acorn-dynamic-import', './lib/dynamic-import/index.js')
 compile('acorn-import-meta', './lib/import-meta/index.js')
 compile('acorn-export-ns-from', './lib/export-ns-from/index.js')
 compile('acorn-class-fields', './lib/class-fields/index.js', privateClassElements)
 compile('acorn-static-class-features', './lib/static-class-features/index.js', privateClassElements)
 compile('acorn-private-class-elements', './lib/private-class-elements/index.js', function (str) {
   return str.replace('class extends Parser', 'class Parser_ extends Parser')
+    // it also works with v7
+    .replace('if (acorn.version.indexOf("6.") != 0 || acorn.version.indexOf("6.0.") == 0) {', 'if (false) {')
 })

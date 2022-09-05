@@ -73,6 +73,13 @@ test('supports bigint', function (t) {
   t.end()
 })
 
+test('supports numeric separators', function (t) {
+  t.doesNotThrow(function () {
+    acorn.parse('50_000_000n ** 1n')
+  })
+  t.end()
+})
+
 test('supports import.meta with sourceType: module', function (t) {
   t.doesNotThrow(function () {
     acorn.parse('console.log(import.meta.url)', { sourceType: 'module' })

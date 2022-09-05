@@ -1,5 +1,6 @@
 window.Infragram = function Infragram(options) {
   options = options || {};
+  options.version = options.version || 1; // for old instances where it hasn't been explicitly set
   options.uploader = options.uploader || false;
   options.processor = options.processor || 'javascript';
   options.camera = require('./io/camera')(options);
@@ -44,6 +45,17 @@ window.Infragram = function Infragram(options) {
     }, interval);
   }
 
+// Procces Uploaded Video File Locally
+  options.processLocalVideo = function processLocalVideo() {
+    options.camera.unInitialize();
+    var interval;
+    if (options.processor.type == "webgl") interval = 15;else interval = 150;
+    setInterval(function () {
+      if (image) options.run(options.mode);
+      options.camera.getSnapshot(); //if (options.colorized) return options.colorize();
+    }, interval);
+   }  
+  
   // TODO: this doesn't work; it just downloads the unmodified image. 
   // probably a timing issue?
   function download() {

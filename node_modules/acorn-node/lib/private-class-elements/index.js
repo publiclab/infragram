@@ -3,7 +3,7 @@
 "use strict"
 
 var acorn = require("acorn")
-if (acorn.version.indexOf("6.") != 0 || acorn.version.indexOf("6.0.") == 0) {
+if (false) {
   throw new Error(("acorn-private-class-elements requires acorn@^6.1.0, not " + (acorn.version)))
 }
 var tt = acorn.tokTypes

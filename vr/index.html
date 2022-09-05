@@ -18,7 +18,6 @@
 
     <script src="../node_modules/webrtc-adapter/out/adapter.js"></script>
     <script src="../node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
-    <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
 
     <script src="../dist/infragram.js"></script>
 
@@ -30,7 +29,7 @@
 
   <body>
   
-    <div class="container page" style="padding-top:10px;">
+    <div class="container page vr" style="padding-top:10px;">
 
        <div class="modal" tabindex="-1" role="dialog" id="preset-modal">
          <div class="modal-dialog modal-lg" role="document">
@@ -126,7 +125,7 @@
             </div>
           </div>
 
-          <div class="zone last" id="save-zone" style="">
+          <div class="zone last" id="save-zone">
             <p>OUTPUT</p>
             <button onClick="infragram.download();openInSequencer();" class="btn btn-primary btn-lg"><i class="fa fa-download"></i></button>
             <button onClick="openInSequencer();" class="btn btn-primary btn-lg">Sequencer</button>
@@ -245,23 +244,5 @@
 	      
       })()
     </script>
-
-    <style>
-      #toolbar {
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        z-index:99;
-      }
-      .canvas {
-        width:50% !important;
-        height:100% !important;
-        left:0;
-        top:100px;
-        position:absolute;
-     }
-    </style>
-
   </body>
 </html>

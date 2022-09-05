@@ -4,7 +4,8 @@
   "description": "A minimal core of the Infragram project in JavaScript.",
   "main": "dist/infragram.js",
   "scripts": {
-    "build": "grunt build"
+    "build": "grunt build",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -22,24 +23,30 @@
     "url": "https://github.com/publiclab/infragram/issues"
   },
   "dependencies": {
-    "webrtc-adapter": "^1.1.0",
-    "webgl-utils": "~1.0.0",
-    "font-awesome": "~4.7.0",
     "bootstrap": "~3.4.0",
+    "bootstrap5": "npm:bootstrap@^5.1.3",
+    "font-awesome": "~4.7.0",
     "getusermedia-js": "~1.0.0",
-    "socket.io-client": "~2.2.0",
-    "jquery": "~3"
+    "http-server": "^14.1.1",
+    "jest": "^28.1.3",
+    "jest-puppeteer": "^6.1.1",
+    "jquery": "~3",
+    "puppeteer": "^16.2.0",
+    "webgl-utils": "~1.0.0",
+    "webrtc-adapter": "^1.1.0"
   },
   "devDependencies": {
-    "browserify": "16.5.2",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^5.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-contrib-uglify": "^5.0.0",
     "babel-core": "7.0.0-beta.3",
-    "babel-preset-env": "2.0.0-alpha.19",
+    "babel-preset-env": "2.0.0-beta.2",
+    "browserify": "17.0.0",
+    "grunt": "^1.4.1",
     "grunt-babel": "^7.0.0",
+    "grunt-browserify": "^6.0.0",
+    "grunt-contrib-concat": "^2.1.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "jest": "^28.0.0",
+    "jest-puppeteer": "^6.1.1",
     "matchdep": "^2.0.0",
     "urlhash": "~0.1.3"
   },

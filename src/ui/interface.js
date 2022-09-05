@@ -1,10 +1,11 @@
 module.exports = function Interface(options) {
-
+  var isVideo = false,
+      isCamera=false;
+  
   options.imageSelector = options.imageSelector || "#image-container";
   options.fileSelector = options.fileSelector || "#file-sel";
 
   var urlHash = require('urlhash')();
-  var FileUpload = require('../file-upload');
   var logger = options.logger;
   var Colormaps = require('../color/colormaps');
   var Fullscreen, Presets, Analysis, Colorize, Saving;
@@ -41,9 +42,6 @@ module.exports = function Interface(options) {
     Presets = require('../ui/presets')(options, save_infragrammar_inputs);
     Analysis = require('../ui/analysis')(options, save_infragrammar_inputs);
     Colorize = require('../ui/colorize')(options);
-    Saving = require('../ui/saving')(options);
-
-    if (options.uploadable) FileUpload.initialize({ socket: options.uploadable });
 
     $(options.imageSelector).ready(function() {
 
@@ -73,12 +71,46 @@ module.exports = function Interface(options) {
     });
 
     $(options.fileSelector).change(function() {
+      if(isVideo || isCamera){
+          $("#localVideo").remove();
+      }      
       $('.choose-prompt').hide();
       $("#save-modal-btn").show();
-      $("#save-zone").show();
-      FileUpload.fromFile(this.files, options.processor.updateImage, options.uploadable);
-      $('#preset-modal').modal('show');
-      return true;
+      $("#save-zone").show();      
+      if(options.version == 1){ //Version 1 enabled
+        let reader = new FileReader();
+        reader.onload = function onReaderLoad(event) {
+          var img;
+          img = new Image();
+          img.onload = function onImageLoad() {
+            options.processor.updateImage(this);
+          };
+          return img.src = event.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+        $('#preset-modal').modal('show');
+      }else{  //Version 2 enabled
+      $('.mediaSelect').toggle();
+      $('.videoControls').toggle();         
+      if ((this.files[0].type == 'image/jpeg')||(this.files[0].type == 'image/png')) {
+        let reader = new FileReader();
+        reader.onload = function onReaderLoad(event) {
+          var img;
+          img = new Image();
+          img.onload = function onImageLoad() {
+            options.processor.updateImage(this);
+          };
+          return img.src = event.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);        
+      }else{
+        videoURL = URL.createObjectURL(this.files[0]);
+        activateVideo(videoURL);
+      }
+        $('#preset-modal').offcanvas('show');
+        $('#preset-modalMobile').offcanvas('show');       
+      }
+    return true;   
     });
 
     $("#webcam-activate").click(function() {
@@ -87,10 +119,80 @@ module.exports = function Interface(options) {
       $("#save-zone").show();
       save_infragrammar_inputs();
       options.video();
-      $('#preset-modal').modal('show');
-      return true;
+      if(options.version == 1){ //Version 1 enabled
+        $('#preset-modal').modal('show');
+      }else{ //Version 2 enabled 
+        if(isVideo){
+          $("#localVideo").remove();
+        }
+        isVideo  = false;
+        isCamera = true; 
+        $('.mediaSelect').toggle();
+        $('.videoControls').toggle();
+        $('#preset-modal').offcanvas('show');
+        $('#preset-modalMobile').offcanvas('show');               
+      }
+    return true;
     });
 
+// Procces Uploaded Video File Locally
+    function activateVideo(videoURL) {   
+     options.processLocalVideo();   
+     if(isCamera){ 
+      localStream.getVideoTracks()[0].stop();  
+    }
+    isCamera = false;
+    $("#localVideo").remove();      
+    localVideo = document.createElement('video');
+    localVideo.setAttribute("id", "localVideo");
+    localVideo.setAttribute("src", videoURL);        
+    localVideo.load();
+    localVideo.style.display = "none"               
+    localVideo.style.width = "50px";   
+    localVideo.style.height = "50px";    
+    document.getElementById("video-container").appendChild(localVideo);
+    localVideo.play();
+    localVideo.muted = true;
+    localVideo.loop = true;
+    document.getElementById("localVideoControls").style.display="block";
+      //Attach video Element tocustom Sleek Bar
+      localVideo.ontimeupdate = function(){
+        var percentage = ( localVideo.currentTime / localVideo.duration ) * 100;
+        $("#custom-seekbar span").css("width", percentage+"%");
+      };
+      isVideo  = true;
+      $('.choose-prompt').hide();
+      $("#save-modal-btn").show();
+      $("#save-zone").show();
+      save_infragrammar_inputs();
+      $('#preset-modal').offcanvas('show');
+      $('#preset-modalMobile').offcanvas('show');
+      return true;
+    }
+
+    //Start video controls
+    $("#custom-seekbar").on("click", function(e){
+      localVideo = document.getElementById('localVideo');
+      var offset = $(this).offset();
+      var left = (e.pageX - offset.left);
+      var totalWidth = $("#custom-seekbar").width();
+      var percentage = ( left / totalWidth );
+      var vidTime = localVideo.duration * percentage;
+      localVideo.currentTime = vidTime;
+    }); 
+
+    $("#localVideoPlayPause").on("click", function(e){
+      localVideo = document.getElementById('localVideo');
+      if (localVideo.paused){
+       localVideo.play();
+       document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-pause"></i>';             
+     }else {
+       localVideo.pause();
+       document.getElementById("localVideoPlayPause").innerHTML = '<i class="fa fa-play"></i>'; 
+     }
+   }); 
+    //End video controls    
+    
     $("#snapshot").click(function() {
       options.camera.getSnapshot();
       return true;
@@ -104,6 +206,7 @@ module.exports = function Interface(options) {
 
     $("#overlay-btn").click(function() {
       $("#overlay-container").toggle();
+      $("#overlay-controls-container").toggle();
       $("#overlay-btn").toggleClass("btn-success");
     });
 
@@ -129,4 +232,66 @@ module.exports = function Interface(options) {
     $("[rel=popover]").popover()
     return true;
   });
+
+  //Start Handle  multiple Canvas Texure(Video/Image/Webcam) resolutions 
+  function changeResolution(w, h){
+    document.getElementById('image').setAttribute("width",w);
+    document.getElementById('image').setAttribute("height",h);
+  }
+  $('#qvga').click(function(e){
+    changeResolution('100px','100px')
+  });
+  $('#vga').click(function(e){
+    changeResolution('800px','600px')
+  });
+  $('#hd').click(function(e){
+    changeResolution('1920px','1080px')
+  })
+  $('#full-hd').click(function(e){
+    changeResolution('7680px','4320px')
+  });
+  //End Handling of  multiple Canvas Texure(Video/Image/Webcam) resolutions 
+
+  //Start Handle Downloads
+
+  const canvas = document.getElementById('image');
+  const ctx = canvas.getContext('2d');
+  var x = 0;
+  const stream = canvas.captureStream(); // grab our canvas MediaStream
+  const rec = new MediaRecorder(stream); 
+
+  function exportVid(blob) {
+    const vid = document.createElement('video');
+    vid.src = URL.createObjectURL(blob);
+    vid.controls = true;
+    vid.style.display='none';
+    document.body.appendChild(vid);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = vid.src;
+    a.download = 'infragramVideo.mp4';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(vid.src);
+    }, 100);
+  }
+  $('#startRecord').click(function(e){
+    const chunks = [];
+
+    rec.ondataavailable = e => chunks.push(e.data);
+    rec.onstop = e => exportVid(new Blob(chunks, {type: 'video/h264'}));
+    rec.start();
+    document.getElementById('startRecord').style.display='none';
+    document.getElementById('stopRecord').style.display='block';
+  })
+  $('#stopRecord').click(function(e){
+    rec.stop();
+    document.getElementById('stopRecord').style.display='none';
+    document.getElementById('startRecord').style.display='block'; 
+    document.getElementById('downloadButton').style.display='block'; 
+  })
+
+  //End Handling Downloads
 }

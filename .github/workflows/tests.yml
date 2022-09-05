@@ -1,0 +1,29 @@
+name: tests
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: Install dependencies
+        run:  npm install grunt-cli
+      - name: "Install http-server"
+        run: npm install http-server -g                
+      - name: "Build dist files"
+        run: grunt build
+      - name: "Start test server"   
+        run: http-server . &        
+      - name: "Run tests"
+        run: npm test
