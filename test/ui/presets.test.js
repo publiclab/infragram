@@ -37,3 +37,5 @@ describe('Presets Ndvi Red color', () => {
     expect(m_expInput).toEqual('(B-R)/(B+R)');
 
   }, timeout);
+  });
+
