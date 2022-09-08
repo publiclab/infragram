@@ -16,7 +16,7 @@ describe('Presets Raw ', () => {
     // Wait for #b_exp to load    
     await page.waitForSelector('#b_exp');
     // Wait for #preset-modal  to load  
-   // await page.waitForSelector('#preset-modal');
+    await page.waitForSelector('#preset-modal');
     // Wait for #colorbar-container  to load
     await page.waitForSelector('#colorbar-container');
    
