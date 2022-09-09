@@ -16,7 +16,7 @@ describe('Presets Raw ', () => {
     // Wait for #b_exp to load    
     await page.waitForSelector('#b_exp');
     // Wait for #preset-modal  to load  
-    await page.waitForSelector('#preset-modal');
+   // await page.waitForSelector('#preset-modal');
     // Wait for #colorbar-container  to load
     await page.waitForSelector('#colorbar-container');
    
@@ -35,8 +35,10 @@ describe('Presets Raw ', () => {
     const preset_modalInput = await page.evaluate(() => getComputedStyle(document.querySelector('#preset-modal')).display);
     // Get Css display of #colorbar_container
     const colorbar_containerInput = await page.evaluate(() => getComputedStyle(document.querySelector('#colorbar-container')).display);
-
-
+    //log css styles
+    //console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ colorbar_containerInput );
+    //console.log(">>>>>>>>>>>>>>>>>>>>>>>>  "+ preset_modalInput );
+    
     // Check if #colorbar_Container appears
     expect(colorbar_containerInput).toBe('none');
     // Check if #preset_modal appears
