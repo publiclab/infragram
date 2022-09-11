@@ -1,6 +1,6 @@
 const timeout = process.env.SLOWMO ? 30000 : 100000;
 beforeAll(async () => {
-  await page.goto('http://127.0.0.1:8080/index2.html', {waitUntil: 'domcontentloaded'});
+  await page.goto('http://127.0.0.1:8080/v2/index.html', {waitUntil: 'domcontentloaded'});
 });
 
 describe('Change Resolution of Canvas ', () => {
