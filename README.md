@@ -42,7 +42,7 @@ Read more at https://publiclab.org/infragram
 16. [First Time?](#first-time)
 
 ## Quick Installation
-1. Fork our repo from [here](https://github.com/publiclab/infragram).
+1. [Fork](https://github.com/publiclab/infragram/fork) our repo.
 2. In the console, download a copy of your forked repo with `git clone https://github.com/your_username/infragram` where `your_username` is your GitHub username.
 3. Enter the new infagram directory with `cd infragram`.
 4. `npm install` - this will install all the node packages into your local machine.
