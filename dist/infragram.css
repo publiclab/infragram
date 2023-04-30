@@ -59,7 +59,7 @@ div#colorbar-container canvas#colorbar {
   border:none;
 }
 #toolbar .zone p {
-  color:#bbb;
+  color:black;
   font-weight:bold;
   font-size:10px;
   margin-bottom:0;
